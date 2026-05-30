@@ -67,6 +67,8 @@ export async function searchDealerships(params: {
     reputation: "reputationScore:desc",
   };
 
+  if (!searchClient) return { hits: [], totalHits: 0, facetDistribution: {} } as any;
+
   return searchClient.index(INDEXES.DEALERSHIPS).search(query, {
     filter: filters.length ? filters.join(" AND ") : undefined,
     sort: params.sort ? [sortMap[params.sort] ?? "reputationScore:desc"] : ["isFeatured:desc", "reputationScore:desc"],
