@@ -10,7 +10,7 @@ import { getCache, setCache, CACHE_KEYS, CACHE_TTL } from "@/lib/redis";
 
 interface Props {
   params: Promise<{ slug: string }>;
-  searchParams: { page?: string };
+  searchParams: Promise<{ page?: string }>;
 }
 
 async function getDealership(slug: string) {
@@ -56,10 +56,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function DealershipPage({ params, searchParams }: Props) {
   const { slug } = await params;
+  const { page: pageParam } = await searchParams;
   const dealer = await getDealership(slug);
   if (!dealer) notFound();
 
-  const page = Number(searchParams.page ?? 1);
+  const page = Number(pageParam ?? 1);
 
   // Schema.org LocalBusiness + Review aggregate markup
   const jsonLd = {

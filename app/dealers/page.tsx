@@ -7,14 +7,15 @@ export const metadata: Metadata = {
   description: "Search and compare car dealerships worldwide. Filter by brand, location, rating, and more.",
 };
 
-export default function DealersPage({
+export default async function DealersPage({
   searchParams,
 }: {
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
+  const resolvedParams = await searchParams;
   return (
     <Suspense>
-      <DealerSearchPage searchParams={searchParams} />
+      <DealerSearchPage searchParams={resolvedParams} />
     </Suspense>
   );
 }
