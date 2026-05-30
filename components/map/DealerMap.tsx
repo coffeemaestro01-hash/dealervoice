@@ -20,10 +20,7 @@ export function DealerMap({ latitude, longitude, name, address, zoom = 15, class
     if (!mapRef.current || mapInstanceRef.current) return;
 
     // Dynamic import to avoid SSR issues with Leaflet
-    Promise.all([
-      import("leaflet"),
-      import("leaflet/dist/leaflet.css"),
-    ]).then(([L]) => {
+    import("leaflet").then((L) => {
       if (!mapRef.current || mapInstanceRef.current) return;
 
       // Fix default marker icon path issue with Webpack
