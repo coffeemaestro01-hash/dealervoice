@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { MapPin, Phone, Globe, Mail, Facebook, Instagram, Twitter } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -70,7 +72,6 @@ export function DealershipSidebar({ dealer }: Props) {
           )}
         </div>
 
-        {/* Social links */}
         {(dealer.facebookUrl || dealer.instagramUrl || dealer.twitterUrl) && (
           <div className="flex gap-2 mt-4 pt-4 border-t border-gray-50">
             {dealer.facebookUrl && (
