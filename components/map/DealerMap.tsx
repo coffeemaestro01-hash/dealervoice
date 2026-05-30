@@ -22,7 +22,7 @@ export function DealerMap({ latitude, longitude, name, address, zoom = 15, class
     // Dynamic import to avoid SSR issues with Leaflet
     Promise.all([
       import("leaflet"),
-      import("leaflet/dist/leaflet.css" as any),
+      import("leaflet/dist/leaflet.css"),
     ]).then(([L]) => {
       if (!mapRef.current || mapInstanceRef.current) return;
 
