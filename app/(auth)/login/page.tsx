@@ -1,0 +1,148 @@
+"use client";
+
+import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff, Star, Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/ui/use-toast";
+import { loginSchema, type LoginInput } from "@/lib/validations";
+import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
+
+export default function LoginPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") ?? "/";
+  const { toast } = useToast();
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginInput>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const onSubmit = async (data: LoginInput) => {
+    setIsLoading(true);
+    try {
+      const result = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
+
+      if (result?.error === "ACCOUNT_SUSPENDED") {
+        toast({ title: "Account suspended", description: "Please contact support.", variant: "destructive" });
+        return;
+      }
+      if (result?.error) {
+        toast({ title: "Invalid credentials", description: "Check your email and password.", variant: "destructive" });
+        return;
+      }
+
+      router.push(callbackUrl);
+      router.refresh();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex">
+      {/* Left panel */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-900 to-blue-700 text-white flex-col justify-center p-12">
+        <Link href="/" className="flex items-center gap-2 text-xl font-bold mb-12">
+          <Star className="fill-current" size={22} />
+          DealerVoice
+        </Link>
+        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
+          <h2 className="text-3xl font-bold mb-4">Welcome back</h2>
+          <p className="text-blue-200 text-lg">Access your reviews, track your favourite dealerships, and manage your reputation.</p>
+          <div className="mt-10 space-y-4 text-blue-200 text-sm">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-blue-800 flex items-center justify-center text-xs font-bold">2.4M</div>
+              <span>Verified customer reviews</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-blue-800 flex items-center justify-center text-xs font-bold">190+</div>
+              <span>Countries covered</span>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Right panel */}
+      <div className="flex-1 flex flex-col justify-center px-6 py-12 lg:px-12">
+        <div className="max-w-md w-full mx-auto">
+          <Link href="/" className="flex items-center gap-2 text-xl font-bold text-blue-700 mb-8 lg:hidden">
+            <Star className="fill-current" size={20} />
+            DealerVoice
+          </Link>
+
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Sign in</h1>
+          <p className="text-gray-600 mb-8">
+            New to DealerVoice?{" "}
+            <Link href="/register" className="text-blue-600 hover:underline font-medium">Create an account</Link>
+          </p>
+
+          <SocialAuthButtons callbackUrl={callbackUrl} />
+
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-4 bg-white text-gray-500">or continue with email</span>
+            </div>
+          </div>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div>
+              <Label htmlFor="email">Email address</Label>
+              <Input
+                id="email"
+                type="email"
+                autoComplete="email"
+                className="mt-1"
+                {...register("email")}
+              />
+              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <Label htmlFor="password">Password</Label>
+                <Link href="/forgot-password" className="text-xs text-blue-600 hover:underline">Forgot password?</Link>
+              </div>
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  {...register("password")}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+              {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
+            </div>
+
+            <Button type="submit" className="w-full bg-blue-700 hover:bg-blue-800" disabled={isLoading}>
+              {isLoading ? <><Loader2 size={16} className="animate-spin mr-2" />Signing in...</> : "Sign in"}
+            </Button>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}

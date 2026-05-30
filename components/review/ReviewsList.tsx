@@ -1,0 +1,68 @@
+import prisma from "@/lib/db";
+import Link from "next/link";
+import { ReviewCard } from "./ReviewCard";
+
+const LIMIT = 10;
+
+async function getReviews(dealershipId: string, page: number) {
+  const [reviews, total] = await Promise.all([
+    prisma.review.findMany({
+      where: { dealershipId, status: "PUBLISHED", deletedAt: null },
+      skip: (page - 1) * LIMIT,
+      take: LIMIT,
+      orderBy: { publishedAt: "desc" },
+      include: {
+        author: { select: { id: true, name: true, avatarUrl: true, reputationScore: true, totalReviews: true } },
+        response: { select: { id: true, body: true, createdAt: true, updatedAt: true, isResolved: true } },
+        media: { select: { url: true, type: true, altText: true }, take: 5 },
+      },
+    }),
+    prisma.review.count({ where: { dealershipId, status: "PUBLISHED", deletedAt: null } }),
+  ]);
+  return { reviews, total, totalPages: Math.ceil(total / LIMIT) };
+}
+
+interface Props {
+  dealershipId: string;
+  page: number;
+}
+
+export async function ReviewsList({ dealershipId, page }: Props) {
+  const { reviews, total, totalPages } = await getReviews(dealershipId, page);
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="font-semibold text-gray-900">Reviews ({total})</h2>
+      </div>
+
+      {reviews.length === 0 ? (
+        <div className="bg-white rounded-xl border border-gray-100 p-10 text-center shadow-sm">
+          <p className="text-gray-500">No reviews yet. Be the first to share your experience.</p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {reviews.map((review) => (
+            <ReviewCard key={review.id} review={review as any} />
+          ))}
+        </div>
+      )}
+
+      {totalPages > 1 && (
+        <div className="flex justify-center gap-2 mt-6">
+          {page > 1 && (
+            <Link href={`?page=${page - 1}`} className="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50">
+              Previous
+            </Link>
+          )}
+          <span className="px-4 py-2 text-sm text-gray-600">Page {page} of {totalPages}</span>
+          {page < totalPages && (
+            <Link href={`?page=${page + 1}`} className="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50">
+              Next
+            </Link>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}

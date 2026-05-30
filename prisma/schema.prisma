@@ -1,0 +1,815 @@
+// DealerVoice Database Schema
+// PostgreSQL via Prisma ORM
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────
+
+enum UserRole {
+  CUSTOMER
+  DEALER_OWNER
+  DEALER_GROUP_ADMIN
+  MODERATOR
+  SUPER_ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
+  PENDING_VERIFICATION
+}
+
+enum DealerStatus {
+  ACTIVE
+  INACTIVE
+  PENDING_CLAIM
+  CLAIMED
+  SUSPENDED
+}
+
+enum DealerCategory {
+  NEW_VEHICLE
+  USED_VEHICLE
+  LUXURY
+  COMMERCIAL
+  MOTORCYCLE
+  EV
+  MULTI_BRAND
+}
+
+enum ReviewType {
+  NEW_CAR_PURCHASE
+  USED_CAR_PURCHASE
+  VEHICLE_SERVICE
+  PARTS_DEPARTMENT
+  FINANCING
+  WARRANTY_CLAIM
+  TRADE_IN
+}
+
+enum ReviewStatus {
+  PENDING
+  PUBLISHED
+  FLAGGED
+  REMOVED
+  UNDER_REVIEW
+}
+
+enum VerificationStatus {
+  UNVERIFIED
+  VERIFIED_PURCHASE
+  VERIFIED_SERVICE
+  PENDING
+}
+
+enum VerificationMethod {
+  INVOICE
+  SERVICE_RECEIPT
+  PURCHASE_AGREEMENT
+  SMS
+  EMAIL
+  VIN
+}
+
+enum ClaimStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  DOCUMENTS_REQUIRED
+}
+
+enum SubscriptionPlan {
+  FREE
+  PRO
+  ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  PAST_DUE
+  TRIALING
+  PAUSED
+}
+
+enum ModerationActionType {
+  REVIEW_REMOVED
+  REVIEW_APPROVED
+  USER_SUSPENDED
+  USER_BANNED
+  DEALER_SUSPENDED
+  FLAG_DISMISSED
+  MEDIATION_STARTED
+  MEDIATION_RESOLVED
+}
+
+enum ReportReason {
+  FAKE_REVIEW
+  SPAM
+  OFFENSIVE_CONTENT
+  CONFLICT_OF_INTEREST
+  WRONG_BUSINESS
+  OTHER
+}
+
+enum MediaType {
+  IMAGE
+  DOCUMENT
+  VIDEO
+}
+
+// ─────────────────────────────────────────────
+// USER
+// ─────────────────────────────────────────────
+
+model User {
+  id                 String     @id @default(cuid())
+  email              String     @unique
+  emailVerified      DateTime?
+  passwordHash       String?
+  name               String
+  displayName        String?
+  avatarUrl          String?
+  bio                String?
+  role               UserRole   @default(CUSTOMER)
+  status             UserStatus @default(PENDING_VERIFICATION)
+  locale             String     @default("en")
+  timezone           String     @default("UTC")
+  reputationScore    Int        @default(0)
+  helpfulVotes       Int        @default(0)
+  totalReviews       Int        @default(0)
+  emailNotifications Boolean    @default(true)
+  marketingEmails    Boolean    @default(false)
+  twoFactorEnabled   Boolean    @default(false)
+  twoFactorSecret    String?
+  phoneNumber        String?
+  phoneVerified      Boolean    @default(false)
+  countryCode        String?
+  lastLoginAt        DateTime?
+  lastLoginIp        String?
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+  deletedAt          DateTime?
+
+  accounts         Account[]
+  sessions         Session[]
+  reviews          Review[]
+  helpfulMarks     HelpfulMark[]
+  reports          Report[]          @relation("ReportedBy")
+  claimsSubmitted  DealerClaim[]     @relation("ClaimSubmittedBy")
+  dealerProfile    DealerStaff[]
+  auditLogs        AuditLog[]
+  notifications    Notification[]
+  moderationActions ModerationAction[] @relation("ModeratorActions")
+
+  @@index([email])
+  @@index([role])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  userAgent    String?
+  ipAddress    String?
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─────────────────────────────────────────────
+// GEOGRAPHY
+// ─────────────────────────────────────────────
+
+model Country {
+  id          String  @id @default(cuid())
+  name        String
+  nameLocal   String?
+  code        String  @unique // ISO 3166-1 alpha-2
+  code3       String  @unique // ISO 3166-1 alpha-3
+  dialCode    String?
+  currency    String?
+  locale      String?
+  flagEmoji   String?
+  isActive    Boolean @default(true)
+  dealerCount Int     @default(0)
+
+  cities      City[]
+  dealerships Dealership[]
+
+  @@index([code])
+  @@index([isActive])
+}
+
+model City {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String
+  countryId   String
+  stateCode   String?
+  stateName   String?
+  latitude    Float?
+  longitude   Float?
+  population  Int?
+  isActive    Boolean @default(true)
+  dealerCount Int     @default(0)
+
+  country     Country      @relation(fields: [countryId], references: [id])
+  dealerships Dealership[]
+
+  @@unique([slug, countryId])
+  @@index([countryId])
+  @@index([slug])
+}
+
+// ─────────────────────────────────────────────
+// BRAND
+// ─────────────────────────────────────────────
+
+model Brand {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  slug        String  @unique
+  logoUrl     String?
+  countryCode String?
+  isActive    Boolean @default(true)
+  sortOrder   Int     @default(0)
+
+  dealerBrands DealerBrand[]
+
+  @@index([slug])
+}
+
+// ─────────────────────────────────────────────
+// DEALERSHIP
+// ─────────────────────────────────────────────
+
+model Dealership {
+  id                  String         @id @default(cuid())
+  slug                String         @unique
+  name                String
+  legalName           String?
+  description         String?        @db.Text
+  logoUrl             String?
+  coverImageUrl       String?
+  category            DealerCategory @default(NEW_VEHICLE)
+  status              DealerStatus   @default(ACTIVE)
+
+  // Contact
+  email               String?
+  phone               String?
+  website             String?
+
+  // Address
+  address             String?
+  address2            String?
+  cityId              String?
+  cityName            String?
+  stateCode           String?
+  stateName           String?
+  countryId           String
+  postalCode          String?
+
+  // GPS
+  latitude            Float?
+  longitude           Float?
+
+  // Social
+  facebookUrl         String?
+  instagramUrl        String?
+  twitterUrl          String?
+  linkedinUrl         String?
+  youtubeUrl          String?
+
+  // Aggregated metrics (denormalized for performance)
+  overallRating       Float          @default(0)
+  totalReviews        Int            @default(0)
+  verifiedReviews     Int            @default(0)
+  reputationScore     Int            @default(0)
+  responseRate        Float          @default(0)
+  avgResponseTimeHrs  Float?
+  resolutionRate      Float          @default(0)
+
+  // Rating breakdown
+  ratingTransparency  Float          @default(0)
+  ratingPricing       Float          @default(0)
+  ratingService       Float          @default(0)
+  ratingDelivery      Float          @default(0)
+  ratingAfterSales    Float          @default(0)
+
+  // Business info
+  yearEstablished     Int?
+  employeeCount       String?
+  licenseNumber       String?
+  taxId               String?
+
+  // SEO
+  metaTitle           String?
+  metaDescription     String?
+
+  // Flags
+  isFeatured          Boolean        @default(false)
+  isVerified          Boolean        @default(false)
+  claimedAt           DateTime?
+
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  deletedAt           DateTime?
+
+  country          Country            @relation(fields: [countryId], references: [id])
+  city             City?              @relation(fields: [cityId], references: [id])
+  brands           DealerBrand[]
+  reviews          Review[]
+  claims           DealerClaim[]
+  staff            DealerStaff[]
+  subscription     DealerSubscription?
+  awards           DealerAward[]
+  media            MediaFile[]
+  reports          Report[]           @relation("DealerReports")
+  competitorSets   CompetitorSet[]    @relation("PrimaryDealer")
+  competitors      CompetitorSet[]    @relation("CompetitorDealer")
+  analyticsEvents  AnalyticsEvent[]
+
+  @@index([slug])
+  @@index([countryId])
+  @@index([cityId])
+  @@index([status])
+  @@index([overallRating])
+  @@index([reputationScore])
+  @@index([isFeatured])
+  @@index([latitude, longitude])
+}
+
+model DealerBrand {
+  id           String     @id @default(cuid())
+  dealershipId String
+  brandId      String
+  isPrimary    Boolean    @default(false)
+
+  dealership   Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+  brand        Brand      @relation(fields: [brandId], references: [id])
+
+  @@unique([dealershipId, brandId])
+  @@index([dealershipId])
+  @@index([brandId])
+}
+
+model DealerStaff {
+  id           String     @id @default(cuid())
+  dealershipId String
+  userId       String
+  role         String     // owner, manager, staff
+  isActive     Boolean    @default(true)
+  invitedAt    DateTime   @default(now())
+  acceptedAt   DateTime?
+
+  dealership   Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+  user         User       @relation(fields: [userId], references: [id])
+
+  @@unique([dealershipId, userId])
+  @@index([dealershipId])
+  @@index([userId])
+}
+
+model DealerClaim {
+  id              String      @id @default(cuid())
+  dealershipId    String
+  submittedById   String
+  status          ClaimStatus @default(PENDING)
+  businessEmail   String?
+  businessPhone   String?
+  notes           String?     @db.Text
+  rejectionReason String?
+  reviewedAt      DateTime?
+  reviewedById    String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  dealership      Dealership  @relation(fields: [dealershipId], references: [id])
+  submittedBy     User        @relation("ClaimSubmittedBy", fields: [submittedById], references: [id])
+  documents       MediaFile[]
+
+  @@index([dealershipId])
+  @@index([submittedById])
+  @@index([status])
+}
+
+model DealerAward {
+  id           String     @id @default(cuid())
+  dealershipId String
+  title        String
+  description  String?
+  year         Int
+  badgeUrl     String?
+  createdAt    DateTime   @default(now())
+
+  dealership   Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+
+  @@index([dealershipId])
+}
+
+// ─────────────────────────────────────────────
+// REVIEWS
+// ─────────────────────────────────────────────
+
+model Review {
+  id                   String             @id @default(cuid())
+  dealershipId         String
+  authorId             String
+
+  // Type & Status
+  reviewType           ReviewType         @default(NEW_CAR_PURCHASE)
+  status               ReviewStatus       @default(PENDING)
+  verificationStatus   VerificationStatus @default(UNVERIFIED)
+  verificationMethod   VerificationMethod?
+
+  // Ratings
+  overallRating        Int                // 1-5
+  ratingTransparency   Int?
+  ratingPricing        Int?
+  ratingService        Int?
+  ratingDelivery       Int?
+  ratingAfterSales     Int?
+  wouldRecommend       Boolean?
+
+  // Content
+  title                String
+  body                 String             @db.Text
+
+  // Vehicle info
+  vehicleMake          String?
+  vehicleModel         String?
+  vehicleYear          Int?
+  vehicleVin           String?
+
+  // Interaction date
+  visitDate            DateTime?
+
+  // AI analysis
+  sentimentScore       Float?
+  sentimentLabel       String?  // positive, neutral, negative
+  aiSummary            String?  @db.Text
+  spamScore            Float?
+  isFlagged            Boolean  @default(false)
+
+  // Engagement
+  helpfulCount         Int      @default(0)
+  unhelpfulCount       Int      @default(0)
+  reportCount          Int      @default(0)
+
+  // Meta
+  isEdited             Boolean  @default(false)
+  editedAt             DateTime?
+  verifiedAt           DateTime?
+  publishedAt          DateTime?
+  ipAddress            String?
+  userAgent            String?
+
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  deletedAt            DateTime?
+
+  dealership   Dealership      @relation(fields: [dealershipId], references: [id])
+  author       User            @relation(fields: [authorId], references: [id])
+  response     ReviewResponse?
+  media        MediaFile[]
+  helpfulMarks HelpfulMark[]
+  reports      Report[]        @relation("ReviewReports")
+  verificationDocs MediaFile[] @relation("VerificationDocs")
+
+  @@index([dealershipId])
+  @@index([authorId])
+  @@index([status])
+  @@index([overallRating])
+  @@index([createdAt])
+  @@index([reviewType])
+  @@index([verificationStatus])
+}
+
+model ReviewResponse {
+  id           String   @id @default(cuid())
+  reviewId     String   @unique
+  dealershipId String
+  respondedById String
+  body         String   @db.Text
+  isPublic     Boolean  @default(true)
+  isResolved   Boolean  @default(false)
+  resolvedAt   DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  review       Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@index([reviewId])
+  @@index([dealershipId])
+}
+
+model HelpfulMark {
+  id        String   @id @default(cuid())
+  reviewId  String
+  userId    String
+  isHelpful Boolean
+  createdAt DateTime @default(now())
+
+  review    Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([reviewId, userId])
+  @@index([reviewId])
+}
+
+// ─────────────────────────────────────────────
+// MEDIA
+// ─────────────────────────────────────────────
+
+model MediaFile {
+  id           String    @id @default(cuid())
+  type         MediaType
+  url          String
+  key          String    // S3 key
+  filename     String
+  mimeType     String
+  size         Int
+  width        Int?
+  height       Int?
+  altText      String?
+  isPublic     Boolean   @default(true)
+  isSafe       Boolean   @default(true) // virus/content scan result
+  createdAt    DateTime  @default(now())
+
+  // Polymorphic relations
+  dealershipId    String?
+  reviewId        String?
+  reviewVerifId   String?
+  claimId         String?
+
+  dealership      Dealership?  @relation(fields: [dealershipId], references: [id])
+  review          Review?      @relation(fields: [reviewId], references: [id])
+  reviewVerif     Review?      @relation("VerificationDocs", fields: [reviewVerifId], references: [id])
+  claim           DealerClaim? @relation(fields: [claimId], references: [id])
+
+  @@index([dealershipId])
+  @@index([reviewId])
+}
+
+// ─────────────────────────────────────────────
+// SUBSCRIPTIONS
+// ─────────────────────────────────────────────
+
+model DealerSubscription {
+  id                   String             @id @default(cuid())
+  dealershipId         String             @unique
+  plan                 SubscriptionPlan   @default(FREE)
+  status               SubscriptionStatus @default(ACTIVE)
+
+  stripeCustomerId     String?            @unique
+  stripeSubscriptionId String?            @unique
+  stripePriceId        String?
+
+  currentPeriodStart   DateTime?
+  currentPeriodEnd     DateTime?
+  trialEnd             DateTime?
+  canceledAt           DateTime?
+  cancelAtPeriodEnd    Boolean            @default(false)
+
+  // Features
+  maxLocations         Int                @default(1)
+  apiAccess            Boolean            @default(false)
+  whiteLabel           Boolean            @default(false)
+  competitorMonitoring Boolean            @default(false)
+
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  dealership           Dealership         @relation(fields: [dealershipId], references: [id])
+  invoices             Invoice[]
+
+  @@index([dealershipId])
+  @@index([stripeCustomerId])
+  @@index([status])
+}
+
+model Invoice {
+  id             String   @id @default(cuid())
+  subscriptionId String
+  stripeInvoiceId String? @unique
+  amount         Int      // cents
+  currency       String   @default("usd")
+  status         String   // paid, open, void, uncollectible
+  pdfUrl         String?
+  invoiceDate    DateTime
+  dueDate        DateTime?
+  paidAt         DateTime?
+  createdAt      DateTime @default(now())
+
+  subscription   DealerSubscription @relation(fields: [subscriptionId], references: [id])
+
+  @@index([subscriptionId])
+}
+
+// ─────────────────────────────────────────────
+// MODERATION & REPORTS
+// ─────────────────────────────────────────────
+
+model Report {
+  id           String       @id @default(cuid())
+  reason       ReportReason
+  description  String?      @db.Text
+  reportedById String
+  status       String       @default("PENDING") // PENDING, REVIEWED, DISMISSED
+  reviewedAt   DateTime?
+  reviewedById String?
+  createdAt    DateTime     @default(now())
+
+  // Polymorphic
+  reviewId     String?
+  dealerId     String?
+
+  reportedBy   User        @relation("ReportedBy", fields: [reportedById], references: [id])
+  review       Review?     @relation("ReviewReports", fields: [reviewId], references: [id])
+  dealership   Dealership? @relation("DealerReports", fields: [dealerId], references: [id])
+
+  @@index([reportedById])
+  @@index([reviewId])
+  @@index([status])
+}
+
+model ModerationAction {
+  id          String               @id @default(cuid())
+  type        ModerationActionType
+  moderatorId String
+  reason      String?
+  notes       String?              @db.Text
+  targetId    String               // reviewId, userId, dealerId
+  targetType  String               // review, user, dealership
+  createdAt   DateTime             @default(now())
+
+  moderator   User                 @relation("ModeratorActions", fields: [moderatorId], references: [id])
+
+  @@index([moderatorId])
+  @@index([targetId])
+  @@index([type])
+}
+
+// ─────────────────────────────────────────────
+// ANALYTICS
+// ─────────────────────────────────────────────
+
+model AnalyticsEvent {
+  id           String     @id @default(cuid())
+  dealershipId String
+  eventType    String     // page_view, review_read, profile_click
+  sessionId    String?
+  userId       String?
+  ipAddress    String?
+  country      String?
+  city         String?
+  device       String?
+  browser      String?
+  referrer     String?
+  metadata     Json?
+  createdAt    DateTime   @default(now())
+
+  dealership   Dealership @relation(fields: [dealershipId], references: [id])
+
+  @@index([dealershipId])
+  @@index([eventType])
+  @@index([createdAt])
+}
+
+model CompetitorSet {
+  id               String     @id @default(cuid())
+  primaryId        String
+  competitorId     String
+  addedAt          DateTime   @default(now())
+
+  primary          Dealership @relation("PrimaryDealer", fields: [primaryId], references: [id])
+  competitor       Dealership @relation("CompetitorDealer", fields: [competitorId], references: [id])
+
+  @@unique([primaryId, competitorId])
+}
+
+// ─────────────────────────────────────────────
+// NOTIFICATIONS
+// ─────────────────────────────────────────────
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String   // new_review, review_response, claim_approved, etc.
+  title     String
+  body      String
+  link      String?
+  isRead    Boolean  @default(false)
+  readAt    DateTime?
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+// ─────────────────────────────────────────────
+// CMS
+// ─────────────────────────────────────────────
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  excerpt     String?
+  content     String   @db.Text
+  coverImage  String?
+  authorName  String
+  authorImage String?
+  category    String?
+  tags        String[]
+  isPublished Boolean  @default(false)
+  publishedAt DateTime?
+  metaTitle   String?
+  metaDesc    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@index([isPublished])
+}
+
+model CmsPage {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  content     String   @db.Text
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ─────────────────────────────────────────────
+// AUDIT
+// ─────────────────────────────────────────────
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  action     String
+  resource   String
+  resourceId String?
+  oldValues  Json?
+  newValues  Json?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  user       User?    @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([resource, resourceId])
+  @@index([createdAt])
+}
