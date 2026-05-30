@@ -9,7 +9,7 @@ import { RatingDistribution } from "@/components/dealership/RatingDistribution";
 import { getCache, setCache, CACHE_KEYS, CACHE_TTL } from "@/lib/redis";
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
   searchParams: { page?: string };
 }
 
@@ -37,7 +37,8 @@ async function fetchDealership(slug: string) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const dealer = await getDealership(params.slug);
+  const { slug } = await params;
+  const dealer = await getDealership(slug);
   if (!dealer) return {};
   const location = [dealer.cityName, dealer.stateName, dealer.country?.name].filter(Boolean).join(", ");
   return {
@@ -54,7 +55,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function DealershipPage({ params, searchParams }: Props) {
-  const dealer = await getDealership(params.slug);
+  const { slug } = await params;
+  const dealer = await getDealership(slug);
   if (!dealer) notFound();
 
   const page = Number(searchParams.page ?? 1);

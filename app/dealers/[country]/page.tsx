@@ -5,7 +5,7 @@ import { DealerCard } from "@/components/dealership/DealerCard";
 import Link from "next/link";
 
 interface Props {
-  params: { country: string };
+  params: Promise<{ country: string }>;
 }
 
 async function getCountryData(code: string) {
@@ -30,7 +30,8 @@ async function getDealersByCountry(countryId: string) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const country = await getCountryData(params.country);
+  const { country: countryCode } = await params;
+  const country = await getCountryData(countryCode);
   if (!country) return {};
   return {
     title: `Car Dealerships in ${country.name}`,
@@ -39,7 +40,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function CountryPage({ params }: Props) {
-  const country = await getCountryData(params.country);
+  const { country: countryCode } = await params;
+  const country = await getCountryData(countryCode);
   if (!country) notFound();
 
   const dealers = await getDealersByCountry(country.id);
@@ -69,7 +71,7 @@ export default async function CountryPage({ params }: Props) {
               {country.cities.map((city) => (
                 <Link
                   key={city.id}
-                  href={`/dealers/${params.country}/${city.slug}`}
+                  href={`/dealers/${countryCode}/${city.slug}`}
                   className="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm text-gray-700 hover:border-blue-300 hover:text-blue-700 transition-colors"
                 >
                   {city.name}

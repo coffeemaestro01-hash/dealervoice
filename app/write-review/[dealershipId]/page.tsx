@@ -6,21 +6,23 @@ import { WriteReviewForm } from "@/components/review/WriteReviewForm";
 import type { Metadata } from "next";
 
 interface Props {
-  params: { dealershipId: string };
+  params: Promise<{ dealershipId: string }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const dealer = await prisma.dealership.findUnique({ where: { id: params.dealershipId }, select: { name: true } });
+  const { dealershipId } = await params;
+  const dealer = await prisma.dealership.findUnique({ where: { id: dealershipId }, select: { name: true } });
   if (!dealer) return {};
   return { title: `Write a Review – ${dealer.name}` };
 }
 
 export default async function WriteReviewPage({ params }: Props) {
+  const { dealershipId } = await params;
   const session = await getServerSession(authOptions);
-  if (!session?.user) redirect(`/login?callbackUrl=/write-review/${params.dealershipId}`);
+  if (!session?.user) redirect(`/login?callbackUrl=/write-review/${dealershipId}`);
 
   const dealer = await prisma.dealership.findUnique({
-    where: { id: params.dealershipId, status: "ACTIVE", deletedAt: null },
+    where: { id: dealershipId, status: "ACTIVE", deletedAt: null },
     select: { id: true, name: true, slug: true, logoUrl: true, cityName: true, stateName: true, country: { select: { name: true } } },
   });
 

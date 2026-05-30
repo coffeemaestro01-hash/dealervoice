@@ -5,12 +5,13 @@ import prisma from "@/lib/db";
 import { reviewResponseSchema } from "@/lib/validations";
 import { deleteCachePattern } from "@/lib/redis";
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const session = await getServerSession(authOptions);
   if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const review = await prisma.review.findUnique({
-    where: { id: params.id, deletedAt: null },
+    where: { id, deletedAt: null },
     include: { dealership: { include: { staff: { where: { userId: session.user.id, isActive: true } } } } },
   });
 
@@ -35,9 +36,9 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 
   // Upsert response
   const response = await prisma.reviewResponse.upsert({
-    where: { reviewId: params.id },
+    where: { reviewId: id },
     create: {
-      reviewId: params.id,
+      reviewId: id,
       dealershipId: review.dealershipId,
       respondedById: session.user.id,
       body: parsed.data.body,

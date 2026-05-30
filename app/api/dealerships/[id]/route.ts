@@ -13,9 +13,10 @@ async function isDealerAdmin(userId: string, dealershipId: string) {
   return !!staff;
 }
 
-export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const dealer = await prisma.dealership.findUnique({
-    where: { id: params.id, deletedAt: null },
+    where: { id, deletedAt: null },
     include: {
       country: { select: { name: true, code: true } },
       city: { select: { name: true, slug: true } },
@@ -29,11 +30,12 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
   return NextResponse.json({ data: dealer });
 }
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const session = await getServerSession(authOptions);
   if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const isAdmin = await isDealerAdmin(session.user.id, params.id);
+  const isAdmin = await isDealerAdmin(session.user.id, id);
   const isSuperAdmin = ["MODERATOR", "SUPER_ADMIN"].includes(session.user.role as string);
 
   if (!isAdmin && !isSuperAdmin) {
@@ -53,7 +55,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   const { brandIds, ...updateData } = parsed.data as any;
 
   const dealer = await prisma.dealership.update({
-    where: { id: params.id },
+    where: { id },
     data: updateData,
     include: {
       country: { select: { name: true, code: true } },
