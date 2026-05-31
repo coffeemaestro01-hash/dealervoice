@@ -4,16 +4,24 @@ import prisma from "@/lib/db";
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [dealerships, countries, cities] = await Promise.all([
-    prisma.dealership.findMany({
-      where: { status: "ACTIVE", deletedAt: null },
-      select: { slug: true, updatedAt: true },
-      orderBy: { reputationScore: "desc" },
-      take: 50_000, // sitemap limit
-    }),
-    prisma.country.findMany({ where: { isActive: true, dealerCount: { gt: 0 } }, select: { code: true } }),
-    prisma.city.findMany({ where: { isActive: true, dealerCount: { gt: 0 } }, select: { slug: true, country: { select: { code: true } } }, take: 10_000 }),
-  ]);
+  let dealerships: { slug: string; updatedAt: Date }[] = [];
+  let countries: { code: string }[] = [];
+  let cities: { slug: string; country: { code: string } }[] = [];
+
+  try {
+    [dealerships, countries, cities] = await Promise.all([
+      prisma.dealership.findMany({
+        where: { status: "ACTIVE", deletedAt: null },
+        select: { slug: true, updatedAt: true },
+        orderBy: { reputationScore: "desc" },
+        take: 50_000,
+      }),
+      prisma.country.findMany({ where: { isActive: true, dealerCount: { gt: 0 } }, select: { code: true } }),
+      prisma.city.findMany({ where: { isActive: true, dealerCount: { gt: 0 } }, select: { slug: true, country: { select: { code: true } } }, take: 10_000 }),
+    ]);
+  } catch {
+    // DB not yet migrated — return static pages only
+  }
 
   const static_pages = [
     { url: `${BASE}/`, priority: 1.0 },
