@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Star, Loader2, Check } from "lucide-react";
+import { Eye, EyeOff, Loader2, Check } from "lucide-react";
+import { Logo } from "@/components/common/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -57,21 +58,20 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-night-gradient px-4 py-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 font-bold text-xl text-blue-700 mb-4">
-            <Star className="fill-current" size={22} />
-            DealerVoice
-          </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Create your account</h1>
-          <p className="text-gray-600 mt-1">
+          <div className="flex justify-center mb-4">
+            <Logo variant="full" height={34} />
+          </div>
+          <h1 className="text-2xl font-bold text-white">Create your account</h1>
+          <p className="text-gray-400 mt-1">
             Already have an account?{" "}
-            <Link href="/login" className="text-blue-600 hover:underline font-medium">Sign in</Link>
+            <Link href="/login" className="text-gold-400 hover:underline font-medium">Sign in</Link>
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
+        <div className="bg-white rounded-2xl border border-gold/20 shadow-gold p-8">
           <SocialAuthButtons callbackUrl="/" />
 
           <div className="relative my-5">
@@ -114,14 +114,14 @@ export default function RegisterPage() {
               {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
             </div>
 
-            <Button type="submit" className="w-full bg-blue-700 hover:bg-blue-800 h-11" disabled={isLoading}>
+            <Button type="submit" className="w-full bg-gold-gradient text-night-900 font-semibold hover:opacity-90 border-0 h-11" disabled={isLoading}>
               {isLoading ? <><Loader2 size={16} className="animate-spin mr-2" />Creating account…</> : "Create Account"}
             </Button>
 
             <p className="text-xs text-gray-500 text-center">
               By creating an account, you agree to our{" "}
-              <Link href="/terms" className="text-blue-600 hover:underline">Terms</Link>{" "}and{" "}
-              <Link href="/privacy" className="text-blue-600 hover:underline">Privacy Policy</Link>.
+              <Link href="/terms" className="text-gold-600 hover:underline">Terms</Link>{" "}and{" "}
+              <Link href="/privacy" className="text-gold-600 hover:underline">Privacy Policy</Link>.
             </p>
           </form>
         </div>

@@ -1,0 +1,34 @@
+<svg width="900" height="240" viewBox="0 0 900 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gold" x1="40" y1="40" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FBE7A1"/>
+      <stop offset="35%" stop-color="#E6C25A"/>
+      <stop offset="65%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#A9791C"/>
+    </linearGradient>
+    <linearGradient id="goldText" x1="270" y1="80" x2="880" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FBE7A1"/>
+      <stop offset="45%" stop-color="#E6C25A"/>
+      <stop offset="100%" stop-color="#C9961E"/>
+    </linearGradient>
+    <linearGradient id="goldEdge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFF4CC"/>
+      <stop offset="100%" stop-color="#C9961E"/>
+    </linearGradient>
+    <radialGradient id="bg" cx="0.5" cy="0.4" r="0.75">
+      <stop offset="0%" stop-color="#1c1c1c"/>
+      <stop offset="100%" stop-color="#0a0a0a"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Icon mark -->
+  <g transform="translate(20, 20) scale(0.39)">
+    <rect x="16" y="16" width="480" height="480" rx="116" fill="url(#bg)"/>
+    <rect x="16.5" y="16.5" width="479" height="479" rx="115.5" fill="none" stroke="url(#goldEdge)" stroke-width="5" stroke-opacity="0.55"/>
+    <path d="M150 130 H362 a44 44 0 0 1 44 44 V300 a44 44 0 0 1 -44 44 H252 l-58 56 v-56 H150 a44 44 0 0 1 -44 -44 V174 a44 44 0 0 1 44 -44 Z" fill="url(#gold)"/>
+    <path d="M256 178 l27.2 55.1 60.8 8.8 -44 42.9 10.4 60.5 -54.4 -28.6 -54.4 28.6 10.4 -60.5 -44 -42.9 60.8 -8.8 Z" fill="#0a0a0a"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="248" y="152" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="92" font-weight="800" letter-spacing="-2" fill="url(#goldText)">Dealer<tspan font-weight="600">Voice</tspan></text>
+</svg>

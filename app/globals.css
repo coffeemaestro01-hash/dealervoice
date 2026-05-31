@@ -22,19 +22,20 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
+    /* Gold primary */
+    --primary: 43 65% 52%;
+    --primary-foreground: 0 0% 6%;
+    --secondary: 45 30% 96%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
+    --accent: 45 40% 95%;
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --ring: 43 65% 52%;
     --radius: 0.5rem;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
@@ -88,4 +89,65 @@
 
   .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+  /* ───────── Black & Gold theme utilities ───────── */
+
+  /* Gold gradient text */
+  .text-gold {
+    background-image: linear-gradient(135deg, #FBE7A1 0%, #E6C25A 40%, #D4AF37 70%, #C9961E 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* Solid gold color helpers */
+  .gold-100 { color: #FBE7A1; }
+  .gold-400 { color: #E6C25A; }
+  .gold-500 { color: #D4AF37; }
+  .gold-600 { color: #C9961E; }
+  .bg-gold-500 { background-color: #D4AF37; }
+  .bg-gold-600 { background-color: #C9961E; }
+
+  /* Gold gradient fill (buttons, chips) */
+  .bg-gold-gradient {
+    background-image: linear-gradient(135deg, #FBE7A1 0%, #E6C25A 38%, #D4AF37 70%, #C9961E 100%);
+  }
+  .bg-gold-gradient:hover {
+    background-image: linear-gradient(135deg, #FFF0BE 0%, #EFCF6B 38%, #E0BB44 70%, #D4A526 100%);
+  }
+
+  /* Dark luxury backgrounds */
+  .bg-night {
+    background-color: #0a0a0a;
+  }
+  .bg-night-gradient {
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(212,175,55,0.16), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 90% 20%, rgba(212,175,55,0.08), transparent 55%),
+      linear-gradient(180deg, #0d0d0d 0%, #0a0a0a 50%, #060606 100%);
+  }
+  .bg-night-soft {
+    background-image: linear-gradient(180deg, #111111 0%, #0c0c0c 100%);
+  }
+
+  /* Subtle gold border */
+  .border-gold {
+    border-color: rgba(212, 175, 55, 0.35);
+  }
+  .border-gold-strong {
+    border-color: rgba(212, 175, 55, 0.6);
+  }
+
+  /* Gold glow */
+  .shadow-gold {
+    box-shadow: 0 0 0 1px rgba(212,175,55,0.18), 0 10px 40px -10px rgba(212,175,55,0.35);
+  }
+
+  /* Card on dark */
+  .card-dark {
+    background-image: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+    border: 1px solid rgba(212,175,55,0.18);
+    backdrop-filter: blur(6px);
+  }
 }

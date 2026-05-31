@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Star } from "lucide-react";
+import { Logo } from "@/components/common/Logo";
 
 const FOOTER_LINKS = {
   Platform: [
@@ -30,32 +30,29 @@ const FOOTER_LINKS = {
 
 export function Footer() {
   return (
-    <footer className="bg-gray-950 text-gray-400 mt-auto">
+    <footer className="bg-night-900 text-gray-400 mt-auto border-t border-gold/20">
       <div className="container py-12">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-10">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 font-bold text-lg text-white mb-3">
-              <Star className="fill-current text-blue-400" size={20} />
-              DealerVoice
-            </Link>
-            <p className="text-sm leading-relaxed">
+            <Logo variant="full" height={30} className="mb-3" />
+            <p className="text-sm leading-relaxed mt-3">
               The world&apos;s most trusted platform for car dealership reviews and reputation insights.
             </p>
-            <div className="flex gap-3 mt-4">
+            <div className="flex gap-2 mt-4">
               {["Twitter", "Facebook", "LinkedIn", "Instagram"].map((s) => (
-                <a key={s} href="#" className="text-xs hover:text-white transition-colors" aria-label={s}>{s[0]}</a>
+                <a key={s} href="#" className="w-8 h-8 grid place-items-center rounded-full border border-gold/30 text-gold-400 text-xs hover:bg-gold-500 hover:text-night-900 transition-colors" aria-label={s}>{s[0]}</a>
               ))}
             </div>
           </div>
 
           {Object.entries(FOOTER_LINKS).map(([section, links]) => (
             <div key={section}>
-              <h4 className="text-white font-semibold text-sm mb-3">{section}</h4>
+              <h4 className="text-gold-400 font-semibold text-sm mb-3">{section}</h4>
               <ul className="space-y-2">
                 {links.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} className="text-sm hover:text-white transition-colors">
+                    <Link href={link.href} className="text-sm hover:text-gold-300 transition-colors">
                       {link.label}
                     </Link>
                   </li>
@@ -65,7 +62,7 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="border-t border-gray-800 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
+        <div className="border-t border-gold/15 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
           <p>© {new Date().getFullYear()} DealerVoice, Inc. All rights reserved.</p>
           <p>Available in 190+ countries · 8 languages</p>
         </div>

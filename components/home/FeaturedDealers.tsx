@@ -22,14 +22,14 @@ export async function FeaturedDealers() {
   if (dealers.length === 0) return null;
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-night">
       <div className="container">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Top-rated dealers</h2>
-            <p className="text-gray-600 mt-1">Dealerships with exceptional customer experiences</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-white">Top-rated <span className="text-gold">dealers</span></h2>
+            <p className="text-gray-400 mt-1">Dealerships with exceptional customer experiences</p>
           </div>
-          <Link href="/dealers" className="text-sm font-medium text-blue-600 hover:underline hidden sm:block">
+          <Link href="/dealers" className="text-sm font-medium text-gold-400 hover:text-gold-300 hidden sm:block">
             View all →
           </Link>
         </div>
@@ -41,7 +41,7 @@ export async function FeaturedDealers() {
         </div>
 
         <div className="text-center mt-8 sm:hidden">
-          <Link href="/dealers" className="text-sm font-medium text-blue-600 hover:underline">
+          <Link href="/dealers" className="text-sm font-medium text-gold-400 hover:text-gold-300">
             View all dealerships →
           </Link>
         </div>

@@ -28,10 +28,10 @@ export function HeroSection() {
   };
 
   return (
-    <section className="relative bg-gradient-to-br from-blue-950 via-blue-900 to-blue-800 text-white overflow-hidden">
+    <section className="relative bg-night-gradient text-white overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute inset-0 bg-[url('/images/hero-pattern.svg')] opacity-5 pointer-events-none" />
-      <div className="absolute top-1/4 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[36rem] h-[36rem] bg-gold-500/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[28rem] h-[28rem] bg-gold-600/10 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="container relative py-20 md:py-28">
         <motion.div
@@ -40,19 +40,17 @@ export function HeroSection() {
           transition={{ duration: 0.6 }}
           className="max-w-3xl mx-auto text-center"
         >
-          <div className="inline-flex items-center gap-2 bg-blue-800/50 border border-blue-700 rounded-full px-4 py-1.5 text-sm text-blue-200 mb-6">
+          <div className="inline-flex items-center gap-2 bg-gold-500/10 border border-gold/40 rounded-full px-4 py-1.5 text-sm text-gold-300 mb-6">
             <ShieldCheck size={14} />
             Trusted by millions of car buyers worldwide
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4 text-white">
             Find Dealerships You Can{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-cyan-300">
-              Trust
-            </span>
+            <span className="text-gold">Trust</span>
           </h1>
 
-          <p className="text-lg md:text-xl text-blue-200 mb-8 max-w-xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-xl mx-auto">
             Read verified customer reviews, compare dealership ratings, and make confident vehicle decisions.
           </p>
 
@@ -76,13 +74,13 @@ export function HeroSection() {
                 className="pl-10 h-12 bg-white text-gray-900 border-0 shadow-lg text-base"
               />
             </div>
-            <Button type="submit" size="lg" className="h-12 px-8 bg-white text-blue-700 hover:bg-blue-50 font-semibold shrink-0 shadow-lg">
+            <Button type="submit" size="lg" className="h-12 px-8 bg-gold-gradient text-night-900 hover:opacity-90 font-semibold shrink-0 shadow-gold border-0">
               Search
             </Button>
           </form>
 
-          <p className="text-blue-300 text-sm mt-4">
-            Popular: Toyota, BMW, Tesla, Mercedes-Benz, Ford
+          <p className="text-gray-400 text-sm mt-4">
+            Popular: <span className="text-gold-400">Toyota, BMW, Tesla, Mercedes-Benz, Ford</span>
           </p>
         </motion.div>
 
@@ -95,8 +93,8 @@ export function HeroSection() {
         >
           {TRUST_STATS.map((stat) => (
             <div key={stat.label} className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-white">{stat.value}</div>
-              <div className="text-sm text-blue-300 mt-1">{stat.label}</div>
+              <div className="text-2xl md:text-3xl font-bold text-gold">{stat.value}</div>
+              <div className="text-sm text-gray-400 mt-1">{stat.label}</div>
             </div>
           ))}
         </motion.div>
