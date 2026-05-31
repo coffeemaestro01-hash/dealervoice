@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 export const dynamic = "force-dynamic";
 import { HeroSection } from "@/components/home/HeroSection";
 import { TrustSection } from "@/components/home/TrustSection";
+import { CategoriesSection } from "@/components/home/CategoriesSection";
 import { FeaturedDealers } from "@/components/home/FeaturedDealers";
 import { HowItWorksSection } from "@/components/home/HowItWorksSection";
 import { RecentReviewsSection } from "@/components/home/RecentReviewsSection";
@@ -19,11 +20,12 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-night">
+    <div className="flex flex-col min-h-screen bg-white">
       <Navbar />
       <main className="flex-1">
         <HeroSection />
         <TrustSection />
+        <CategoriesSection />
         <Suspense>
           <FeaturedDealers />
         </Suspense>

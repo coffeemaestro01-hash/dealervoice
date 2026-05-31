@@ -37,7 +37,7 @@ export function ReviewCard({ review, showDealerResponse = true, onHelpful, onFla
         <div className="flex items-center gap-3">
           <Avatar className="w-10 h-10">
             <AvatarImage src={review.author.avatarUrl ?? undefined} />
-            <AvatarFallback className="bg-blue-100 text-blue-700 font-semibold text-sm">
+            <AvatarFallback className="bg-gold-100 text-gold-700 font-semibold text-sm">
               {getInitials(review.author.name)}
             </AvatarFallback>
           </Avatar>
@@ -77,7 +77,7 @@ export function ReviewCard({ review, showDealerResponse = true, onHelpful, onFla
       {isLong && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className="flex items-center gap-1 text-blue-600 text-sm mt-1 hover:underline"
+          className="flex items-center gap-1 text-gold-600 text-sm mt-1 hover:underline"
         >
           {expanded ? <><ChevronUp size={14} /> Show less</> : <><ChevronDown size={14} /> Read more</>}
         </button>
@@ -144,10 +144,10 @@ export function ReviewCard({ review, showDealerResponse = true, onHelpful, onFla
 
       {/* Dealer response */}
       {showDealerResponse && review.response && (
-        <div className="mt-4 ml-4 pl-4 border-l-2 border-blue-100 bg-blue-50/50 rounded-r-lg p-3">
+        <div className="mt-4 ml-4 pl-4 border-l-2 border-gold/30 bg-gold-50/50 rounded-r-lg p-3">
           <div className="flex items-center gap-2 mb-2">
-            <MessageSquare size={14} className="text-blue-600" />
-            <span className="text-xs font-semibold text-blue-700">Dealer Response</span>
+            <MessageSquare size={14} className="text-gold-600" />
+            <span className="text-xs font-semibold text-gold-700">Dealer Response</span>
             <span className="text-xs text-gray-500 ml-auto">{timeAgo(review.response.createdAt)}</span>
           </div>
           <p className="text-sm text-gray-700 leading-relaxed">{review.response.body}</p>

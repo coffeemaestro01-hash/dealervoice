@@ -17,8 +17,8 @@ export function DealerCard({ dealer, featured, className }: DealerCardProps) {
     <Link
       href={buildDealerUrl(dealer.slug)}
       className={cn(
-        "group block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-blue-100 transition-all duration-200",
-        featured && "ring-2 ring-blue-500 ring-offset-1",
+        "group block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-gold/40 transition-all duration-200",
+        featured && "ring-2 ring-gold-500 ring-offset-1",
         className
       )}
     >
@@ -39,7 +39,7 @@ export function DealerCard({ dealer, featured, className }: DealerCardProps) {
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
-                <h3 className="font-semibold text-gray-900 truncate group-hover:text-blue-700 transition-colors">
+                <h3 className="font-semibold text-gray-900 truncate group-hover:text-gold-600 transition-colors">
                   {dealer.name}
                 </h3>
                 <div className="flex items-center gap-1 mt-0.5 text-gray-500 text-sm">
@@ -58,7 +58,7 @@ export function DealerCard({ dealer, featured, className }: DealerCardProps) {
                 {formatNumber(dealer.totalReviews)} review{dealer.totalReviews !== 1 ? "s" : ""}
               </span>
               {dealer.isVerified && (
-                <span className="inline-flex items-center gap-1 text-xs text-blue-600">
+                <span className="inline-flex items-center gap-1 text-xs text-gold-600">
                   <BadgeCheck size={12} />
                   Verified
                 </span>
