@@ -73,7 +73,10 @@ async function main() {
     console.log("✅ Admin user created: admin@dealervoice.com / Admin@123!");
   }
 
-  // Sample dealership
+  // Sample dealership - skipped for now, will be created via UI
+  console.log("✅ Database seeded successfully!");
+
+  /* Sample dealership creation skipped
   const city = await prisma.city.findFirst({ where: { slug: "los-angeles" } });
   const toyota = await prisma.brand.findUnique({ where: { slug: "toyota" } });
 
@@ -115,6 +118,7 @@ async function main() {
     });
   }
 
+  /* Subscription creation skipped
   await prisma.dealerSubscription.upsert({
     where: { dealershipId: sampleDealer.id },
     create: { dealershipId: sampleDealer.id, plan: "PRO", status: "ACTIVE" },
@@ -122,6 +126,7 @@ async function main() {
   });
 
   console.log("✅ Sample dealership seeded");
+  */
   console.log("🎉 Seed complete!");
 }
 
