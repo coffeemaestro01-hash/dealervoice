@@ -11,7 +11,9 @@ async function getTopBrands() {
 }
 
 export async function BrandsSection() {
-  const brands = await getTopBrands();
+  let brands: Awaited<ReturnType<typeof getTopBrands>> = [];
+  try { brands = await getTopBrands(); } catch { return null; }
+  if (brands.length === 0) return null;
 
   return (
     <section className="py-14 bg-white border-t border-gray-100">

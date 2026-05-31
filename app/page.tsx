@@ -1,5 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
+
+export const dynamic = "force-dynamic";
 import { HeroSection } from "@/components/home/HeroSection";
 import { TrustSection } from "@/components/home/TrustSection";
 import { FeaturedDealers } from "@/components/home/FeaturedDealers";

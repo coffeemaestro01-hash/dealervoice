@@ -17,7 +17,8 @@ async function getFeaturedDealers() {
 }
 
 export async function FeaturedDealers() {
-  const dealers = await getFeaturedDealers();
+  let dealers: Awaited<ReturnType<typeof getFeaturedDealers>> = [];
+  try { dealers = await getFeaturedDealers(); } catch { return null; }
   if (dealers.length === 0) return null;
 
   return (

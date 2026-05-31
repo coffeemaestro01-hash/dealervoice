@@ -15,7 +15,8 @@ async function getRecentReviews() {
 }
 
 export async function RecentReviewsSection() {
-  const reviews = await getRecentReviews();
+  let reviews: Awaited<ReturnType<typeof getRecentReviews>> = [];
+  try { reviews = await getRecentReviews(); } catch { return null; }
   if (reviews.length === 0) return null;
 
   return (
