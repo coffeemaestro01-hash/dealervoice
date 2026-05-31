@@ -73,60 +73,110 @@ async function main() {
     console.log("✅ Admin user created: admin@dealervoice.com / Admin@123!");
   }
 
-  // Sample dealership - skipped for now, will be created via UI
-  console.log("✅ Database seeded successfully!");
+  // ───────── Sample dealerships ─────────
+  const la = await prisma.city.findFirst({ where: { slug: "los-angeles" } });
+  const ny = await prisma.city.findFirst({ where: { slug: "new-york" } });
+  const chi = await prisma.city.findFirst({ where: { slug: "chicago" } });
+  const admin = await prisma.user.findUnique({ where: { email: adminEmail } });
 
-  /* Sample dealership creation skipped
-  const city = await prisma.city.findFirst({ where: { slug: "los-angeles" } });
-  const toyota = await prisma.brand.findUnique({ where: { slug: "toyota" } });
+  const brandBySlug = async (slug: string) => prisma.brand.findUnique({ where: { slug } });
 
-  const sampleDealer = await prisma.dealership.upsert({
-    where: { slug: "sunrise-toyota-la" },
-    create: {
-      slug: "sunrise-toyota-la",
-      name: "Sunrise Toyota of LA",
-      description: "Los Angeles' premier Toyota dealership since 1985. Award-winning customer service and the largest Toyota inventory in SoCal.",
-      category: "NEW_VEHICLE",
-      status: "ACTIVE",
-      countryId: us!.id,
-      cityId: city?.id,
-      cityName: "Los Angeles",
-      stateName: "California",
-      address: "1234 Sunset Blvd",
-      phone: "+1 (310) 555-0100",
-      website: "https://sunrisetoyota.example.com",
-      latitude: 34.0522,
-      longitude: -118.2437,
-      overallRating: 4.6,
-      totalReviews: 847,
-      verifiedReviews: 612,
-      reputationScore: 88,
-      responseRate: 0.92,
-      isFeatured: true,
-      isVerified: true,
-      claimedAt: new Date(),
-      yearEstablished: 1985,
+  const SAMPLE_DEALERS = [
+    {
+      slug: "sunrise-toyota-la", name: "Sunrise Toyota of LA", brand: "toyota",
+      description: "Los Angeles' premier Toyota dealership since 1985. Award-winning service and the largest Toyota inventory in SoCal.",
+      city: la, cityName: "Los Angeles", stateName: "California", address: "1234 Sunset Blvd",
+      phone: "+1 (310) 555-0100", lat: 34.0522, lng: -118.2437,
+      rating: 4.6, reviews: 847, verified: 612, score: 88, year: 1985,
     },
-    update: {},
-  });
+    {
+      slug: "metropolitan-bmw-ny", name: "Metropolitan BMW", brand: "bmw",
+      description: "New York's flagship BMW center. Luxury sales, certified service, and an exceptional ownership experience.",
+      city: ny, cityName: "New York", stateName: "New York", address: "880 Park Avenue",
+      phone: "+1 (212) 555-0142", lat: 40.7128, lng: -74.006,
+      rating: 4.8, reviews: 1203, verified: 905, score: 94, year: 1992,
+    },
+    {
+      slug: "windy-city-tesla", name: "Windy City Tesla", brand: "tesla",
+      description: "Chicago's dedicated Tesla sales and service hub. Test drive the latest Model S, 3, X, and Y.",
+      city: chi, cityName: "Chicago", stateName: "Illinois", address: "500 N Michigan Ave",
+      phone: "+1 (312) 555-0188", lat: 41.8781, lng: -87.6298,
+      rating: 4.5, reviews: 634, verified: 488, score: 85, year: 2016,
+    },
+    {
+      slug: "liberty-ford-chicago", name: "Liberty Ford", brand: "ford",
+      description: "Family-owned Ford dealership serving Chicagoland for three generations. Trucks, SUVs, and EVs.",
+      city: chi, cityName: "Chicago", stateName: "Illinois", address: "2200 S Wabash Ave",
+      phone: "+1 (312) 555-0210", lat: 41.8531, lng: -87.6258,
+      rating: 4.3, reviews: 512, verified: 367, score: 79, year: 1978,
+    },
+    {
+      slug: "empire-mercedes-ny", name: "Empire Mercedes-Benz", brand: "mercedes-benz",
+      description: "Authorized Mercedes-Benz dealer in Manhattan. Premium sedans, SUVs, and AMG performance models.",
+      city: ny, cityName: "New York", stateName: "New York", address: "1500 Broadway",
+      phone: "+1 (212) 555-0167", lat: 40.7589, lng: -73.9851,
+      rating: 4.7, reviews: 978, verified: 741, score: 91, year: 1988,
+    },
+    {
+      slug: "pacific-honda-la", name: "Pacific Honda", brand: "honda",
+      description: "Trusted Honda sales and service in West LA. Civics, Accords, CR-Vs, and certified pre-owned vehicles.",
+      city: la, cityName: "Los Angeles", stateName: "California", address: "3400 Olympic Blvd",
+      phone: "+1 (310) 555-0233", lat: 34.0488, lng: -118.299,
+      rating: 4.4, reviews: 689, verified: 503, score: 82, year: 1995,
+    },
+  ];
 
-  if (toyota) {
-    await prisma.dealerBrand.upsert({
-      where: { dealershipId_brandId: { dealershipId: sampleDealer.id, brandId: toyota.id } },
-      create: { dealershipId: sampleDealer.id, brandId: toyota.id, isPrimary: true },
-      update: {},
+  const REVIEW_SAMPLES = [
+    { rating: 5, title: "Outstanding buying experience", body: "From the test drive to financing, the team was transparent and professional. No pressure, fair pricing, and they delivered exactly what was promised. Highly recommend." },
+    { rating: 5, title: "Best dealership I've dealt with", body: "Service department is top notch. They explained everything clearly, finished ahead of schedule, and the waiting area was comfortable. Will definitely return." },
+    { rating: 4, title: "Great cars, smooth process", body: "Found the exact trim I wanted. Paperwork took a little longer than expected but the staff were friendly and kept me updated throughout." },
+    { rating: 5, title: "Honest and helpful", body: "They went above and beyond to get me a good trade-in value. Genuinely felt like they cared about finding the right vehicle for my budget." },
+  ];
+
+  for (const d of SAMPLE_DEALERS) {
+    const brand = await brandBySlug(d.brand);
+    const dealer = await prisma.dealership.upsert({
+      where: { slug: d.slug },
+      create: {
+        slug: d.slug, name: d.name, description: d.description,
+        category: "NEW_VEHICLE", status: "ACTIVE",
+        countryId: us!.id, cityId: d.city?.id, cityName: d.cityName, stateName: d.stateName,
+        address: d.address, phone: d.phone, latitude: d.lat, longitude: d.lng,
+        overallRating: d.rating, totalReviews: d.reviews, verifiedReviews: d.verified,
+        reputationScore: d.score, responseRate: 0.9, isFeatured: true, isVerified: true,
+        claimedAt: new Date(), yearEstablished: d.year,
+      },
+      update: { isFeatured: true, status: "ACTIVE", overallRating: d.rating, totalReviews: d.reviews },
     });
+
+    if (brand) {
+      await prisma.dealerBrand.upsert({
+        where: { dealershipId_brandId: { dealershipId: dealer.id, brandId: brand.id } },
+        create: { dealershipId: dealer.id, brandId: brand.id, isPrimary: true },
+        update: {},
+      });
+    }
+
+    // Add a couple of published reviews authored by admin (visible on the site)
+    if (admin) {
+      for (let i = 0; i < 2; i++) {
+        const r = REVIEW_SAMPLES[(d.slug.length + i) % REVIEW_SAMPLES.length];
+        const reviewId = `${d.slug}-seed-review-${i}`;
+        await prisma.review.upsert({
+          where: { id: reviewId },
+          create: {
+            id: reviewId, dealershipId: dealer.id, authorId: admin.id,
+            overallRating: r.rating, title: r.title, body: r.body,
+            status: "PUBLISHED", reviewType: "NEW_CAR_PURCHASE",
+            verificationStatus: "VERIFIED_PURCHASE", publishedAt: new Date(),
+          },
+          update: {},
+        });
+      }
+    }
   }
-
-  /* Subscription creation skipped
-  await prisma.dealerSubscription.upsert({
-    where: { dealershipId: sampleDealer.id },
-    create: { dealershipId: sampleDealer.id, plan: "PRO", status: "ACTIVE" },
-    update: {},
-  });
-
-  console.log("✅ Sample dealership seeded");
-  */
+  console.log(`✅ ${SAMPLE_DEALERS.length} sample dealerships + reviews seeded`);
+  console.log("✅ Database seeded successfully!");
   console.log("🎉 Seed complete!");
 }
 
