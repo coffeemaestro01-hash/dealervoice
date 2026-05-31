@@ -2,6 +2,8 @@ import prisma from "@/lib/db";
 import { formatNumber } from "@/lib/utils";
 import { Users, Store, MessageSquare, Flag, DollarSign, TrendingUp } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 async function getAdminStats() {
   const [users, dealers, reviews, pendingReports, pendingClaims, revenue] = await Promise.all([
     prisma.user.count({ where: { deletedAt: null } }),
@@ -37,7 +39,14 @@ async function getRecentActivity() {
 }
 
 export default async function AdminOverviewPage() {
-  const [stats, activity] = await Promise.all([getAdminStats(), getRecentActivity()]);
+  let stats: Awaited<ReturnType<typeof getAdminStats>> = { users: 0, dealers: 0, reviews: 0, pendingReports: 0, pendingClaims: 0, revenue: 0 };
+  let activity: Awaited<ReturnType<typeof getRecentActivity>> = { recentReviews: [], recentUsers: [], recentClaims: [] };
+
+  try {
+    [stats, activity] = await Promise.all([getAdminStats(), getRecentActivity()]);
+  } catch {
+    // DB not yet migrated
+  }
 
   const statCards = [
     { label: "Total Users", value: formatNumber(stats.users), icon: Users, color: "text-blue-600 bg-blue-50" },
