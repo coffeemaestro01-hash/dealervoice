@@ -38,7 +38,14 @@ export async function ReviewsList({ dealershipId, page }: Props) {
 
       {reviews.length === 0 ? (
         <div className="bg-white rounded-xl border border-gray-100 p-10 text-center shadow-sm">
-          <p className="text-gray-500">No reviews yet. Be the first to share your experience.</p>
+          <p className="text-gray-700 font-medium mb-1">No reviews yet</p>
+          <p className="text-gray-500 mb-5">Be the first to share your experience with this dealership.</p>
+          <Link
+            href={`/write-review/${dealershipId}`}
+            className="inline-flex items-center justify-center h-10 px-5 rounded-lg bg-gold-gradient text-night-900 font-semibold hover:opacity-90 transition"
+          >
+            Write the first review
+          </Link>
         </div>
       ) : (
         <div className="space-y-4">
