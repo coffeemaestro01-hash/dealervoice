@@ -58,6 +58,64 @@ export async function sendNewReviewNotification(to: string, dealerName: string, 
   });
 }
 
+export interface DigestStats {
+  periodLabel: string;
+  totalDealers: number;
+  totalUsers: number;
+  totalReviews: number;
+  newUsers7d: number;
+  newReviews7d: number;
+  pendingClaims: number;
+  pendingReports: number;
+  paidSubscriptions: number;
+  revenueInr: number;
+  topDealers: { name: string; rating: number; reviews: number; slug: string }[];
+  recentClaims: { dealerName: string; by: string }[];
+}
+
+export async function sendWeeklyDigest(to: string, s: DigestStats) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL;
+  const stat = (label: string, value: string | number, sub?: string) =>
+    `<td style="padding:14px;background:#faf8f2;border:1px solid #eee;border-radius:10px;text-align:center;width:33%">
+      <div style="font-size:26px;font-weight:800;color:#0a0a0a">${value}</div>
+      <div style="font-size:12px;color:#777;margin-top:2px">${label}</div>
+      ${sub ? `<div style="font-size:11px;color:#C9961E;font-weight:600;margin-top:2px">${sub}</div>` : ""}
+    </td>`;
+  const topRows = s.topDealers.map(
+    (d) => `<tr><td style="padding:8px 0;border-bottom:1px solid #f0f0f0"><a href="${appUrl}/dealership/${d.slug}" style="color:#0a0a0a;text-decoration:none;font-weight:600">${d.name}</a></td>
+      <td style="padding:8px 0;border-bottom:1px solid #f0f0f0;text-align:right;color:#C9961E;font-weight:700">${d.rating.toFixed(1)}★</td>
+      <td style="padding:8px 0;border-bottom:1px solid #f0f0f0;text-align:right;color:#777">${d.reviews} reviews</td></tr>`
+  ).join("");
+  const claimsRows = s.recentClaims.length
+    ? s.recentClaims.map((c) => `<li style="margin-bottom:4px">${c.dealerName} — <span style="color:#777">by ${c.by}</span></li>`).join("")
+    : `<li style="color:#777">No new claims this week</li>`;
+
+  return resend.emails.send({
+    from: FROM,
+    to,
+    subject: `📊 DealerVoice weekly digest — ${s.periodLabel}`,
+    html: emailTemplate({
+      title: "Your weekly business digest",
+      body: `<p style="color:#555">Here's how DealerVoice performed over the last 7 days.</p>
+<table style="width:100%;border-collapse:separate;border-spacing:6px;margin:12px 0"><tr>
+${stat("Total dealerships", s.totalDealers.toLocaleString())}
+${stat("Total members", s.totalUsers.toLocaleString(), `+${s.newUsers7d} this week`)}
+${stat("Published reviews", s.totalReviews.toLocaleString(), `+${s.newReviews7d} this week`)}
+</tr><tr>
+${stat("Paid subscriptions", s.paidSubscriptions)}
+${stat("Revenue (₹)", s.revenueInr.toLocaleString())}
+${stat("Needs your action", s.pendingClaims + s.pendingReports, `${s.pendingClaims} claims · ${s.pendingReports} reports`)}
+</tr></table>
+<h3 style="margin:24px 0 8px;color:#0a0a0a">🏆 Top-rated dealers</h3>
+<table style="width:100%;border-collapse:collapse">${topRows || '<tr><td style="color:#777">No rated dealers yet</td></tr>'}</table>
+<h3 style="margin:24px 0 8px;color:#0a0a0a">🔑 Recent claim requests</h3>
+<ul style="padding-left:18px;color:#444">${claimsRows}</ul>
+<p style="margin-top:24px"><a href="${appUrl}/dashboard/admin" style="background:#C9961E;color:#0a0a0a;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block;font-weight:600">Open admin dashboard</a></p>
+<p style="color:#999;font-size:12px;margin-top:16px">You receive this because you're the DealerVoice administrator.</p>`,
+    }),
+  });
+}
+
 export async function sendClaimApprovedEmail(to: string, name: string, dealerName: string) {
   const url = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/dealer`;
   return resend.emails.send({
