@@ -15,7 +15,7 @@ interface StatCardProps {
   iconColor?: string;
 }
 
-function StatCard({ label, value, change, icon: Icon, iconColor = "text-blue-600 bg-blue-50" }: StatCardProps) {
+function StatCard({ label, value, change, icon: Icon, iconColor = "text-gold-700 bg-gold-50" }: StatCardProps) {
   return (
     <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
       <div className="flex items-start justify-between">
@@ -52,7 +52,7 @@ export function DealerOverviewPage({ data }: Props) {
       <div className="p-8 text-center">
         <h2 className="text-xl font-semibold text-gray-900 mb-2">No dealership found</h2>
         <p className="text-gray-600 mb-4">You are not associated with any dealership yet.</p>
-        <Link href="/dealers/claim" className="text-blue-600 hover:underline text-sm">Claim a dealership →</Link>
+        <Link href="/dealers/claim" className="text-gold-700 hover:underline text-sm">Claim a dealership →</Link>
       </div>
     );
   }
@@ -70,7 +70,7 @@ export function DealerOverviewPage({ data }: Props) {
           <StarRating rating={dealership.overallRating} size="sm" showValue />
           <span className="text-sm text-gray-500">Reputation: <strong className="text-gray-900">{dealership.reputationScore}/100</strong></span>
           {dealership.subscription && (
-            <span className="text-xs px-2 py-0.5 bg-blue-50 text-blue-700 border border-blue-100 rounded-full font-medium">
+            <span className="text-xs px-2 py-0.5 bg-gold-50 text-gold-800 border border-gold-100 rounded-full font-medium">
               {dealership.subscription.plan}
             </span>
           )}
@@ -104,7 +104,7 @@ export function DealerOverviewPage({ data }: Props) {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-900">Recent Reviews</h2>
-          <Link href="/dashboard/dealer/reviews" className="text-sm text-blue-600 hover:underline">View all</Link>
+          <Link href="/dashboard/dealer/reviews" className="text-sm text-gold-700 hover:underline">View all</Link>
         </div>
         <div className="space-y-4">
           {recentReviews.length === 0 ? (

@@ -23,7 +23,7 @@ export function AdminDashboardLayout({ children }: { children: React.ReactNode }
       <aside className="hidden lg:flex flex-col w-56 bg-gray-950 fixed h-full z-10">
         <div className="p-5 border-b border-gray-800">
           <Link href="/" className="flex items-center gap-2 font-bold text-white">
-            <Star className="fill-current text-blue-400" size={18} />
+            <Star className="fill-current text-gold-500" size={18} />
             DealerVoice
           </Link>
           <span className="text-xs text-gray-500 mt-0.5 block">Admin Panel</span>
@@ -38,7 +38,7 @@ export function AdminDashboardLayout({ children }: { children: React.ReactNode }
                 href={item.href}
                 className={cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mb-0.5",
-                  active ? "bg-blue-600 text-white" : "text-gray-400 hover:bg-gray-800 hover:text-white"
+                  active ? "bg-gold-700 text-white" : "text-gray-400 hover:bg-gray-800 hover:text-white"
                 )}
               >
                 <item.icon size={16} />

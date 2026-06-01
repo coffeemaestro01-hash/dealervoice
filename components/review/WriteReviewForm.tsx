@@ -237,7 +237,7 @@ export function WriteReviewForm({ dealer }: Props) {
 
           <Button
             type="submit"
-            className="w-full bg-blue-700 hover:bg-blue-800 h-12 text-base font-semibold"
+            className="w-full bg-gold-800 hover:bg-gold-800 h-12 text-base font-semibold"
             disabled={submitMutation.isPending}
           >
             {submitMutation.isPending ? (
@@ -249,7 +249,7 @@ export function WriteReviewForm({ dealer }: Props) {
 
           <p className="text-xs text-gray-500 text-center">
             By submitting, you agree to our{" "}
-            <a href="/terms" className="text-blue-600 hover:underline">Terms of Service</a>. Reviews are subject to moderation.
+            <a href="/terms" className="text-gold-700 hover:underline">Terms of Service</a>. Reviews are subject to moderation.
           </p>
         </div>
       </form>

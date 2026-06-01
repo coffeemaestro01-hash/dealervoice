@@ -98,7 +98,7 @@ export function DealerSearchPage({ searchParams: initialParams }: DealerSearchPa
                 className="pl-9"
               />
             </div>
-            <Button type="submit" className="bg-blue-700 hover:bg-blue-800 shrink-0">Search</Button>
+            <Button type="submit" className="bg-gold-800 hover:bg-gold-800 shrink-0">Search</Button>
           </form>
 
           {/* Active filters */}
@@ -109,7 +109,7 @@ export function DealerSearchPage({ searchParams: initialParams }: DealerSearchPa
                 <button
                   key={f.key}
                   onClick={() => clearFilter(f.key)}
-                  className="inline-flex items-center gap-1 text-xs px-2.5 py-1 bg-blue-50 text-blue-700 border border-blue-100 rounded-full hover:bg-blue-100"
+                  className="inline-flex items-center gap-1 text-xs px-2.5 py-1 bg-gold-50 text-gold-800 border border-gold-100 rounded-full hover:bg-gold-100"
                 >
                   {f.label}
                   <X size={10} />

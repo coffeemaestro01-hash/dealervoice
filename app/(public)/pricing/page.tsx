@@ -88,12 +88,12 @@ export default function PricingPage() {
             <div
               key={plan.name}
               className={`bg-white rounded-2xl border p-8 shadow-sm relative ${
-                plan.highlighted ? "border-blue-500 ring-2 ring-blue-500 ring-offset-2" : "border-gray-200"
+                plan.highlighted ? "border-gold-600 ring-2 ring-gold-600 ring-offset-2" : "border-gray-200"
               }`}
             >
               {plan.badge && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                  <span className="bg-gold-700 text-white text-xs font-bold px-3 py-1 rounded-full">
                     {plan.badge}
                   </span>
                 </div>
@@ -135,7 +135,7 @@ export default function PricingPage() {
 
               <Link href={plan.ctaHref}>
                 <Button
-                  className={`w-full ${plan.highlighted ? "bg-blue-700 hover:bg-blue-800" : "bg-gray-900 hover:bg-gray-800"}`}
+                  className={`w-full ${plan.highlighted ? "bg-gold-800 hover:bg-gold-800" : "bg-gray-900 hover:bg-gray-800"}`}
                 >
                   {plan.cta}
                 </Button>
@@ -152,7 +152,7 @@ export default function PricingPage() {
             14-day free trial on all paid plans · No credit card required to start
           </p>
           <p className="text-sm text-gray-500">
-            Questions? <Link href="/contact" className="text-blue-600 hover:underline">Talk to us</Link>
+            Questions? <Link href="/contact" className="text-gold-700 hover:underline">Talk to us</Link>
           </p>
         </div>
       </div>

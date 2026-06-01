@@ -22,7 +22,7 @@ export function DealerDashboardLayout({ children }: { children: React.ReactNode 
       {/* Sidebar */}
       <aside className="hidden lg:flex flex-col w-56 bg-white border-r border-gray-100 fixed h-full z-10">
         <div className="p-5 border-b border-gray-100">
-          <Link href="/" className="flex items-center gap-2 font-bold text-blue-700">
+          <Link href="/" className="flex items-center gap-2 font-bold text-gold-800">
             <Star className="fill-current" size={18} />
             DealerVoice
           </Link>
@@ -39,7 +39,7 @@ export function DealerDashboardLayout({ children }: { children: React.ReactNode 
                 className={cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mb-0.5",
                   active
-                    ? "bg-blue-50 text-blue-700"
+                    ? "bg-gold-50 text-gold-800"
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                 )}
               >

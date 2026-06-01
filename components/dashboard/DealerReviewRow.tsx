@@ -90,8 +90,8 @@ export function DealerReviewRow({ review, dealershipId, onResponded }: Props) {
 
         {/* Existing response */}
         {review.response && !responding && (
-          <div className="mt-4 pl-4 border-l-2 border-blue-100 bg-blue-50/50 rounded-r p-3 text-sm text-gray-700">
-            <p className="text-xs font-semibold text-blue-700 mb-1">Your response</p>
+          <div className="mt-4 pl-4 border-l-2 border-gold-100 bg-gold-50/50 rounded-r p-3 text-sm text-gray-700">
+            <p className="text-xs font-semibold text-gold-800 mb-1">Your response</p>
             {review.response.body}
           </div>
         )}
@@ -131,7 +131,7 @@ export function DealerReviewRow({ review, dealershipId, onResponded }: Props) {
               <Button variant="outline" size="sm" onClick={() => setResponding(false)}>Cancel</Button>
               <Button
                 size="sm"
-                className="bg-blue-700 hover:bg-blue-800"
+                className="bg-gold-800 hover:bg-gold-800"
                 onClick={() => respondMutation.mutate()}
                 disabled={!responseText.trim() || respondMutation.isPending}
               >

@@ -68,7 +68,7 @@ export async function RatingDistribution({ dealer }: Props) {
                 </div>
                 <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-blue-500 rounded-full"
+                    className="h-full bg-gold-600 rounded-full"
                     style={{ width: `${(r.value / 5) * 100}%` }}
                   />
                 </div>

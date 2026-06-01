@@ -1,0 +1,66 @@
+import type { Metadata } from "next";
+import { Mail, MessageSquare, Building2, LifeBuoy } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Contact Us",
+  description: "Get in touch with the DealerVoice team — support, partnerships, press, and dealer enquiries.",
+};
+
+const CHANNELS = [
+  { icon: LifeBuoy, title: "Customer support", body: "Questions about your account or a review.", email: "support@dealervoice.com" },
+  { icon: Building2, title: "Dealer enquiries", body: "Claim your profile or learn about Pro plans.", email: "dealers@dealervoice.com" },
+  { icon: MessageSquare, title: "Press & media", body: "Interviews, data requests, and partnerships.", email: "press@dealervoice.com" },
+];
+
+export default function ContactPage() {
+  return (
+    <div className="bg-white">
+      <section className="border-b border-gray-100 bg-gray-50">
+        <div className="container py-14 text-center max-w-2xl">
+          <h1 className="text-4xl font-extrabold text-gray-900 mb-4">Get in <span className="text-gold">touch</span></h1>
+          <p className="text-lg text-gray-600">We usually respond within one business day. Choose the right channel below or send us a message.</p>
+        </div>
+      </section>
+
+      <section className="py-14">
+        <div className="container grid lg:grid-cols-2 gap-10 items-start">
+          {/* Channels */}
+          <div className="space-y-4">
+            {CHANNELS.map((c) => (
+              <div key={c.title} className="flex gap-4 rounded-2xl border border-gray-100 p-6 shadow-sm">
+                <span className="grid place-items-center w-12 h-12 rounded-xl bg-gold-50 text-gold-600 shrink-0"><c.icon size={22} /></span>
+                <div>
+                  <h3 className="font-semibold text-gray-900">{c.title}</h3>
+                  <p className="text-sm text-gray-600 mb-1">{c.body}</p>
+                  <a href={`mailto:${c.email}`} className="text-sm font-medium text-gold-700 hover:underline inline-flex items-center gap-1">
+                    <Mail size={13} /> {c.email}
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Form (mailto fallback — no backend needed) */}
+          <form action="mailto:support@dealervoice.com" method="post" encType="text/plain" className="rounded-2xl border border-gray-100 p-7 shadow-sm bg-white">
+            <h3 className="font-semibold text-gray-900 mb-4 text-lg">Send us a message</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <input name="name" required className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-gold-500/40" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input name="email" type="email" required className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-gold-500/40" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                <textarea name="message" rows={5} required className="w-full rounded-lg border border-gray-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500/40" />
+              </div>
+              <button type="submit" className="w-full h-11 rounded-lg bg-gold-gradient text-night-900 font-semibold hover:opacity-90 transition">Send message</button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+  );
+}

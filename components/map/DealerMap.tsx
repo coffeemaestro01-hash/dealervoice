@@ -65,7 +65,7 @@ export function DealerMap({ latitude, longitude, name, address, zoom = 15, class
           href={`https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=${zoom}/${latitude}/${longitude}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-xs text-blue-600 hover:underline"
+          className="text-xs text-gold-700 hover:underline"
         >
           Open in Maps →
         </a>

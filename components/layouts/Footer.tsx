@@ -4,7 +4,7 @@ import { Logo } from "@/components/common/Logo";
 const FOOTER_LINKS = {
   Platform: [
     { label: "Find Dealers", href: "/dealers" },
-    { label: "Write a Review", href: "/write-review" },
+    { label: "Write a Review", href: "/dealers" },
     { label: "How It Works", href: "/about" },
     { label: "Pricing", href: "/pricing" },
   ],

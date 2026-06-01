@@ -1,187 +1,238 @@
 /**
- * Seed dealerships from OpenStreetMap Overpass API — 100% free, no ToS issues.
- * Queries OSM for car dealerships in target countries and imports them.
+ * Seed real dealerships from OpenStreetMap Overpass API — free, no ToS issues.
+ * Covers Asia, Europe, and North America. Prioritises dealers that have
+ * contact info (phone/website) so claim requests can be sent at launch.
  *
- * Usage: npx tsx scripts/seed-dealers-osm.ts
+ * Usage: DATABASE_URL=... npx tsx scripts/seed-dealers-osm.ts
  */
 
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
-
-// Target areas — OSM area IDs (country level)
-// Find more at: https://nominatim.openstreetmap.org/search?q=India&format=json
-const TARGET_AREAS = [
-  { name: "India", osmId: 3600304716, countryCode: "IN" },
-  { name: "United States", osmId: 3600148838, countryCode: "US" },
-  { name: "United Kingdom", osmId: 3600062149, countryCode: "GB" },
-  { name: "Australia", osmId: 3600080500, countryCode: "AU" },
-  { name: "United Arab Emirates", osmId: 3600307763, countryCode: "AE" },
+const OVERPASS_URLS = [
+  "https://overpass-api.de/api/interpreter",
+  "https://overpass.openstreetmap.ru/api/interpreter",
+  "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+  "https://overpass.kumi.systems/api/interpreter",
 ];
 
-// Batch size to avoid Overpass timeout
-const BATCH_LIMIT = 500;
+const UA = "DealerVoice-Seeder/1.0 (dealership directory; contact: admin@dealervoice.com)";
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+interface CountrySpec {
+  name: string;
+  code: string;       // ISO 3166-1 alpha-2 (used for OSM area + our Country.code)
+  code3: string;
+  dialCode: string;
+  currency: string;
+  locale: string;
+  flagEmoji: string;
+  region: "Asia" | "Europe" | "North America";
+  quota: number;      // target number of dealers to import
+}
+
+// ~1500 dealerships across three regions, prioritised by market size
+const COUNTRIES: CountrySpec[] = [
+  // North America (~470)
+  { name: "United States", code: "US", code3: "USA", dialCode: "+1", currency: "USD", locale: "en-US", flagEmoji: "🇺🇸", region: "North America", quota: 250 },
+  { name: "Canada", code: "CA", code3: "CAN", dialCode: "+1", currency: "CAD", locale: "en-CA", flagEmoji: "🇨🇦", region: "North America", quota: 120 },
+  { name: "Mexico", code: "MX", code3: "MEX", dialCode: "+52", currency: "MXN", locale: "es-MX", flagEmoji: "🇲🇽", region: "North America", quota: 100 },
+  // Europe (~680)
+  { name: "United Kingdom", code: "GB", code3: "GBR", dialCode: "+44", currency: "GBP", locale: "en-GB", flagEmoji: "🇬🇧", region: "Europe", quota: 150 },
+  { name: "Germany", code: "DE", code3: "DEU", dialCode: "+49", currency: "EUR", locale: "de-DE", flagEmoji: "🇩🇪", region: "Europe", quota: 150 },
+  { name: "France", code: "FR", code3: "FRA", dialCode: "+33", currency: "EUR", locale: "fr-FR", flagEmoji: "🇫🇷", region: "Europe", quota: 120 },
+  { name: "Italy", code: "IT", code3: "ITA", dialCode: "+39", currency: "EUR", locale: "it-IT", flagEmoji: "🇮🇹", region: "Europe", quota: 100 },
+  { name: "Spain", code: "ES", code3: "ESP", dialCode: "+34", currency: "EUR", locale: "es-ES", flagEmoji: "🇪🇸", region: "Europe", quota: 90 },
+  { name: "Netherlands", code: "NL", code3: "NLD", dialCode: "+31", currency: "EUR", locale: "nl-NL", flagEmoji: "🇳🇱", region: "Europe", quota: 70 },
+  // Asia (~360)
+  { name: "India", code: "IN", code3: "IND", dialCode: "+91", currency: "INR", locale: "en-IN", flagEmoji: "🇮🇳", region: "Asia", quota: 150 },
+  { name: "Japan", code: "JP", code3: "JPN", dialCode: "+81", currency: "JPY", locale: "ja-JP", flagEmoji: "🇯🇵", region: "Asia", quota: 100 },
+  { name: "South Korea", code: "KR", code3: "KOR", dialCode: "+82", currency: "KRW", locale: "ko-KR", flagEmoji: "🇰🇷", region: "Asia", quota: 60 },
+  { name: "United Arab Emirates", code: "AE", code3: "ARE", dialCode: "+971", currency: "AED", locale: "ar-AE", flagEmoji: "🇦🇪", region: "Asia", quota: 50 },
+];
 
 interface OSMNode {
   type: string;
   id: number;
-  lat: number;
-  lon: number;
+  lat?: number;
+  lon?: number;
   center?: { lat: number; lon: number };
   tags: Record<string, string>;
 }
 
-function buildOverpassQuery(areaOsmId: number, limit: number): string {
+function slugify(text: string): string {
+  return text.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 70);
+}
+function buildSlug(name: string, city: string, id: number): string {
+  return `${slugify(name)}-${slugify(city || "x")}-${id.toString().slice(-7)}`.replace(/--+/g, "-");
+}
+
+function overpassQuery(iso: string, limit: number): string {
+  // Pull more than quota so we can prioritise dealers with contact info
+  const fetchLimit = Math.min(limit * 4, 2000);
   return `
-    [out:json][timeout:60];
-    area(${areaOsmId})->.searchArea;
+    [out:json][timeout:120];
+    area["ISO3166-1"="${iso}"][admin_level=2]->.a;
     (
-      node["shop"="car"](area.searchArea);
-      node["amenity"="car_rental"]["brand"](area.searchArea);
-      way["shop"="car"](area.searchArea);
+      node["shop"="car"](area.a);
+      way["shop"="car"](area.a);
     );
-    out center ${limit};
+    out center ${fetchLimit};
   `;
 }
 
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 80);
-}
+async function fetchOSM(iso: string, limit: number): Promise<OSMNode[]> {
+  const query = overpassQuery(iso, limit);
+  const body = `data=${encodeURIComponent(query)}`;
 
-function buildSlug(name: string, city: string, id: number): string {
-  const base = `${slugify(name)}-${slugify(city || "unknown")}`;
-  return `${base}-${id.toString().slice(-6)}`;
-}
-
-async function fetchOSMDealers(area: typeof TARGET_AREAS[0]): Promise<OSMNode[]> {
-  console.log(`  Fetching OSM data for ${area.name}...`);
-  const query = buildOverpassQuery(area.osmId, BATCH_LIMIT);
-
-  const res = await fetch(OVERPASS_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: `data=${encodeURIComponent(query)}`,
-  });
-
-  if (!res.ok) throw new Error(`Overpass API error: ${res.status}`);
-  const data = await res.json();
-  return (data.elements || []) as OSMNode[];
-}
-
-async function importDealers(nodes: OSMNode[], countryCode: string, countryId: string): Promise<number> {
-  let imported = 0;
-
-  for (const node of nodes) {
-    const tags = node.tags || {};
-    const name = tags.name || tags["name:en"] || tags.brand;
-    if (!name || name.length < 2) continue;
-
-    const lat = node.lat ?? node.center?.lat ?? null;
-    const lon = node.lon ?? node.center?.lon ?? null;
-    const city = tags["addr:city"] || tags["addr:town"] || tags["addr:suburb"] || "";
-    const slug = buildSlug(name, city, node.id);
-
-    // Map OSM brand tags to our brand names
-    const brandName = tags.brand || tags["brand:en"];
-
-    try {
-      const existing = await prisma.dealership.findUnique({ where: { slug } });
-      if (existing) continue;
-
-      await prisma.dealership.create({
-        data: {
-          slug,
-          name,
-          category: "NEW_VEHICLE",
-          status: "ACTIVE",
-          countryId,
-          cityName: city || null,
-          address: [tags["addr:housenumber"], tags["addr:street"]].filter(Boolean).join(" ") || null,
-          postalCode: tags["addr:postcode"] || null,
-          phone: tags.phone || tags["contact:phone"] || null,
-          website: tags.website || tags["contact:website"] || null,
-          latitude: lat,
-          longitude: lon,
-          overallRating: 0,
-          totalReviews: 0,
-          reputationScore: 0,
-        },
-      });
-
-      // Link brand if known
-      if (brandName) {
-        const brand = await prisma.brand.findFirst({
-          where: { name: { contains: brandName, mode: "insensitive" } },
+  for (const url of OVERPASS_URLS) {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Accept": "application/json",
+            "User-Agent": UA,
+          },
+          body,
         });
-        if (brand) {
-          const dealer = await prisma.dealership.findUnique({ where: { slug } });
-          if (dealer) {
-            await prisma.dealerBrand.upsert({
-              where: { dealershipId_brandId: { dealershipId: dealer.id, brandId: brand.id } },
-              create: { dealershipId: dealer.id, brandId: brand.id, isPrimary: true },
-              update: {},
-            }).catch(() => {});
-          }
+        if (res.status === 429 || res.status === 504) {
+          const wait = 8000 * (attempt + 1);
+          console.log(`    ${url.split("/")[2]} -> ${res.status}, backoff ${wait / 1000}s`);
+          await sleep(wait);
+          continue;
         }
-      }
-
-      imported++;
-    } catch (err: any) {
-      // Skip duplicates or constraint errors silently
-      if (!err.message?.includes("Unique constraint")) {
-        console.warn(`  Skip [${name}]: ${err.message}`);
+        if (!res.ok) { console.log(`    ${url.split("/")[2]} -> ${res.status}, next mirror`); break; }
+        const data = await res.json();
+        return (data.elements || []) as OSMNode[];
+      } catch (e: any) {
+        console.log(`    ${url.split("/")[2]} failed: ${e.message}`);
+        await sleep(3000);
       }
     }
   }
+  return [];
+}
 
-  return imported;
+function score(tags: Record<string, string>): number {
+  // Higher = more "established" / claim-worthy
+  let s = 0;
+  if (tags.website || tags["contact:website"]) s += 3;
+  if (tags.phone || tags["contact:phone"]) s += 2;
+  if (tags.brand || tags["brand:en"]) s += 2;
+  if (tags["addr:street"]) s += 1;
+  if (tags.opening_hours) s += 1;
+  if (tags.email || tags["contact:email"]) s += 1;
+  return s;
 }
 
 async function main() {
-  console.log("🗺️  DealerVoice OSM Seeder");
-  console.log("=".repeat(40));
+  console.log("🗺️  DealerVoice — real dealership import (Asia · Europe · North America)");
+  console.log("=".repeat(64));
+  let grandTotal = 0;
+  const byRegion: Record<string, number> = { Asia: 0, Europe: 0, "North America": 0 };
 
-  let totalImported = 0;
+  for (const c of COUNTRIES) {
+    console.log(`\n📍 ${c.name} (${c.code}) — target ${c.quota}`);
 
-  for (const area of TARGET_AREAS) {
-    console.log(`\n📍 Processing ${area.name} (${area.countryCode})...`);
+    // Ensure country row exists
+    const country = await prisma.country.upsert({
+      where: { code: c.code },
+      create: {
+        name: c.name, code: c.code, code3: c.code3, dialCode: c.dialCode,
+        currency: c.currency, locale: c.locale, flagEmoji: c.flagEmoji,
+      },
+      update: {},
+    });
 
-    // Ensure country exists
-    const country = await prisma.country.findUnique({ where: { code: area.countryCode } });
-    if (!country) {
-      console.log(`  ⚠️  Country ${area.countryCode} not in DB — run db:seed first`);
-      continue;
+    const nodes = await fetchOSM(c.code, c.quota);
+    console.log(`    fetched ${nodes.length} OSM nodes`);
+    if (nodes.length === 0) continue;
+
+    // Build candidate records (must have a name)
+    const candidates = nodes
+      .map((n) => {
+        const tags = n.tags || {};
+        const name = tags.name || tags["name:en"] || tags.brand;
+        if (!name || name.length < 2) return null;
+        const lat = n.lat ?? n.center?.lat ?? null;
+        const lon = n.lon ?? n.center?.lon ?? null;
+        const city = tags["addr:city"] || tags["addr:town"] || tags["addr:suburb"] || tags["addr:state"] || "";
+        return {
+          slug: buildSlug(name, city, n.id),
+          name: name.slice(0, 120),
+          city,
+          state: tags["addr:state"] || null,
+          address: [tags["addr:housenumber"], tags["addr:street"]].filter(Boolean).join(" ") || null,
+          postal: tags["addr:postcode"] || null,
+          phone: tags.phone || tags["contact:phone"] || null,
+          website: tags.website || tags["contact:website"] || null,
+          lat, lon,
+          brand: tags.brand || tags["brand:en"] || null,
+          _score: score(tags),
+        };
+      })
+      .filter(Boolean) as any[];
+
+    // Prioritise by score (contact info first), dedupe by slug, take quota
+    candidates.sort((a, b) => b._score - a._score);
+    const seen = new Set<string>();
+    const picked: any[] = [];
+    for (const r of candidates) {
+      if (seen.has(r.slug)) continue;
+      seen.add(r.slug);
+      picked.push(r);
+      if (picked.length >= c.quota) break;
     }
 
-    try {
-      const nodes = await fetchOSMDealers(area);
-      console.log(`  Found ${nodes.length} OSM nodes`);
-
-      const imported = await importDealers(nodes, area.countryCode, country.id);
-      totalImported += imported;
-
-      // Update country dealer count
-      await prisma.country.update({
-        where: { id: country.id },
-        data: { dealerCount: { increment: imported } },
+    // Insert in chunks with skipDuplicates
+    let inserted = 0;
+    for (let i = 0; i < picked.length; i += 100) {
+      const chunk = picked.slice(i, i + 100);
+      const res = await prisma.dealership.createMany({
+        data: chunk.map((r) => ({
+          slug: r.slug,
+          name: r.name,
+          category: "NEW_VEHICLE" as const,
+          status: "ACTIVE" as const,
+          countryId: country.id,
+          cityName: r.city || null,
+          stateName: r.state,
+          address: r.address,
+          postalCode: r.postal,
+          phone: r.phone,
+          website: r.website,
+          latitude: r.lat,
+          longitude: r.lon,
+          overallRating: 0,
+          totalReviews: 0,
+          reputationScore: 0,
+          isVerified: false,
+        })),
+        skipDuplicates: true,
       });
-
-      console.log(`  ✅ Imported ${imported} new dealerships`);
-
-      // Rate limit — be polite to Overpass API
-      await new Promise((r) => setTimeout(r, 2000));
-    } catch (err: any) {
-      console.error(`  ❌ Error: ${err.message}`);
+      inserted += res.count;
     }
+
+    await prisma.country.update({
+      where: { id: country.id },
+      data: { dealerCount: { increment: inserted } },
+    }).catch(() => {});
+
+    byRegion[c.region] += inserted;
+    grandTotal += inserted;
+    console.log(`    ✅ imported ${inserted} (with contact info prioritised)`);
+
+    // be polite to Overpass (avoid 429)
+    await sleep(4000);
   }
 
-  console.log(`\n🎉 Done! Total imported: ${totalImported} dealerships`);
+  console.log("\n" + "=".repeat(64));
+  console.log(`🎉 Total imported: ${grandTotal}`);
+  console.log(`   Asia: ${byRegion.Asia} · Europe: ${byRegion.Europe} · North America: ${byRegion["North America"]}`);
 }
 
 main()

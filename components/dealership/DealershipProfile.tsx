@@ -27,7 +27,7 @@ export function DealershipProfile({ dealer }: Props) {
   return (
     <div className="bg-white border-b border-gray-100">
       {/* Cover */}
-      <div className="h-40 md:h-56 bg-gradient-to-br from-blue-900 to-blue-700 relative overflow-hidden">
+      <div className="h-40 md:h-56 bg-gradient-to-br from-gold-900 to-gold-800 relative overflow-hidden">
         {dealer.coverImageUrl && (
           <Image src={dealer.coverImageUrl} alt={dealer.name} fill className="object-cover opacity-60" />
         )}
@@ -51,7 +51,7 @@ export function DealershipProfile({ dealer }: Props) {
                 <div className="flex items-center gap-2 flex-wrap">
                   <h1 className="text-2xl font-bold text-gray-900">{dealer.name}</h1>
                   {dealer.isVerified && (
-                    <span className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 bg-blue-50 text-blue-700 border border-blue-100 rounded-full">
+                    <span className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 bg-gold-50 text-gold-800 border border-gold-100 rounded-full">
                       <BadgeCheck size={12} />
                       Verified
                     </span>
@@ -59,7 +59,7 @@ export function DealershipProfile({ dealer }: Props) {
                 </div>
                 <div className="flex items-center gap-1.5 mt-1 text-gray-500 text-sm">
                   <MapPin size={14} />
-                  <Link href={buildCountryUrl(dealer.country.code)} className="hover:text-blue-600 hover:underline">
+                  <Link href={buildCountryUrl(dealer.country.code)} className="hover:text-gold-700 hover:underline">
                     {location}
                   </Link>
                 </div>
@@ -90,7 +90,7 @@ export function DealershipProfile({ dealer }: Props) {
                 {/* Action buttons */}
                 <div className="flex gap-2 sm:mt-2">
                   <Link href={`/write-review/${dealer.id}`}>
-                    <Button size="sm" className="bg-blue-700 hover:bg-blue-800 gap-1.5">
+                    <Button size="sm" className="bg-gold-800 hover:bg-gold-800 gap-1.5">
                       <PenLine size={14} />
                       Write Review
                     </Button>
@@ -124,13 +124,13 @@ export function DealershipProfile({ dealer }: Props) {
             <span className="ml-1.5 font-semibold text-gray-900">{dealer.verifiedReviews} reviews</span>
           </div>
           {dealer.phone && (
-            <a href={`tel:${dealer.phone}`} className="flex items-center gap-1 text-gray-600 hover:text-blue-600">
+            <a href={`tel:${dealer.phone}`} className="flex items-center gap-1 text-gray-600 hover:text-gold-700">
               <Phone size={13} />
               {dealer.phone}
             </a>
           )}
           {dealer.website && (
-            <a href={dealer.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-blue-600 hover:underline">
+            <a href={dealer.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-gold-700 hover:underline">
               <Globe size={13} />
               Website
             </a>

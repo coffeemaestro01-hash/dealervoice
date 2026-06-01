@@ -51,7 +51,7 @@ export default async function CountryPage({ params }: Props) {
       <div className="bg-white border-b border-gray-100">
         <div className="container py-8">
           <nav className="text-sm text-gray-500 mb-2">
-            <Link href="/dealers" className="hover:text-blue-600">Dealers</Link>
+            <Link href="/dealers" className="hover:text-gold-700">Dealers</Link>
             {" / "}
             <span className="text-gray-900">{country.name}</span>
           </nav>
@@ -72,7 +72,7 @@ export default async function CountryPage({ params }: Props) {
                 <Link
                   key={city.id}
                   href={`/dealers/${countryCode}/${city.slug}`}
-                  className="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm text-gray-700 hover:border-blue-300 hover:text-blue-700 transition-colors"
+                  className="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm text-gray-700 hover:border-gold-300 hover:text-gold-800 transition-colors"
                 >
                   {city.name}
                   <span className="ml-1.5 text-gray-400 text-xs">{city.dealerCount}</span>

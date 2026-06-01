@@ -34,11 +34,11 @@ export function DealershipSidebar({ dealer }: Props) {
   return (
     <>
       {/* Write Review CTA */}
-      <div className="bg-blue-50 border border-blue-100 rounded-xl p-5 text-center">
-        <h3 className="font-semibold text-blue-900 mb-1">Been to this dealer?</h3>
-        <p className="text-blue-700 text-sm mb-4">Share your experience to help other car buyers.</p>
+      <div className="bg-gold-50 border border-gold-100 rounded-xl p-5 text-center">
+        <h3 className="font-semibold text-gold-900 mb-1">Been to this dealer?</h3>
+        <p className="text-gold-800 text-sm mb-4">Share your experience to help other car buyers.</p>
         <Link href={`/write-review/${dealer.id}`}>
-          <Button className="w-full bg-blue-700 hover:bg-blue-800">Write a Review</Button>
+          <Button className="w-full bg-gold-800 hover:bg-gold-800">Write a Review</Button>
         </Link>
       </div>
 
@@ -53,19 +53,19 @@ export function DealershipSidebar({ dealer }: Props) {
             </div>
           )}
           {dealer.phone && (
-            <a href={`tel:${dealer.phone}`} className="flex gap-2 text-gray-600 hover:text-blue-600">
+            <a href={`tel:${dealer.phone}`} className="flex gap-2 text-gray-600 hover:text-gold-700">
               <Phone size={15} className="mt-0.5 shrink-0 text-gray-400" />
               <span>{dealer.phone}</span>
             </a>
           )}
           {dealer.website && (
-            <a href={dealer.website} target="_blank" rel="noopener noreferrer" className="flex gap-2 text-blue-600 hover:underline">
+            <a href={dealer.website} target="_blank" rel="noopener noreferrer" className="flex gap-2 text-gold-700 hover:underline">
               <Globe size={15} className="mt-0.5 shrink-0" />
               <span className="truncate">{dealer.website.replace(/^https?:\/\//, "")}</span>
             </a>
           )}
           {dealer.email && (
-            <a href={`mailto:${dealer.email}`} className="flex gap-2 text-blue-600 hover:underline">
+            <a href={`mailto:${dealer.email}`} className="flex gap-2 text-gold-700 hover:underline">
               <Mail size={15} className="mt-0.5 shrink-0" />
               <span className="truncate">{dealer.email}</span>
             </a>
@@ -75,7 +75,7 @@ export function DealershipSidebar({ dealer }: Props) {
         {(dealer.facebookUrl || dealer.instagramUrl || dealer.twitterUrl) && (
           <div className="flex gap-2 mt-4 pt-4 border-t border-gray-50">
             {dealer.facebookUrl && (
-              <a href={dealer.facebookUrl} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-600">
+              <a href={dealer.facebookUrl} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gold-700">
                 <Facebook size={18} />
               </a>
             )}
