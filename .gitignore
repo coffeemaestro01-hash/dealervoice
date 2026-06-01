@@ -51,3 +51,10 @@ playwright-report/
 next-env.d.ts
 .vercel
 .env*
+node_modules/
+.next/
+.env*.local
+check_db.js
+complete-schema.js
+test-platform.js
+*.log
