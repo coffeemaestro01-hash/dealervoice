@@ -35,6 +35,7 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api/auth") ||
     pathname.startsWith("/api/public") ||
+    pathname.startsWith("/api/search") ||
     pathname.match(/\.(ico|png|jpg|jpeg|svg|webp|css|js|woff|woff2)$/)
   ) {
     return NextResponse.next();
