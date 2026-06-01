@@ -2,7 +2,14 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const FROM = `DealerVoice <noreply@${process.env.EMAIL_DOMAIN || "dealervoice.com"}>`;
+// Use a full EMAIL_FROM if provided; otherwise build noreply@<domain>.
+// Falls back to Resend's shared test sender so email works before a
+// custom domain is verified.
+const FROM =
+  process.env.EMAIL_FROM ||
+  (process.env.EMAIL_DOMAIN
+    ? `DealerVoice <noreply@${process.env.EMAIL_DOMAIN}>`
+    : "DealerVoice <onboarding@resend.dev>");
 
 export async function sendVerificationEmail(to: string, name: string, token: string) {
   const url = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${token}`;
