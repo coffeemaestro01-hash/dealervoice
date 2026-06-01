@@ -126,13 +126,10 @@ async function main() {
     },
   ];
 
-  const REVIEW_SAMPLES = [
-    { rating: 5, title: "Outstanding buying experience", body: "From the test drive to financing, the team was transparent and professional. No pressure, fair pricing, and they delivered exactly what was promised. Highly recommend." },
-    { rating: 5, title: "Best dealership I've dealt with", body: "Service department is top notch. They explained everything clearly, finished ahead of schedule, and the waiting area was comfortable. Will definitely return." },
-    { rating: 4, title: "Great cars, smooth process", body: "Found the exact trim I wanted. Paperwork took a little longer than expected but the staff were friendly and kept me updated throughout." },
-    { rating: 5, title: "Honest and helpful", body: "They went above and beyond to get me a good trade-in value. Genuinely felt like they cared about finding the right vehicle for my budget." },
-  ];
-
+  // NOTE: Per FTC 16 CFR Part 465 + BIS IS 19000:2022, we never seed fake
+  // reviews or fabricated ratings. Sample dealers are created as honest,
+  // unrated listings (0 reviews) — real reviews come only from real users.
+  void admin;
   for (const d of SAMPLE_DEALERS) {
     const brand = await brandBySlug(d.brand);
     const dealer = await prisma.dealership.upsert({
@@ -142,11 +139,11 @@ async function main() {
         category: "NEW_VEHICLE", status: "ACTIVE",
         countryId: us!.id, cityId: d.city?.id, cityName: d.cityName, stateName: d.stateName,
         address: d.address, phone: d.phone, latitude: d.lat, longitude: d.lng,
-        overallRating: d.rating, totalReviews: d.reviews, verifiedReviews: d.verified,
-        reputationScore: d.score, responseRate: 0.9, isFeatured: true, isVerified: true,
-        claimedAt: new Date(), yearEstablished: d.year,
+        overallRating: 0, totalReviews: 0, verifiedReviews: 0,
+        reputationScore: 0, responseRate: 0, isFeatured: false, isVerified: false,
+        yearEstablished: d.year,
       },
-      update: { isFeatured: true, status: "ACTIVE", overallRating: d.rating, totalReviews: d.reviews },
+      update: {},
     });
 
     if (brand) {
@@ -156,26 +153,8 @@ async function main() {
         update: {},
       });
     }
-
-    // Add a couple of published reviews authored by admin (visible on the site)
-    if (admin) {
-      for (let i = 0; i < 2; i++) {
-        const r = REVIEW_SAMPLES[(d.slug.length + i) % REVIEW_SAMPLES.length];
-        const reviewId = `${d.slug}-seed-review-${i}`;
-        await prisma.review.upsert({
-          where: { id: reviewId },
-          create: {
-            id: reviewId, dealershipId: dealer.id, authorId: admin.id,
-            overallRating: r.rating, title: r.title, body: r.body,
-            status: "PUBLISHED", reviewType: "NEW_CAR_PURCHASE",
-            verificationStatus: "VERIFIED_PURCHASE", publishedAt: new Date(),
-          },
-          update: {},
-        });
-      }
-    }
   }
-  console.log(`✅ ${SAMPLE_DEALERS.length} sample dealerships + reviews seeded`);
+  console.log(`✅ ${SAMPLE_DEALERS.length} sample dealerships seeded (no fake reviews/ratings)`);
   console.log("✅ Database seeded successfully!");
   console.log("🎉 Seed complete!");
 }

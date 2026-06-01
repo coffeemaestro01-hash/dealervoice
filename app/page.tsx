@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import prisma from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 import { HeroSection } from "@/components/home/HeroSection";
@@ -18,12 +19,24 @@ export const metadata: Metadata = {
   description: "Discover honest, verified reviews for car dealerships worldwide. Read real customer experiences and make informed decisions.",
 };
 
-export default function HomePage() {
+async function getHeroStats() {
+  try {
+    const dealers = await prisma.dealership.count({ where: { deletedAt: null } });
+    const countries = await prisma.country.count({ where: { dealerCount: { gt: 0 } } });
+    const reviews = await prisma.review.count({ where: { status: "PUBLISHED", deletedAt: null } });
+    return { dealers, countries, reviews };
+  } catch {
+    return { dealers: 0, countries: 0, reviews: 0 };
+  }
+}
+
+export default async function HomePage() {
+  const stats = await getHeroStats();
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Navbar />
       <main className="flex-1">
-        <HeroSection />
+        <HeroSection stats={stats} />
         <TrustSection />
         <CategoriesSection />
         <Suspense>

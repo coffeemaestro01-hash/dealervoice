@@ -7,19 +7,30 @@ import { Search, MapPin, ShieldCheck, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const TRUST_STATS = [
-  { value: "2.4M+", label: "Verified Reviews" },
-  { value: "180K+", label: "Dealerships Listed" },
-  { value: "190+", label: "Countries" },
-  { value: "4.8", label: "Platform Rating", star: true },
-];
-
 const POPULAR = ["Toyota", "BMW", "Tesla", "Mercedes-Benz", "Ford"];
 
-export function HeroSection() {
+interface HeroStats {
+  dealers: number;
+  countries: number;
+  reviews: number;
+}
+
+function compact(n: number) {
+  if (n >= 1000) return `${(n / 1000).toFixed(1).replace(/\.0$/, "")}K+`;
+  return `${n}`;
+}
+
+export function HeroSection({ stats }: { stats: HeroStats }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [location, setLocation] = useState("");
+
+  const TRUST_STATS = [
+    { value: compact(stats.dealers), label: "Dealerships listed" },
+    { value: `${stats.countries}`, label: "Countries" },
+    { value: stats.reviews > 0 ? compact(stats.reviews) : "100%", label: stats.reviews > 0 ? "Verified reviews" : "Verified reviews only" },
+    { value: "Free", label: "To read & review" },
+  ];
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,7 +55,7 @@ export function HeroSection() {
         >
           <div className="inline-flex items-center gap-2 bg-gold-50 border border-gold/40 rounded-full px-4 py-1.5 text-sm text-gold-700 font-medium mb-6">
             <ShieldCheck size={14} />
-            Trusted by millions of car buyers worldwide
+            New platform — be among the first verified reviewers in your city
           </div>
 
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-gray-900 mb-5">
@@ -115,7 +126,6 @@ export function HeroSection() {
             <div key={stat.label} className="text-center rounded-xl border border-gray-100 bg-gray-50/60 py-4">
               <div className="text-2xl md:text-3xl font-bold text-gray-900 flex items-center justify-center gap-1">
                 {stat.value}
-                {stat.star && <Star size={20} className="fill-gold-500 text-gold-500" />}
               </div>
               <div className="text-sm text-gray-500 mt-1">{stat.label}</div>
             </div>

@@ -6,6 +6,7 @@ const FOOTER_LINKS = {
     { label: "Find Dealers", href: "/dealers" },
     { label: "Write a Review", href: "/dealers" },
     { label: "How It Works", href: "/about" },
+    { label: "Methodology", href: "/methodology" },
     { label: "Pricing", href: "/pricing" },
   ],
   Business: [
@@ -24,6 +25,9 @@ const FOOTER_LINKS = {
     { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms of Service", href: "/terms" },
     { label: "Cookie Policy", href: "/cookies" },
+    { label: "Grievance Redressal", href: "/grievance" },
+    { label: "Cancellations & Refunds", href: "/shipping-refunds" },
+    { label: "BIS Compliance", href: "/bis-compliance" },
     { label: "DMCA", href: "/dmca" },
   ],
 };
