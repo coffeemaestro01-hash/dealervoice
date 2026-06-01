@@ -17,34 +17,32 @@ export async function GET(req: NextRequest) {
   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
   try {
-    const [
-      totalDealers, totalUsers, totalReviews,
-      newUsers7d, newReviews7d, pendingClaims, pendingReports,
-      paidSubscriptions, revenueAgg, topDealers, recentClaims,
-    ] = await Promise.all([
-      prisma.dealership.count({ where: { deletedAt: null } }),
-      prisma.user.count({ where: { deletedAt: null } }),
-      prisma.review.count({ where: { status: "PUBLISHED", deletedAt: null } }),
-      prisma.user.count({ where: { createdAt: { gte: weekAgo }, deletedAt: null } }),
-      prisma.review.count({ where: { createdAt: { gte: weekAgo }, status: "PUBLISHED" } }),
-      prisma.dealerClaim.count({ where: { status: "PENDING" } }),
-      prisma.report.count({ where: { status: "PENDING" } }),
-      prisma.dealerSubscription.count({ where: { status: "ACTIVE", plan: { in: ["PRO", "ENTERPRISE"] } } }).catch(() => 0),
-      prisma.invoice.aggregate({ _sum: { amount: true }, where: { status: "paid" } }).catch(() => ({ _sum: { amount: 0 } })),
-      prisma.dealership.findMany({
-        where: { totalReviews: { gt: 0 }, deletedAt: null },
-        orderBy: [{ overallRating: "desc" }, { totalReviews: "desc" }],
-        take: 5,
-        select: { name: true, overallRating: true, totalReviews: true, slug: true },
-      }),
-      prisma.dealerClaim.findMany({
-        where: { createdAt: { gte: weekAgo } },
-        take: 5, orderBy: { createdAt: "desc" },
-        include: { dealership: { select: { name: true } }, submittedBy: { select: { name: true } } },
-      }).catch(() => []),
-    ]);
+    // Sequential queries — the connection pool is limited to 1, so parallel
+    // (Promise.all) calls would exhaust it and time out.
+    const totalDealers = await prisma.dealership.count({ where: { deletedAt: null } });
+    const totalUsers = await prisma.user.count({ where: { deletedAt: null } });
+    const totalReviews = await prisma.review.count({ where: { status: "PUBLISHED", deletedAt: null } });
+    const newUsers7d = await prisma.user.count({ where: { createdAt: { gte: weekAgo }, deletedAt: null } });
+    const newReviews7d = await prisma.review.count({ where: { createdAt: { gte: weekAgo }, status: "PUBLISHED" } });
+    const pendingClaims = await prisma.dealerClaim.count({ where: { status: "PENDING" } });
+    const pendingReports = await prisma.report.count({ where: { status: "PENDING" } });
+    const paidSubscriptions = await prisma.dealerSubscription.count({ where: { status: "ACTIVE", plan: { in: ["PRO", "ENTERPRISE"] } } }).catch(() => 0);
+    const revenueAgg = await prisma.invoice.aggregate({ _sum: { amount: true }, where: { status: "paid" } }).catch(() => ({ _sum: { amount: 0 } }));
+    const newLeads7d = await prisma.lead.count({ where: { createdAt: { gte: weekAgo } } }).catch(() => 0);
+    const topDealers = await prisma.dealership.findMany({
+      where: { totalReviews: { gt: 0 }, deletedAt: null },
+      orderBy: [{ overallRating: "desc" }, { totalReviews: "desc" }],
+      take: 5,
+      select: { name: true, overallRating: true, totalReviews: true, slug: true },
+    });
+    const recentClaims = await prisma.dealerClaim.findMany({
+      where: { createdAt: { gte: weekAgo } },
+      take: 5, orderBy: { createdAt: "desc" },
+      include: { dealership: { select: { name: true } }, submittedBy: { select: { name: true } } },
+    }).catch(() => [] as any[]);
 
     const stats: DigestStats = {
+      newLeads7d,
       periodLabel: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
       totalDealers, totalUsers, totalReviews, newUsers7d, newReviews7d,
       pendingClaims, pendingReports, paidSubscriptions,

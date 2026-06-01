@@ -5,6 +5,7 @@ import prisma from "@/lib/db";
 import { DealershipProfile } from "@/components/dealership/DealershipProfile";
 import { ReviewsList } from "@/components/review/ReviewsList";
 import { DealershipSidebar } from "@/components/dealership/DealershipSidebar";
+import { QuoteRequestForm } from "@/components/dealership/QuoteRequestForm";
 import { RatingDistribution } from "@/components/dealership/RatingDistribution";
 import { getCache, setCache, CACHE_KEYS, CACHE_TTL } from "@/lib/redis";
 
@@ -109,6 +110,7 @@ export default async function DealershipPage({ params, searchParams }: Props) {
 
             {/* Sidebar */}
             <div className="space-y-5">
+              <QuoteRequestForm dealershipId={dealer.id} dealerName={dealer.name} />
               <DealershipSidebar dealer={dealer as any} />
             </div>
           </div>

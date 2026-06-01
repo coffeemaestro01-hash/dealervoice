@@ -65,6 +65,7 @@ export interface DigestStats {
   totalReviews: number;
   newUsers7d: number;
   newReviews7d: number;
+  newLeads7d: number;
   pendingClaims: number;
   pendingReports: number;
   paidSubscriptions: number;
@@ -102,8 +103,8 @@ ${stat("Total dealerships", s.totalDealers.toLocaleString())}
 ${stat("Total members", s.totalUsers.toLocaleString(), `+${s.newUsers7d} this week`)}
 ${stat("Published reviews", s.totalReviews.toLocaleString(), `+${s.newReviews7d} this week`)}
 </tr><tr>
-${stat("Paid subscriptions", s.paidSubscriptions)}
-${stat("Revenue (₹)", s.revenueInr.toLocaleString())}
+${stat("New leads", s.newLeads7d, "this week")}
+${stat("Revenue (₹)", s.revenueInr.toLocaleString(), `${s.paidSubscriptions} paid plans`)}
 ${stat("Needs your action", s.pendingClaims + s.pendingReports, `${s.pendingClaims} claims · ${s.pendingReports} reports`)}
 </tr></table>
 <h3 style="margin:24px 0 8px;color:#0a0a0a">🏆 Top-rated dealers</h3>

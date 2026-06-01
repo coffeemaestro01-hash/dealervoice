@@ -373,6 +373,7 @@ model Dealership {
   competitorSets   CompetitorSet[]    @relation("PrimaryDealer")
   competitors      CompetitorSet[]    @relation("CompetitorDealer")
   analyticsEvents  AnalyticsEvent[]
+  leads            Lead[]
 
   @@index([slug])
   @@index([countryId])
@@ -811,5 +812,40 @@ model AuditLog {
 
   @@index([userId])
   @@index([resource, resourceId])
+  @@index([createdAt])
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  CONVERTED
+  CLOSED
+}
+
+enum LeadType {
+  QUOTE
+  TEST_DRIVE
+  GENERAL
+  FINANCE
+}
+
+model Lead {
+  id           String     @id @default(cuid())
+  dealershipId String
+  name         String
+  email        String
+  phone        String?
+  vehicle      String?
+  message      String?    @db.Text
+  type         LeadType   @default(QUOTE)
+  status       LeadStatus @default(NEW)
+  source       String?    // page/path the lead came from
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  dealership   Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+
+  @@index([dealershipId])
+  @@index([status])
   @@index([createdAt])
 }
