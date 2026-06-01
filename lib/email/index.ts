@@ -21,7 +21,7 @@ export async function sendVerificationEmail(to: string, name: string, token: str
       title: "Verify Your Email",
       body: `<p>Hi ${name},</p>
 <p>Please verify your email address to complete your registration.</p>
-<p><a href="${url}" style="background:#1d4ed8;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block">Verify Email</a></p>
+<p><a href="${url}" style="background:#C9961E;color:#0a0a0a;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block">Verify Email</a></p>
 <p>This link expires in 24 hours.</p>`,
     }),
   });
@@ -37,7 +37,7 @@ export async function sendPasswordResetEmail(to: string, name: string, token: st
       title: "Reset Your Password",
       body: `<p>Hi ${name},</p>
 <p>You requested a password reset. Click below to choose a new password.</p>
-<p><a href="${url}" style="background:#1d4ed8;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block">Reset Password</a></p>
+<p><a href="${url}" style="background:#C9961E;color:#0a0a0a;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block">Reset Password</a></p>
 <p>This link expires in 1 hour. If you didn't request this, ignore this email.</p>`,
     }),
   });
@@ -52,7 +52,7 @@ export async function sendNewReviewNotification(to: string, dealerName: string, 
     html: emailTemplate({
       title: "New Review Received",
       body: `<p>Your dealership <strong>${dealerName}</strong> received a new ${rating}-star review.</p>
-<p><a href="${url}" style="background:#1d4ed8;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block">View & Respond</a></p>
+<p><a href="${url}" style="background:#C9961E;color:#0a0a0a;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block">View & Respond</a></p>
 <p>Responding to reviews improves your reputation score.</p>`,
     }),
   });
@@ -78,8 +78,8 @@ function emailTemplate({ title, body }: { title: string; body: string }): string
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f4f5;margin:0;padding:20px}
 .container{max-width:600px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.1)}
-.header{background:#1d4ed8;padding:24px;text-align:center}
-.header h1{color:#fff;margin:0;font-size:24px}
+.header{background:#0a0a0a;padding:24px;text-align:center}
+.header h1{color:#D4AF37;margin:0;font-size:24px;letter-spacing:-0.5px}
 .body{padding:32px;color:#374151;line-height:1.6}
 .footer{background:#f9fafb;padding:16px;text-align:center;font-size:12px;color:#9ca3af}
 </style></head>

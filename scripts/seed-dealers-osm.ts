@@ -32,24 +32,37 @@ interface CountrySpec {
   quota: number;      // target number of dealers to import
 }
 
-// ~1500 dealerships across three regions, prioritised by market size
+// ~6,000+ dealerships across three regions, prioritised by market size
 const COUNTRIES: CountrySpec[] = [
-  // North America (~470)
-  { name: "United States", code: "US", code3: "USA", dialCode: "+1", currency: "USD", locale: "en-US", flagEmoji: "🇺🇸", region: "North America", quota: 250 },
-  { name: "Canada", code: "CA", code3: "CAN", dialCode: "+1", currency: "CAD", locale: "en-CA", flagEmoji: "🇨🇦", region: "North America", quota: 120 },
-  { name: "Mexico", code: "MX", code3: "MEX", dialCode: "+52", currency: "MXN", locale: "es-MX", flagEmoji: "🇲🇽", region: "North America", quota: 100 },
-  // Europe (~680)
-  { name: "United Kingdom", code: "GB", code3: "GBR", dialCode: "+44", currency: "GBP", locale: "en-GB", flagEmoji: "🇬🇧", region: "Europe", quota: 150 },
-  { name: "Germany", code: "DE", code3: "DEU", dialCode: "+49", currency: "EUR", locale: "de-DE", flagEmoji: "🇩🇪", region: "Europe", quota: 150 },
-  { name: "France", code: "FR", code3: "FRA", dialCode: "+33", currency: "EUR", locale: "fr-FR", flagEmoji: "🇫🇷", region: "Europe", quota: 120 },
-  { name: "Italy", code: "IT", code3: "ITA", dialCode: "+39", currency: "EUR", locale: "it-IT", flagEmoji: "🇮🇹", region: "Europe", quota: 100 },
-  { name: "Spain", code: "ES", code3: "ESP", dialCode: "+34", currency: "EUR", locale: "es-ES", flagEmoji: "🇪🇸", region: "Europe", quota: 90 },
-  { name: "Netherlands", code: "NL", code3: "NLD", dialCode: "+31", currency: "EUR", locale: "nl-NL", flagEmoji: "🇳🇱", region: "Europe", quota: 70 },
-  // Asia (~360)
-  { name: "India", code: "IN", code3: "IND", dialCode: "+91", currency: "INR", locale: "en-IN", flagEmoji: "🇮🇳", region: "Asia", quota: 150 },
-  { name: "Japan", code: "JP", code3: "JPN", dialCode: "+81", currency: "JPY", locale: "ja-JP", flagEmoji: "🇯🇵", region: "Asia", quota: 100 },
-  { name: "South Korea", code: "KR", code3: "KOR", dialCode: "+82", currency: "KRW", locale: "ko-KR", flagEmoji: "🇰🇷", region: "Asia", quota: 60 },
-  { name: "United Arab Emirates", code: "AE", code3: "ARE", dialCode: "+971", currency: "AED", locale: "ar-AE", flagEmoji: "🇦🇪", region: "Asia", quota: 50 },
+  // North America
+  { name: "United States", code: "US", code3: "USA", dialCode: "+1", currency: "USD", locale: "en-US", flagEmoji: "🇺🇸", region: "North America", quota: 800 },
+  { name: "Canada", code: "CA", code3: "CAN", dialCode: "+1", currency: "CAD", locale: "en-CA", flagEmoji: "🇨🇦", region: "North America", quota: 300 },
+  { name: "Mexico", code: "MX", code3: "MEX", dialCode: "+52", currency: "MXN", locale: "es-MX", flagEmoji: "🇲🇽", region: "North America", quota: 200 },
+  // Europe
+  { name: "United Kingdom", code: "GB", code3: "GBR", dialCode: "+44", currency: "GBP", locale: "en-GB", flagEmoji: "🇬🇧", region: "Europe", quota: 450 },
+  { name: "Germany", code: "DE", code3: "DEU", dialCode: "+49", currency: "EUR", locale: "de-DE", flagEmoji: "🇩🇪", region: "Europe", quota: 450 },
+  { name: "France", code: "FR", code3: "FRA", dialCode: "+33", currency: "EUR", locale: "fr-FR", flagEmoji: "🇫🇷", region: "Europe", quota: 350 },
+  { name: "Italy", code: "IT", code3: "ITA", dialCode: "+39", currency: "EUR", locale: "it-IT", flagEmoji: "🇮🇹", region: "Europe", quota: 300 },
+  { name: "Spain", code: "ES", code3: "ESP", dialCode: "+34", currency: "EUR", locale: "es-ES", flagEmoji: "🇪🇸", region: "Europe", quota: 250 },
+  { name: "Netherlands", code: "NL", code3: "NLD", dialCode: "+31", currency: "EUR", locale: "nl-NL", flagEmoji: "🇳🇱", region: "Europe", quota: 150 },
+  { name: "Poland", code: "PL", code3: "POL", dialCode: "+48", currency: "PLN", locale: "pl-PL", flagEmoji: "🇵🇱", region: "Europe", quota: 150 },
+  { name: "Belgium", code: "BE", code3: "BEL", dialCode: "+32", currency: "EUR", locale: "nl-BE", flagEmoji: "🇧🇪", region: "Europe", quota: 100 },
+  { name: "Sweden", code: "SE", code3: "SWE", dialCode: "+46", currency: "SEK", locale: "sv-SE", flagEmoji: "🇸🇪", region: "Europe", quota: 100 },
+  { name: "Switzerland", code: "CH", code3: "CHE", dialCode: "+41", currency: "CHF", locale: "de-CH", flagEmoji: "🇨🇭", region: "Europe", quota: 100 },
+  { name: "Austria", code: "AT", code3: "AUT", dialCode: "+43", currency: "EUR", locale: "de-AT", flagEmoji: "🇦🇹", region: "Europe", quota: 90 },
+  { name: "Portugal", code: "PT", code3: "PRT", dialCode: "+351", currency: "EUR", locale: "pt-PT", flagEmoji: "🇵🇹", region: "Europe", quota: 90 },
+  { name: "Ireland", code: "IE", code3: "IRL", dialCode: "+353", currency: "EUR", locale: "en-IE", flagEmoji: "🇮🇪", region: "Europe", quota: 70 },
+  // Asia
+  { name: "India", code: "IN", code3: "IND", dialCode: "+91", currency: "INR", locale: "en-IN", flagEmoji: "🇮🇳", region: "Asia", quota: 500 },
+  { name: "Japan", code: "JP", code3: "JPN", dialCode: "+81", currency: "JPY", locale: "ja-JP", flagEmoji: "🇯🇵", region: "Asia", quota: 350 },
+  { name: "South Korea", code: "KR", code3: "KOR", dialCode: "+82", currency: "KRW", locale: "ko-KR", flagEmoji: "🇰🇷", region: "Asia", quota: 200 },
+  { name: "Indonesia", code: "ID", code3: "IDN", dialCode: "+62", currency: "IDR", locale: "id-ID", flagEmoji: "🇮🇩", region: "Asia", quota: 150 },
+  { name: "Malaysia", code: "MY", code3: "MYS", dialCode: "+60", currency: "MYR", locale: "ms-MY", flagEmoji: "🇲🇾", region: "Asia", quota: 130 },
+  { name: "Thailand", code: "TH", code3: "THA", dialCode: "+66", currency: "THB", locale: "th-TH", flagEmoji: "🇹🇭", region: "Asia", quota: 130 },
+  { name: "Philippines", code: "PH", code3: "PHL", dialCode: "+63", currency: "PHP", locale: "en-PH", flagEmoji: "🇵🇭", region: "Asia", quota: 120 },
+  { name: "United Arab Emirates", code: "AE", code3: "ARE", dialCode: "+971", currency: "AED", locale: "ar-AE", flagEmoji: "🇦🇪", region: "Asia", quota: 120 },
+  { name: "Saudi Arabia", code: "SA", code3: "SAU", dialCode: "+966", currency: "SAR", locale: "ar-SA", flagEmoji: "🇸🇦", region: "Asia", quota: 120 },
+  { name: "Singapore", code: "SG", code3: "SGP", dialCode: "+65", currency: "SGD", locale: "en-SG", flagEmoji: "🇸🇬", region: "Asia", quota: 80 },
 ];
 
 interface OSMNode {
@@ -71,7 +84,7 @@ function buildSlug(name: string, city: string, id: number): string {
 
 function overpassQuery(iso: string, limit: number): string {
   // Pull more than quota so we can prioritise dealers with contact info
-  const fetchLimit = Math.min(limit * 4, 2000);
+  const fetchLimit = Math.min(limit * 3, 3500);
   return `
     [out:json][timeout:120];
     area["ISO3166-1"="${iso}"][admin_level=2]->.a;

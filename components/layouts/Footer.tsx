@@ -40,8 +40,21 @@ export function Footer() {
               The world&apos;s most trusted platform for car dealership reviews and reputation insights.
             </p>
             <div className="flex gap-2 mt-4">
-              {["Twitter", "Facebook", "LinkedIn", "Instagram"].map((s) => (
-                <a key={s} href="#" className="w-8 h-8 grid place-items-center rounded-full border border-gold/30 text-gold-400 text-xs hover:bg-gold-500 hover:text-night-900 transition-colors" aria-label={s}>{s[0]}</a>
+              {[
+                { label: "X", href: "https://x.com/dealervoice" },
+                { label: "in", href: "https://www.linkedin.com/company/dealervoice" },
+                { label: "f", href: "https://www.facebook.com/dealervoice" },
+              ].map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 grid place-items-center rounded-full border border-gold/30 text-gold-400 text-xs hover:bg-gold-500 hover:text-night-900 transition-colors"
+                  aria-label={`DealerVoice on ${s.label}`}
+                >
+                  {s.label}
+                </a>
               ))}
             </div>
           </div>

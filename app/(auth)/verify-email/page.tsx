@@ -1,0 +1,75 @@
+"use client";
+
+import { useEffect, useState, Suspense } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { Loader2, CheckCircle2, XCircle } from "lucide-react";
+import { Logo } from "@/components/common/Logo";
+import { Button } from "@/components/ui/button";
+
+function VerifyInner() {
+  const token = useSearchParams().get("token") ?? "";
+  const [state, setState] = useState<"loading" | "ok" | "error">("loading");
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    if (!token) { setState("error"); setMessage("This verification link is missing its token."); return; }
+    (async () => {
+      try {
+        const res = await fetch("/api/auth/verify-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token }),
+        });
+        const json = await res.json();
+        if (res.ok) { setState("ok"); setMessage(json.message); }
+        else { setState("error"); setMessage(json.error ?? "Verification failed."); }
+      } catch {
+        setState("error"); setMessage("Something went wrong. Please try again.");
+      }
+    })();
+  }, [token]);
+
+  return (
+    <div className="text-center">
+      {state === "loading" && (
+        <>
+          <Loader2 className="mx-auto text-gold-500 animate-spin mb-4" size={48} />
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Verifying your email…</h1>
+          <p className="text-gray-600">One moment.</p>
+        </>
+      )}
+      {state === "ok" && (
+        <>
+          <CheckCircle2 className="mx-auto text-green-500 mb-4" size={48} />
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Email verified! 🎉</h1>
+          <p className="text-gray-600 mb-6">Your account is now active. You can sign in and start exploring.</p>
+          <Link href="/login"><Button className="bg-gold-gradient text-night-900 font-semibold border-0 hover:opacity-90">Sign in</Button></Link>
+        </>
+      )}
+      {state === "error" && (
+        <>
+          <XCircle className="mx-auto text-red-500 mb-4" size={48} />
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Verification failed</h1>
+          <p className="text-gray-600 mb-6">{message}</p>
+          <Link href="/register"><Button variant="outline" className="border-gold/50 text-gold-700 hover:bg-gold-50">Back to register</Button></Link>
+        </>
+      )}
+    </div>
+  );
+}
+
+export default function VerifyEmailPage() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-night-gradient px-4 py-12">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8"><div className="flex justify-center mb-4"><Logo variant="full" height={34} /></div></div>
+        <div className="bg-white rounded-2xl border border-gold/20 shadow-gold p-8">
+          <Suspense fallback={<div className="text-center text-gray-500">Loading…</div>}>
+            <VerifyInner />
+          </Suspense>
+        </div>
+      </div>
+    </div>
+  );
+}
