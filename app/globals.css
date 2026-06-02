@@ -90,11 +90,11 @@
   .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 
-  /* ───────── Black & Gold theme utilities ───────── */
+  /* ───────── Navy & Gold theme utilities (brand kit) ───────── */
 
-  /* Gold gradient text */
+  /* Gold gradient text (#C9A24A -> #E8C97A) */
   .text-gold {
-    background-image: linear-gradient(135deg, #FBE7A1 0%, #E6C25A 40%, #D4AF37 70%, #C9961E 100%);
+    background-image: linear-gradient(135deg, #E8C97A 0%, #D9B95F 45%, #C9A24A 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -102,52 +102,52 @@
   }
 
   /* Solid gold color helpers */
-  .gold-100 { color: #FBE7A1; }
-  .gold-400 { color: #E6C25A; }
-  .gold-500 { color: #D4AF37; }
-  .gold-600 { color: #C9961E; }
-  .bg-gold-500 { background-color: #D4AF37; }
-  .bg-gold-600 { background-color: #C9961E; }
+  .gold-100 { color: #f3e7c4; }
+  .gold-400 { color: #D9B95F; }
+  .gold-500 { color: #C9A24A; }
+  .gold-600 { color: #b08c3a; }
+  .bg-gold-500 { background-color: #C9A24A; }
+  .bg-gold-600 { background-color: #b08c3a; }
 
   /* Gold gradient fill (buttons, chips) */
   .bg-gold-gradient {
-    background-image: linear-gradient(135deg, #FBE7A1 0%, #E6C25A 38%, #D4AF37 70%, #C9961E 100%);
+    background-image: linear-gradient(135deg, #E8C97A 0%, #D9B95F 45%, #C9A24A 100%);
   }
   .bg-gold-gradient:hover {
-    background-image: linear-gradient(135deg, #FFF0BE 0%, #EFCF6B 38%, #E0BB44 70%, #D4A526 100%);
+    background-image: linear-gradient(135deg, #F0D896 0%, #E3C56F 45%, #D3AC54 100%);
   }
 
-  /* Dark luxury backgrounds */
+  /* Navy backgrounds (brand #0F172A) */
   .bg-night {
-    background-color: #0a0a0a;
+    background-color: #0F172A;
   }
   .bg-night-gradient {
     background-image:
-      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(212,175,55,0.16), transparent 60%),
-      radial-gradient(ellipse 60% 50% at 90% 20%, rgba(212,175,55,0.08), transparent 55%),
-      linear-gradient(180deg, #0d0d0d 0%, #0a0a0a 50%, #060606 100%);
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(201,162,74,0.18), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 90% 20%, rgba(201,162,74,0.10), transparent 55%),
+      linear-gradient(180deg, #16203a 0%, #0F172A 50%, #080d1a 100%);
   }
   .bg-night-soft {
-    background-image: linear-gradient(180deg, #111111 0%, #0c0c0c 100%);
+    background-image: linear-gradient(180deg, #1e293b 0%, #0F172A 100%);
   }
 
   /* Subtle gold border */
   .border-gold {
-    border-color: rgba(212, 175, 55, 0.35);
+    border-color: rgba(201, 162, 74, 0.35);
   }
   .border-gold-strong {
-    border-color: rgba(212, 175, 55, 0.6);
+    border-color: rgba(201, 162, 74, 0.6);
   }
 
   /* Gold glow */
   .shadow-gold {
-    box-shadow: 0 0 0 1px rgba(212,175,55,0.18), 0 10px 40px -10px rgba(212,175,55,0.35);
+    box-shadow: 0 0 0 1px rgba(201,162,74,0.18), 0 10px 40px -10px rgba(201,162,74,0.35);
   }
 
   /* Card on dark */
   .card-dark {
     background-image: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
-    border: 1px solid rgba(212,175,55,0.18);
+    border: 1px solid rgba(201,162,74,0.18);
     backdrop-filter: blur(6px);
   }
 }

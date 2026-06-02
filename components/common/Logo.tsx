@@ -3,7 +3,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface LogoProps {
-  /** "full" shows icon + wordmark, "mark" shows just the icon */
+  /** "full" = horizontal lockup (mic + wordmark), "mark" = icon only */
   variant?: "full" | "mark";
   /** height in px (width auto-scales) */
   height?: number;
@@ -13,19 +13,20 @@ interface LogoProps {
 }
 
 /**
- * DealerVoice brand logo - gold-on-black.
- * Uses the generated SVG assets in /public/logo/svg.
+ * DealerVoice brand logo (official kit: gold mic/key-fob + navy wordmark).
+ * The full lockup has a navy wordmark, so use it on light backgrounds.
+ * On dark backgrounds use the FooterBrand component (icon + white text).
  */
 export function Logo({
   variant = "full",
-  height = 36,
+  height = 38,
   href = "/",
   className,
   priority = false,
 }: LogoProps) {
   const isFull = variant === "full";
-  const src = isFull ? "/logo/svg/logo-full.svg" : "/logo/svg/logo-mark.svg";
-  const ratio = isFull ? 900 / 240 : 1;
+  const src = isFull ? "/logo/dealervoice-horizontal.png" : "/logo/dealervoice-icon.png";
+  const ratio = isFull ? 1600 / 410 : 1;
   const width = Math.round(height * ratio);
 
   const img = (
@@ -35,7 +36,7 @@ export function Logo({
       width={width}
       height={height}
       priority={priority}
-      className={cn("select-none", className)}
+      className={cn("select-none object-contain", className)}
     />
   );
 
@@ -44,6 +45,18 @@ export function Logo({
   return (
     <Link href={href} className="inline-flex items-center" aria-label="DealerVoice home">
       {img}
+    </Link>
+  );
+}
+
+/** Brand lockup for dark backgrounds: gold icon + white wordmark text. */
+export function FooterBrand({ height = 34 }: { height?: number }) {
+  return (
+    <Link href="/" className="inline-flex items-center gap-2.5" aria-label="DealerVoice home">
+      <Image src="/logo/dealervoice-icon.png" alt="DealerVoice" width={height} height={height} className="object-contain" />
+      <span className="text-xl font-extrabold tracking-tight text-white">
+        DealerVoice<span className="text-gold-400">.io</span>
+      </span>
     </Link>
   );
 }

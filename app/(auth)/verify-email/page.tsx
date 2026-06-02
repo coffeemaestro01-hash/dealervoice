@@ -4,7 +4,7 @@ import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Loader2, CheckCircle2, XCircle } from "lucide-react";
-import { Logo } from "@/components/common/Logo";
+import { FooterBrand } from "@/components/common/Logo";
 import { Button } from "@/components/ui/button";
 
 function VerifyInner() {
@@ -63,7 +63,7 @@ export default function VerifyEmailPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-night-gradient px-4 py-12">
       <div className="w-full max-w-md">
-        <div className="text-center mb-8"><div className="flex justify-center mb-4"><Logo variant="full" height={34} /></div></div>
+        <div className="text-center mb-8"><div className="flex justify-center mb-4"><FooterBrand height={34} /></div></div>
         <div className="bg-white rounded-2xl border border-gold/20 shadow-gold p-8">
           <Suspense fallback={<div className="text-center text-gray-500">Loading…</div>}>
             <VerifyInner />

@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Loader2, Check } from "lucide-react";
-import { Logo } from "@/components/common/Logo";
+import { FooterBrand } from "@/components/common/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -62,7 +62,7 @@ export default function RegisterPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <Logo variant="full" height={34} />
+            <FooterBrand height={34} />
           </div>
           <h1 className="text-2xl font-bold text-white">Create your account</h1>
           <p className="text-gray-400 mt-1">

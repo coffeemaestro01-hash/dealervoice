@@ -37,7 +37,7 @@ export function Navbar() {
       : "/dashboard/customer";
 
   return (
-    <header className="sticky top-0 z-50 bg-night-800/90 backdrop-blur-md border-b border-gold/40 shadow-sm">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
       <nav className="container flex items-center justify-between h-16">
         {/* Logo */}
         <Logo variant="full" height={34} priority />
@@ -45,7 +45,7 @@ export function Navbar() {
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-6">
           {NAV_LINKS.map((link) => (
-            <Link key={link.href} href={link.href} className="text-sm text-gray-300 hover:text-gold-400 transition-colors font-medium">
+            <Link key={link.href} href={link.href} className="text-sm text-gray-700 hover:text-gold-600 transition-colors font-medium">
               {link.label}
             </Link>
           ))}
@@ -54,7 +54,7 @@ export function Navbar() {
         {/* Actions */}
         <div className="hidden md:flex items-center gap-3">
           <Link href="/dealers">
-            <Button variant="ghost" size="sm" className="gap-2 text-gray-200 hover:text-gold-400 hover:bg-white/5">
+            <Button variant="ghost" size="sm" className="gap-2 text-gray-700 hover:text-gold-600 hover:bg-gray-50">
               <Search size={15} />
               Search
             </Button>
@@ -63,10 +63,10 @@ export function Navbar() {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="gap-2 px-2 text-gray-200 hover:text-gold-400 hover:bg-white/5">
+                <Button variant="ghost" size="sm" className="gap-2 px-2 text-gray-700 hover:text-gold-600 hover:bg-gray-50">
                   <Avatar className="w-7 h-7">
                     <AvatarImage src={user.image ?? undefined} />
-                    <AvatarFallback className="bg-gold-500/20 text-gold-400 text-xs font-semibold">
+                    <AvatarFallback className="bg-gold-100 text-gold-700 text-xs font-semibold">
                       {getInitials(user.name ?? "U")}
                     </AvatarFallback>
                   </Avatar>
@@ -100,7 +100,7 @@ export function Navbar() {
           ) : (
             <>
               <Link href="/login">
-                <Button variant="ghost" size="sm" className="text-gray-200 hover:text-gold-400 hover:bg-white/5">Sign in</Button>
+                <Button variant="ghost" size="sm" className="text-gray-700 hover:text-gold-600 hover:bg-gray-50">Sign in</Button>
               </Link>
               <Link href="/register">
                 <Button size="sm" className="bg-gold-gradient text-night-900 font-semibold hover:opacity-90 border-0">Get started</Button>
@@ -113,7 +113,7 @@ export function Navbar() {
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden text-gray-200 hover:text-gold-400 hover:bg-white/5"
+          className="md:hidden text-gray-700 hover:text-gold-600 hover:bg-gray-50"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
         >
@@ -128,35 +128,35 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-night-800 border-t border-gold/30"
+            className="md:hidden bg-white border-t border-gray-200"
           >
             <div className="container py-4 flex flex-col gap-1">
               {NAV_LINKS.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="px-3 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-gold-400 rounded-lg"
+                  className="px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gold-600 rounded-lg"
                   onClick={() => setMobileOpen(false)}
                 >
                   {link.label}
                 </Link>
               ))}
-              <div className="border-t border-gold/20 mt-2 pt-2 flex flex-col gap-1">
+              <div className="border-t border-gray-200 mt-2 pt-2 flex flex-col gap-1">
                 {user ? (
                   <>
-                    <Link href={dashboardHref} className="px-3 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-gold-400 rounded-lg" onClick={() => setMobileOpen(false)}>
+                    <Link href={dashboardHref} className="px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gold-600 rounded-lg" onClick={() => setMobileOpen(false)}>
                       Dashboard
                     </Link>
                     <button
                       onClick={() => signOut({ callbackUrl: "/" })}
-                      className="px-3 py-2.5 text-sm font-medium text-red-400 hover:bg-red-950/40 rounded-lg text-left"
+                      className="px-3 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg text-left"
                     >
                       Sign out
                     </button>
                   </>
                 ) : (
                   <>
-                    <Link href="/login" className="px-3 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-gold-400 rounded-lg" onClick={() => setMobileOpen(false)}>
+                    <Link href="/login" className="px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gold-600 rounded-lg" onClick={() => setMobileOpen(false)}>
                       Sign in
                     </Link>
                     <Link href="/register" className="px-3 py-2.5 text-sm font-medium text-night-900 bg-gold-gradient rounded-lg text-center" onClick={() => setMobileOpen(false)}>

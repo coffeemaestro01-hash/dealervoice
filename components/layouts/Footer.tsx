@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Logo } from "@/components/common/Logo";
+import { FooterBrand } from "@/components/common/Logo";
 import { ManageCookiesLink } from "@/components/consent/ManageCookiesLink";
 
 const FOOTER_LINKS = {
@@ -40,7 +40,7 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-10">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <Logo variant="full" height={30} className="mb-3" />
+            <FooterBrand height={32} />
             <p className="text-sm leading-relaxed mt-3">
               The world&apos;s most trusted platform for car dealership reviews and reputation insights.
             </p>

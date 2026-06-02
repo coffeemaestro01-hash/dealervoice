@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
-import { Logo } from "@/components/common/Logo";
+import { Logo, FooterBrand } from "@/components/common/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -58,7 +58,7 @@ export default function LoginPage() {
       {/* Left panel */}
       <div className="hidden lg:flex lg:w-1/2 bg-night-gradient text-white flex-col justify-center p-12 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gold-500/10 rounded-full blur-[120px]" />
-        <Logo variant="full" height={34} className="mb-12 relative" />
+        <div className="mb-12 relative"><FooterBrand height={34} /></div>
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="relative">
           <h2 className="text-3xl font-bold mb-4">Welcome <span className="text-gold">back</span></h2>
           <p className="text-gray-300 text-lg">Access your reviews, track your favourite dealerships, and manage your reputation.</p>
