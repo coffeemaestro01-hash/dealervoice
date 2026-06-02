@@ -117,6 +117,30 @@ ${stat("Needs your action", s.pendingClaims + s.pendingReports, `${s.pendingClai
   });
 }
 
+export async function sendDsrConfirmation(to: string, name: string, kind: string, slaDueAt: Date) {
+  const labels: Record<string, string> = {
+    access: "data access (export)",
+    correction: "data correction",
+    erasure: "account & data deletion",
+    nominate: "nominee registration",
+  };
+  const label = labels[kind] ?? kind;
+  const due = slaDueAt.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
+  return resend.emails.send({
+    from: FROM,
+    to,
+    subject: `We received your ${label} request`,
+    html: emailTemplate({
+      title: "Request received",
+      body: `<p>Hi ${name},</p>
+<p>We've received your <strong>${label}</strong> request under the Digital Personal Data Protection Act, 2023.</p>
+<p>We'll complete it by <strong>${due}</strong> (within 30 days, as the Act requires). You can track it anytime under
+<a href="${process.env.NEXT_PUBLIC_APP_URL}/settings/privacy" style="color:#C9961E">Privacy &amp; Your Data</a>.</p>
+<p>Questions? Reply here or email <a href="mailto:dpo@dealervoice.io" style="color:#C9961E">dpo@dealervoice.io</a>.</p>`,
+    }),
+  });
+}
+
 export async function sendClaimApprovedEmail(to: string, name: string, dealerName: string) {
   const url = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/dealer`;
   return resend.emails.send({

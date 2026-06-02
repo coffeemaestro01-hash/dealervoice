@@ -9,10 +9,10 @@ export const metadata: Metadata = {
 };
 
 const STEPS = [
-  { icon: Search, title: "Find your dealer", body: "Search 180,000+ dealerships by name, brand, or location and compare verified ratings side by side." },
+  { icon: Search, title: "Find your dealer", body: "Search thousands of dealerships by name, brand, or location and compare verified ratings side by side." },
   { icon: PenLine, title: "Share your experience", body: "Write a review backed by your purchase invoice or service receipt to earn a Verified badge." },
   { icon: ShieldCheck, title: "We verify it", body: "Every review is screened for authenticity using document checks and fraud detection." },
-  { icon: TrendingUp, title: "Everyone decides better", body: "Reputation scores and real experiences help millions choose dealers they can trust." },
+  { icon: TrendingUp, title: "Everyone decides better", body: "Reputation scores and real experiences help buyers choose dealers they can trust." },
 ];
 
 const VALUES = [
@@ -85,10 +85,10 @@ export default function AboutPage() {
       <section className="py-16">
         <div className="container">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto mb-14 text-center">
-            {[["2.4M+", "Verified reviews"], ["180K+", "Dealerships"], ["190+", "Countries"], ["4.8", "Avg. rating"]].map(([v, l]) => (
+            {[["5,800+", "Dealerships listed"], ["26", "Countries"], ["100%", "Verified-first"], ["Free", "To read & review"]].map(([v, l]) => (
               <div key={l}>
                 <div className="text-3xl font-extrabold text-gray-900 flex items-center justify-center gap-1">
-                  {v}{l === "Avg. rating" && <Star size={20} className="fill-gold-500 text-gold-500" />}
+                  {v}
                 </div>
                 <div className="text-sm text-gray-500 mt-1">{l}</div>
               </div>

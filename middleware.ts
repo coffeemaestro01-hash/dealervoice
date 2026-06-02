@@ -42,6 +42,7 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith("/api/public") ||
     pathname.startsWith("/api/search") ||
     pathname.startsWith("/api/leads") ||
+    pathname.startsWith("/api/consent") ||
     pathname.startsWith("/api/cron") ||
     pathname.startsWith("/api/webhooks") ||
     pathname.match(/\.(ico|png|jpg|jpeg|svg|webp|css|js|woff|woff2)$/)

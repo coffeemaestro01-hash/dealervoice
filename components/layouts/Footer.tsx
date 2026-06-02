@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/common/Logo";
+import { ManageCookiesLink } from "@/components/consent/ManageCookiesLink";
 
 const FOOTER_LINKS = {
   Platform: [
@@ -80,8 +81,11 @@ export function Footer() {
         </div>
 
         <div className="border-t border-gold/15 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
-          <p>© {new Date().getFullYear()} DealerVoice, Inc. All rights reserved.</p>
-          <p>Available in 190+ countries · 8 languages</p>
+          <p>© {new Date().getFullYear()} DealerVoice. All rights reserved.</p>
+          <div className="flex items-center gap-4">
+            <ManageCookiesLink />
+            <span>Dealership listings across 26 countries</span>
+          </div>
         </div>
       </div>
     </footer>

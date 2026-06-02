@@ -171,6 +171,7 @@ model User {
   dealerProfile    DealerStaff[]
   auditLogs        AuditLog[]
   notifications    Notification[]
+  dsrRequests      DsrRequest[]
   moderationActions ModerationAction[] @relation("ModeratorActions")
 
   @@index([email])
@@ -848,4 +849,51 @@ model Lead {
   @@index([dealershipId])
   @@index([status])
   @@index([createdAt])
+}
+
+enum ConsentStatus {
+  GRANTED
+  WITHDRAWN
+  DENIED
+}
+
+// Append-only consent ledger (DPDP Act 2023 §6). Never UPDATE/DELETE —
+// a withdrawal is a new row with status=WITHDRAWN.
+model Consent {
+  id            String        @id @default(cuid())
+  userId        String?
+  anonId        String?       // cookie id for pre-auth visitors
+  purpose       String        // 'strictly_necessary'|'functional'|'analytics'|'marketing'|'terms'|'privacy_notice'
+  status        ConsentStatus
+  noticeVersion String
+  source        String        // 'banner'|'settings'|'signup'
+  ipHash        String?
+  userAgent     String?
+  createdAt     DateTime      @default(now())
+
+  @@index([userId])
+  @@index([anonId])
+  @@index([purpose])
+  @@index([createdAt])
+}
+
+// ─────────────────────────────────────────────
+// PRIVACY / COMPLIANCE (DPDP Act 2023)
+// ─────────────────────────────────────────────
+
+model DsrRequest {
+  id          String    @id @default(cuid())
+  userId      String
+  kind        String    // 'access'|'correction'|'erasure'|'portability'|'nominate'
+  status      String    @default("submitted") // submitted|verifying|in_progress|ready|completed|rejected|cancelled
+  payload     Json?
+  notes       String?
+  slaDueAt    DateTime
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
 }

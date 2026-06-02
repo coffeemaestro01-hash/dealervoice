@@ -64,11 +64,11 @@ export default function LoginPage() {
           <p className="text-gray-300 text-lg">Access your reviews, track your favourite dealerships, and manage your reputation.</p>
           <div className="mt-10 space-y-4 text-gray-300 text-sm">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-gold-500/15 text-gold-400 flex items-center justify-center text-xs font-bold">2.4M</div>
-              <span>Verified customer reviews</span>
+              <div className="w-9 h-9 rounded-full bg-gold-500/15 text-gold-400 flex items-center justify-center text-xs font-bold">5.8K</div>
+              <span>Dealerships listed</span>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-gold-500/15 text-gold-400 flex items-center justify-center text-xs font-bold">190+</div>
+              <div className="w-9 h-9 rounded-full bg-gold-500/15 text-gold-400 flex items-center justify-center text-xs font-bold">26</div>
               <span>Countries covered</span>
             </div>
           </div>

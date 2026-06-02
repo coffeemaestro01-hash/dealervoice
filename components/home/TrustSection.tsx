@@ -14,7 +14,7 @@ const FEATURES = [
   {
     icon: Globe,
     title: "Global Coverage",
-    description: "Reviews for dealerships across 190+ countries in 8 languages.",
+    description: "Real dealership listings across 26 countries in Asia, Europe & North America — and growing.",
   },
   {
     icon: Zap,
