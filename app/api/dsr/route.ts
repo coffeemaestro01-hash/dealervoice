@@ -7,7 +7,7 @@ import { sendDsrConfirmation } from "@/lib/email";
 const KINDS = ["access", "correction", "erasure", "nominate"] as const;
 type Kind = (typeof KINDS)[number];
 
-// DPDP Act 2023 §11–14 — Data principal rights requests.
+// DPDP Act 2023 §11-14 - Data principal rights requests.
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

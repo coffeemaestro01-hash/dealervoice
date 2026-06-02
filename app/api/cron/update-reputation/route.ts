@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { calculateReputationScore } from "@/lib/reputation";
 
-// Vercel Cron — runs daily at 3 AM UTC
+// Vercel Cron - runs daily at 3 AM UTC
 // Protected by CRON_SECRET header
 export async function GET(req: NextRequest) {
   const authHeader = req.headers.get("authorization");

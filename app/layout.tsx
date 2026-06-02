@@ -14,7 +14,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.com"),
   title: {
-    default: "DealerVoice – Trusted Dealership Reviews Worldwide",
+    default: "DealerVoice - Trusted Dealership Reviews Worldwide",
     template: "%s | DealerVoice",
   },
   description:
@@ -27,13 +27,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "/",
     siteName: "DealerVoice",
-    title: "DealerVoice – Trusted Dealership Reviews Worldwide",
+    title: "DealerVoice - Trusted Dealership Reviews Worldwide",
     description: "Find honest, verified reviews for car dealerships worldwide.",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "DealerVoice" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "DealerVoice – Trusted Dealership Reviews Worldwide",
+    title: "DealerVoice - Trusted Dealership Reviews Worldwide",
     description: "Find honest, verified reviews for car dealerships worldwide.",
     images: ["/og-image.png"],
     creator: "@dealervoice",

@@ -16,9 +16,9 @@ const STEPS = [
 ];
 
 const VALUES = [
-  { icon: ShieldCheck, title: "Verification first", body: "Reviews backed by proof of purchase carry more weight — so ratings reflect real customers." },
+  { icon: ShieldCheck, title: "Verification first", body: "Reviews backed by proof of purchase carry more weight - so ratings reflect real customers." },
   { icon: Globe, title: "Global coverage", body: "Dealerships across Asia, Europe, North America and beyond, in multiple languages." },
-  { icon: Award, title: "Fair & transparent", body: "Our 0–100 reputation score is based on clear, published factors — no pay-to-win." },
+  { icon: Award, title: "Fair & transparent", body: "Our 0-100 reputation score is based on clear, published factors - no pay-to-win." },
 ];
 
 export default function AboutPage() {

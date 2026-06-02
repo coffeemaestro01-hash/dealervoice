@@ -23,7 +23,7 @@ export async function rateLimit(
   const key = CACHE_KEYS.rateLimit(ip, action);
 
   if (!redis) {
-    // No Redis — allow all requests (deploy behind Vercel/Cloudflare rate limiting instead)
+    // No Redis - allow all requests (deploy behind Vercel/Cloudflare rate limiting instead)
     return { success: true, remaining: config.limit, resetAt: Date.now() + config.windowSeconds * 1000 };
   }
   try {

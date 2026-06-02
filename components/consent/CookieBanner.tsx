@@ -104,7 +104,7 @@ export function CookieBanner() {
             ))}
           </div>
 
-          {/* All three buttons equally prominent (no dark patterns — DPDP §6) */}
+          {/* All three buttons equally prominent (no dark patterns - DPDP §6) */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             <button
               onClick={() => persist({ functional: false, analytics: false, marketing: false })}

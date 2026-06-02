@@ -15,7 +15,7 @@ import { Navbar } from "@/components/layouts/Navbar";
 import { Footer } from "@/components/layouts/Footer";
 
 export const metadata: Metadata = {
-  title: "DealerVoice – Trusted Dealership Reviews Worldwide",
+  title: "DealerVoice - Trusted Dealership Reviews Worldwide",
   description: "Discover honest, verified reviews for car dealerships worldwide. Read real customer experiences and make informed decisions.",
 };
 

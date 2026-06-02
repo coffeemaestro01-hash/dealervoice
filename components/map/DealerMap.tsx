@@ -11,7 +11,7 @@ interface DealerMapProps {
   className?: string;
 }
 
-// Dynamically loaded Leaflet — no SSR issues, zero cost (OpenStreetMap tiles are free)
+// Dynamically loaded Leaflet - no SSR issues, zero cost (OpenStreetMap tiles are free)
 export function DealerMap({ latitude, longitude, name, address, zoom = 15, className = "h-64 w-full rounded-xl" }: DealerMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
@@ -33,7 +33,7 @@ export function DealerMap({ latitude, longitude, name, address, zoom = 15, class
 
       const map = L.map(mapRef.current).setView([latitude, longitude], zoom);
 
-      // OpenStreetMap tiles — completely free, no API key
+      // OpenStreetMap tiles - completely free, no API key
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         maxZoom: 19,
@@ -82,7 +82,7 @@ export function StaticMapThumbnail({ latitude, longitude, zoom = 14, width = 400
   width?: number;
   height?: number;
 }) {
-  // Using staticmap.openstreetmap.de — free static tile service
+  // Using staticmap.openstreetmap.de - free static tile service
   const url = `https://staticmap.openstreetmap.de/staticmap.php?center=${latitude},${longitude}&zoom=${zoom}&size=${width}x${height}&markers=${latitude},${longitude},red-pushpin`;
   return (
     // eslint-disable-next-line @next/next/no-img-element

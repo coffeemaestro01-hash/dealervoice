@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { dealershipId } = await params;
   const dealer = await prisma.dealership.findUnique({ where: { id: dealershipId }, select: { name: true } });
   if (!dealer) return {};
-  return { title: `Write a Review – ${dealer.name}` };
+  return { title: `Write a Review - ${dealer.name}` };
 }
 
 export default async function WriteReviewPage({ params }: Props) {

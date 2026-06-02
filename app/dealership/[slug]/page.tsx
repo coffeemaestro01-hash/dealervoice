@@ -43,12 +43,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!dealer) return {};
   const location = [dealer.cityName, dealer.stateName, dealer.country?.name].filter(Boolean).join(", ");
   return {
-    title: `${dealer.name} Reviews – ${location}`,
+    title: `${dealer.name} Reviews - ${location}`,
     description:
       dealer.description ??
       `Read ${dealer.totalReviews} verified reviews for ${dealer.name} in ${location}. Overall rating: ${dealer.overallRating.toFixed(1)}/5.`,
     openGraph: {
-      title: `${dealer.name} – ${dealer.overallRating.toFixed(1)}★ (${dealer.totalReviews} reviews)`,
+      title: `${dealer.name} - ${dealer.overallRating.toFixed(1)}★ (${dealer.totalReviews} reviews)`,
       description: dealer.description ?? `Dealership reviews for ${dealer.name}`,
       images: dealer.coverImageUrl ? [{ url: dealer.coverImageUrl }] : [],
     },

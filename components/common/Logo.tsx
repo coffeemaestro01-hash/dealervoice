@@ -13,7 +13,7 @@ interface LogoProps {
 }
 
 /**
- * DealerVoice brand logo — gold-on-black.
+ * DealerVoice brand logo - gold-on-black.
  * Uses the generated SVG assets in /public/logo/svg.
  */
 export function Logo({

@@ -27,7 +27,7 @@ export default function BisCompliancePage() {
           </section>
           <section>
             <h2 className="text-xl font-bold text-gray-900">No incentives, no bias</h2>
-            <p>We do not offer incentives in exchange for positive reviews. Negative reviews are never edited, hidden, or down-ranked, and dealers cannot alter a reviewer&apos;s text — only respond to it.</p>
+            <p>We do not offer incentives in exchange for positive reviews. Negative reviews are never edited, hidden, or down-ranked, and dealers cannot alter a reviewer&apos;s text - only respond to it.</p>
           </section>
           <section>
             <h2 className="text-xl font-bold text-gray-900">Moderation &amp; fake-review detection</h2>

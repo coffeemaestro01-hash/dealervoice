@@ -25,7 +25,7 @@ export default function PrivacySettingsPage() {
       const res = await fetch("/api/dsr", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind, payload }) });
       const json = await res.json();
       if (!res.ok) { setMsg({ kind, text: json.error ?? "Something went wrong." }); return; }
-      setMsg({ kind, text: "Request received — we'll email you and complete it within 30 days." });
+      setMsg({ kind, text: "Request received - we'll email you and complete it within 30 days." });
       load();
     } finally { setBusy(null); }
   };
@@ -37,7 +37,7 @@ export default function PrivacySettingsPage() {
         <div className="container max-w-4xl py-12">
           <h1 className="text-3xl font-extrabold text-gray-900">Privacy &amp; Your Data</h1>
           <p className="text-gray-600 mt-2 mb-8">
-            Exercise your rights under the Digital Personal Data Protection Act, 2023 (§11–14). Requests are completed within 30 days.
+            Exercise your rights under the Digital Personal Data Protection Act, 2023 (§11-14). Requests are completed within 30 days.
           </p>
 
           <div className="grid md:grid-cols-2 gap-5">

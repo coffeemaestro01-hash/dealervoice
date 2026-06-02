@@ -88,13 +88,13 @@ export async function sendWeeklyDigest(to: string, s: DigestStats) {
       <td style="padding:8px 0;border-bottom:1px solid #f0f0f0;text-align:right;color:#777">${d.reviews} reviews</td></tr>`
   ).join("");
   const claimsRows = s.recentClaims.length
-    ? s.recentClaims.map((c) => `<li style="margin-bottom:4px">${c.dealerName} — <span style="color:#777">by ${c.by}</span></li>`).join("")
+    ? s.recentClaims.map((c) => `<li style="margin-bottom:4px">${c.dealerName} - <span style="color:#777">by ${c.by}</span></li>`).join("")
     : `<li style="color:#777">No new claims this week</li>`;
 
   return resend.emails.send({
     from: FROM,
     to,
-    subject: `📊 DealerVoice weekly digest — ${s.periodLabel}`,
+    subject: `📊 DealerVoice weekly digest - ${s.periodLabel}`,
     html: emailTemplate({
       title: "Your weekly business digest",
       body: `<p style="color:#555">Here's how DealerVoice performed over the last 7 days.</p>

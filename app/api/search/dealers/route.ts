@@ -10,24 +10,39 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Invalid search params" }, { status: 400 });
   }
 
-  const { q, country, city, brand, category, rating, verified, sort, page, limit } = parsed.data;
+  const { q, location, country, city, brand, category, rating, verified, sort, page, limit } = parsed.data;
 
   const cacheKey = CACHE_KEYS.searchResults(searchParams.toString());
   const cached = await getCache(cacheKey);
   if (cached) return NextResponse.json(cached);
 
-  // Build Prisma query (fallback from Meilisearch for reliability)
-  const where: any = {
-    status: "ACTIVE",
-    deletedAt: null,
-    ...(q && {
+  // q and location each need their own OR group, so combine them under AND.
+  const andClauses: any[] = [];
+  if (q) {
+    andClauses.push({
       OR: [
         { name: { contains: q, mode: "insensitive" } },
         { description: { contains: q, mode: "insensitive" } },
         { cityName: { contains: q, mode: "insensitive" } },
         { brands: { some: { brand: { name: { contains: q, mode: "insensitive" } } } } },
       ],
-    }),
+    });
+  }
+  if (location) {
+    andClauses.push({
+      OR: [
+        { cityName: { contains: location, mode: "insensitive" } },
+        { stateName: { contains: location, mode: "insensitive" } },
+        { postalCode: { contains: location, mode: "insensitive" } },
+        { country: { name: { contains: location, mode: "insensitive" } } },
+      ],
+    });
+  }
+
+  const where: any = {
+    status: "ACTIVE",
+    deletedAt: null,
+    ...(andClauses.length > 0 && { AND: andClauses }),
     ...(country && { country: { code: country.toUpperCase() } }),
     ...(city && { cityName: { contains: city, mode: "insensitive" } }),
     ...(category && { category }),

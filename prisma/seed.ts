@@ -128,7 +128,7 @@ async function main() {
 
   // NOTE: Per FTC 16 CFR Part 465 + BIS IS 19000:2022, we never seed fake
   // reviews or fabricated ratings. Sample dealers are created as honest,
-  // unrated listings (0 reviews) — real reviews come only from real users.
+  // unrated listings (0 reviews) - real reviews come only from real users.
   void admin;
   for (const d of SAMPLE_DEALERS) {
     const brand = await brandBySlug(d.brand);

@@ -86,7 +86,7 @@ export function DealerReviewRow({ review, dealershipId, onResponded }: Props) {
         </div>
 
         <p className="text-sm text-gray-700 leading-relaxed line-clamp-3">{review.body}</p>
-        <p className="text-xs text-gray-400 mt-1">— {review.author.name}</p>
+        <p className="text-xs text-gray-400 mt-1">- {review.author.name}</p>
 
         {/* Existing response */}
         {review.response && !responding && (

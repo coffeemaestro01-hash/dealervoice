@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { PLAN_PRICES_INR, PLAN_PRICES_USD } from "@/lib/payment";
 
 export const metadata: Metadata = {
-  title: "Pricing – DealerVoice",
+  title: "Pricing - DealerVoice",
   description: "Simple, transparent pricing for dealership reputation management.",
 };
 
@@ -146,7 +146,7 @@ export default function PricingPage() {
 
         <div className="text-center mt-10 space-y-2">
           <p className="text-sm text-gray-500">
-            Payments via Razorpay — accepts all Indian cards, UPI, Net Banking &amp; international cards
+            Payments via Razorpay - accepts all Indian cards, UPI, Net Banking &amp; international cards
           </p>
           <p className="text-sm text-gray-500">
             14-day free trial on all paid plans · No credit card required to start

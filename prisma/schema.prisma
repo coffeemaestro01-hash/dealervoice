@@ -857,7 +857,7 @@ enum ConsentStatus {
   DENIED
 }
 
-// Append-only consent ledger (DPDP Act 2023 §6). Never UPDATE/DELETE —
+// Append-only consent ledger (DPDP Act 2023 §6). Never UPDATE/DELETE -
 // a withdrawal is a new row with status=WITHDRAWN.
 model Consent {
   id            String        @id @default(cuid())

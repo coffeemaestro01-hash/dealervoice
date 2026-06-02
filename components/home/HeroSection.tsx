@@ -55,7 +55,7 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
         >
           <div className="inline-flex items-center gap-2 bg-gold-50 border border-gold/40 rounded-full px-4 py-1.5 text-sm text-gold-700 font-medium mb-6">
             <ShieldCheck size={14} />
-            New platform — be among the first verified reviewers in your city
+            New platform - be among the first verified reviewers in your city
           </div>
 
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-gray-900 mb-5">

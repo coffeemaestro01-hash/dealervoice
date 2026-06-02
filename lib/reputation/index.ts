@@ -64,12 +64,12 @@ export async function calculateReputationScore(dealershipId: string): Promise<Re
   const resolved = reviews.filter((r) => r.response?.isResolved).length;
   const resolutionRate = total > 0 ? (resolved / total) * 100 : 0;
 
-  // 5. Freshness — weight recent reviews higher
+  // 5. Freshness - weight recent reviews higher
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
   const recentReviews = reviews.filter((r) => r.createdAt >= thirtyDaysAgo).length;
   const freshness = Math.min(100, (recentReviews / Math.max(total * 0.2, 1)) * 100);
 
-  // 6. Trend — compare last 30 days vs prior 30 days
+  // 6. Trend - compare last 30 days vs prior 30 days
   const sixtyDaysAgo = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000);
   const priorReviews = reviews.filter((r) => r.createdAt >= sixtyDaysAgo && r.createdAt < thirtyDaysAgo);
   const recentAvg = reviews.filter((r) => r.createdAt >= thirtyDaysAgo).reduce((s, r, _, a) => s + r.overallRating / a.length, 0) || avg;

@@ -39,11 +39,11 @@ export default function GrievancePage() {
             <ul className="mt-4 space-y-1.5 text-gray-700">
               <li><strong>Email:</strong> <a href="mailto:grievance@dealervoice.io" className="text-gold-700 hover:underline">grievance@dealervoice.io</a></li>
               <li><strong>Data Protection Officer (DPDP Act):</strong> <a href="mailto:dpo@dealervoice.io" className="text-gold-700 hover:underline">dpo@dealervoice.io</a></li>
-              <li><strong>Hours:</strong> Monday–Friday, 10:00–18:00 IST</li>
+              <li><strong>Hours:</strong> Monday-Friday, 10:00-18:00 IST</li>
             </ul>
             <p className="text-sm text-gray-500 mt-4">
-              DealerVoice is an early-stage platform; formal company incorporation in India is in progress, after which the
-              registered office address, CIN, and named officer details will be published here.
+              Full registered company details (registered office, CIN, and named officer) will be published here once company
+              registration is finalized. In the meantime, all grievances are monitored and actioned at the contacts above.
             </p>
           </div>
 

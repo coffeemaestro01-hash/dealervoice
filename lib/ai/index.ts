@@ -1,4 +1,4 @@
-// AI disabled for lean launch — no openai package installed.
+// AI disabled for lean launch - no openai package installed.
 // All functions return safe no-op defaults.
 
 export interface SentimentResult { score: number; label: "positive" | "neutral" | "negative"; confidence: number; }

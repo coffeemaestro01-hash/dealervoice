@@ -117,7 +117,7 @@ export default async function ClaimPage({ searchParams }: { searchParams: Promis
         <div className="container">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900">Why claim your profile?</h2>
-            <p className="text-gray-600 mt-2">Everything you need to manage your reputation — free to start.</p>
+            <p className="text-gray-600 mt-2">Everything you need to manage your reputation - free to start.</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {BENEFITS.map((b) => (

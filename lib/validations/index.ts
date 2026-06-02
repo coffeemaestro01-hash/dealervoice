@@ -80,6 +80,7 @@ export const reportSchema = z.object({
 
 export const searchSchema = z.object({
   q: z.string().max(200).optional(),
+  location: z.string().max(120).optional(),
   country: z.string().max(2).optional(),
   city: z.string().max(100).optional(),
   brand: z.string().max(100).optional(),

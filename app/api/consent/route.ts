@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/config";
 
 // Current privacy/cookie notice version. Bump this whenever the notice text
-// changes — the banner re-prompts visitors who consented under an older version.
+// changes - the banner re-prompts visitors who consented under an older version.
 // (Keep in sync with NOTICE_VERSION in components/consent/CookieBanner.tsx)
 const NOTICE_VERSION = "v1.0";
 

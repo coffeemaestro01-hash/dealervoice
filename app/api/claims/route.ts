@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     select: { id: true, status: true },
   });
 
-  return NextResponse.json({ data: claim, message: "Claim submitted. We will review it within 2–3 business days." }, { status: 201 });
+  return NextResponse.json({ data: claim, message: "Claim submitted. We will review it within 2-3 business days." }, { status: 201 });
 }
 
 export async function GET(req: NextRequest) {

@@ -9,12 +9,12 @@ const FEATURES = [
   {
     icon: Award,
     title: "Reputation Scoring",
-    description: "Our proprietary algorithm scores dealerships 0–100 based on 6 key factors.",
+    description: "Our proprietary algorithm scores dealerships 0-100 based on 6 key factors.",
   },
   {
     icon: Globe,
     title: "Global Coverage",
-    description: "Real dealership listings across 26 countries in Asia, Europe & North America — and growing.",
+    description: "Real dealership listings across 26 countries in Asia, Europe & North America - and growing.",
   },
   {
     icon: Zap,

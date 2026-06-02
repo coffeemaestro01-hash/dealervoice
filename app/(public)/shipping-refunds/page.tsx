@@ -26,7 +26,7 @@ export default function ShippingRefundsPage() {
           </section>
           <section>
             <h2 className="text-xl font-bold text-gray-900">Refunds</h2>
-            <p>Because access is granted immediately, fees are generally non-refundable except where required by law or in cases of duplicate/erroneous charges. Approved refunds are returned to the original payment method within 5–7 business days.</p>
+            <p>Because access is granted immediately, fees are generally non-refundable except where required by law or in cases of duplicate/erroneous charges. Approved refunds are returned to the original payment method within 5-7 business days.</p>
           </section>
           <section>
             <h2 className="text-xl font-bold text-gray-900">Disputes</h2>

@@ -19,7 +19,7 @@ function hasConsent(category: "functional" | "analytics" | "marketing"): boolean
 /**
  * Renders children only after the visitor has granted consent for `category`.
  * Wrap any analytics/marketing script in this so nothing loads before consent
- * (DPDP Act 2023 §6 — opt-in).
+ * (DPDP Act 2023 §6 - opt-in).
  */
 export function ConsentGate({
   category,

@@ -3,7 +3,7 @@ import { Mail, MessageSquare, Building2, LifeBuoy } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Contact Us",
-  description: "Get in touch with the DealerVoice team — support, partnerships, press, and dealer enquiries.",
+  description: "Get in touch with the DealerVoice team - support, partnerships, press, and dealer enquiries.",
 };
 
 const CHANNELS = [
@@ -40,7 +40,7 @@ export default function ContactPage() {
             ))}
           </div>
 
-          {/* Form (mailto fallback — no backend needed) */}
+          {/* Form (mailto fallback - no backend needed) */}
           <form action="mailto:support@dealervoice.com" method="post" encType="text/plain" className="rounded-2xl border border-gray-100 p-7 shadow-sm bg-white">
             <h3 className="font-semibold text-gray-900 mb-4 text-lg">Send us a message</h3>
             <div className="space-y-4">

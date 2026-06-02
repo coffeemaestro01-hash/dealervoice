@@ -15,7 +15,7 @@ export default function PrivacyPage() {
         <div className="prose prose-gray max-w-none space-y-6 text-gray-700 leading-relaxed">
           <section>
             <h2 className="text-xl font-bold text-gray-900">1. Information we collect</h2>
-            <p>We collect information you provide directly — such as your name, email address, and the content of reviews you write — as well as limited technical data (device, browser, and usage analytics) needed to operate the service.</p>
+            <p>We collect information you provide directly - such as your name, email address, and the content of reviews you write - as well as limited technical data (device, browser, and usage analytics) needed to operate the service.</p>
           </section>
           <section>
             <h2 className="text-xl font-bold text-gray-900">2. How we use your information</h2>

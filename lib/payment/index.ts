@@ -17,7 +17,7 @@ function getRazorpay(): Razorpay {
   return _razorpay;
 }
 
-// Plan IDs — create these in Razorpay dashboard or via API
+// Plan IDs - create these in Razorpay dashboard or via API
 export const RAZORPAY_PLANS = {
   PRO_MONTHLY: process.env.RAZORPAY_PRO_MONTHLY_PLAN_ID || "",
   PRO_ANNUAL: process.env.RAZORPAY_PRO_ANNUAL_PLAN_ID || "",

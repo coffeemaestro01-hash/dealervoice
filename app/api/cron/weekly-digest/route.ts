@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
   try {
-    // Sequential queries — the connection pool is limited to 1, so parallel
+    // Sequential queries - the connection pool is limited to 1, so parallel
     // (Promise.all) calls would exhaust it and time out.
     const totalDealers = await prisma.dealership.count({ where: { deletedAt: null } });
     const totalUsers = await prisma.user.count({ where: { deletedAt: null } });
@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
       pendingClaims, pendingReports, paidSubscriptions,
       revenueInr: Math.round(((revenueAgg as any)?._sum?.amount ?? 0) / 100),
       topDealers: topDealers.map((d) => ({ name: d.name, rating: d.overallRating, reviews: d.totalReviews, slug: d.slug })),
-      recentClaims: (recentClaims as any[]).map((c) => ({ dealerName: c.dealership?.name ?? "—", by: c.submittedBy?.name ?? "—" })),
+      recentClaims: (recentClaims as any[]).map((c) => ({ dealerName: c.dealership?.name ?? "-", by: c.submittedBy?.name ?? "-" })),
     };
 
     await sendWeeklyDigest(to, stats);

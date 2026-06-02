@@ -20,7 +20,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       prisma.city.findMany({ where: { isActive: true, dealerCount: { gt: 0 } }, select: { slug: true, country: { select: { code: true } } }, take: 10_000 }),
     ]);
   } catch {
-    // DB not yet migrated — return static pages only
+    // DB not yet migrated - return static pages only
   }
 
   const static_pages = [

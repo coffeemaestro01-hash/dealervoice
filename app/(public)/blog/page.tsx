@@ -8,10 +8,10 @@ export const metadata: Metadata = {
 };
 
 const POSTS = [
-  { slug: "#", title: "How to spot a trustworthy car dealership", excerpt: "Five signals that separate great dealers from the rest — and how verified reviews reveal them.", date: "May 28, 2026", tag: "Buyer Guide" },
+  { slug: "#", title: "How to spot a trustworthy car dealership", excerpt: "Five signals that separate great dealers from the rest - and how verified reviews reveal them.", date: "May 28, 2026", tag: "Buyer Guide" },
   { slug: "#", title: "Why verified reviews matter more than star ratings", excerpt: "A high rating means little without proof. Here's how verification changes the game for buyers.", date: "May 14, 2026", tag: "Trust & Safety" },
-  { slug: "#", title: "Dealers: turning reviews into your best marketing channel", excerpt: "Responding to reviews isn't damage control — it's the highest-ROI trust builder you have.", date: "Apr 30, 2026", tag: "For Dealers" },
-  { slug: "#", title: "What makes a dealership reputation score fair", excerpt: "A look at the factors that should — and shouldn't — shape how a dealership is rated online.", date: "Apr 12, 2026", tag: "Research" },
+  { slug: "#", title: "Dealers: turning reviews into your best marketing channel", excerpt: "Responding to reviews isn't damage control - it's the highest-ROI trust builder you have.", date: "Apr 30, 2026", tag: "For Dealers" },
+  { slug: "#", title: "What makes a dealership reputation score fair", excerpt: "A look at the factors that should - and shouldn't - shape how a dealership is rated online.", date: "Apr 12, 2026", tag: "Research" },
 ];
 
 export default function BlogPage() {
