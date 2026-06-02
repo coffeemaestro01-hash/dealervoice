@@ -20,7 +20,7 @@ export function CtaSection() {
             </Button>
           </Link>
           <Link href="/dealers">
-            <Button size="lg" variant="outline" className="border-gold/50 text-gold-300 bg-transparent hover:bg-gold-500/10 gap-2">
+            <Button size="lg" variant="outline" className="border-gold/50 text-gold-300 bg-transparent hover:bg-gold-500/15 gap-2">
               Browse Dealerships
               <ArrowRight size={16} />
             </Button>

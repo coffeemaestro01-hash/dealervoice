@@ -58,26 +58,27 @@ const config: Config = {
           700: "#1d4ed8",
           900: "#1e3a8a",
         },
-        // Gold scale (brand kit: #C9A24A -> #E8C97A)
+        // Accent scale (luxury orange) — kept under the `gold` key so every
+        // existing gold-* class re-themes to orange with no per-file edits.
         gold: {
-          50: "#faf5e8",
-          100: "#f3e7c4",
-          200: "#ecd79c",
-          300: "#E8C97A",
-          400: "#D9B95F",
-          500: "#C9A24A",
-          600: "#b08c3a",
-          700: "#8f7030",
-          800: "#6d5524",
-          900: "#4a3a18",
+          50: "#fff5ed",
+          100: "#ffe6d5",
+          200: "#ffc8a8",
+          300: "#ffa470",
+          400: "#ff7f3f",
+          500: "#fb6514",
+          600: "#e2571e",
+          700: "#bd4514",
+          800: "#963718",
+          900: "#7c2f16",
         },
-        // Navy scale (brand kit: #0F172A)
+        // Dark scale (rich black / charcoal)
         night: {
-          900: "#080d1a",
-          800: "#0F172A",
-          700: "#16203a",
-          600: "#1e293b",
-          500: "#334155",
+          900: "#000000",
+          800: "#0a0a0a",
+          700: "#121212",
+          600: "#1a1a1a",
+          500: "#262626",
         },
       },
       borderRadius: {

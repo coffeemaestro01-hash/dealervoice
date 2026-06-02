@@ -20,11 +20,11 @@ export async function RecentReviewsSection() {
   if (reviews.length === 0) return null;
 
   return (
-    <section className="py-16 bg-gray-50 border-y border-gray-100">
+    <section className="py-16 bg-night-soft border-y border-white/5">
       <div className="container">
         <div className="text-center mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Recent customer <span className="text-gold">reviews</span></h2>
-          <p className="text-gray-600 mt-2">Real experiences from verified car buyers</p>
+          <h2 className="text-2xl md:text-3xl font-bold text-white">Recent customer <span className="text-gold">reviews</span></h2>
+          <p className="text-gray-400 mt-2">Real experiences from verified car buyers</p>
         </div>
         <div className="grid md:grid-cols-3 gap-5 max-w-5xl mx-auto">
           {reviews.map((review) => (

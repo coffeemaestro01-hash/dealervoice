@@ -25,26 +25,26 @@ const STEPS = [
 
 export function HowItWorksSection() {
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-night">
       <div className="container">
         <div className="text-center mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">How <span className="text-gold">DealerVoice</span> works</h2>
-          <p className="text-gray-600 mt-2">Simple, transparent, and trusted by millions.</p>
+          <h2 className="text-2xl md:text-3xl font-bold text-white">How <span className="text-gold">DealerVoice</span> works</h2>
+          <p className="text-gray-400 mt-2">Simple, transparent, and trusted by millions.</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
           {STEPS.map((step, i) => (
             <div key={step.step} className="relative text-center">
               {i < STEPS.length - 1 && (
-                <div className="hidden md:block absolute top-8 left-1/2 w-full h-px bg-gray-200" />
+                <div className="hidden md:block absolute top-8 left-1/2 w-full h-px bg-white/10" />
               )}
               <div className="relative inline-flex flex-col items-center">
-                <div className="w-16 h-16 rounded-full bg-gold-50 border-2 border-gold/40 flex items-center justify-center mb-4 relative z-10">
-                  <step.icon size={24} className="text-gold-600" />
+                <div className="w-16 h-16 rounded-full bg-gold-500/10 border-2 border-gold/40 flex items-center justify-center mb-4 relative z-10">
+                  <step.icon size={24} className="text-gold-400" />
                 </div>
-                <span className="text-xs font-bold text-gold-600 mb-2">{step.step}</span>
-                <h3 className="font-semibold text-gray-900 mb-2">{step.title}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{step.description}</p>
+                <span className="text-xs font-bold text-gold-400 mb-2">{step.step}</span>
+                <h3 className="font-semibold text-white mb-2">{step.title}</h3>
+                <p className="text-sm text-gray-400 leading-relaxed">{step.description}</p>
               </div>
             </div>
           ))}
