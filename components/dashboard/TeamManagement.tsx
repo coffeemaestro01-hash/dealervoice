@@ -190,11 +190,6 @@ export function TeamManagement({ dealershipId, initialMembers }: Props) {
             onSuccess={() => {
               setIsFormOpen(false);
               router.refresh();
-              // In a real app, I'd probably use React Query or a manual state update,
-              // but for now, router.refresh() will update the server component data.
-              // I'll also trigger a reload of local state.
-              fetch(`/api/users/me/dealership`) // Assuming this might help or just wait for refresh
-                .then(() => window.location.reload());
             }}
             onCancel={() => setIsFormOpen(false)}
           />

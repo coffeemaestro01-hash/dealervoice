@@ -34,7 +34,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     // Transaction to update all orders
     await prisma.$transaction(
       parsed.data.map((item) =>
-        prisma.teamMember.update({
+        prisma.teamMember.updateMany({
           where: { id: item.id, dealershipId },
           data: { sortOrder: item.sortOrder },
         })

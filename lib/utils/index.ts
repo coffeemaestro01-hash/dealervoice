@@ -92,8 +92,10 @@ export function formatCurrency(amount: number, currency = "USD"): string {
   return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(amount / 100);
 }
 
-export function buildDealerUrl(slug: string): string {
-  return `/dealership/${slug}`;
+export function buildDealerUrl(dealer: { slug: string; countryCode?: string; country?: { code: string }; cityName?: string; city?: { name: string } }): string {
+  const country = (dealer.countryCode || dealer.country?.code || "intl").toLowerCase();
+  const city = (dealer.cityName || dealer.city?.name || "all").toLowerCase();
+  return `/dealers/${country}/${city}/${dealer.slug}`;
 }
 
 export function buildCountryUrl(countryCode: string): string {

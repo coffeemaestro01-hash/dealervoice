@@ -37,14 +37,18 @@ export async function PATCH(
       return NextResponse.json({ error: "Invalid data", details: parsed.error.flatten() }, { status: 422 });
     }
 
-    const member = await prisma.teamMember.update({
+    const result = await prisma.teamMember.updateMany({
       where: { id: memberId, dealershipId },
       data: parsed.data,
     });
 
-    return NextResponse.json({ data: member });
+    if (result.count === 0) {
+      return NextResponse.json({ error: "Member not found or unauthorized" }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: "Member updated" });
   } catch (error) {
-    return NextResponse.json({ error: "Member not found or unauthorized" }, { status: 404 });
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
 
@@ -60,11 +64,16 @@ export async function DELETE(
   if (!isAdmin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   try {
-    await prisma.teamMember.delete({
+    const result = await prisma.teamMember.deleteMany({
       where: { id: memberId, dealershipId },
     });
+
+    if (result.count === 0) {
+      return NextResponse.json({ error: "Member not found or unauthorized" }, { status: 404 });
+    }
+
     return NextResponse.json({ message: "Member deleted" });
   } catch (error) {
-    return NextResponse.json({ error: "Member not found or unauthorized" }, { status: 404 });
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

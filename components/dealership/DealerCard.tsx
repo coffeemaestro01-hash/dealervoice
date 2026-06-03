@@ -15,7 +15,7 @@ interface DealerCardProps {
 export function DealerCard({ dealer, featured, className }: DealerCardProps) {
   return (
     <Link
-      href={buildDealerUrl(dealer.slug)}
+      href={buildDealerUrl(dealer as any)}
       className={cn(
         "group block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-gold/40 transition-all duration-200",
         featured && "ring-2 ring-gold-500 ring-offset-1",

@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { MessageSquare, Star, TrendingUp, Clock, ArrowUpRight, ArrowDownRight, Minus } from "lucide-react";
+import { MessageSquare, Star, TrendingUp, Clock, ArrowUpRight, ArrowDownRight, Minus, ExternalLink } from "lucide-react";
 import { StarRating } from "@/components/common/StarRating";
 import { ReviewCard } from "@/components/review/ReviewCard";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { cn, buildDealerUrl } from "@/lib/utils";
 import type { ReviewWithRelations } from "@/types";
 
 interface StatCardProps {
@@ -64,17 +65,25 @@ export function DealerOverviewPage({ data }: Props) {
 
   return (
     <div className="p-6 md:p-8">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">{dealership.name}</h1>
-        <div className="flex items-center gap-3 mt-1">
-          <StarRating rating={dealership.overallRating} size="sm" showValue />
-          <span className="text-sm text-gray-500">Reputation: <strong className="text-gray-900">{dealership.reputationScore}/100</strong></span>
-          {dealership.subscription && (
-            <span className="text-xs px-2 py-0.5 bg-gold-50 text-gold-800 border border-gold-100 rounded-full font-medium">
-              {dealership.subscription.plan}
-            </span>
-          )}
+      <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">{dealership.name}</h1>
+          <div className="flex items-center gap-3 mt-1">
+            <StarRating rating={dealership.overallRating} size="sm" showValue />
+            <span className="text-sm text-gray-500">Reputation: <strong className="text-gray-900">{dealership.reputationScore}/100</strong></span>
+            {dealership.subscription && (
+              <span className="text-xs px-2 py-0.5 bg-gold-50 text-gold-800 border border-gold-100 rounded-full font-medium">
+                {dealership.subscription.plan}
+              </span>
+            )}
+          </div>
         </div>
+
+        <Button asChild variant="outline" className="border-gold-600 text-gold-700 hover:bg-gold-50 w-full md:w-auto">
+          <Link href={buildDealerUrl(dealership as any)} target="_blank">
+            <ExternalLink size={16} className="mr-2" /> View Public Profile
+          </Link>
+        </Button>
       </div>
 
       {/* Stats */}
