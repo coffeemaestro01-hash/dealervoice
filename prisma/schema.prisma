@@ -343,6 +343,7 @@ model Dealership {
   ratingAfterSales    Float          @default(0)
 
   // Business info
+  businessHours       String?
   yearEstablished     Int?
   employeeCount       String?
   licenseNumber       String?
@@ -375,6 +376,7 @@ model Dealership {
   competitors      CompetitorSet[]    @relation("CompetitorDealer")
   analyticsEvents  AnalyticsEvent[]
   leads            Lead[]
+  teamMembers      TeamMember[]
 
   @@index([slug])
   @@index([countryId])
@@ -896,4 +898,19 @@ model DsrRequest {
 
   @@index([userId])
   @@index([status])
+}
+
+model TeamMember {
+  id           String     @id @default(cuid())
+  dealershipId String
+  name         String
+  title        String
+  photoUrl     String?
+  bio          String?    @db.Text
+  sortOrder    Int        @default(0)
+  createdAt    DateTime   @default(now())
+
+  dealership   Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+
+  @@index([dealershipId])
 }
