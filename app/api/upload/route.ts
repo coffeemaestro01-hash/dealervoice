@@ -1,23 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/config";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { supabaseAdmin } from "@/lib/supabase";
 import { rateLimit } from "@/lib/auth/rate-limit";
 import crypto from "crypto";
 import { z } from "zod";
 
-const s3 = new S3Client({
-  region: process.env.AWS_REGION || "us-east-1",
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-  },
-  endpoint: process.env.S3_ENDPOINT,
-});
-
-const BUCKET = process.env.S3_BUCKET || "dealervoice-media";
-const CDN = process.env.NEXT_PUBLIC_CDN_URL || `https://${BUCKET}.s3.amazonaws.com`;
+const BUCKET = process.env.S3_BUCKET || "dealer-assets";
+const SUPABASE_URL = process.env.SUPABASE_URL;
 
 const ALLOWED_TYPES = [
   "image/jpeg", "image/png", "image/webp", "image/heic",
@@ -59,19 +49,23 @@ export async function POST(req: NextRequest) {
   const ext = filename.split(".").pop() ?? "bin";
   const key = `${purpose}/${session.user.id}/${crypto.randomBytes(16).toString("hex")}.${ext}`;
 
-  const command = new PutObjectCommand({
-    Bucket: BUCKET,
-    Key: key,
-    ContentType: contentType,
-    ContentLength: size,
-    Metadata: { userId: session.user.id, purpose },
-  });
+  // Generate signed upload URL via Supabase
+  const { data, error } = await supabaseAdmin
+    .storage
+    .from(BUCKET)
+    .createSignedUploadUrl(key);
 
-  const presignedUrl = await getSignedUrl(s3, command, { expiresIn: 300 });
+  if (error || !data) {
+    console.error("Supabase Storage Error:", error);
+    return NextResponse.json({ error: "Failed to generate upload URL" }, { status: 500 });
+  }
+
+  // Construct public URL
+  const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${key}`;
 
   return NextResponse.json({
-    uploadUrl: presignedUrl,
+    uploadUrl: data.signedUrl,
     key,
-    publicUrl: `${CDN}/${key}`,
+    publicUrl,
   });
 }
