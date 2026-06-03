@@ -28,14 +28,14 @@ export const RAZORPAY_PLANS = {
 // Prices in INR paise (1 INR = 100 paise)
 // At ~83 INR/USD: $49 ≈ ₹4,099 | $149 ≈ ₹12,399
 export const PLAN_PRICES_INR = {
-  PRO: { monthly: 409900, annual: 3999900, monthlyDisplay: "₹4,099", annualDisplay: "₹39,999" },
-  ENTERPRISE: { monthly: 1239900, annual: 11999900, monthlyDisplay: "₹12,399", annualDisplay: "₹1,19,999" },
+  PRO: { monthly: 1699900, annual: 16999900, monthlyDisplay: "₹16,999", annualDisplay: "₹1,69,999" },
+  ENTERPRISE: { monthly: 4199900, annual: 41999900, monthlyDisplay: "₹41,999", annualDisplay: "₹4,19,999" },
 };
 
-// For international billing display (approximate USD)
+// For international billing display (USD)
 export const PLAN_PRICES_USD = {
-  PRO: { monthly: 49, annual: 479 },
-  ENTERPRISE: { monthly: 149, annual: 1439 },
+  PRO: { monthly: 199, annual: 1990 },
+  ENTERPRISE: { monthly: 499, annual: 4990 },
 };
 
 export interface CreateSubscriptionParams {

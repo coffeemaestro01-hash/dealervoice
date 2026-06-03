@@ -59,21 +59,21 @@ export async function GET(req: NextRequest) {
     newest: { createdAt: "desc" as const },
   }[sort ?? "relevance"] ?? { reputationScore: "desc" as const };
 
-  const [dealers, total] = await Promise.all([
-    prisma.dealership.findMany({
-      where,
-      orderBy: [{ isFeatured: "desc" }, orderBy],
-      skip: (page - 1) * limit,
-      take: limit,
-      include: {
-        country: { select: { name: true, code: true } },
-        city: { select: { name: true, slug: true } },
-        brands: { include: { brand: { select: { name: true, slug: true, logoUrl: true } } }, take: 6 },
-        subscription: { select: { plan: true } },
-      },
-    }),
-    prisma.dealership.count({ where }),
-  ]);
+  // Sequential (not Promise.all) — the pooled connection limit is small, so
+  // running these in parallel can exhaust the pool and time out (P2024).
+  const dealers = await prisma.dealership.findMany({
+    where,
+    orderBy: [{ isFeatured: "desc" }, orderBy],
+    skip: (page - 1) * limit,
+    take: limit,
+    include: {
+      country: { select: { name: true, code: true } },
+      city: { select: { name: true, slug: true } },
+      brands: { include: { brand: { select: { name: true, slug: true, logoUrl: true } } }, take: 6 },
+      subscription: { select: { plan: true } },
+    },
+  });
+  const total = await prisma.dealership.count({ where });
 
   const result = {
     data: dealers,
