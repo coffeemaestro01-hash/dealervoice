@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Loader2, Save, Globe, Phone, Mail, Clock, ImageIcon, Building2 } from "lucide-react";
+import { Loader2, Save, Globe, Phone, Mail, Clock, ImageIcon, Building2, Sparkles } from "lucide-react";
 import { FileUpload } from "@/components/common/FileUpload";
 
 interface Props {
@@ -22,11 +22,14 @@ export function DealerSettingsForm({ dealership }: Props) {
   const router = useRouter();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const {
     register,
     handleSubmit,
     control,
+    getValues,
+    setValue,
     formState: { errors },
   } = useForm<DealershipInput>({
     resolver: zodResolver(dealershipSchema),
@@ -75,6 +78,59 @@ export function DealerSettingsForm({ dealership }: Props) {
       });
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleGenerateAI = async () => {
+    const values = getValues();
+    if (!values.name || !values.category || !values.cityName) {
+      toast({
+        title: "Missing Information",
+        description: "Please enter your dealership name, category, and city first.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const response = await fetch("/api/ai/generate-profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          dealershipId: dealership.id,
+          name: values.name,
+          category: values.category,
+          city: values.cityName,
+          state: values.stateName,
+          country: dealership.country?.name || "India",
+          website: values.website,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Generation failed");
+      }
+
+      const { description, summary } = result.data;
+      
+      // Update form fields
+      setValue("description", `${description}\n\n${summary}`);
+      
+      toast({
+        title: "Profile Generated!",
+        description: "Review and edit the generated description below.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "AI Generation Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
     }
   };
 
@@ -132,13 +188,29 @@ export function DealerSettingsForm({ dealership }: Props) {
 
       {/* Basic Info Section */}
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Building2 className="w-5 h-5 text-gold-600" /> Basic Information
-          </CardTitle>
-          <CardDescription>
-            General details about your dealership.
-          </CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0">
+          <div>
+            <CardTitle className="flex items-center gap-2">
+              <Building2 className="w-5 h-5 text-gold-600" /> Basic Information
+            </CardTitle>
+            <CardDescription>
+              General details about your dealership.
+            </CardDescription>
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleGenerateAI}
+            disabled={isGenerating}
+            className="border-gold-600 text-gold-700 hover:bg-gold-50"
+          >
+            {isGenerating ? (
+              <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Generating...</>
+            ) : (
+              <><Sparkles className="w-4 h-4 mr-2" /> Generate with AI</>
+            )}
+          </Button>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
