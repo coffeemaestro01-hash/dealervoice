@@ -52,20 +52,29 @@ export const authOptions: NextAuthOptions = {
         };
       },
     }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      allowDangerousEmailAccountLinking: true,
-    }),
-    FacebookProvider({
-      clientId: process.env.FACEBOOK_CLIENT_ID!,
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
-      allowDangerousEmailAccountLinking: true,
-    }),
-    AppleProvider({
-      clientId: process.env.APPLE_CLIENT_ID!,
-      clientSecret: process.env.APPLE_CLIENT_SECRET!,
-    }),
+    // OAuth providers are only registered when their credentials exist.
+    // A provider with an undefined clientId breaks the NextAuth route and
+    // makes its sign-in button fail, so we add them conditionally.
+    ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+      ? [GoogleProvider({
+          clientId: process.env.GOOGLE_CLIENT_ID,
+          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+          allowDangerousEmailAccountLinking: true,
+        })]
+      : []),
+    ...(process.env.FACEBOOK_CLIENT_ID && process.env.FACEBOOK_CLIENT_SECRET
+      ? [FacebookProvider({
+          clientId: process.env.FACEBOOK_CLIENT_ID,
+          clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+          allowDangerousEmailAccountLinking: true,
+        })]
+      : []),
+    ...(process.env.APPLE_CLIENT_ID && process.env.APPLE_CLIENT_SECRET
+      ? [AppleProvider({
+          clientId: process.env.APPLE_CLIENT_ID,
+          clientSecret: process.env.APPLE_CLIENT_SECRET,
+        })]
+      : []),
   ],
   callbacks: {
     async jwt({ token, user, trigger, session }) {
