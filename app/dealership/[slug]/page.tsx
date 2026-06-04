@@ -7,6 +7,7 @@ import { ReviewsList } from "@/components/review/ReviewsList";
 import { DealershipSidebar } from "@/components/dealership/DealershipSidebar";
 import { QuoteRequestForm } from "@/components/dealership/QuoteRequestForm";
 import { RatingDistribution } from "@/components/dealership/RatingDistribution";
+import { ClaimModal } from "@/components/dealership/ClaimModal";
 import { getCache, setCache, CACHE_KEYS, CACHE_TTL } from "@/lib/redis";
 
 interface Props {
@@ -94,6 +95,10 @@ export default async function DealershipPage({ params, searchParams }: Props) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      <Suspense>
+        <ClaimModal dealershipId={dealer.id} dealershipName={dealer.name} />
+      </Suspense>
 
       <div className="min-h-screen bg-gray-50">
         <DealershipProfile dealer={dealer as any} />

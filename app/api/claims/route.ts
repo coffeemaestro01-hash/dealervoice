@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Validation failed", details: parsed.error.flatten() }, { status: 422 });
   }
 
-  const { dealershipId, businessEmail, businessPhone, notes } = parsed.data;
+  const { dealershipId, businessEmail, businessPhone, notes, documentUrl } = parsed.data;
 
   const dealership = await prisma.dealership.findUnique({ where: { id: dealershipId, deletedAt: null } });
   if (!dealership) return NextResponse.json({ error: "Dealership not found" }, { status: 404 });
@@ -39,6 +39,16 @@ export async function POST(req: NextRequest) {
       businessPhone,
       notes,
       status: "PENDING",
+      documents: {
+        create: {
+          type: "DOCUMENT",
+          url: documentUrl,
+          key: documentUrl.split('/').pop() || 'proof',
+          filename: "proof_of_ownership",
+          mimeType: "application/octet-stream",
+          size: 0,
+        }
+      }
     },
     select: { id: true, status: true },
   });
