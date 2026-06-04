@@ -72,9 +72,29 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.role = (user as { role?: UserRole }).role ?? UserRole.CUSTOMER;
         token.id = user.id;
+        token.roleSyncedAt = Date.now();
       }
       if (trigger === "update" && session?.name) {
         token.name = session.name;
+      }
+      // Re-sync role from the DB so changes (e.g. claim approval -> DEALER_OWNER)
+      // reach the session without a forced re-login. Throttled to once per 60s,
+      // or immediately on an explicit session update. Failures are non-fatal.
+      const lastSync = (token.roleSyncedAt as number | undefined) ?? 0;
+      const stale = Date.now() - lastSync > 60_000;
+      if (token.id && (trigger === "update" || stale)) {
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { id: token.id as string },
+            select: { role: true },
+          });
+          if (dbUser) {
+            token.role = dbUser.role;
+            token.roleSyncedAt = Date.now();
+          }
+        } catch {
+          // keep existing token.role on DB error
+        }
       }
       return token;
     },
