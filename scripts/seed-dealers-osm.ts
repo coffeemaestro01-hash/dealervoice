@@ -28,7 +28,7 @@ interface CountrySpec {
   currency: string;
   locale: string;
   flagEmoji: string;
-  region: "Asia" | "Europe" | "North America";
+  region: "Asia" | "Europe" | "North America" | "Oceania";
   quota: number;      // target number of dealers to import
 }
 
@@ -63,6 +63,9 @@ const COUNTRIES: CountrySpec[] = [
   { name: "United Arab Emirates", code: "AE", code3: "ARE", dialCode: "+971", currency: "AED", locale: "ar-AE", flagEmoji: "🇦🇪", region: "Asia", quota: 120 },
   { name: "Saudi Arabia", code: "SA", code3: "SAU", dialCode: "+966", currency: "SAR", locale: "ar-SA", flagEmoji: "🇸🇦", region: "Asia", quota: 120 },
   { name: "Singapore", code: "SG", code3: "SGP", dialCode: "+65", currency: "SGD", locale: "en-SG", flagEmoji: "🇸🇬", region: "Asia", quota: 80 },
+  // Oceania
+  { name: "Australia", code: "AU", code3: "AUS", dialCode: "+61", currency: "AUD", locale: "en-AU", flagEmoji: "🇦🇺", region: "Oceania", quota: 350 },
+  { name: "New Zealand", code: "NZ", code3: "NZL", dialCode: "+64", currency: "NZD", locale: "en-NZ", flagEmoji: "🇳🇿", region: "Oceania", quota: 90 },
 ];
 
 interface OSMNode {
@@ -146,7 +149,7 @@ async function main() {
   console.log("🗺️  DealerVoice — real dealership import (Asia · Europe · North America)");
   console.log("=".repeat(64));
   let grandTotal = 0;
-  const byRegion: Record<string, number> = { Asia: 0, Europe: 0, "North America": 0 };
+  const byRegion: Record<string, number> = { Asia: 0, Europe: 0, "North America": 0, Oceania: 0 };
 
   for (const c of COUNTRIES) {
     console.log(`\n📍 ${c.name} (${c.code}) — target ${c.quota}`);
@@ -245,7 +248,7 @@ async function main() {
 
   console.log("\n" + "=".repeat(64));
   console.log(`🎉 Total imported: ${grandTotal}`);
-  console.log(`   Asia: ${byRegion.Asia} · Europe: ${byRegion.Europe} · North America: ${byRegion["North America"]}`);
+  console.log(`   Asia: ${byRegion.Asia} · Europe: ${byRegion.Europe} · North America: ${byRegion["North America"]} · Oceania: ${byRegion.Oceania}`);
 }
 
 main()

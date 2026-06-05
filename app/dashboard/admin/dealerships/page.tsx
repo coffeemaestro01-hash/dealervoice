@@ -1,0 +1,135 @@
+import { requireAuth } from "@/lib/auth/session";
+import { redirect } from "next/navigation";
+import Link from "next/link";
+import prisma from "@/lib/db";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Search, ExternalLink, MapPin } from "lucide-react";
+import { AdminDealerActions } from "./AdminDealerActions";
+
+export const dynamic = "force-dynamic";
+
+const PER_PAGE = 25;
+
+export default async function AdminDealershipsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; status?: string; page?: string }>;
+}) {
+  const user = await requireAuth();
+  if (user.role !== "SUPER_ADMIN" && user.role !== "MODERATOR") redirect("/dashboard");
+
+  const sp = await searchParams;
+  const q = (sp.q ?? "").trim();
+  const status = sp.status ?? "";
+  const page = Math.max(1, Number(sp.page ?? 1) || 1);
+
+  const where: any = { deletedAt: null };
+  if (q) {
+    where.OR = [
+      { name: { contains: q, mode: "insensitive" } },
+      { cityName: { contains: q, mode: "insensitive" } },
+    ];
+  }
+  if (status) where.status = status;
+
+  // Sequential (small connection pool)
+  const total = await prisma.dealership.count({ where });
+  const dealers = await prisma.dealership.findMany({
+    where,
+    orderBy: [{ isFeatured: "desc" }, { totalReviews: "desc" }, { name: "asc" }],
+    skip: (page - 1) * PER_PAGE,
+    take: PER_PAGE,
+    select: {
+      id: true, slug: true, name: true, cityName: true, stateName: true, status: true,
+      isFeatured: true, isVerified: true, totalReviews: true, claimedAt: true,
+      country: { select: { name: true, flagEmoji: true } },
+    },
+  });
+  const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
+
+  const qs = (overrides: Record<string, string | number>) => {
+    const p = new URLSearchParams();
+    if (q) p.set("q", q);
+    if (status) p.set("status", status);
+    Object.entries(overrides).forEach(([k, v]) => p.set(k, String(v)));
+    return `?${p.toString()}`;
+  };
+
+  const STATUSES = ["", "ACTIVE", "CLAIMED", "PENDING_CLAIM", "SUSPENDED", "INACTIVE"];
+
+  return (
+    <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900">Dealerships</h1>
+        <p className="text-gray-500 mt-1">{total.toLocaleString()} listings · manage status, featuring, and verification.</p>
+      </div>
+
+      {/* Search + filters */}
+      <form className="flex flex-col sm:flex-row gap-3" action="/dashboard/admin/dealerships">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+          <input name="q" defaultValue={q} placeholder="Search by name or city" className="w-full h-10 pl-9 pr-3 rounded-md border border-gray-200 text-sm" />
+        </div>
+        <select name="status" defaultValue={status} className="h-10 rounded-md border border-gray-200 px-3 text-sm">
+          {STATUSES.map((s) => <option key={s || "all"} value={s}>{s || "All statuses"}</option>)}
+        </select>
+        <Button type="submit" className="bg-gold-gradient text-night-900 font-semibold border-0">Search</Button>
+      </form>
+
+      {/* Table */}
+      <div className="rounded-xl border border-gray-100 bg-white overflow-hidden">
+        <table className="w-full text-sm">
+          <thead className="bg-gray-50 text-gray-500">
+            <tr>
+              <th className="text-left font-medium px-4 py-3">Dealership</th>
+              <th className="text-left font-medium px-4 py-3 hidden md:table-cell">Location</th>
+              <th className="text-left font-medium px-4 py-3">Status</th>
+              <th className="text-left font-medium px-4 py-3 hidden sm:table-cell">Reviews</th>
+              <th className="text-right font-medium px-4 py-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-50">
+            {dealers.length === 0 ? (
+              <tr><td colSpan={5} className="px-4 py-10 text-center text-gray-500">No dealerships match your filters.</td></tr>
+            ) : dealers.map((d) => (
+              <tr key={d.id} className="hover:bg-gray-50/50">
+                <td className="px-4 py-3">
+                  <Link href={`/dealership/${d.slug}`} target="_blank" className="font-medium text-gray-900 hover:text-gold-700 inline-flex items-center gap-1">
+                    {d.name} <ExternalLink size={12} className="text-gray-300" />
+                  </Link>
+                  <div className="flex gap-1.5 mt-1">
+                    {d.isFeatured && <Badge variant="outline" className="bg-gold-50 text-gold-700 border-gold/30 text-[10px]">Featured</Badge>}
+                    {d.isVerified && <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-[10px]">Verified</Badge>}
+                    {d.claimedAt && <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 text-[10px]">Claimed</Badge>}
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-gray-500 hidden md:table-cell">
+                  <span className="inline-flex items-center gap-1"><MapPin size={12} />{[d.cityName, d.country?.name].filter(Boolean).join(", ")}</span>
+                </td>
+                <td className="px-4 py-3">
+                  <Badge variant="outline" className={
+                    d.status === "SUSPENDED" ? "bg-red-50 text-red-700 border-red-200" :
+                    d.status === "ACTIVE" || d.status === "CLAIMED" ? "bg-green-50 text-green-700 border-green-200" :
+                    "bg-gray-100 text-gray-600"
+                  }>{d.status}</Badge>
+                </td>
+                <td className="px-4 py-3 text-gray-600 hidden sm:table-cell">{d.totalReviews}</td>
+                <td className="px-4 py-3"><div className="flex justify-end"><AdminDealerActions id={d.id} status={d.status} isFeatured={d.isFeatured} isVerified={d.isVerified} /></div></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Pagination */}
+      <div className="flex items-center justify-between text-sm">
+        <span className="text-gray-500">Page {page} of {totalPages}</span>
+        <div className="flex gap-2">
+          {page > 1 && <Link href={qs({ page: page - 1 })}><Button variant="outline" size="sm">Previous</Button></Link>}
+          {page < totalPages && <Link href={qs({ page: page + 1 })}><Button variant="outline" size="sm">Next</Button></Link>}
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,66 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Star, ShieldCheck, Ban, RotateCcw, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+interface Props {
+  id: string;
+  status: string;
+  isFeatured: boolean;
+  isVerified: boolean;
+}
+
+export function AdminDealerActions({ id, status, isFeatured, isVerified }: Props) {
+  const router = useRouter();
+  const [busy, setBusy] = useState<string | null>(null);
+
+  async function patch(key: string, data: Record<string, unknown>) {
+    setBusy(key);
+    try {
+      const res = await fetch(`/api/admin/dealerships/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (res.ok) router.refresh();
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  const suspended = status === "SUSPENDED";
+
+  return (
+    <div className="flex items-center gap-1.5">
+      <Button
+        size="sm" variant="outline"
+        disabled={busy !== null}
+        onClick={() => patch("feature", { isFeatured: !isFeatured })}
+        className={isFeatured ? "border-gold/50 text-gold-700 bg-gold-50" : ""}
+        title={isFeatured ? "Un-feature" : "Feature"}
+      >
+        {busy === "feature" ? <Loader2 size={13} className="animate-spin" /> : <Star size={13} className={isFeatured ? "fill-gold-500 text-gold-500" : ""} />}
+      </Button>
+      <Button
+        size="sm" variant="outline"
+        disabled={busy !== null}
+        onClick={() => patch("verify", { isVerified: !isVerified })}
+        className={isVerified ? "border-green-300 text-green-700 bg-green-50" : ""}
+        title={isVerified ? "Un-verify" : "Verify"}
+      >
+        {busy === "verify" ? <Loader2 size={13} className="animate-spin" /> : <ShieldCheck size={13} />}
+      </Button>
+      <Button
+        size="sm" variant="outline"
+        disabled={busy !== null}
+        onClick={() => patch("status", { status: suspended ? "ACTIVE" : "SUSPENDED" })}
+        className={suspended ? "border-green-300 text-green-700" : "border-red-200 text-red-600 hover:bg-red-50"}
+        title={suspended ? "Reactivate" : "Suspend"}
+      >
+        {busy === "status" ? <Loader2 size={13} className="animate-spin" /> : suspended ? <RotateCcw size={13} /> : <Ban size={13} />}
+      </Button>
+    </div>
+  );
+}
