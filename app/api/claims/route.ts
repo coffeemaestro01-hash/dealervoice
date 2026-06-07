@@ -3,6 +3,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/config";
 import prisma from "@/lib/db";
 import { claimSchema } from "@/lib/validations";
+import { shouldAutoApproveClaim } from "@/lib/claims/domains";
+import { approveDealerClaim } from "@/lib/claims/approveClaim";
+import { sendNewClaimNotification, sendClaimApprovedEmail } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -20,16 +23,23 @@ export async function POST(req: NextRequest) {
 
   const { dealershipId, businessEmail, businessPhone, notes, documentUrl } = parsed.data;
 
-  const dealership = await prisma.dealership.findUnique({ where: { id: dealershipId, deletedAt: null } });
+  const dealership = await prisma.dealership.findUnique({
+    where: { id: dealershipId, deletedAt: null },
+    select: { id: true, name: true, slug: true, website: true, email: true, claimedAt: true },
+  });
   if (!dealership) return NextResponse.json({ error: "Dealership not found" }, { status: 404 });
+  if (dealership.claimedAt) {
+    return NextResponse.json({ error: "This dealership is already claimed." }, { status: 409 });
+  }
 
-  // Check for existing pending/approved claim
   const existingClaim = await prisma.dealerClaim.findFirst({
     where: { dealershipId, status: { in: ["PENDING", "APPROVED"] } },
   });
   if (existingClaim) {
     return NextResponse.json({ error: "A claim for this dealership is already pending or approved." }, { status: 409 });
   }
+
+  const autoApprove = shouldAutoApproveClaim(businessEmail, dealership);
 
   const claim = await prisma.dealerClaim.create({
     data: {
@@ -43,17 +53,49 @@ export async function POST(req: NextRequest) {
         create: {
           type: "DOCUMENT",
           url: documentUrl,
-          key: documentUrl.split('/').pop() || 'proof',
+          key: documentUrl.split("/").pop() || "proof",
           filename: "proof_of_ownership",
           mimeType: "application/octet-stream",
           size: 0,
-        }
-      }
+        },
+      },
     },
     select: { id: true, status: true },
   });
 
-  return NextResponse.json({ data: claim, message: "Claim submitted. We will review it within 2-3 business days." }, { status: 201 });
+  let approved = false;
+  if (autoApprove) {
+    try {
+      await approveDealerClaim(prisma, claim.id);
+      approved = true;
+    } catch (err) {
+      console.error("[claims] auto-approve failed:", err);
+    }
+  }
+
+  await sendNewClaimNotification(dealership.name, businessEmail, approved, claim.id).catch(() => {});
+
+  if (approved && session.user.email) {
+    await sendClaimApprovedEmail(
+      session.user.email,
+      session.user.name ?? "Dealer",
+      dealership.name
+    ).catch(() => {});
+  }
+
+  return NextResponse.json(
+    {
+      data: { ...claim, status: approved ? "APPROVED" : claim.status },
+      autoApproved: approved,
+      message: approved
+        ? "Claim approved! You now own this profile. Upgrade to Pro to remove competitor ads."
+        : "Claim submitted. Our team will review it within 1 business day.",
+      redirectUrl: approved
+        ? `/dashboard/dealer/billing?dealer=${dealershipId}&upgrade=1`
+        : undefined,
+    },
+    { status: 201 }
+  );
 }
 
 export async function GET(req: NextRequest) {

@@ -18,9 +18,10 @@ import { useSession } from "next-auth/react";
 interface Props {
   dealershipId: string;
   dealershipName: string;
+  dealershipSlug?: string;
 }
 
-export function ClaimModal({ dealershipId, dealershipName }: Props) {
+export function ClaimModal({ dealershipId, dealershipName, dealershipSlug }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: session } = useSession();
@@ -29,6 +30,8 @@ export function ClaimModal({ dealershipId, dealershipName }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [autoApproved, setAutoApproved] = useState(false);
+  const [redirectUrl, setRedirectUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (searchParams?.get("claim") === "1") {
@@ -59,7 +62,8 @@ export function ClaimModal({ dealershipId, dealershipName }: Props) {
         description: "You must be signed in to claim a dealership.",
         variant: "destructive",
       });
-      router.push(`/login?callbackUrl=/dealership/${dealershipId}?claim=1`);
+      const slug = dealershipSlug ?? dealershipId;
+      router.push(`/login?callbackUrl=/dealership/${slug}?claim=1`);
       return;
     }
 
@@ -76,10 +80,16 @@ export function ClaimModal({ dealershipId, dealershipName }: Props) {
         throw new Error(error.error || "Failed to submit claim");
       }
 
+      const result = await response.json();
+      const approved = Boolean(result.autoApproved);
+      setAutoApproved(approved);
+      setRedirectUrl(result.redirectUrl ?? null);
       setIsSuccess(true);
       toast({
-        title: "Claim Submitted!",
-        description: "We will review your claim and get back to you shortly.",
+        title: approved ? "Claim approved!" : "Claim submitted",
+        description: approved
+          ? "You now own this profile. Upgrade to Pro to remove competitor ads."
+          : "Our team will review your claim within 1 business day.",
       });
     } catch (error: any) {
       toast({
@@ -122,13 +132,35 @@ export function ClaimModal({ dealershipId, dealershipName }: Props) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold">Claim Submitted</h3>
+            <h3 className="text-xl font-bold">{autoApproved ? "You're in!" : "Claim Submitted"}</h3>
             <p className="text-gray-500">
-              Our team will review your application and documents. You'll receive an email once approved.
+              {autoApproved
+                ? "Your profile is live in your dashboard. Upgrade to Pro to strip competitor ads and unlock inventory + analytics."
+                : "Our team will review your application and documents. You'll receive an email once approved."}
             </p>
-            <Button className="mt-4 w-full" onClick={() => handleOpenChange(false)}>
-              Close
-            </Button>
+            <div className="flex flex-col gap-2 mt-4">
+              {autoApproved && redirectUrl && (
+                <Button
+                  className="w-full bg-gold-gradient text-night-900 font-bold"
+                  onClick={() => {
+                    handleOpenChange(false);
+                    router.push(redirectUrl);
+                  }}
+                >
+                  Upgrade to Pro →
+                </Button>
+              )}
+              <Button
+                variant={autoApproved ? "outline" : "default"}
+                className="w-full"
+                onClick={() => {
+                  handleOpenChange(false);
+                  if (autoApproved) router.push("/dashboard/dealer");
+                }}
+              >
+                {autoApproved ? "Go to dashboard" : "Close"}
+              </Button>
+            </div>
           </div>
         ) : (
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

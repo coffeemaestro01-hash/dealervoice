@@ -142,27 +142,60 @@ export async function sendDsrConfirmation(to: string, name: string, kind: string
   });
 }
 
+export async function sendAdminNotification(
+  subject: string,
+  htmlBody: string
+) {
+  const to = process.env.ADMIN_NOTIFICATION_EMAIL || EMAILS.dealers;
+  return resend.emails.send({
+    from: FROM,
+    to,
+    subject,
+    html: emailTemplate({ title: subject, body: htmlBody }),
+  });
+}
+
+export async function sendNewClaimNotification(
+  dealerName: string,
+  businessEmail: string,
+  autoApproved: boolean,
+  claimId: string
+) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.io";
+  return sendAdminNotification(
+    autoApproved ? `✅ Auto-approved claim: ${dealerName}` : `📋 New claim pending: ${dealerName}`,
+    `<p><strong>${dealerName}</strong> claim submitted by <a href="mailto:${businessEmail}">${businessEmail}</a>.</p>
+<p>Status: <strong>${autoApproved ? "AUTO-APPROVED" : "PENDING REVIEW"}</strong></p>
+<p><a href="${appUrl}/dashboard/admin/claims" style="background:#C9961E;color:#0a0a0a;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block">Review in admin</a></p>
+<p style="color:#999;font-size:12px">Claim ID: ${claimId}</p>`
+  );
+}
+
 export async function sendNewLeadNotification(
   to: string,
   dealerName: string,
   lead: { name: string; email: string; phone?: string | null; vehicle?: string | null; message?: string | null; type: string }
 ) {
   const url = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/dealer/leads`;
-  return resend.emails.send({
-    from: FROM,
-    to,
-    subject: `New ${lead.type.toLowerCase()} lead for ${dealerName}`,
-    html: emailTemplate({
-      title: "New Customer Lead",
-      body: `<p><strong>${lead.name}</strong> submitted a request on your DealerVoice profile.</p>
+  const body = `<p><strong>${lead.name}</strong> submitted a request on your DealerVoice profile.</p>
 <ul style="padding-left:18px;color:#444">
 <li>Email: ${lead.email}</li>
 ${lead.phone ? `<li>Phone: ${lead.phone}</li>` : ""}
 ${lead.vehicle ? `<li>Vehicle: ${lead.vehicle}</li>` : ""}
 ${lead.message ? `<li>Message: ${lead.message}</li>` : ""}
 </ul>
-<p><a href="${url}" style="background:#C9961E;color:#0a0a0a;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block">View in Dashboard</a></p>`,
-    }),
+<p><a href="${url}" style="background:#C9961E;color:#0a0a0a;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block">View in Dashboard</a></p>`;
+
+  await sendAdminNotification(
+    `💰 New lead: ${dealerName} — ${lead.name}`,
+    `<p>New lead on <strong>${dealerName}</strong>.</p>${body}`
+  ).catch(() => {});
+
+  return resend.emails.send({
+    from: FROM,
+    to,
+    subject: `New ${lead.type.toLowerCase()} lead for ${dealerName}`,
+    html: emailTemplate({ title: "New Customer Lead", body }),
   });
 }
 

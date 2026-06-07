@@ -46,9 +46,9 @@ export default async function HomePage() {
         </Suspense>
         <section className="py-10 bg-night border-t border-white/5" aria-label="Sponsored automotive offers">
           <div className="container grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
-            <AutomotiveAdBanner type="Tier2_OEM_Offer" />
-            <AutomotiveAdBanner type="Sponsored_Local_Dealer" />
-            <AutomotiveAdBanner type="Auto_Ecosystem_Partner" />
+            <AutomotiveAdBanner type="Tier2_OEM_Offer" slot="homepage_financing" />
+            <AutomotiveAdBanner type="Sponsored_Local_Dealer" slot="homepage_dealer" />
+            <AutomotiveAdBanner type="Auto_Ecosystem_Partner" slot="homepage_insurance" />
           </div>
         </section>
         <HowItWorksSection />

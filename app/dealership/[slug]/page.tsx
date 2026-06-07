@@ -102,7 +102,7 @@ export default async function DealershipPage({ params, searchParams }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <Suspense>
-        <ClaimModal dealershipId={dealer.id} dealershipName={dealer.name} />
+        <ClaimModal dealershipId={dealer.id} dealershipName={dealer.name} dealershipSlug={dealer.slug} />
       </Suspense>
 
       <div className="min-h-screen bg-gray-50">

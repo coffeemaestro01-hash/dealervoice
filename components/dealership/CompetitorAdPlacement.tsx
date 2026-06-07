@@ -46,8 +46,8 @@ export async function CompetitorAdPlacement(props: Props) {
   } catch {
     return (
       <section aria-label="Sponsored dealer alternatives" className="space-y-4">
-        <AutomotiveAdBanner type="Sponsored_Local_Dealer" />
-        <AutomotiveAdBanner type="Tier2_OEM_Offer" compact />
+        <AutomotiveAdBanner type="Sponsored_Local_Dealer" slot="profile_competitor_fallback" />
+        <AutomotiveAdBanner type="Tier2_OEM_Offer" compact slot="profile_financing_fallback" />
       </section>
     );
   }
@@ -92,11 +92,11 @@ export async function CompetitorAdPlacement(props: Props) {
           ))}
         </ul>
       ) : (
-        <AutomotiveAdBanner type="Sponsored_Local_Dealer" />
+        <AutomotiveAdBanner type="Sponsored_Local_Dealer" slot="profile_competitor" />
       )}
 
       <div className="mt-4 pt-4 border-t border-gold/20">
-        <AutomotiveAdBanner type="Tier2_OEM_Offer" compact />
+        <AutomotiveAdBanner type="Tier2_OEM_Offer" compact slot="profile_financing" />
       </div>
     </section>
   );

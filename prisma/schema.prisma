@@ -360,6 +360,7 @@ model Dealership {
 
   // Flags
   isFeatured          Boolean        @default(false)
+  isSponsored         Boolean        @default(false)
   isVerified          Boolean        @default(false)
   isPremiumClaimed    Boolean        @default(false) @map("is_premium_claimed")
   inventoryUrl        String?
@@ -715,6 +716,20 @@ model ModerationAction {
 // ─────────────────────────────────────────────
 // ANALYTICS
 // ─────────────────────────────────────────────
+
+model AdClickEvent {
+  id        String   @id @default(cuid())
+  adType    String
+  slot      String
+  targetUrl String
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([adType])
+  @@index([slot])
+  @@index([createdAt])
+}
 
 model AnalyticsEvent {
   id           String     @id @default(cuid())

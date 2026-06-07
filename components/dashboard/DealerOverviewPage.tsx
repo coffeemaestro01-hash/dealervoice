@@ -7,6 +7,7 @@ import { ReviewCard } from "@/components/review/ReviewCard";
 import { Button } from "@/components/ui/button";
 import { cn, buildDealerUrl } from "@/lib/utils";
 import type { ReviewWithRelations } from "@/types";
+import { PremiumUpgradeBanner } from "@/components/dashboard/PremiumUpgradeBanner";
 
 interface StatCardProps {
   label: string;
@@ -41,7 +42,16 @@ function StatCard({ label, value, change, icon: Icon, iconColor = "text-gold-700
 
 interface Props {
   data: {
-    dealership: { id: string; name: string; slug: string; overallRating: number; reputationScore: number; responseRate: number; subscription?: { plan: string } | null };
+    dealership: {
+      id: string;
+      name: string;
+      slug: string;
+      overallRating: number;
+      reputationScore: number;
+      responseRate: number;
+      isPremiumClaimed?: boolean;
+      subscription?: { plan: string } | null;
+    };
     stats: { totalReviews: number; avgRating: number; reputationScore: number; responseRate: number; pendingResponses: number; reviewsThisMonth: number; reviewsLastMonth: number; ratingChange: number };
     recentReviews: ReviewWithRelations[];
   } | null;
@@ -85,6 +95,13 @@ export function DealerOverviewPage({ data }: Props) {
           </Link>
         </Button>
       </div>
+
+      <PremiumUpgradeBanner
+        dealershipId={dealership.id}
+        dealerName={dealership.name}
+        isPremiumClaimed={dealership.isPremiumClaimed}
+        subscription={dealership.subscription}
+      />
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">

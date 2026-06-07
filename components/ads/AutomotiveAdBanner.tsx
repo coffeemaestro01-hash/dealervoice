@@ -12,10 +12,22 @@ interface Props {
   ad?: Partial<AutomotiveAd>;
   className?: string;
   compact?: boolean;
+  /** Placement identifier for click analytics */
+  slot?: string;
 }
 
-export function AutomotiveAdBanner({ type, ad, className, compact }: Props) {
+function trackedHref(type: AutomotiveAdType, slot: string, destination: string) {
+  const params = new URLSearchParams({
+    type,
+    slot,
+    redirect: destination,
+  });
+  return `/api/ads/click?${params.toString()}`;
+}
+
+export function AutomotiveAdBanner({ type, ad, className, compact, slot = "homepage" }: Props) {
   const content: AutomotiveAd = { ...FALLBACK_AUTOMOTIVE_ADS[type], ...ad, type };
+  const href = trackedHref(type, slot, content.ctaHref);
 
   return (
     <aside
@@ -51,7 +63,7 @@ export function AutomotiveAdBanner({ type, ad, className, compact }: Props) {
             {content.subheadline}
           </p>
           <Link
-            href={content.ctaHref}
+            href={href}
             className={cn(
               "inline-flex items-center gap-1.5 mt-4 font-semibold rounded-lg w-fit",
               "bg-white/15 hover:bg-white/25 transition-colors",

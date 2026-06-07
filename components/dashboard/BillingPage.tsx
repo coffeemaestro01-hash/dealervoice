@@ -5,11 +5,13 @@ import { Check, CreditCard } from "lucide-react";
 import { SubscriptionCheckoutButton } from "@/components/payment/SubscriptionCheckoutButton";
 import { PLAN_PRICES_INR } from "@/lib/payment";
 import { Badge } from "@/components/ui/badge";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { PremiumUpgradeBanner } from "@/components/dashboard/PremiumUpgradeBanner";
 
 interface Dealership {
   id: string;
   name: string;
+  isPremiumClaimed?: boolean;
   subscription?: { plan: string; status: string; currentPeriodEnd?: string | null } | null;
 }
 
@@ -32,6 +34,8 @@ const PLANS = [
 
 export function BillingPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const showUpgrade = searchParams?.get("upgrade") === "1";
   const [dealership, setDealership] = useState<Dealership | null>(null);
   const [interval, setInterval] = useState<"monthly" | "annual">("monthly");
   const [loading, setLoading] = useState(true);
@@ -68,6 +72,14 @@ export function BillingPage() {
           <p className="text-gray-500 text-sm">{dealership.name}</p>
         </div>
       </div>
+
+      <PremiumUpgradeBanner
+        dealershipId={dealership.id}
+        dealerName={dealership.name}
+        isPremiumClaimed={dealership.isPremiumClaimed}
+        subscription={dealership.subscription}
+        showUpgradeQuery={showUpgrade}
+      />
 
       <div className="bg-white rounded-xl border border-gray-100 p-5 mb-8 shadow-sm">
         <p className="text-sm text-gray-500 mb-1">Current plan</p>

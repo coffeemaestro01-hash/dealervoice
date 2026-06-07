@@ -58,6 +58,7 @@ export interface DealershipWithRelations {
   longitude?: number | null;
   isFeatured: boolean;
   isVerified: boolean;
+  isSponsored?: boolean;
   isPremiumClaimed?: boolean;
   inventoryUrl?: string | null;
   country: { name: string; code: string };

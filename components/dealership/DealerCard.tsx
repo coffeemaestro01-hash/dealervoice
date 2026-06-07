@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, MessageSquare, BadgeCheck } from "lucide-react";
+import { MapPin, MessageSquare, BadgeCheck, Megaphone, PenLine } from "lucide-react";
 import { StarRating } from "@/components/common/StarRating";
 import { RatingBadge } from "@/components/common/RatingBadge";
 import { cn, formatNumber, buildDealerUrl } from "@/lib/utils";
@@ -39,8 +39,14 @@ export function DealerCard({ dealer, featured, className }: DealerCardProps) {
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
-                <h3 className="font-semibold text-gray-900 truncate group-hover:text-gold-600 transition-colors">
-                  {dealer.name}
+                <h3 className="font-semibold text-gray-900 truncate group-hover:text-gold-600 transition-colors flex items-center gap-1.5 flex-wrap">
+                  <span className="truncate">{dealer.name}</span>
+                  {(dealer as { isSponsored?: boolean }).isSponsored && (
+                    <span className="inline-flex items-center gap-0.5 text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded bg-gold-100 text-gold-800 border border-gold/30 shrink-0">
+                      <Megaphone size={9} aria-hidden />
+                      Sponsored
+                    </span>
+                  )}
                 </h3>
                 <div className="flex items-center gap-1 mt-0.5 text-gray-500 text-sm">
                   <MapPin size={12} />
@@ -52,11 +58,20 @@ export function DealerCard({ dealer, featured, className }: DealerCardProps) {
               <RatingBadge rating={dealer.overallRating} size="sm" />
             </div>
 
-            <div className="flex items-center gap-2 mt-2">
-              <StarRating rating={dealer.overallRating} size="sm" />
-              <span className="text-xs text-gray-500">
-                {formatNumber(dealer.totalReviews)} review{dealer.totalReviews !== 1 ? "s" : ""}
-              </span>
+            <div className="flex items-center gap-2 mt-2 flex-wrap">
+              {dealer.totalReviews > 0 ? (
+                <>
+                  <StarRating rating={dealer.overallRating} size="sm" />
+                  <span className="text-xs text-gray-500">
+                    {formatNumber(dealer.totalReviews)} review{dealer.totalReviews !== 1 ? "s" : ""}
+                  </span>
+                </>
+              ) : (
+                <span className="inline-flex items-center gap-1 text-xs font-medium text-gold-700 bg-gold-50 border border-gold/20 rounded-full px-2 py-0.5">
+                  <PenLine size={11} aria-hidden />
+                  Be the first reviewer
+                </span>
+              )}
               {dealer.isVerified && (
                 <span className="inline-flex items-center gap-1 text-xs text-gold-600">
                   <BadgeCheck size={12} />

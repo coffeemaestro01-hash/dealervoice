@@ -1,17 +1,15 @@
 import Link from "next/link";
 import prisma from "@/lib/db";
-import { publicDealerWhere } from "@/lib/dealer/status";
 import { DealerCard } from "@/components/dealership/DealerCard";
 import { TrendingUp } from "lucide-react";
+import { publicDealerWhere } from "@/lib/dealer/status";
 
 async function getTrendingDealers() {
-  return prisma.dealership.findMany({
-    where: {
-      ...publicDealerWhere,
-      totalReviews: { gte: 0 },
-    },
+  const withReviews = await prisma.dealership.findMany({
+    where: { ...publicDealerWhere, totalReviews: { gt: 0 } },
     take: 9,
     orderBy: [
+      { isSponsored: "desc" },
       { totalReviews: "desc" },
       { overallRating: "desc" },
       { reputationScore: "desc" },
@@ -26,6 +24,31 @@ async function getTrendingDealers() {
       subscription: { select: { plan: true } },
     },
   });
+
+  if (withReviews.length >= 6) return withReviews;
+
+  const fallback = await prisma.dealership.findMany({
+    where: publicDealerWhere,
+    take: 9,
+    orderBy: [
+      { isSponsored: "desc" },
+      { isFeatured: "desc" },
+      { reputationScore: "desc" },
+      { totalReviews: "desc" },
+    ],
+    include: {
+      country: { select: { name: true, code: true } },
+      city: { select: { name: true, slug: true } },
+      brands: {
+        include: { brand: { select: { name: true, slug: true, logoUrl: true } } },
+        take: 5,
+      },
+      subscription: { select: { plan: true } },
+    },
+  });
+
+  const seen = new Set(withReviews.map((d) => d.id));
+  return [...withReviews, ...fallback.filter((d) => !seen.has(d.id))].slice(0, 9);
 }
 
 export async function TrendingLocalDealers() {
@@ -51,7 +74,7 @@ export async function TrendingLocalDealers() {
               Trending <span className="text-gold">Local Dealers</span>
             </h2>
             <p className="text-gray-400 mt-1 text-sm md:text-base">
-              Dealerships getting the most attention from car buyers right now.
+              Top dealerships by reviews and reputation in your network.
             </p>
           </div>
           <Link
