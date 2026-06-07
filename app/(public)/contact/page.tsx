@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Mail, MessageSquare, Building2, LifeBuoy } from "lucide-react";
+import { EMAILS } from "@/lib/constants/emails";
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -7,9 +8,9 @@ export const metadata: Metadata = {
 };
 
 const CHANNELS = [
-  { icon: LifeBuoy, title: "Customer support", body: "Questions about your account or a review.", email: "support@dealervoice.com" },
-  { icon: Building2, title: "Dealer enquiries", body: "Claim your profile or learn about Pro plans.", email: "dealers@dealervoice.com" },
-  { icon: MessageSquare, title: "Press & media", body: "Interviews, data requests, and partnerships.", email: "press@dealervoice.com" },
+  { icon: LifeBuoy, title: "Customer support", body: "Questions about your account or a review.", email: EMAILS.support },
+  { icon: Building2, title: "Dealer enquiries", body: "Claim your profile or learn about Pro plans.", email: EMAILS.dealers },
+  { icon: MessageSquare, title: "Press & media", body: "Interviews, data requests, and partnerships.", email: EMAILS.press },
 ];
 
 export default function ContactPage() {
@@ -24,7 +25,6 @@ export default function ContactPage() {
 
       <section className="py-14">
         <div className="container grid lg:grid-cols-2 gap-10 items-start">
-          {/* Channels */}
           <div className="space-y-4">
             {CHANNELS.map((c) => (
               <div key={c.title} className="flex gap-4 rounded-2xl border border-gray-100 p-6 shadow-sm">
@@ -40,8 +40,7 @@ export default function ContactPage() {
             ))}
           </div>
 
-          {/* Form (mailto fallback - no backend needed) */}
-          <form action="mailto:support@dealervoice.com" method="post" encType="text/plain" className="rounded-2xl border border-gray-100 p-7 shadow-sm bg-white">
+          <form action={`mailto:${EMAILS.support}`} method="post" encType="text/plain" className="rounded-2xl border border-gray-100 p-7 shadow-sm bg-white">
             <h3 className="font-semibold text-gray-900 mb-4 text-lg">Send us a message</h3>
             <div className="space-y-4">
               <div>

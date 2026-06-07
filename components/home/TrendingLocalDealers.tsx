@@ -1,14 +1,13 @@
 import Link from "next/link";
 import prisma from "@/lib/db";
-import type { DealerStatus } from "@prisma/client";
+import { publicDealerWhere } from "@/lib/dealer/status";
 import { DealerCard } from "@/components/dealership/DealerCard";
 import { TrendingUp } from "lucide-react";
 
 async function getTrendingDealers() {
   return prisma.dealership.findMany({
     where: {
-      deletedAt: null,
-      status: { in: ["ACTIVE", "CLAIMED"] as DealerStatus[] },
+      ...publicDealerWhere,
       totalReviews: { gte: 0 },
     },
     take: 9,

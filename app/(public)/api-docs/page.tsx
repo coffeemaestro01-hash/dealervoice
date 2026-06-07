@@ -20,7 +20,7 @@ export default function ApiDocsPage() {
           <div className="rounded-2xl border border-gray-100 overflow-hidden shadow-sm mb-8">
             <div className="bg-night-800 text-gray-200 text-sm font-mono p-5 overflow-x-auto">
               <div className="text-gray-500"># Example: fetch a dealership&apos;s rating</div>
-              <div><span className="text-gold-400">GET</span> https://api.dealervoice.com/v1/dealers/&#123;id&#125;</div>
+              <div><span className="text-gold-400">GET</span> https://api.dealervoice.io/v1/dealers/&#123;id&#125;</div>
               <div className="text-gray-500 mt-2"># Response</div>
               <div>&#123; &quot;name&quot;: &quot;...&quot;, &quot;rating&quot;: 4.6, &quot;reviews&quot;: 847 &#125;</div>
             </div>
@@ -29,7 +29,7 @@ export default function ApiDocsPage() {
             <span className="grid place-items-center w-12 h-12 rounded-xl bg-gold-50 text-gold-600 mx-auto mb-4"><Lock size={22} /></span>
             <h2 className="text-xl font-bold text-gray-900 mb-2">API access is available on Enterprise plans</h2>
             <p className="text-gray-600 mb-5">Request an API key and full documentation from our team.</p>
-            <a href="mailto:api@dealervoice.com" className="inline-flex items-center gap-2 h-11 px-6 rounded-lg bg-gold-gradient text-night-900 font-semibold hover:opacity-90">
+            <a href="mailto:api@dealervoice.io" className="inline-flex items-center gap-2 h-11 px-6 rounded-lg bg-gold-gradient text-night-900 font-semibold hover:opacity-90">
               <Mail size={16} /> Request access
             </a>
           </div>

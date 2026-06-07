@@ -43,6 +43,7 @@ export function DealerSettingsForm({ dealership }: Props) {
       email: dealership.email || "",
       phone: dealership.phone || "",
       website: dealership.website || "",
+      inventoryUrl: dealership.inventoryUrl || "",
       address: dealership.address || "",
       cityName: dealership.cityName || "",
       stateName: dealership.stateName || "",
@@ -263,6 +264,21 @@ export function DealerSettingsForm({ dealership }: Props) {
               <Input id="website" className="pl-10" placeholder="https://www.yourdealer.com" {...register("website")} />
             </div>
             {errors.website && <p className="text-xs text-red-500">{errors.website.message}</p>}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="inventoryUrl">Live Inventory URL (Premium)</Label>
+            <div className="relative">
+              <Globe className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+              <Input
+                id="inventoryUrl"
+                className="pl-10"
+                placeholder="https://www.yourdealer.com/inventory"
+                {...register("inventoryUrl")}
+              />
+            </div>
+            <p className="text-xs text-gray-500">Shown on your profile when you have a premium plan. Falls back to website if empty.</p>
+            {errors.inventoryUrl && <p className="text-xs text-red-500">{errors.inventoryUrl.message}</p>}
           </div>
         </CardContent>
       </Card>

@@ -39,7 +39,7 @@ export default function TermsPage() {
           </section>
           <section>
             <h2 className="text-xl font-bold text-gray-900">7. Changes</h2>
-            <p>We may update these terms from time to time. Continued use after changes constitutes acceptance. Questions? Email <a href="mailto:legal@dealervoice.com" className="text-gold-700 hover:underline">legal@dealervoice.com</a>.</p>
+            <p>We may update these terms from time to time. Continued use after changes constitutes acceptance. Questions? Email <a href="mailto:legal@dealervoice.io" className="text-gold-700 hover:underline">legal@dealervoice.io</a>.</p>
           </section>
         </div>
       </div>

@@ -24,25 +24,25 @@ export function ClaimProfileCTA({ dealerId, dealerName, dealerSlug }: Props) {
         Own {dealerName}?
       </h2>
       <p className="text-gray-400 text-sm md:text-base max-w-md mx-auto mb-5">
-        Claim this profile to remove competitor ads, respond to reviews, and link your live inventory.
+        Remove competitor ads, respond to reviews, and link your live inventory with a premium profile.
       </p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        <Link href={`/dealership/${dealerSlug}?claim=1`}>
+        <Link href={`/pricing?dealer=${dealerId}`}>
           <Button
             size="lg"
             className="w-full sm:w-auto bg-gold-gradient text-night-900 font-bold hover:opacity-90 border-0 gap-2"
           >
             <Sparkles size={16} aria-hidden />
-            Claim This Profile
+            Claim This Profile to Remove Ads
           </Button>
         </Link>
-        <Link href={`/pricing?dealer=${dealerId}`}>
+        <Link href={`/dealership/${dealerSlug}?claim=1`}>
           <Button
             size="lg"
             variant="outline"
             className="w-full sm:w-auto border-gold/40 text-gold-300 hover:bg-gold/10 hover:text-gold-200"
           >
-            View Premium Plans
+            Start Free Claim
           </Button>
         </Link>
       </div>

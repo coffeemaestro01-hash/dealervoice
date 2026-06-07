@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { EMAILS } from "@/lib/constants/emails";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -9,7 +10,7 @@ const FROM =
   process.env.EMAIL_FROM ||
   (process.env.EMAIL_DOMAIN
     ? `DealerVoice <noreply@${process.env.EMAIL_DOMAIN}>`
-    : "DealerVoice <onboarding@resend.dev>");
+    : `DealerVoice <${EMAILS.noreply}>`);
 
 export async function sendVerificationEmail(to: string, name: string, token: string) {
   const url = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${token}`;
@@ -137,6 +138,30 @@ export async function sendDsrConfirmation(to: string, name: string, kind: string
 <p>We'll complete it by <strong>${due}</strong> (within 30 days, as the Act requires). You can track it anytime under
 <a href="${process.env.NEXT_PUBLIC_APP_URL}/settings/privacy" style="color:#C9961E">Privacy &amp; Your Data</a>.</p>
 <p>Questions? Reply here or email <a href="mailto:dpo@dealervoice.io" style="color:#C9961E">dpo@dealervoice.io</a>.</p>`,
+    }),
+  });
+}
+
+export async function sendNewLeadNotification(
+  to: string,
+  dealerName: string,
+  lead: { name: string; email: string; phone?: string | null; vehicle?: string | null; message?: string | null; type: string }
+) {
+  const url = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/dealer/leads`;
+  return resend.emails.send({
+    from: FROM,
+    to,
+    subject: `New ${lead.type.toLowerCase()} lead for ${dealerName}`,
+    html: emailTemplate({
+      title: "New Customer Lead",
+      body: `<p><strong>${lead.name}</strong> submitted a request on your DealerVoice profile.</p>
+<ul style="padding-left:18px;color:#444">
+<li>Email: ${lead.email}</li>
+${lead.phone ? `<li>Phone: ${lead.phone}</li>` : ""}
+${lead.vehicle ? `<li>Vehicle: ${lead.vehicle}</li>` : ""}
+${lead.message ? `<li>Message: ${lead.message}</li>` : ""}
+</ul>
+<p><a href="${url}" style="background:#C9961E;color:#0a0a0a;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block">View in Dashboard</a></p>`,
     }),
   });
 }

@@ -42,7 +42,7 @@ export default function BlogPage() {
           <div className="rounded-2xl bg-night-gradient text-white p-8 text-center">
             <h3 className="text-xl font-bold mb-2">Get our newsletter</h3>
             <p className="text-gray-300 text-sm mb-5">Monthly insights on car buying and dealership trends. No spam.</p>
-            <form action="mailto:hello@dealervoice.com" method="post" encType="text/plain" className="flex gap-2 max-w-md mx-auto">
+            <form action="mailto:hello@dealervoice.io" method="post" encType="text/plain" className="flex gap-2 max-w-md mx-auto">
               <input name="email" type="email" required placeholder="you@email.com" className="flex-1 h-11 rounded-lg px-3 text-gray-900 focus:outline-none" />
               <button className="h-11 px-5 rounded-lg bg-gold-gradient text-night-900 font-semibold">Subscribe</button>
             </form>

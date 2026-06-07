@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/config";
 import prisma from "@/lib/db";
+import { publicDealerWhere } from "@/lib/dealer/status";
 import { WriteReviewForm } from "@/components/review/WriteReviewForm";
 import type { Metadata } from "next";
 
@@ -22,7 +23,7 @@ export default async function WriteReviewPage({ params }: Props) {
   if (!session?.user) redirect(`/login?callbackUrl=/write-review/${dealershipId}`);
 
   const dealer = await prisma.dealership.findUnique({
-    where: { id: dealershipId, status: "ACTIVE", deletedAt: null },
+    where: { id: dealershipId, ...publicDealerWhere },
     select: { id: true, name: true, slug: true, logoUrl: true, cityName: true, stateName: true, country: { select: { name: true } } },
   });
 

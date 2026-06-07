@@ -83,7 +83,7 @@ export default async function ClaimPage({ searchParams }: { searchParams: Promis
             {results.length === 0 ? (
               <p className="text-gray-600 text-sm">
                 We couldn&apos;t find that dealership. Try a different spelling, or{" "}
-                <a href="mailto:dealers@dealervoice.com" className="text-gold-700 hover:underline">contact us</a> to add it.
+                <a href="mailto:dealers@dealervoice.io" className="text-gold-700 hover:underline">contact us</a> to add it.
               </p>
             ) : (
               <div className="space-y-3">

@@ -134,7 +134,7 @@ export default async function DealerProfilePage({ params }: Props) {
                   <span className="ml-2 text-gray-400 font-normal">({dealer._count.reviews})</span>
                 </h2>
                 <Button asChild className="bg-gold-600 hover:bg-gold-700 text-white font-semibold">
-                  <Link href={`/dealership/${dealer.slug}/write-review`}>Write a Review</Link>
+                  <Link href={`/write-review/${dealer.id}`}>Write a Review</Link>
                 </Button>
               </div>
 
@@ -149,7 +149,7 @@ export default async function DealerProfilePage({ params }: Props) {
                     <h3 className="text-lg font-semibold text-gray-900">No reviews yet</h3>
                     <p className="text-gray-500 mt-1 mb-6">Be the first to share your experience with {dealer.name}.</p>
                     <Button asChild variant="outline" className="border-gold-600 text-gold-700 hover:bg-gold-50">
-                      <Link href={`/dealership/${dealer.slug}/write-review`}>Write a Review</Link>
+                      <Link href={`/write-review/${dealer.id}`}>Write a Review</Link>
                     </Button>
                   </div>
                 )}

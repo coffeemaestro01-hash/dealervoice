@@ -86,6 +86,7 @@ export const dealershipSchema = z.object({
   email: z.string().email().optional(),
   phone: z.string().max(20).optional(),
   website: z.string().url().optional(),
+  inventoryUrl: z.string().url().or(z.string().length(0)).optional().nullable(),
   address: z.string().max(500).optional(),
   cityName: z.string().max(100).optional(),
   stateName: z.string().max(100).optional(),
@@ -121,7 +122,7 @@ export const searchSchema = z.object({
   category: z.string().optional(),
   rating: z.coerce.number().min(1).max(5).optional(),
   verified: z.coerce.boolean().optional(),
-  sort: z.enum(["rating", "reviews", "newest", "relevance"]).optional(),
+  sort: z.enum(["rating", "reviews", "newest", "relevance", "reputation"]).optional(),
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(50).default(20),
 });

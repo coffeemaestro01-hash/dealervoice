@@ -12,7 +12,7 @@ export default function CookiesPage() {
           <section><h2 className="text-xl font-bold text-gray-900">What are cookies?</h2><p>Cookies are small text files stored on your device that help websites work and remember your preferences.</p></section>
           <section><h2 className="text-xl font-bold text-gray-900">How we use them</h2><p>We use <strong>essential cookies</strong> to keep you signed in and secure, and <strong>analytics cookies</strong> to understand how the site is used so we can improve it. We do not use cookies to sell your data.</p></section>
           <section><h2 className="text-xl font-bold text-gray-900">Managing cookies</h2><p>You can control or delete cookies in your browser settings. Disabling essential cookies may affect core features like signing in.</p></section>
-          <section><h2 className="text-xl font-bold text-gray-900">Questions</h2><p>Email <a href="mailto:privacy@dealervoice.com" className="text-gold-700 hover:underline">privacy@dealervoice.com</a>.</p></section>
+          <section><h2 className="text-xl font-bold text-gray-900">Questions</h2><p>Email <a href="mailto:privacy@dealervoice.io" className="text-gold-700 hover:underline">privacy@dealervoice.io</a>.</p></section>
         </div>
       </div>
     </div>

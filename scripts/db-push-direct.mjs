@@ -29,6 +29,15 @@ function loadEnvFile(name) {
   }
 }
 
+function toDirectUrl(raw) {
+  const url = new URL(raw);
+  if (url.port === "6543") url.port = "5432";
+  for (const key of ["pgbouncer", "connection_limit", "pool_timeout", "connect_timeout"]) {
+    url.searchParams.delete(key);
+  }
+  return url.toString();
+}
+
 loadEnvFile(".env.local");
 loadEnvFile(".env.production");
 
@@ -38,22 +47,16 @@ if (!base) {
   process.exit(1);
 }
 
-const direct = base
-  .replace(":6543/", ":5432/")
-  .replace(/[?&]pgbouncer=true(&|$)/g, (_, tail) => (tail === "&" ? "&" : ""))
-  .replace(/[?&]connection_limit=\d+(&|$)/g, (_, tail) => (tail === "&" ? "&" : ""))
-  .replace(/\?&/, "?")
-  .replace(/\?$/, "");
+process.env.DATABASE_URL = toDirectUrl(base);
 
-process.env.DATABASE_URL = direct;
-
-console.log("Applying schema via direct connection (port 5432)…");
+console.log("Applying schema via direct connection…");
+console.log("Target host:", new URL(process.env.DATABASE_URL).host);
 
 const result = spawnSync("npx", ["prisma", "db", "push", "--accept-data-loss"], {
   cwd: root,
   env: process.env,
   stdio: "inherit",
-  timeout: 90_000,
+  timeout: 120_000,
 });
 
 process.exit(result.status ?? 1);

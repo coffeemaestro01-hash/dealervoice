@@ -1,8 +1,9 @@
 import { MetadataRoute } from "next";
 import prisma from "@/lib/db";
+import { publicDealerWhere } from "@/lib/dealer/status";
 import { stateSlug } from "@/lib/geo";
 
-const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.com";
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.io";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let dealerships: { slug: string; updatedAt: Date }[] = [];
@@ -13,7 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     [dealerships, countries, cities, stateRows] = await Promise.all([
       prisma.dealership.findMany({
-        where: { status: "ACTIVE", deletedAt: null },
+        where: publicDealerWhere,
         select: { slug: true, updatedAt: true },
         orderBy: { reputationScore: "desc" },
         take: 50_000,

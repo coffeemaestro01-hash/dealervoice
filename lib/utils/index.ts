@@ -113,7 +113,7 @@ export function buildCityUrl(countryCode: string, citySlug: string): string {
 }
 
 export function absoluteUrl(path: string): string {
-  const base = process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.com";
+  const base = process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.io";
   return `${base}${path}`;
 }
 

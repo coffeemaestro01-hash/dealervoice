@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import prisma from "@/lib/db";
+import { publicDealerWhere } from "@/lib/dealer/status";
 import { DealerCard } from "@/components/dealership/DealerCard";
 import Link from "next/link";
 import { stateHref, stateSlug } from "@/lib/geo";
@@ -36,7 +37,7 @@ async function getStatesByCountry(countryId: string) {
 
 async function getDealersByCountry(countryId: string) {
   return prisma.dealership.findMany({
-    where: { countryId, status: "ACTIVE", deletedAt: null },
+    where: { countryId, ...publicDealerWhere },
     take: 20,
     orderBy: { reputationScore: "desc" },
     include: {

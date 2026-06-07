@@ -13,7 +13,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.io"),
   title: {
     default: "DealerVoice - Trusted Dealership Reviews Worldwide",
     template: "%s | DealerVoice",

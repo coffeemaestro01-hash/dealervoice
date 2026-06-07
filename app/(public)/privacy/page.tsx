@@ -31,7 +31,7 @@ export default function PrivacyPage() {
           </section>
           <section>
             <h2 className="text-xl font-bold text-gray-900">5. Your rights</h2>
-            <p>You may access, correct, export, or delete your personal data at any time from your account settings, or by contacting <a href="mailto:privacy@dealervoice.com" className="text-gold-700 hover:underline">privacy@dealervoice.com</a>. Depending on your region, you may have additional rights under GDPR, CCPA, or local law.</p>
+            <p>You may access, correct, export, or delete your personal data at any time from your account settings, or by contacting <a href="mailto:privacy@dealervoice.io" className="text-gold-700 hover:underline">privacy@dealervoice.io</a>. Depending on your region, you may have additional rights under GDPR, CCPA, or local law.</p>
           </section>
           <section>
             <h2 className="text-xl font-bold text-gray-900">6. Data security</h2>
@@ -39,7 +39,7 @@ export default function PrivacyPage() {
           </section>
           <section>
             <h2 className="text-xl font-bold text-gray-900">7. Contact</h2>
-            <p>Questions about this policy? Email <a href="mailto:privacy@dealervoice.com" className="text-gold-700 hover:underline">privacy@dealervoice.com</a>.</p>
+            <p>Questions about this policy? Email <a href="mailto:privacy@dealervoice.io" className="text-gold-700 hover:underline">privacy@dealervoice.io</a>.</p>
           </section>
         </div>
       </div>
