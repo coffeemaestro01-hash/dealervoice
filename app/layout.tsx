@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "@/components/layouts/Providers";
 import { Toaster } from "@/components/ui/toaster";
 import { CookieBanner } from "@/components/consent/CookieBanner";
+import { SupportChat } from "@/components/support/SupportChat";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -59,6 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>{children}</Providers>
         <Toaster />
         <CookieBanner />
+        <SupportChat />
       </body>
     </html>
   );
