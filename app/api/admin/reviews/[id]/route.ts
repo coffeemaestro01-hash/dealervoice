@@ -7,7 +7,8 @@ import { isAdminRole } from "@/lib/admin/guards";
 import { deleteCachePattern } from "@/lib/redis";
 
 const patchSchema = z.object({
-  status: z.enum(["PUBLISHED", "REMOVED", "FLAGGED", "UNDER_REVIEW", "PENDING"]),
+  status: z.enum(["PUBLISHED", "REMOVED", "FLAGGED", "UNDER_REVIEW", "PENDING"]).optional(),
+  verificationStatus: z.enum(["UNVERIFIED", "VERIFIED_PURCHASE", "VERIFIED_SERVICE", "PENDING"]).optional(),
 });
 
 export async function PATCH(req: NextRequest, props: { params: Promise<{ id: string }> }) {
@@ -24,7 +25,9 @@ export async function PATCH(req: NextRequest, props: { params: Promise<{ id: str
   }
 
   const parsed = patchSchema.safeParse(body);
-  if (!parsed.success) return NextResponse.json({ error: "Invalid status" }, { status: 422 });
+  if (!parsed.success || Object.keys(parsed.data).length === 0) {
+    return NextResponse.json({ error: "Nothing to update" }, { status: 422 });
+  }
 
   const review = await prisma.review.findUnique({
     where: { id },
@@ -32,15 +35,25 @@ export async function PATCH(req: NextRequest, props: { params: Promise<{ id: str
   });
   if (!review) return NextResponse.json({ error: "Review not found" }, { status: 404 });
 
+  const updateData: Record<string, unknown> = {};
+  if (parsed.data.status) {
+    updateData.status = parsed.data.status;
+    updateData.isFlagged = parsed.data.status === "FLAGGED";
+    if (parsed.data.status === "PUBLISHED") updateData.publishedAt = new Date();
+    if (parsed.data.status === "REMOVED") updateData.deletedAt = new Date();
+    else if (parsed.data.status) updateData.deletedAt = null;
+  }
+  if (parsed.data.verificationStatus) {
+    updateData.verificationStatus = parsed.data.verificationStatus;
+    if (parsed.data.verificationStatus.startsWith("VERIFIED")) {
+      updateData.verifiedAt = new Date();
+    }
+  }
+
   const updated = await prisma.review.update({
     where: { id },
-    data: {
-      status: parsed.data.status,
-      isFlagged: parsed.data.status === "FLAGGED",
-      ...(parsed.data.status === "PUBLISHED" ? { publishedAt: new Date() } : {}),
-      ...(parsed.data.status === "REMOVED" ? { deletedAt: new Date() } : { deletedAt: null }),
-    },
-    select: { id: true, status: true },
+    data: updateData,
+    select: { id: true, status: true, verificationStatus: true },
   });
 
   const modType =
@@ -48,7 +61,9 @@ export async function PATCH(req: NextRequest, props: { params: Promise<{ id: str
       ? "REVIEW_REMOVED"
       : parsed.data.status === "PUBLISHED"
         ? "REVIEW_APPROVED"
-        : "FLAG_DISMISSED";
+        : parsed.data.verificationStatus
+          ? "REVIEW_APPROVED"
+          : "FLAG_DISMISSED";
 
   await prisma.moderationAction.create({
     data: {

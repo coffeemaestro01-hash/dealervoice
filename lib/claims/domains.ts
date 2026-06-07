@@ -26,6 +26,7 @@ export function shouldAutoApproveClaim(
   dealership: { website?: string | null; email?: string | null }
 ): boolean {
   if (process.env.CLAIM_AUTO_APPROVE_ALL === "true") return true;
+  // PlatformSetting checked at runtime in API if needed; env is fallback
 
   const claimDomain = normalizeDomain(businessEmail);
   if (!claimDomain) return false;

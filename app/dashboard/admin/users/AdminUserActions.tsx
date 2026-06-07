@@ -103,7 +103,7 @@ export function AdminUserActions({ id, email, status, role, actorRole }: Props) 
             <DropdownMenuItem disabled className="text-xs text-gray-400 font-semibold">
               Change role
             </DropdownMenuItem>
-            {(["CUSTOMER", "DEALER_OWNER", "MODERATOR"] as const).map((r) =>
+            {(["CUSTOMER", "DEALER_OWNER", "SUPPORT", "REVENUE", "MODERATOR"] as const).map((r) =>
               r !== role ? (
                 <DropdownMenuItem key={r} onClick={() => patch({ role: r })}>
                   → {r.replace(/_/g, " ")}

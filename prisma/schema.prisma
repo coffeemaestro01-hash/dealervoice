@@ -19,6 +19,8 @@ enum UserRole {
   CUSTOMER
   DEALER_OWNER
   DEALER_GROUP_ADMIN
+  SUPPORT
+  REVENUE
   MODERATOR
   SUPER_ADMIN
 }
@@ -178,6 +180,7 @@ model User {
   notifications    Notification[]
   dsrRequests      DsrRequest[]
   moderationActions ModerationAction[] @relation("ModeratorActions")
+  adminNotes         AdminNote[]       @relation("AdminNoteAuthor")
 
   @@index([email])
   @@index([role])
@@ -361,6 +364,9 @@ model Dealership {
   // Flags
   isFeatured          Boolean        @default(false)
   isSponsored         Boolean        @default(false)
+  sponsorLabel        String?
+  sponsoredUntil      DateTime?
+  homepagePinOrder    Int?
   isVerified          Boolean        @default(false)
   isPremiumClaimed    Boolean        @default(false) @map("is_premium_claimed")
   inventoryUrl        String?
@@ -826,6 +832,40 @@ model CmsPage {
 // ─────────────────────────────────────────────
 // AUDIT
 // ─────────────────────────────────────────────
+
+model AdminNote {
+  id         String   @id @default(cuid())
+  authorId   String
+  targetType String
+  targetId   String
+  body       String   @db.Text
+  createdAt  DateTime @default(now())
+
+  author     User     @relation("AdminNoteAuthor", fields: [authorId], references: [id])
+
+  @@index([targetType, targetId])
+  @@index([createdAt])
+}
+
+model PlatformSetting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+}
+
+model WebhookLog {
+  id        String   @id @default(cuid())
+  provider  String
+  event     String
+  payload   Json
+  status    String
+  error     String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([provider, event])
+}
 
 model AuditLog {
   id         String   @id @default(cuid())

@@ -7,7 +7,7 @@ import { canManageUser, isAdminRole, isSuperAdmin } from "@/lib/admin/guards";
 
 const patchSchema = z.object({
   status: z.enum(["ACTIVE", "SUSPENDED", "BANNED", "PENDING_VERIFICATION"]).optional(),
-  role: z.enum(["CUSTOMER", "DEALER_OWNER", "DEALER_GROUP_ADMIN", "MODERATOR", "SUPER_ADMIN"]).optional(),
+  role: z.enum(["CUSTOMER", "DEALER_OWNER", "DEALER_GROUP_ADMIN", "SUPPORT", "REVENUE", "MODERATOR", "SUPER_ADMIN"]).optional(),
 });
 
 export async function PATCH(req: NextRequest, props: { params: Promise<{ id: string }> }) {

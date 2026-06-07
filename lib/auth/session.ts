@@ -25,7 +25,12 @@ export async function requireRole(...roles: UserRole[]) {
 }
 
 export function isAdmin(role: string) {
-  return role === UserRole.MODERATOR || role === UserRole.SUPER_ADMIN;
+  return (
+    role === UserRole.MODERATOR ||
+    role === UserRole.SUPER_ADMIN ||
+    role === UserRole.SUPPORT ||
+    role === UserRole.REVENUE
+  );
 }
 
 export function isDealerAdmin(role: string) {

@@ -5,6 +5,23 @@ import { TrendingUp } from "lucide-react";
 import { publicDealerWhere } from "@/lib/dealer/status";
 
 async function getTrendingDealers() {
+  const pinned = await prisma.dealership.findMany({
+    where: { ...publicDealerWhere, homepagePinOrder: { not: null } },
+    orderBy: { homepagePinOrder: "asc" },
+    take: 9,
+    include: {
+      country: { select: { name: true, code: true } },
+      city: { select: { name: true, slug: true } },
+      brands: {
+        include: { brand: { select: { name: true, slug: true, logoUrl: true } } },
+        take: 5,
+      },
+      subscription: { select: { plan: true } },
+    },
+  });
+
+  if (pinned.length >= 6) return pinned;
+
   const withReviews = await prisma.dealership.findMany({
     where: { ...publicDealerWhere, totalReviews: { gt: 0 } },
     take: 9,
@@ -25,7 +42,12 @@ async function getTrendingDealers() {
     },
   });
 
-  if (withReviews.length >= 6) return withReviews;
+  const pinnedIds = new Set(pinned.map((d) => d.id));
+
+  if (pinned.length + withReviews.filter((d) => !pinnedIds.has(d.id)).length >= 6) {
+    const seen = new Set(pinned.map((d) => d.id));
+    return [...pinned, ...withReviews.filter((d) => !seen.has(d.id))].slice(0, 9);
+  }
 
   const fallback = await prisma.dealership.findMany({
     where: publicDealerWhere,
@@ -47,8 +69,8 @@ async function getTrendingDealers() {
     },
   });
 
-  const seen = new Set(withReviews.map((d) => d.id));
-  return [...withReviews, ...fallback.filter((d) => !seen.has(d.id))].slice(0, 9);
+  const seen = new Set([...pinned, ...withReviews].map((d) => d.id));
+  return [...pinned, ...withReviews, ...fallback.filter((d) => !seen.has(d.id))].slice(0, 9);
 }
 
 export async function TrendingLocalDealers() {

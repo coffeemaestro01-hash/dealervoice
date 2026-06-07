@@ -17,6 +17,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
 
+  let status = "success";
+  let errorMsg: string | null = null;
+
   try {
     switch (event.event) {
       case "subscription.authenticated":
@@ -106,8 +109,20 @@ export async function POST(req: NextRequest) {
       }
     }
   } catch (err) {
+    status = "error";
+    errorMsg = err instanceof Error ? err.message : "Unknown error";
     console.error("Razorpay webhook error:", err);
   }
+
+  await prisma.webhookLog.create({
+    data: {
+      provider: "razorpay",
+      event: event.event ?? "unknown",
+      payload: event as object,
+      status,
+      error: errorMsg,
+    },
+  }).catch(() => {});
 
   return NextResponse.json({ received: true });
 }

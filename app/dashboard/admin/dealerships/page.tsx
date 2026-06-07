@@ -106,6 +106,9 @@ export default async function AdminDealershipsPage({
                   <Link href={`/dealership/${d.slug}`} target="_blank" className="font-medium text-gray-900 hover:text-gold-700 inline-flex items-center gap-1">
                     {d.name} <ExternalLink size={12} className="text-gray-300" />
                   </Link>
+                  <Link href={`/dashboard/admin/dealerships/${d.id}/preview`} className="text-[10px] text-gold-600 hover:underline block mt-0.5">
+                    Support preview
+                  </Link>
                   <div className="flex gap-1.5 mt-1">
                     {d.isFeatured && <Badge variant="outline" className="bg-gold-50 text-gold-700 border-gold/30 text-[10px]">Featured</Badge>}
                     {d.isVerified && <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-[10px]">Verified</Badge>}

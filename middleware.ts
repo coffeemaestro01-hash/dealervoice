@@ -66,7 +66,8 @@ export async function middleware(req: NextRequest) {
     const role = token.role as string;
 
     if (ADMIN_PATHS.some((p) => pathname.startsWith(p))) {
-      if (role !== "MODERATOR" && role !== "SUPER_ADMIN") {
+      const staff = ["MODERATOR", "SUPER_ADMIN", "SUPPORT", "REVENUE"];
+      if (!staff.includes(role)) {
         return NextResponse.redirect(new URL("/", req.url));
       }
     }

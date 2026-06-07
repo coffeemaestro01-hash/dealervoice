@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth/config";
 import prisma from "@/lib/db";
 import { claimSchema } from "@/lib/validations";
 import { shouldAutoApproveClaim } from "@/lib/claims/domains";
+import { getFeatureFlag } from "@/lib/admin/feature-flags";
 import { approveDealerClaim } from "@/lib/claims/approveClaim";
 import { sendNewClaimNotification, sendClaimApprovedEmail } from "@/lib/email";
 
@@ -39,7 +40,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "A claim for this dealership is already pending or approved." }, { status: 409 });
   }
 
-  const autoApprove = shouldAutoApproveClaim(businessEmail, dealership);
+  const autoApproveAll = await getFeatureFlag<boolean>("CLAIM_AUTO_APPROVE_ALL");
+  const autoApprove = autoApproveAll || shouldAutoApproveClaim(businessEmail, dealership);
 
   const claim = await prisma.dealerClaim.create({
     data: {

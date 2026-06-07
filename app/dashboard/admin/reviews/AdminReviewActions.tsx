@@ -14,7 +14,7 @@ export function AdminReviewActions({ id, status }: Props) {
   const router = useRouter();
   const [busy, setBusy] = useState<string | null>(null);
 
-  async function patch(key: string, data: { status: string }) {
+  async function patch(key: string, data: { status?: string; verificationStatus?: string }) {
     setBusy(key);
     try {
       const res = await fetch(`/api/admin/reviews/${id}`, {
@@ -64,6 +64,16 @@ export function AdminReviewActions({ id, status }: Props) {
           {busy === "remove" ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
         </Button>
       )}
+      <Button
+        size="sm"
+        variant="outline"
+        disabled={busy !== null}
+        onClick={() => patch("verify", { verificationStatus: "VERIFIED_PURCHASE" })}
+        title="Mark verified purchase"
+        className="text-green-700 border-green-200"
+      >
+        {busy === "verify" ? <Loader2 size={13} className="animate-spin" /> : "✓"}
+      </Button>
     </div>
   );
 }
