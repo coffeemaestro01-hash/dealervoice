@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Search, ExternalLink, MapPin } from "lucide-react";
 import { AdminDealerActions } from "./AdminDealerActions";
+import { AdminCreateDealerDialog } from "./AdminCreateDealerDialog";
 
 export const dynamic = "force-dynamic";
 
@@ -47,6 +48,10 @@ export default async function AdminDealershipsPage({
     },
   });
   const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
+  const countries = await prisma.country.findMany({
+    orderBy: { name: "asc" },
+    select: { id: true, name: true, code: true },
+  });
 
   const qs = (overrides: Record<string, string | number>) => {
     const p = new URLSearchParams();
@@ -60,9 +65,12 @@ export default async function AdminDealershipsPage({
 
   return (
     <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dealerships</h1>
-        <p className="text-gray-500 mt-1">{total.toLocaleString()} listings · manage status, featuring, and verification.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Dealerships</h1>
+          <p className="text-gray-500 mt-1">{total.toLocaleString()} listings · create, feature, verify, suspend, or remove.</p>
+        </div>
+        {user.role === "SUPER_ADMIN" && <AdminCreateDealerDialog countries={countries} />}
       </div>
 
       {/* Search + filters */}
@@ -115,7 +123,7 @@ export default async function AdminDealershipsPage({
                   }>{d.status}</Badge>
                 </td>
                 <td className="px-4 py-3 text-gray-600 hidden sm:table-cell">{d.totalReviews}</td>
-                <td className="px-4 py-3"><div className="flex justify-end"><AdminDealerActions id={d.id} status={d.status} isFeatured={d.isFeatured} isVerified={d.isVerified} /></div></td>
+                <td className="px-4 py-3"><div className="flex justify-end"><AdminDealerActions id={d.id} name={d.name} status={d.status} isFeatured={d.isFeatured} isVerified={d.isVerified} canDelete={user.role === "SUPER_ADMIN"} /></div></td>
               </tr>
             ))}
           </tbody>

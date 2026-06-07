@@ -98,6 +98,20 @@ export const dealershipSchema = z.object({
   yearEstablished: z.number().int().min(1800).max(new Date().getFullYear()).optional(),
 });
 
+export const blogPostSchema = z.object({
+  title: z.string().min(3).max(200),
+  slug: z.string().min(3).max(200).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  excerpt: z.string().max(500).optional(),
+  content: z.string().min(20),
+  coverImage: z.string().url().optional().or(z.literal("")),
+  authorName: z.string().min(2).max(100),
+  category: z.string().max(50).optional(),
+  tags: z.array(z.string()).optional(),
+  isPublished: z.boolean().optional(),
+  metaTitle: z.string().max(70).optional(),
+  metaDesc: z.string().max(160).optional(),
+});
+
 export const claimSchema = z.object({
   dealershipId: z.string().cuid(),
   businessEmail: z.string().email(),

@@ -97,6 +97,21 @@ export function AdminUserActions({ id, email, status, role, actorRole }: Props) 
             Ban
           </DropdownMenuItem>
         )}
+        {isSuperAdmin && role !== "SUPER_ADMIN" && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem disabled className="text-xs text-gray-400 font-semibold">
+              Change role
+            </DropdownMenuItem>
+            {(["CUSTOMER", "DEALER_OWNER", "MODERATOR"] as const).map((r) =>
+              r !== role ? (
+                <DropdownMenuItem key={r} onClick={() => patch({ role: r })}>
+                  → {r.replace(/_/g, " ")}
+                </DropdownMenuItem>
+              ) : null
+            )}
+          </>
+        )}
         {isSuperAdmin && !protectedRole && (
           <>
             <DropdownMenuSeparator />

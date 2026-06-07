@@ -199,6 +199,28 @@ ${lead.message ? `<li>Message: ${lead.message}</li>` : ""}
   });
 }
 
+export async function sendClaimDocumentsRequiredEmail(
+  to: string,
+  name: string,
+  dealerName: string,
+  message: string
+) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.io";
+  return resend.emails.send({
+    from: FROM,
+    to,
+    subject: `More documents needed for your ${dealerName} claim`,
+    html: emailTemplate({
+      title: "Additional Documents Required",
+      body: `<p>Hi ${name},</p>
+<p>We're reviewing your claim for <strong>${dealerName}</strong> and need more information before we can approve it.</p>
+<p style="background:#f9fafb;border-left:4px solid #C9961E;padding:12px 16px;margin:16px 0">${message}</p>
+<p>Please upload the requested documents and resubmit from your dealership profile.</p>
+<p><a href="${appUrl}/dashboard/dealer" style="background:#C9961E;color:#0a0a0a;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block">Go to Dashboard</a></p>`,
+    }),
+  });
+}
+
 export async function sendClaimApprovedEmail(to: string, name: string, dealerName: string) {
   const url = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/dealer`;
   return resend.emails.send({

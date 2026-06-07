@@ -2,17 +2,19 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Star, ShieldCheck, Ban, RotateCcw, Loader2 } from "lucide-react";
+import { Star, ShieldCheck, Ban, RotateCcw, Loader2, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Props {
   id: string;
+  name: string;
   status: string;
   isFeatured: boolean;
   isVerified: boolean;
+  canDelete?: boolean;
 }
 
-export function AdminDealerActions({ id, status, isFeatured, isVerified }: Props) {
+export function AdminDealerActions({ id, name, status, isFeatured, isVerified, canDelete }: Props) {
   const router = useRouter();
   const [busy, setBusy] = useState<string | null>(null);
 
@@ -31,6 +33,21 @@ export function AdminDealerActions({ id, status, isFeatured, isVerified }: Props
   }
 
   const suspended = status === "SUSPENDED";
+
+  async function remove() {
+    if (!confirm(`Remove "${name}" from the directory?\n\nThis soft-deletes the listing.`)) return;
+    setBusy("delete");
+    try {
+      const res = await fetch(`/api/admin/dealerships/${id}`, { method: "DELETE" });
+      if (res.ok) router.refresh();
+      else {
+        const json = await res.json().catch(() => ({}));
+        alert(json.error || "Delete failed");
+      }
+    } finally {
+      setBusy(null);
+    }
+  }
 
   return (
     <div className="flex items-center gap-1.5">
@@ -61,6 +78,18 @@ export function AdminDealerActions({ id, status, isFeatured, isVerified }: Props
       >
         {busy === "status" ? <Loader2 size={13} className="animate-spin" /> : suspended ? <RotateCcw size={13} /> : <Ban size={13} />}
       </Button>
+      {canDelete && (
+        <Button
+          size="sm"
+          variant="outline"
+          disabled={busy !== null}
+          onClick={remove}
+          className="border-red-200 text-red-600 hover:bg-red-50"
+          title="Remove listing"
+        >
+          {busy === "delete" ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
+        </Button>
+      )}
     </div>
   );
 }

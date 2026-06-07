@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, Store, MessageSquare, CreditCard, Flag, FileText, Star, ClipboardCheck } from "lucide-react";
+import { LayoutDashboard, Users, Store, MessageSquare, CreditCard, Flag, FileText, Star, ClipboardCheck, ScrollText } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -14,6 +14,7 @@ const NAV = [
   { href: "/dashboard/admin/moderation", icon: Flag, label: "Moderation" },
   { href: "/dashboard/admin/subscriptions", icon: CreditCard, label: "Subscriptions" },
   { href: "/dashboard/admin/cms", icon: FileText, label: "CMS" },
+  { href: "/dashboard/admin/audit", icon: ScrollText, label: "Audit log" },
 ];
 
 export function AdminDashboardLayout({ children }: { children: React.ReactNode }) {

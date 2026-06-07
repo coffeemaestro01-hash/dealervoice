@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import prisma from "@/lib/db";
 import { Badge } from "@/components/ui/badge";
+import { AdminSubscriptionActions } from "./AdminSubscriptionActions";
 
 export const dynamic = "force-dynamic";
 
@@ -26,7 +27,8 @@ export default async function AdminSubscriptionsPage() {
 
   return (
     <div className="p-6 lg:p-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Subscriptions</h1>
+      <h1 className="text-2xl font-bold text-gray-900 mb-2">Subscriptions</h1>
+      <p className="text-sm text-gray-500 mb-6">Manually upgrade, downgrade, or cancel dealer plans.</p>
       <div className="grid grid-cols-3 gap-4 mb-8">
         {(["FREE", "PRO", "ENTERPRISE"] as const).map((plan) => (
           <div key={plan} className="bg-white rounded-xl border border-gray-100 p-4 text-center">
@@ -35,14 +37,15 @@ export default async function AdminSubscriptionsPage() {
           </div>
         ))}
       </div>
-      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden overflow-x-auto">
+        <table className="w-full text-sm min-w-[700px]">
           <thead className="bg-gray-50 text-left text-gray-500">
             <tr>
               <th className="px-4 py-3">Dealership</th>
               <th className="px-4 py-3">Plan</th>
               <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3">Renews</th>
+              <th className="px-4 py-3">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
@@ -54,10 +57,17 @@ export default async function AdminSubscriptionsPage() {
                   </Link>
                   <p className="text-xs text-gray-400">{s.dealership.cityName}</p>
                 </td>
-                <td className="px-4 py-3"><Badge>{s.plan}</Badge></td>
-                <td className="px-4 py-3"><Badge variant="outline">{s.status}</Badge></td>
+                <td className="px-4 py-3">
+                  <Badge>{s.plan}</Badge>
+                </td>
+                <td className="px-4 py-3">
+                  <Badge variant="outline">{s.status}</Badge>
+                </td>
                 <td className="px-4 py-3 text-gray-500">
                   {s.currentPeriodEnd ? new Date(s.currentPeriodEnd).toLocaleDateString() : "—"}
+                </td>
+                <td className="px-4 py-3">
+                  <AdminSubscriptionActions id={s.id} plan={s.plan} status={s.status} />
                 </td>
               </tr>
             ))}
