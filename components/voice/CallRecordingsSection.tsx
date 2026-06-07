@@ -2,9 +2,10 @@
 
 import { useState, useCallback } from "react";
 import { Play, Pause, CheckCircle2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { CALL_SAMPLES } from "@/lib/marketing/voice";
 import { cn } from "@/lib/utils";
+import { SectionHeader } from "@/components/luxury/SectionHeader";
+import { LuxuryMesh } from "@/components/luxury/LuxuryMesh";
 
 export function CallRecordingsSection() {
   const [activeId, setActiveId] = useState(CALL_SAMPLES[0].id);
@@ -24,7 +25,6 @@ export function CallRecordingsSection() {
     stop();
     setPlaying(true);
     let i = 0;
-
     const speakNext = () => {
       if (i >= sample.transcript.length) {
         setPlaying(false);
@@ -35,36 +35,32 @@ export function CallRecordingsSection() {
       const line = sample.transcript[i];
       const utter = new SpeechSynthesisUtterance(line.text);
       utter.rate = line.speaker === "DealerVoice" ? 1.05 : 0.95;
-      utter.pitch = line.speaker === "DealerVoice" ? 1 : 1.05;
-      utter.onend = () => { i++; setTimeout(speakNext, 400); };
+      utter.onend = () => { i++; setTimeout(speakNext, 450); };
       window.speechSynthesis.speak(utter);
     };
     speakNext();
   }, [sample, stop]);
 
   return (
-    <section id="call-samples" className="py-16 md:py-20 bg-night-soft border-y border-white/5 scroll-mt-20">
-      <div className="container">
-        <div className="text-center mb-10 max-w-2xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold text-white">
-            Hear a <span className="text-gold">real conversation</span>
-          </h2>
-          <p className="text-gray-400 mt-2">
-            Skeptical AI sounds robotic? Listen to how DealerVoice books appointments naturally.
-            <span className="block text-xs text-gray-500 mt-1">Demo playback uses your browser voice engine · production uses human-quality AI voice</span>
-          </p>
-        </div>
+    <section id="call-samples" className="relative py-24 md:py-32 bg-night-soft border-y border-white/[0.06] scroll-mt-24 overflow-hidden">
+      <LuxuryMesh className="opacity-50" />
+      <div className="container relative">
+        <SectionHeader
+          eyebrow="Live proof"
+          title={<>Hear the <span className="text-gold italic">conversation</span></>}
+          subtitle="Skeptical AI sounds robotic? Listen to how DealerVoice books appointments — naturally, professionally, instantly."
+        />
 
-        <div className="flex flex-wrap justify-center gap-2 mb-8">
+        <div className="flex flex-wrap justify-center gap-3 mb-10">
           {CALL_SAMPLES.map((s) => (
             <button
               key={s.id}
               onClick={() => { stop(); setActiveId(s.id); }}
               className={cn(
-                "px-4 py-2 rounded-full text-sm font-medium transition-colors border",
+                "px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border",
                 activeId === s.id
-                  ? "bg-gold-500/20 border-gold/50 text-gold-300"
-                  : "border-white/10 text-gray-400 hover:border-white/20"
+                  ? "bg-gold-500/15 border-gold/50 text-gold-300 shadow-gold"
+                  : "border-white/10 text-gray-500 hover:border-gold/30 hover:text-gray-300"
               )}
             >
               {s.title}
@@ -73,39 +69,39 @@ export function CallRecordingsSection() {
         </div>
 
         <div className="grid lg:grid-cols-5 gap-6 max-w-5xl mx-auto">
-          <div className="lg:col-span-2 card-dark rounded-2xl border border-white/10 p-6">
-            <p className="text-white font-semibold mb-1">{sample.title}</p>
-            <p className="text-gray-500 text-sm mb-4">{sample.duration} · Demo call</p>
-            <Button
+          <div className="lg:col-span-2 luxury-card p-7">
+            <p className="font-display text-xl text-white font-semibold mb-1">{sample.title}</p>
+            <p className="text-gray-500 text-sm mb-6">{sample.duration} · Demonstration</p>
+            <button
               onClick={playing ? stop : play}
-              className="w-full bg-gold-gradient text-night-900 font-semibold border-0 gap-2 mb-4"
+              className="w-full h-12 rounded-full flex items-center justify-center gap-2 btn-luxury-primary text-night-900 font-semibold text-sm mb-5"
             >
-              {playing ? <><Pause size={16} /> Stop</> : <><Play size={16} /> Play Sample Call</>}
-            </Button>
-            <div className="flex items-start gap-2 text-sm text-green-400 bg-green-500/10 border border-green-500/20 rounded-lg p-3">
-              <CheckCircle2 size={16} className="shrink-0 mt-0.5" />
+              {playing ? <><Pause size={16} /> Stop playback</> : <><Play size={16} /> Play sample call</>}
+            </button>
+            <div className="flex items-start gap-3 text-sm text-green-400 bg-green-500/10 border border-green-500/20 rounded-xl p-4">
+              <CheckCircle2 size={18} className="shrink-0 mt-0.5" />
               <span>{sample.outcome}</span>
             </div>
           </div>
 
-          <div className="lg:col-span-3 card-dark rounded-2xl border border-white/10 p-6 max-h-[22rem] overflow-y-auto">
-            <p className="text-xs uppercase tracking-wider text-gray-500 mb-4">Transcript</p>
+          <div className="lg:col-span-3 luxury-card p-6 max-h-[26rem] overflow-y-auto">
+            <p className="text-[10px] uppercase tracking-luxury text-gray-500 mb-4 font-semibold">Transcript</p>
             <div className="space-y-3">
               {sample.transcript.map((line, i) => (
                 <div
                   key={i}
                   className={cn(
-                    "rounded-lg px-3 py-2 text-sm transition-colors",
-                    lineIndex === i ? "bg-gold-500/15 border border-gold/30" : "bg-white/5"
+                    "rounded-xl px-4 py-3 text-sm transition-all duration-300",
+                    lineIndex === i ? "bg-gold-500/15 border border-gold/30 shadow-gold" : "bg-white/[0.03] border border-transparent"
                   )}
                 >
                   <span className={cn(
-                    "text-xs font-semibold uppercase tracking-wide",
-                    line.speaker === "DealerVoice" ? "text-gold-400" : "text-gray-400"
+                    "text-[10px] font-semibold uppercase tracking-luxury",
+                    line.speaker === "DealerVoice" ? "text-gold-400" : "text-gray-500"
                   )}>
                     {line.speaker}
                   </span>
-                  <p className="text-gray-200 mt-0.5">{line.text}</p>
+                  <p className="text-gray-200 mt-1 leading-relaxed">{line.text}</p>
                 </div>
               ))}
             </div>

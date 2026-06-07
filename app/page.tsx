@@ -15,12 +15,12 @@ import { DemoCtaSection } from "@/components/voice/DemoCtaSection";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "DealerVoice - Turn Missed Calls Into Booked Appointments",
+  title: "DealerVoice — AI Voice Intelligence for Automotive Dealerships",
   description:
-    "AI voice automation for car dealerships. Answer service and sales calls 24/7, book appointments automatically, and recover lost revenue.",
+    "The AI voice platform built to rule automotive retail. Turn missed calls into booked appointments — 24/7, integrated with your DMS & CRM.",
   openGraph: {
-    title: "DealerVoice - Revenue Recovery for Dealerships",
-    description: "Turn missed calls into booked service appointments with AI voice automation.",
+    title: "DealerVoice — Revenue Recovery for Dealerships",
+    description: "Turn missed calls into booked service appointments. Luxury-grade AI voice for the automotive industry.",
   },
 };
 

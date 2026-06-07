@@ -1,90 +1,136 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
-import { Phone, Play, Calculator, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Sparkles, Play, Calculator, ArrowRight, PhoneCall } from "lucide-react";
 import { VOICE_HERO } from "@/lib/marketing/voice";
+import { LuxuryMesh } from "@/components/luxury/LuxuryMesh";
+import { LuxuryButton } from "@/components/luxury/LuxuryButton";
+
+const MARQUEE = [
+  "AI Voice for Dealerships",
+  "24/7 Appointment Booking",
+  "DMS & CRM Integrated",
+  "Revenue Recovery",
+  "Service · Sales · BDC",
+  "Built for Automotive",
+];
 
 export function VoiceHeroSection() {
   return (
-    <section className="relative bg-night overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_70%_60%_at_50%_-10%,rgba(251,101,20,0.14),transparent_60%)]" />
-      <div className="absolute top-20 -right-24 w-[28rem] h-[28rem] bg-gold-500/12 rounded-full blur-[120px] pointer-events-none" />
+    <section className="relative min-h-[92vh] flex flex-col bg-night overflow-hidden">
+      <LuxuryMesh />
 
-      <div className="container relative py-14 md:py-20 lg:py-28">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div className="container relative flex-1 flex flex-col justify-center py-20 md:py-28 lg:py-32">
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            className="lg:col-span-7"
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="inline-flex items-center gap-2 bg-gold-500/10 border border-gold/40 rounded-full px-4 py-1.5 text-sm text-gold-400 font-medium mb-6">
-              <Phone size={14} />
+            <div className="luxury-pill mb-8">
+              <span className="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_10px_#22c55e] animate-glow-pulse" />
+              <Sparkles size={13} className="text-gold-400" />
               {VOICE_HERO.badge}
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-extrabold tracking-tight text-white leading-[1.1] mb-5">
-              {VOICE_HERO.headline}
+            <h1 className="font-display text-[2.5rem] sm:text-5xl md:text-6xl lg:text-[4.25rem] font-semibold text-white leading-[1.05] tracking-tight mb-6">
+              Turn missed calls into{" "}
+              <span className="text-gold italic">booked</span>{" "}
+              appointments.
             </h1>
 
-            <p className="text-lg text-gray-400 mb-8 max-w-xl leading-relaxed">
+            <p className="text-lg md:text-xl text-gray-400/95 max-w-xl leading-relaxed mb-10 font-light">
               {VOICE_HERO.subheadline}
             </p>
 
-            <div className="flex flex-col sm:flex-row flex-wrap gap-3 mb-8">
-              <Link href="/demo">
-                <Button size="lg" className="w-full sm:w-auto h-12 px-8 bg-gold-gradient text-night-900 hover:opacity-90 font-semibold border-0 shadow-gold gap-2">
-                  Book a Demo
-                  <ArrowRight size={16} />
-                </Button>
-              </Link>
-              <a href="#call-samples">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto h-12 border-gold/50 text-gold-300 bg-transparent hover:bg-gold-500/15 gap-2">
-                  <Play size={16} />
-                  Listen to a Real Call
-                </Button>
-              </a>
-              <a href="#roi-calculator">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto h-12 border-white/20 text-gray-200 bg-transparent hover:bg-white/5 gap-2">
-                  <Calculator size={16} />
-                  Calculate ROI
-                </Button>
-              </a>
+            <div className="flex flex-col sm:flex-row flex-wrap gap-4 mb-10">
+              <LuxuryButton href="/demo" variant="primary" icon={<ArrowRight size={16} />}>
+                Book a Private Demo
+              </LuxuryButton>
+              <LuxuryButton href="#call-samples" variant="outline" icon={<Play size={15} />}>
+                Hear a Live Call
+              </LuxuryButton>
+              <LuxuryButton href="#roi-calculator" variant="ghost" icon={<Calculator size={15} />}>
+                Calculate ROI
+              </LuxuryButton>
             </div>
 
-            <p className="text-gray-500 text-sm">
-              No long-term contract · Go live in 2–4 weeks · Integrates with your DMS &amp; CRM
-            </p>
+            <div className="flex flex-wrap gap-x-8 gap-y-2 text-xs text-gray-500 tracking-wide">
+              {["No long-term contract", "Live in 2–4 weeks", "Enterprise-grade security"].map((t) => (
+                <span key={t} className="flex items-center gap-2">
+                  <span className="w-1 h-1 rounded-full bg-gold-500" />
+                  {t}
+                </span>
+              ))}
+            </div>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="card-dark rounded-2xl border border-white/10 p-6 md:p-8 shadow-2xl shadow-black/40"
+            className="lg:col-span-5"
+            initial={{ opacity: 0, scale: 0.96, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
           >
-            <p className="text-xs uppercase tracking-wider text-gold-400 font-semibold mb-4">Live dashboard preview</p>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between rounded-xl bg-white/5 border border-white/10 px-4 py-3">
-                <span className="text-gray-400 text-sm">Calls answered today</span>
-                <span className="text-2xl font-bold text-white">47</span>
+            <div className="luxury-card p-6 md:p-8 animate-float">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <p className="text-[10px] uppercase tracking-luxury text-gold-400/90 font-semibold">Command Center</p>
+                  <p className="text-white font-medium mt-1">Today&apos;s performance</p>
+                </div>
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/25">
+                  <span className="w-2 h-2 rounded-full bg-green-400 animate-glow-pulse" />
+                  <span className="text-green-400 text-xs font-medium">AI Active</span>
+                </div>
               </div>
-              <div className="flex items-center justify-between rounded-xl bg-white/5 border border-white/10 px-4 py-3">
-                <span className="text-gray-400 text-sm">Appointments booked</span>
-                <span className="text-2xl font-bold text-green-400">12</span>
+
+              <div className="space-y-3">
+                {[
+                  { label: "Calls answered", value: "47", accent: false },
+                  { label: "Appointments booked", value: "12", accent: false },
+                  { label: "Revenue recovered", value: "$4,200", accent: true },
+                ].map((row) => (
+                  <div
+                    key={row.label}
+                    className={`flex items-center justify-between rounded-xl px-4 py-3.5 ${
+                      row.accent
+                        ? "bg-gold-500/10 border border-gold/30"
+                        : "bg-white/[0.04] border border-white/[0.08]"
+                    }`}
+                  >
+                    <span className="text-gray-400 text-sm">{row.label}</span>
+                    <span className={`luxury-stat text-2xl font-semibold ${row.accent ? "text-gold" : "text-white"}`}>
+                      {row.value}
+                    </span>
+                  </div>
+                ))}
               </div>
-              <div className="flex items-center justify-between rounded-xl bg-gold-500/10 border border-gold/30 px-4 py-3">
-                <span className="text-gold-300 text-sm font-medium">Revenue recovered (est.)</span>
-                <span className="text-2xl font-bold text-gold-400">$4,200</span>
-              </div>
-              <div className="rounded-xl bg-white/5 border border-white/10 p-4">
-                <p className="text-xs text-gray-500 mb-2">Latest booked appointment</p>
-                <p className="text-white text-sm font-medium">Oil change + inspection · Thu 9:30 AM</p>
-                <p className="text-gray-500 text-xs mt-1">2021 Ford Explorer · RO est. $189</p>
+
+              <div className="mt-5 rounded-xl bg-black/30 border border-white/[0.06] p-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gold-500/15 border border-gold/30 flex items-center justify-center">
+                    <PhoneCall size={18} className="text-gold-400" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white text-sm font-medium truncate">Oil change · Thu 9:30 AM</p>
+                    <p className="text-gray-500 text-xs">2021 Ford Explorer · RO $189</p>
+                  </div>
+                  <span className="text-[10px] uppercase tracking-wider text-green-400 font-semibold shrink-0">Booked</span>
+                </div>
               </div>
             </div>
           </motion.div>
+        </div>
+      </div>
+
+      <div className="relative border-t border-white/[0.06] bg-black/40 overflow-hidden py-4">
+        <div className="flex animate-marquee whitespace-nowrap gap-12">
+          {[...MARQUEE, ...MARQUEE].map((item, i) => (
+            <span key={i} className="text-xs uppercase tracking-luxury text-gray-500 font-medium flex items-center gap-12">
+              {item}
+              <span className="text-gold-500/60">◆</span>
+            </span>
+          ))}
         </div>
       </div>
     </section>

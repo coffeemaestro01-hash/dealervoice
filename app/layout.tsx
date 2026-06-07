@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/layouts/Providers";
 import { Toaster } from "@/components/ui/toaster";
@@ -12,14 +12,21 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+const display = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-display",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.com"),
   title: {
-    default: "DealerVoice - Trusted Dealership Reviews Worldwide",
+    default: "DealerVoice — AI Voice Intelligence for Automotive Dealerships",
     template: "%s | DealerVoice",
   },
   description:
-    "Find honest, verified reviews for car dealerships worldwide. Compare ratings, read customer experiences, and choose the best dealer with confidence.",
+    "The AI voice platform built to rule automotive retail. Turn missed calls into booked appointments — 24/7, integrated with your DMS & CRM.",
   keywords: ["car dealership reviews", "auto dealer ratings", "vehicle dealer reviews", "dealership ratings"],
   authors: [{ name: "DealerVoice" }],
   creator: "DealerVoice",
@@ -55,7 +62,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${display.variable}`} suppressHydrationWarning>
       <body className="min-h-screen bg-background font-sans antialiased">
         <Providers>{children}</Providers>
         <Toaster />
