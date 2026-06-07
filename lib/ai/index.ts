@@ -16,24 +16,24 @@ export interface DealerProfileDraft {
   summary: string;
 }
 
+export const AI_ENABLED = !!(process.env.GEMINI_API_KEY || process.env.OPENAI_API_KEY);
+
 // ─────────────────────────────────────────────────────────────────────────────
 // PROVIDER INTEGRATIONS
 // ─────────────────────────────────────────────────────────────────────────────
 
-async function callGemini(prompt: string): Promise<string> {
+async function callGemini(prompt: string, json = true): Promise<string> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error("Missing GEMINI_API_KEY");
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-  
+
   const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: {
-        responseMimeType: "application/json",
-      },
+      generationConfig: json ? { responseMimeType: "application/json" } : undefined,
     }),
   });
 
@@ -72,16 +72,42 @@ async function callOpenAI(prompt: string): Promise<string> {
   return data.choices?.[0]?.message?.content || "";
 }
 
+async function callAI(prompt: string, json = true): Promise<string> {
+  if (process.env.GEMINI_API_KEY) {
+    try { return await callGemini(prompt, json); } catch (e) { console.error("Gemini error:", e); }
+  }
+  if (process.env.OPENAI_API_KEY) {
+    return callOpenAI(prompt);
+  }
+  throw new Error("No AI provider configured");
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // AI FUNCTIONS
 // ─────────────────────────────────────────────────────────────────────────────
 
-export async function analyzeSentiment(_text: string): Promise<SentimentResult> {
-  return { score: 0, label: "neutral", confidence: 0 };
+export async function analyzeSentiment(text: string): Promise<SentimentResult> {
+  if (!AI_ENABLED) return { score: 0, label: "neutral", confidence: 0 };
+
+  const prompt = `Analyze the sentiment of this review text. Return JSON: {"score": -1 to 1, "label": "positive"|"neutral"|"negative", "confidence": 0 to 1}\n\nText: ${text.slice(0, 2000)}`;
+  try {
+    const result = await callAI(prompt);
+    return JSON.parse(result);
+  } catch {
+    return { score: 0, label: "neutral", confidence: 0 };
+  }
 }
 
-export async function detectSpam(_review: { title: string; body: string }): Promise<SpamResult> {
-  return { isSpam: false, score: 0, reasons: [] };
+export async function detectSpam(review: { title: string; body: string }): Promise<SpamResult> {
+  if (!AI_ENABLED) return { isSpam: false, score: 0, reasons: [] };
+
+  const prompt = `Detect if this dealership review is spam/fake. Return JSON: {"isSpam": boolean, "score": 0-1, "reasons": string[]}\n\nTitle: ${review.title}\nBody: ${review.body.slice(0, 2000)}`;
+  try {
+    const result = await callAI(prompt);
+    return JSON.parse(result);
+  } catch {
+    return { isSpam: false, score: 0, reasons: [] };
+  }
 }
 
 export async function generateProfileDraft(data: {
@@ -94,9 +120,6 @@ export async function generateProfileDraft(data: {
   brands?: string[];
   context?: string;
 }): Promise<DealerProfileDraft> {
-  const isGeminiEnabled = !!process.env.GEMINI_API_KEY;
-  const isOpenAIEnabled = !!process.env.OPENAI_API_KEY;
-
   const prompt = `
     Act as a professional automotive marketing expert. 
     Generate a high-quality dealership profile based on the following information:
@@ -125,25 +148,15 @@ export async function generateProfileDraft(data: {
     }
   `;
 
-  if (isGeminiEnabled) {
+  if (AI_ENABLED) {
     try {
-      const result = await callGemini(prompt);
+      const result = await callAI(prompt);
       return JSON.parse(result);
     } catch (e) {
-      console.error("Gemini fallback to OpenAI/Template due to error:", e);
+      console.error("AI profile generation fallback:", e);
     }
   }
 
-  if (isOpenAIEnabled) {
-    try {
-      const result = await callOpenAI(prompt);
-      return JSON.parse(result);
-    } catch (e) {
-      console.error("OpenAI fallback to Template due to error:", e);
-    }
-  }
-
-  // Final Fallback: Static Template
   return {
     description: `Welcome to ${data.name}, your trusted ${data.category.toLowerCase().replace("_", " ")} destination in ${data.city}. We are committed to delivering exceptional value and personalized service to every customer who walks through our doors.`,
     specialties: ["Customer Satisfaction", "Quality Inventory", "Transparent Pricing"],
@@ -153,10 +166,45 @@ export async function generateProfileDraft(data: {
   };
 }
 
-export async function generateResponseSuggestion(_review: { title: string; body: string; rating: number; dealerName: string; }): Promise<ResponseSuggestion> {
-  return { suggestion: "", tone: "professional" };
+export async function generateResponseSuggestion(review: {
+  title: string;
+  body: string;
+  rating: number;
+  dealerName: string;
+}): Promise<ResponseSuggestion> {
+  if (!AI_ENABLED) return { suggestion: "", tone: "professional" };
+
+  const tone = review.rating >= 4 ? "grateful" : review.rating <= 2 ? "apologetic" : "professional";
+  const prompt = `Write a professional dealership response to this customer review. Return JSON: {"suggestion": "2-4 sentence response", "tone": "professional"|"apologetic"|"grateful"}
+
+Dealer: ${review.dealerName}
+Rating: ${review.rating}/5
+Title: ${review.title}
+Review: ${review.body.slice(0, 1500)}
+
+Be sincere, specific, and invite offline follow-up for negative reviews. Do not be defensive.`;
+
+  try {
+    const result = await callAI(prompt);
+    const parsed = JSON.parse(result);
+    return { suggestion: parsed.suggestion || "", tone: parsed.tone || tone };
+  } catch {
+    return { suggestion: "", tone };
+  }
 }
 
-export async function generateReputationInsights(_data: any): Promise<string> {
-  return "";
+export async function generateReputationInsights(data: {
+  dealerName: string;
+  avgRating: number;
+  totalReviews: number;
+  recentThemes?: string[];
+}): Promise<string> {
+  if (!AI_ENABLED) return "";
+
+  const prompt = `Summarize reputation insights for ${data.dealerName} (${data.avgRating}/5, ${data.totalReviews} reviews). Themes: ${data.recentThemes?.join(", ") || "none"}. Return plain text, 3-4 bullet points, actionable for the dealer manager.`;
+  try {
+    return (await callAI(prompt, false)).trim();
+  } catch {
+    return "";
+  }
 }

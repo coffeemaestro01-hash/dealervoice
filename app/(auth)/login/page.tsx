@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { loginSchema, type LoginInput } from "@/lib/validations";
 import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
+import { AuthDivider } from "@/components/auth/AuthDivider";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -89,15 +90,7 @@ export default function LoginPage() {
           </p>
 
           <SocialAuthButtons callbackUrl={callbackUrl} />
-
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-500">or continue with email</span>
-            </div>
-          </div>
+          <AuthDivider />
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>

@@ -52,9 +52,14 @@ export function DealerDashboardLayout({ children }: { children: React.ReactNode 
         </nav>
 
         <div className="p-3 border-t border-gray-100">
-          <Link href="/pricing" className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm text-gray-600 hover:bg-gray-50">
+          <Link href="/dashboard/dealer/billing" className={cn(
+            "flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm transition-colors",
+            pathname.startsWith("/dashboard/dealer/billing")
+              ? "bg-gold-50 text-gold-800 font-medium"
+              : "text-gray-600 hover:bg-gray-50"
+          )}>
             <CreditCard size={16} />
-            Upgrade Plan
+            Billing & Plans
           </Link>
         </div>
       </aside>

@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { registerSchema, type RegisterInput } from "@/lib/validations";
 import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
+import { AuthDivider } from "@/components/auth/AuthDivider";
 
 const PASSWORD_RULES = [
   { test: (p: string) => p.length >= 8, label: "At least 8 characters" },
@@ -73,11 +74,7 @@ export default function RegisterPage() {
 
         <div className="bg-white rounded-2xl border border-gold/20 shadow-gold p-8">
           <SocialAuthButtons callbackUrl="/" />
-
-          <div className="relative my-5">
-            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200" /></div>
-            <div className="relative flex justify-center text-sm"><span className="px-4 bg-white text-gray-500">or with email</span></div>
-          </div>
+          <AuthDivider />
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>

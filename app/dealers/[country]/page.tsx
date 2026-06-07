@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import prisma from "@/lib/db";
 import { DealerCard } from "@/components/dealership/DealerCard";
 import Link from "next/link";
+import { stateHref, stateSlug } from "@/lib/geo";
 
 interface Props {
   params: Promise<{ country: string }>;
@@ -13,6 +14,24 @@ async function getCountryData(code: string) {
     where: { code: code.toUpperCase() },
     include: { cities: { where: { isActive: true, dealerCount: { gt: 0 } }, orderBy: { dealerCount: "desc" }, take: 20 } },
   });
+}
+
+async function getStatesByCountry(countryId: string) {
+  const rows = await prisma.dealership.groupBy({
+    by: ["stateCode", "stateName"],
+    where: { countryId, deletedAt: null, OR: [{ stateCode: { not: null } }, { stateName: { not: null } }] },
+    _count: { id: true },
+    orderBy: { _count: { id: "desc" } },
+    take: 30,
+  });
+  return rows
+    .filter((r) => r.stateCode || r.stateName)
+    .map((r) => ({
+      name: r.stateName ?? r.stateCode ?? "",
+      slug: stateSlug(r.stateCode, r.stateName),
+      count: r._count.id,
+    }))
+    .filter((s) => s.slug);
 }
 
 async function getDealersByCountry(countryId: string) {
@@ -44,7 +63,10 @@ export default async function CountryPage({ params }: Props) {
   const country = await getCountryData(countryCode);
   if (!country) notFound();
 
-  const dealers = await getDealersByCountry(country.id);
+  const [dealers, states] = await Promise.all([
+    getDealersByCountry(country.id),
+    getStatesByCountry(country.id),
+  ]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -63,6 +85,25 @@ export default async function CountryPage({ params }: Props) {
       </div>
 
       <div className="container py-8">
+        {/* States */}
+        {states.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-lg font-semibold text-gray-900 mb-3">Browse by state / region</h2>
+            <div className="flex flex-wrap gap-2">
+              {states.map((state) => (
+                <Link
+                  key={state.slug}
+                  href={stateHref(countryCode, state.slug, state.name)!}
+                  className="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm text-gray-700 hover:border-gold-300 hover:text-gold-800 transition-colors"
+                >
+                  {state.name}
+                  <span className="ml-1.5 text-gray-400 text-xs">{state.count}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Cities */}
         {country.cities.length > 0 && (
           <div className="mb-8">

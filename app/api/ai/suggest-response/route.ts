@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/config";
 import prisma from "@/lib/db";
-import { generateResponseSuggestion } from "@/lib/ai";
+import { generateResponseSuggestion, AI_ENABLED } from "@/lib/ai";
 import { rateLimit } from "@/lib/auth/rate-limit";
 
 export async function POST(req: NextRequest) {
-  if (!process.env.OPENAI_API_KEY) {
+  if (!AI_ENABLED) {
     return NextResponse.json({ error: "AI features are not enabled on this instance." }, { status: 503 });
   }
 

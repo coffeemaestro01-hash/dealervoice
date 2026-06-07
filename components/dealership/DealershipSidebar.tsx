@@ -5,6 +5,7 @@ import { MapPin, Phone, Globe, Mail, Facebook, Instagram, Twitter } from "lucide
 import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
 import type { DealershipWithRelations } from "@/types";
+import { FreeProfileAd } from "@/components/dealership/FreeProfileAd";
 
 const DealerMap = dynamic(
   () => import("@/components/map/DealerMap").then((m) => m.DealerMap),
@@ -22,7 +23,9 @@ interface Props {
     twitterUrl?: string | null;
     description?: string | null;
     yearEstablished?: number | null;
+    claimedAt?: Date | string | null;
     id: string;
+    subscription?: { plan: string } | null;
   };
 }
 
@@ -31,8 +34,16 @@ export function DealershipSidebar({ dealer }: Props) {
     .filter(Boolean)
     .join(", ");
 
+  const isFreeProfile =
+    !dealer.claimedAt &&
+    (!dealer.subscription || dealer.subscription.plan === "FREE");
+
   return (
     <>
+      {isFreeProfile && (
+        <FreeProfileAd dealerName={dealer.name} dealerId={dealer.id} />
+      )}
+
       {/* Write Review CTA */}
       <div className="bg-gold-50 border border-gold-100 rounded-xl p-5 text-center">
         <h3 className="font-semibold text-gold-900 mb-1">Been to this dealer?</h3>

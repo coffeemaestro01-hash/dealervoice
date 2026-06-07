@@ -4,10 +4,13 @@ import { authOptions } from "@/lib/auth/config";
 import prisma from "@/lib/db";
 import {
   createRazorpaySubscription,
+  createRazorpayOrder,
   RAZORPAY_PLANS,
   RAZORPAY_ENABLED,
+  planAmountPaise,
 } from "@/lib/payment";
 import { z } from "zod";
+import crypto from "crypto";
 
 const schema = z.object({
   dealershipId: z.string().cuid(),
@@ -42,36 +45,59 @@ export async function POST(req: NextRequest) {
 
   const planKey = `${plan}_${interval.toUpperCase()}` as keyof typeof RAZORPAY_PLANS;
   const planId = RAZORPAY_PLANS[planKey];
+  const keyId = process.env.RAZORPAY_KEY_ID;
+  const prefill = {
+    name: session.user.name ?? undefined,
+    email: session.user.email ?? undefined,
+  };
 
-  if (!planId) {
-    return NextResponse.json({ error: "Plan not configured yet. Payments coming soon." }, { status: 503 });
+  // Recurring subscription when Razorpay plan IDs are configured
+  if (planId) {
+    const subscription = await createRazorpaySubscription({
+      planId,
+      customerEmail: session.user.email!,
+      customerName: session.user.name!,
+      dealershipId,
+    });
+
+    await prisma.dealerSubscription.upsert({
+      where: { dealershipId },
+      create: {
+        dealershipId,
+        plan: "FREE",
+        status: "TRIALING",
+        stripeSubscriptionId: subscription.id,
+      },
+      update: {
+        stripeSubscriptionId: subscription.id,
+        status: "TRIALING",
+      },
+    });
+
+    return NextResponse.json({
+      mode: "subscription",
+      subscriptionId: subscription.id,
+      keyId,
+      plan,
+      interval,
+      prefill,
+    });
   }
 
-  const subscription = await createRazorpaySubscription({
-    planId,
-    customerEmail: session.user.email!,
-    customerName: session.user.name!,
-    dealershipId,
-  });
-
-  // Store subscription ID
-  await prisma.dealerSubscription.upsert({
-    where: { dealershipId },
-    create: {
-      dealershipId,
-      plan: plan as any,
-      status: "ACTIVE",
-      stripeSubscriptionId: subscription.id, // reusing field for Razorpay sub ID
-    },
-    update: {
-      stripeSubscriptionId: subscription.id,
-    },
-  });
+  // Fallback: one-time order checkout (works without pre-created Razorpay plans)
+  const amount = planAmountPaise(plan, interval);
+  const receipt = `dv_${dealershipId.slice(-8)}_${crypto.randomBytes(4).toString("hex")}`;
+  const order = await createRazorpayOrder(amount, "INR", receipt);
 
   return NextResponse.json({
-    subscriptionId: subscription.id,
-    keyId: process.env.RAZORPAY_KEY_ID,
+    mode: "order",
+    orderId: order.id,
+    amount: order.amount,
+    currency: order.currency,
+    keyId,
     plan,
     interval,
+    dealershipId,
+    prefill,
   });
 }

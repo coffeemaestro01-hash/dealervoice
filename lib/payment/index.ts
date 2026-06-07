@@ -101,4 +101,22 @@ export function verifyRazorpayPaymentSignature(params: {
   return expectedSignature === params.signature;
 }
 
+export function verifyRazorpaySubscriptionSignature(params: {
+  paymentId: string;
+  subscriptionId: string;
+  signature: string;
+}): boolean {
+  const body = `${params.paymentId}|${params.subscriptionId}`;
+  const expectedSignature = crypto
+    .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET!)
+    .update(body)
+    .digest("hex");
+  return expectedSignature === params.signature;
+}
+
+export function planAmountPaise(plan: "PRO" | "ENTERPRISE", interval: "monthly" | "annual") {
+  const prices = PLAN_PRICES_INR[plan];
+  return interval === "annual" ? prices.annual : prices.monthly;
+}
+
 export { RAZORPAY_ENABLED };

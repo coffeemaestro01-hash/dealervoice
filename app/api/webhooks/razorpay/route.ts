@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyRazorpayWebhookSignature } from "@/lib/payment";
+import { planFeatures } from "@/lib/subscription";
 import prisma from "@/lib/db";
+import type { SubscriptionPlan } from "@prisma/client";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -17,6 +19,34 @@ export async function POST(req: NextRequest) {
 
   try {
     switch (event.event) {
+      case "subscription.authenticated":
+      case "subscription.activated": {
+        const sub = event.payload.subscription?.entity;
+        if (!sub) break;
+        const dealershipId = sub.notes?.dealershipId;
+        const planNote = sub.notes?.plan as string | undefined;
+        const plan: SubscriptionPlan =
+          planNote === "ENTERPRISE" || planNote === "PRO" ? planNote : "PRO";
+        const features = planFeatures(plan);
+        await prisma.dealerSubscription.updateMany({
+          where: { stripeSubscriptionId: sub.id },
+          data: {
+            status: "ACTIVE",
+            plan,
+            currentPeriodStart: sub.current_start ? new Date(sub.current_start * 1000) : new Date(),
+            currentPeriodEnd: sub.current_end ? new Date(sub.current_end * 1000) : undefined,
+            ...features,
+          },
+        });
+        if (dealershipId) {
+          await prisma.dealerSubscription.updateMany({
+            where: { dealershipId, stripeSubscriptionId: sub.id },
+            data: { status: "ACTIVE", plan, ...features },
+          });
+        }
+        break;
+      }
+
       case "subscription.charged": {
         const sub = event.payload.subscription?.entity;
         const payment = event.payload.payment?.entity;
