@@ -14,8 +14,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { loginSchema, type LoginInput } from "@/lib/validations";
+import { Suspense } from "react";
 import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
 import { AuthDivider } from "@/components/auth/AuthDivider";
+import { OAuthErrorHandler } from "@/components/auth/OAuthErrorHandler";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -56,6 +58,9 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex">
+      <Suspense>
+        <OAuthErrorHandler />
+      </Suspense>
       {/* Left panel */}
       <div className="hidden lg:flex lg:w-1/2 bg-night-gradient text-white flex-col justify-center p-12 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gold-500/10 rounded-full blur-[120px]" />

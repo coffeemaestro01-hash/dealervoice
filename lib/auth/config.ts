@@ -14,7 +14,6 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/login",
     error: "/login",
-    newUser: "/onboarding",
   },
   providers: [
     CredentialsProvider({
@@ -79,8 +78,20 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user, trigger, session }) {
       if (user) {
-        token.role = (user as { role?: UserRole }).role ?? UserRole.CUSTOMER;
         token.id = user.id;
+        // OAuth user objects omit custom fields — always hydrate from DB on first sign-in.
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { id: user.id },
+            select: { role: true, status: true },
+          });
+          token.role = dbUser?.role ?? UserRole.CUSTOMER;
+          if (dbUser?.status === UserStatus.BANNED) {
+            token.banned = true;
+          }
+        } catch {
+          token.role = (user as { role?: UserRole }).role ?? UserRole.CUSTOMER;
+        }
         token.roleSyncedAt = Date.now();
       }
       if (trigger === "update" && session?.name) {
@@ -117,12 +128,30 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user, account }) {
       if (account?.provider !== "credentials") {
         const existing = await prisma.user.findUnique({ where: { email: user.email! } });
-        if (existing?.status === UserStatus.BANNED) return false;
+        if (existing?.status === UserStatus.BANNED || existing?.status === UserStatus.SUSPENDED) {
+          return false;
+        }
+        // Google-verified email — activate OAuth accounts immediately.
+        if (existing && existing.status === UserStatus.PENDING_VERIFICATION) {
+          await prisma.user.update({
+            where: { id: existing.id },
+            data: { status: UserStatus.ACTIVE, emailVerified: new Date() },
+          });
+        }
       }
       return true;
     },
   },
   events: {
+    async createUser({ user }) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          status: UserStatus.ACTIVE,
+          emailVerified: new Date(),
+        },
+      }).catch(() => {});
+    },
     async signIn({ user }) {
       await prisma.user.update({
         where: { id: user.id },

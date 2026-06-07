@@ -13,8 +13,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { registerSchema, type RegisterInput } from "@/lib/validations";
+import { Suspense } from "react";
 import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
 import { AuthDivider } from "@/components/auth/AuthDivider";
+import { OAuthErrorHandler } from "@/components/auth/OAuthErrorHandler";
 
 const PASSWORD_RULES = [
   { test: (p: string) => p.length >= 8, label: "At least 8 characters" },
@@ -60,6 +62,9 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-night-gradient px-4 py-12">
+      <Suspense>
+        <OAuthErrorHandler />
+      </Suspense>
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
