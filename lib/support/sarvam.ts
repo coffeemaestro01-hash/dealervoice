@@ -3,7 +3,12 @@
 // app/api/support/chat/route.ts (a server route handler) only.
 
 const SARVAM_CHAT_URL = "https://api.sarvam.ai/v1/chat/completions";
+const SARVAM_STT_URL = "https://api.sarvam.ai/speech-to-text";
+const SARVAM_TTS_URL = "https://api.sarvam.ai/text-to-speech";
 const MODEL = "sarvam-30b";
+const STT_MODEL = "saarika:v2.5";
+const TTS_MODEL = "bulbul:v2";
+const TTS_MAX_CHARS = 1500; // bulbul per-request text limit
 
 export const SARVAM_ENABLED = !!process.env.SARVAM_API_KEY;
 
@@ -103,4 +108,73 @@ export async function askSarvam(history: ChatMessage[]): Promise<string> {
   const content: string | undefined = data?.choices?.[0]?.message?.content;
   if (!content || !content.trim()) throw new Error("SARVAM_EMPTY_REPLY");
   return content.trim();
+}
+
+function sarvamError(res: Response, detail: string): Error {
+  const err = new Error(`SARVAM_HTTP_${res.status}`);
+  (err as any).status = res.status;
+  (err as any).detail = detail;
+  return err;
+}
+
+/**
+ * Speech-to-text. Accepts a recorded audio file (any common format Sarvam
+ * supports: wav, mp3, webm/ogg-opus). Returns the transcript and the detected
+ * BCP-47 language code (e.g. "en-IN", "hi-IN").
+ */
+export async function transcribeAudio(
+  file: Blob,
+  filename = "audio.webm"
+): Promise<{ transcript: string; languageCode: string }> {
+  const apiKey = process.env.SARVAM_API_KEY;
+  if (!apiKey) throw new Error("SARVAM_NOT_CONFIGURED");
+
+  const form = new FormData();
+  form.append("model", STT_MODEL);
+  form.append("file", file, filename);
+
+  const res = await fetch(SARVAM_STT_URL, {
+    method: "POST",
+    headers: { "api-subscription-key": apiKey },
+    body: form,
+  });
+
+  if (!res.ok) throw sarvamError(res, await res.text().catch(() => ""));
+
+  const data = await res.json();
+  const transcript: string = (data?.transcript ?? "").trim();
+  const languageCode: string = data?.language_code || "en-IN";
+  return { transcript, languageCode };
+}
+
+/**
+ * Text-to-speech. Returns base64-encoded WAV audio. languageCode should be a
+ * BCP-47 code the model supports; falls back to en-IN.
+ */
+export async function synthesizeSpeech(
+  text: string,
+  languageCode = "en-IN"
+): Promise<string> {
+  const apiKey = process.env.SARVAM_API_KEY;
+  if (!apiKey) throw new Error("SARVAM_NOT_CONFIGURED");
+
+  const res = await fetch(SARVAM_TTS_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "api-subscription-key": apiKey,
+    },
+    body: JSON.stringify({
+      text: text.slice(0, TTS_MAX_CHARS),
+      target_language_code: languageCode || "en-IN",
+      model: TTS_MODEL,
+    }),
+  });
+
+  if (!res.ok) throw sarvamError(res, await res.text().catch(() => ""));
+
+  const data = await res.json();
+  const audio: string | undefined = data?.audios?.[0];
+  if (!audio) throw new Error("SARVAM_EMPTY_AUDIO");
+  return audio; // base64 WAV
 }
