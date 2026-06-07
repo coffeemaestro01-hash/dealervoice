@@ -1,5 +1,5 @@
 import { NextAuthOptions } from "next-auth";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { DealerVoicePrismaAdapter } from "@/lib/auth/adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
@@ -9,7 +9,7 @@ import { prisma } from "@/lib/db";
 import { UserRole, UserStatus } from "@prisma/client";
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  adapter: DealerVoicePrismaAdapter(prisma),
   session: { strategy: "jwt", maxAge: 30 * 24 * 60 * 60 },
   pages: {
     signIn: "/login",
@@ -79,13 +79,14 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
-        // OAuth user objects omit custom fields — always hydrate from DB on first sign-in.
+        if (user.image) token.picture = user.image;
         try {
           const dbUser = await prisma.user.findUnique({
             where: { id: user.id },
-            select: { role: true, status: true },
+            select: { role: true, status: true, avatarUrl: true },
           });
           token.role = dbUser?.role ?? UserRole.CUSTOMER;
+          if (dbUser?.avatarUrl) token.picture = dbUser.avatarUrl;
           if (dbUser?.status === UserStatus.BANNED) {
             token.banned = true;
           }
@@ -122,36 +123,43 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         session.user.id = token.id as string;
         session.user.role = token.role as UserRole;
+        if (token.picture) session.user.image = token.picture as string;
       }
       return session;
     },
-    async signIn({ user, account }) {
-      if (account?.provider !== "credentials") {
-        const existing = await prisma.user.findUnique({ where: { email: user.email! } });
+    async signIn({ user, account, profile }) {
+      if (account?.provider !== "credentials" && user.email) {
+        const email = user.email.toLowerCase().trim();
+        const existing = await prisma.user.findUnique({ where: { email } });
         if (existing?.status === UserStatus.BANNED || existing?.status === UserStatus.SUSPENDED) {
           return false;
         }
-        // Google-verified email — activate OAuth accounts immediately.
-        if (existing && existing.status === UserStatus.PENDING_VERIFICATION) {
+
+        const oauthImage =
+          (profile as { picture?: string } | undefined)?.picture ??
+          user.image ??
+          null;
+
+        if (existing) {
           await prisma.user.update({
             where: { id: existing.id },
-            data: { status: UserStatus.ACTIVE, emailVerified: new Date() },
-          });
+            data: {
+              status: UserStatus.ACTIVE,
+              emailVerified: new Date(),
+              ...(oauthImage && { avatarUrl: oauthImage }),
+            },
+          }).catch(() => {});
+        } else if (user.id && oauthImage) {
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { avatarUrl: oauthImage },
+          }).catch(() => {});
         }
       }
       return true;
     },
   },
   events: {
-    async createUser({ user }) {
-      await prisma.user.update({
-        where: { id: user.id },
-        data: {
-          status: UserStatus.ACTIVE,
-          emailVerified: new Date(),
-        },
-      }).catch(() => {});
-    },
     async signIn({ user }) {
       await prisma.user.update({
         where: { id: user.id },
