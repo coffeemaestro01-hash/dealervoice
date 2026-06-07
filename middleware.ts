@@ -27,6 +27,9 @@ const PUBLIC_PATHS = [
   "/dealers",
   "/dealership",
   "/verify-email",
+  "/write-review",
+  "/settings",
+  "/test-payment",
 ];
 
 const DEALER_PATHS = ["/dashboard/dealer"];
@@ -35,21 +38,18 @@ const ADMIN_PATHS = ["/dashboard/admin"];
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Allow public assets and API routes (auth-checked per-route)
+  // SEO + static assets — never gate
   if (
+    pathname === "/sitemap.xml" ||
+    pathname === "/robots.txt" ||
     pathname.startsWith("/_next") ||
-    pathname.startsWith("/api/auth") ||
-    pathname.startsWith("/api/public") ||
-    pathname.startsWith("/api/search") ||
-    pathname.startsWith("/api/leads") ||
-    pathname.startsWith("/api/consent") ||
-    pathname.startsWith("/api/support") ||
-    pathname.startsWith("/api/create-order") ||
-    pathname.startsWith("/api/verify-payment") ||
-    pathname.startsWith("/api/cron") ||
-    pathname.startsWith("/api/webhooks") ||
     pathname.match(/\.(ico|png|jpg|jpeg|svg|webp|css|js|woff|woff2)$/)
   ) {
+    return NextResponse.next();
+  }
+
+  // All API routes enforce auth themselves (return 401 JSON, not HTML redirect)
+  if (pathname.startsWith("/api/")) {
     return NextResponse.next();
   }
 

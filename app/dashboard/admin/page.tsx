@@ -98,7 +98,7 @@ export default async function AdminOverviewPage() {
         <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-semibold text-gray-900">Pending Claims</h2>
-            <a href="/dashboard/admin/dealerships?tab=claims" className="text-xs text-gold-700 hover:underline">View all</a>
+            <a href="/dashboard/admin/claims" className="text-xs text-gold-700 hover:underline">View all</a>
           </div>
           <div className="space-y-3">
             {activity.recentClaims.length === 0 ? (

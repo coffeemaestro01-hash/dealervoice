@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, Store, MessageSquare, CreditCard, Flag, Globe, FileText, Star } from "lucide-react";
+import { LayoutDashboard, Users, Store, MessageSquare, CreditCard, Flag, FileText, Star, ClipboardCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV = [
   { href: "/dashboard/admin", icon: LayoutDashboard, label: "Overview", exact: true },
   { href: "/dashboard/admin/users", icon: Users, label: "Users" },
   { href: "/dashboard/admin/dealerships", icon: Store, label: "Dealerships" },
+  { href: "/dashboard/admin/claims", icon: ClipboardCheck, label: "Claims" },
   { href: "/dashboard/admin/reviews", icon: MessageSquare, label: "Reviews" },
   { href: "/dashboard/admin/moderation", icon: Flag, label: "Moderation" },
   { href: "/dashboard/admin/subscriptions", icon: CreditCard, label: "Subscriptions" },

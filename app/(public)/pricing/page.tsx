@@ -46,7 +46,7 @@ const PLANS = [
       { label: "Priority support", included: true },
     ],
     cta: "Start 14-Day Free Trial",
-    ctaHref: "/dashboard/dealer/settings",
+    ctaHref: "/dashboard/dealer/billing",
     highlighted: true,
     badge: "Most Popular",
   },

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
@@ -29,16 +29,15 @@ export default function AnalyticsPage() {
     enabled: !!dealershipId,
   });
 
-  // Fetch dealershipId from user's staff record on mount
   const { data: session } = useSession();
 
-  useState(() => {
+  useEffect(() => {
     if (!session?.user) return;
     fetch("/api/users/me/dealership")
       .then((r) => r.json())
       .then((d) => d.data?.id && setDealershipId(d.data.id))
       .catch(() => {});
-  });
+  }, [session?.user]);
 
   if (error) {
     return (

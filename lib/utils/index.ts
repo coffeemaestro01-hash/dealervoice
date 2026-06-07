@@ -92,9 +92,15 @@ export function formatCurrency(amount: number, currency = "USD"): string {
   return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(amount / 100);
 }
 
-export function buildDealerUrl(dealer: { slug: string; countryCode?: string; country?: { code: string }; cityName?: string; city?: { name: string } }): string {
+export function buildDealerUrl(dealer: {
+  slug: string;
+  countryCode?: string;
+  country?: { code: string };
+  cityName?: string;
+  city?: { name: string; slug?: string };
+}): string {
   const country = (dealer.countryCode || dealer.country?.code || "intl").toLowerCase();
-  const city = (dealer.cityName || dealer.city?.name || "all").toLowerCase();
+  const city = (dealer.city?.slug || slugify(dealer.cityName || dealer.city?.name || "all"));
   return `/dealers/${country}/${city}/${dealer.slug}`;
 }
 
