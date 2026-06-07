@@ -69,27 +69,33 @@ export async function POST(req: NextRequest) {
   const now = new Date();
   const end = periodEnd(data.interval, now);
 
-  const sub = await prisma.dealerSubscription.upsert({
-    where: { dealershipId: data.dealershipId },
-    create: {
-      dealershipId: data.dealershipId,
-      plan: data.plan,
-      status: "ACTIVE",
-      stripeSubscriptionId: data.mode === "subscription" ? data.razorpay_subscription_id : null,
-      currentPeriodStart: now,
-      currentPeriodEnd: end,
-      ...features,
-    },
-    update: {
-      plan: data.plan,
-      status: "ACTIVE",
-      stripeSubscriptionId: data.mode === "subscription" ? data.razorpay_subscription_id : undefined,
-      currentPeriodStart: now,
-      currentPeriodEnd: end,
-      canceledAt: null,
-      ...features,
-    },
-  });
+  const [sub] = await prisma.$transaction([
+    prisma.dealerSubscription.upsert({
+      where: { dealershipId: data.dealershipId },
+      create: {
+        dealershipId: data.dealershipId,
+        plan: data.plan,
+        status: "ACTIVE",
+        stripeSubscriptionId: data.mode === "subscription" ? data.razorpay_subscription_id : null,
+        currentPeriodStart: now,
+        currentPeriodEnd: end,
+        ...features,
+      },
+      update: {
+        plan: data.plan,
+        status: "ACTIVE",
+        stripeSubscriptionId: data.mode === "subscription" ? data.razorpay_subscription_id : undefined,
+        currentPeriodStart: now,
+        currentPeriodEnd: end,
+        canceledAt: null,
+        ...features,
+      },
+    }),
+    prisma.dealership.update({
+      where: { id: data.dealershipId },
+      data: { isPremiumClaimed: true },
+    }),
+  ]);
 
   return NextResponse.json({ success: true, subscription: { plan: sub.plan, status: sub.status } });
 }

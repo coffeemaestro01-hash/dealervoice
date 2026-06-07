@@ -8,6 +8,10 @@ import { DealershipSidebar } from "@/components/dealership/DealershipSidebar";
 import { QuoteRequestForm } from "@/components/dealership/QuoteRequestForm";
 import { RatingDistribution } from "@/components/dealership/RatingDistribution";
 import { ClaimModal } from "@/components/dealership/ClaimModal";
+import { CompetitorAdPlacement } from "@/components/dealership/CompetitorAdPlacement";
+import { ClaimProfileCTA } from "@/components/dealership/ClaimProfileCTA";
+import { PremiumInventoryCTA } from "@/components/dealership/PremiumInventoryCTA";
+import { isDealerPremiumClaimed } from "@/lib/dealer/premium";
 import { getCache, setCache, CACHE_KEYS, CACHE_TTL } from "@/lib/redis";
 
 interface Props {
@@ -63,6 +67,7 @@ export default async function DealershipPage({ params, searchParams }: Props) {
   if (!dealer) notFound();
 
   const page = Number(pageParam ?? 1);
+  const isPremium = isDealerPremiumClaimed(dealer);
 
   // Schema.org LocalBusiness + Review aggregate markup
   const jsonLd = {
@@ -101,22 +106,41 @@ export default async function DealershipPage({ params, searchParams }: Props) {
       </Suspense>
 
       <div className="min-h-screen bg-gray-50">
-        <DealershipProfile dealer={dealer as any} />
+        <DealershipProfile dealer={dealer as any} isPremium={isPremium} />
 
         <div className="container py-8">
+          {isPremium && (
+            <div className="mb-6">
+              <PremiumInventoryCTA dealer={dealer} />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Main content */}
             <div className="lg:col-span-2 space-y-6">
+              {!isPremium && (
+                <CompetitorAdPlacement
+                  dealershipId={dealer.id}
+                  cityId={dealer.cityId}
+                  stateName={dealer.stateName}
+                  countryId={dealer.countryId}
+                />
+              )}
               <RatingDistribution dealer={dealer as any} />
               <Suspense>
                 <ReviewsList dealershipId={dealer.id} page={page} />
               </Suspense>
+              {!isPremium && (
+                <ClaimProfileCTA
+                  dealerId={dealer.id}
+                  dealerName={dealer.name}
+                  dealerSlug={dealer.slug}
+                />
+              )}
             </div>
 
-            {/* Sidebar */}
             <div className="space-y-5">
               <QuoteRequestForm dealershipId={dealer.id} dealerName={dealer.name} />
-              <DealershipSidebar dealer={dealer as any} />
+              <DealershipSidebar dealer={dealer as any} isPremium={isPremium} />
             </div>
           </div>
         </div>

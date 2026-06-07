@@ -14,32 +14,62 @@ export const loginSchema = z.object({
   password: z.string().min(1),
 });
 
-export const reviewSchema = z.object({
-  dealershipId: z.string().cuid(),
-  reviewType: z.enum([
-    "NEW_CAR_PURCHASE",
-    "USED_CAR_PURCHASE",
-    "VEHICLE_SERVICE",
-    "PARTS_DEPARTMENT",
-    "FINANCING",
-    "WARRANTY_CLAIM",
-    "TRADE_IN",
-  ]),
-  overallRating: z.number().int().min(1).max(5),
-  ratingTransparency: z.number().int().min(1).max(5).optional(),
-  ratingPricing: z.number().int().min(1).max(5).optional(),
-  ratingService: z.number().int().min(1).max(5).optional(),
-  ratingDelivery: z.number().int().min(1).max(5).optional(),
-  ratingAfterSales: z.number().int().min(1).max(5).optional(),
-  wouldRecommend: z.boolean().optional(),
-  title: z.string().min(5).max(200),
-  body: z.string().min(50).max(5000),
-  vehicleMake: z.string().max(100).optional(),
-  vehicleModel: z.string().max(100).optional(),
-  vehicleYear: z.number().int().min(1900).max(new Date().getFullYear() + 2).optional(),
-  vehicleVin: z.string().max(17).optional(),
-  visitDate: z.string().optional(),
-});
+export const reviewSchema = z
+  .object({
+    dealershipId: z.string().cuid(),
+    reviewCategory: z.enum(["SALES_FINANCING", "SERVICE_PARTS"]),
+    overallRating: z.number().int().min(1).max(5),
+    ratingTransparency: z.number().int().min(1).max(5).optional(),
+    ratingPricing: z.number().int().min(1).max(5).optional(),
+    ratingService: z.number().int().min(1).max(5).optional(),
+    ratingDelivery: z.number().int().min(1).max(5).optional(),
+    ratingAfterSales: z.number().int().min(1).max(5).optional(),
+    wouldRecommend: z.boolean().optional(),
+    title: z.string().min(5).max(200),
+    body: z.string().min(50).max(5000),
+    salesConsultantName: z.string().min(1).max(100).optional(),
+    serviceAdvisorName: z.string().min(1).max(100).optional(),
+    serviceRendered: z.string().min(1).max(200).optional(),
+    vehicleMake: z.string().max(100).optional(),
+    vehicleModel: z.string().max(100).optional(),
+    vehicleYear: z.number().int().min(1900).max(new Date().getFullYear() + 2).optional(),
+    vehicleVin: z.string().max(17).optional(),
+    visitDate: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.reviewCategory === "SALES_FINANCING") {
+      if (!data.salesConsultantName?.trim()) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Sales consultant name is required",
+          path: ["salesConsultantName"],
+        });
+      }
+      if (!data.vehicleModel?.trim()) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Vehicle model bought is required",
+          path: ["vehicleModel"],
+        });
+      }
+    }
+    if (data.reviewCategory === "SERVICE_PARTS") {
+      if (!data.serviceAdvisorName?.trim()) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Service advisor name is required",
+          path: ["serviceAdvisorName"],
+        });
+      }
+      if (!data.serviceRendered?.trim()) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Service rendered is required",
+          path: ["serviceRendered"],
+        });
+      }
+    }
+  });
 
 export const reviewResponseSchema = z.object({
   body: z.string().min(10).max(2000),

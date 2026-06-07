@@ -58,6 +58,11 @@ enum ReviewType {
   TRADE_IN
 }
 
+enum ReviewCategory {
+  SALES_FINANCING
+  SERVICE_PARTS
+}
+
 enum ReviewStatus {
   PENDING
   PUBLISHED
@@ -356,6 +361,8 @@ model Dealership {
   // Flags
   isFeatured          Boolean        @default(false)
   isVerified          Boolean        @default(false)
+  isPremiumClaimed    Boolean        @default(false) @map("is_premium_claimed")
+  inventoryUrl        String?
   claimedAt           DateTime?
 
   createdAt           DateTime       @default(now())
@@ -466,6 +473,7 @@ model Review {
   authorId             String
 
   // Type & Status
+  reviewCategory       ReviewCategory?
   reviewType           ReviewType         @default(NEW_CAR_PURCHASE)
   status               ReviewStatus       @default(PENDING)
   verificationStatus   VerificationStatus @default(UNVERIFIED)
@@ -483,6 +491,11 @@ model Review {
   // Content
   title                String
   body                 String             @db.Text
+
+  // Contextual staff & service details
+  salesConsultantName  String?
+  serviceAdvisorName   String?
+  serviceRendered      String?
 
   // Vehicle info
   vehicleMake          String?

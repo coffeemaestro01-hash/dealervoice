@@ -88,30 +88,13 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-        display: ["var(--font-display)", "Georgia", "serif"],
-      },
-      letterSpacing: {
-        luxury: "0.18em",
       },
       keyframes: {
-        float: {
-          "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-10px)" },
-        },
-        "glow-pulse": {
-          "0%, 100%": { opacity: "0.5", transform: "scale(1)" },
-          "50%": { opacity: "0.85", transform: "scale(1.03)" },
-        },
-        "border-shine": {
-          "0%": { backgroundPosition: "0% 50%" },
-          "100%": { backgroundPosition: "200% 50%" },
-        },
         "accordion-down": { from: { height: "0" }, to: { height: "var(--radix-accordion-content-height)" } },
         "accordion-up": { from: { height: "var(--radix-accordion-content-height)" }, to: { height: "0" } },
         "fade-in": { from: { opacity: "0", transform: "translateY(8px)" }, to: { opacity: "1", transform: "translateY(0)" } },
         "slide-in": { from: { transform: "translateX(-100%)" }, to: { transform: "translateX(0)" } },
         shimmer: { "100%": { transform: "translateX(100%)" } },
-        marquee: { "0%": { transform: "translateX(0)" }, "100%": { transform: "translateX(-50%)" } },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -119,12 +102,6 @@ const config: Config = {
         "fade-in": "fade-in 0.3s ease-out",
         "slide-in": "slide-in 0.2s ease-out",
         shimmer: "shimmer 1.5s infinite",
-        float: "float 6s ease-in-out infinite",
-        "glow-pulse": "glow-pulse 4s ease-in-out infinite",
-        marquee: "marquee 40s linear infinite",
-      },
-      backgroundImage: {
-        "luxury-radial": "radial-gradient(ellipse 80% 60% at 50% -20%, rgba(251,101,20,0.22), transparent 60%)",
       },
     },
   },

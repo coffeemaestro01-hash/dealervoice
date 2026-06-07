@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { MapPin, Phone, Globe, BadgeCheck, Share2, PenLine, Award } from "lucide-react";
+import { MapPin, Phone, Globe, BadgeCheck, Share2, PenLine, Award, ExternalLink } from "lucide-react";
+import { getPremiumInventoryUrl } from "@/lib/dealer/premium";
 import { StarRating } from "@/components/common/StarRating";
 import { RatingBadge } from "@/components/common/RatingBadge";
 import { Button } from "@/components/ui/button";
@@ -15,13 +16,18 @@ interface Props {
     address?: string | null;
     phone?: string | null;
     website?: string | null;
+    inventoryUrl?: string | null;
+    isPremiumClaimed?: boolean;
     coverImageUrl?: string | null;
     awards?: Array<{ title: string; year: number }>;
     ratingDistribution?: Record<string, number>;
+    subscription?: { plan: string } | null;
   };
+  isPremium?: boolean;
 }
 
-export function DealershipProfile({ dealer }: Props) {
+export function DealershipProfile({ dealer, isPremium = false }: Props) {
+  const inventoryUrl = isPremium ? getPremiumInventoryUrl(dealer) : null;
   const location = [dealer.cityName, dealer.stateName, dealer.country?.name].filter(Boolean).join(", ");
 
   return (
@@ -87,16 +93,23 @@ export function DealershipProfile({ dealer }: Props) {
                   </div>
                 </div>
 
-                {/* Action buttons */}
-                <div className="flex gap-2 sm:mt-2">
+                <div className="flex flex-wrap gap-2 sm:mt-2">
                   <Link href={`/write-review/${dealer.id}`}>
                     <Button size="sm" className="bg-gold-800 hover:bg-gold-800 gap-1.5">
-                      <PenLine size={14} />
+                      <PenLine size={14} aria-hidden />
                       Write Review
                     </Button>
                   </Link>
+                  {inventoryUrl && (
+                    <a href={inventoryUrl} target="_blank" rel="noopener noreferrer">
+                      <Button size="sm" variant="outline" className="gap-1.5 border-gold-300 text-gold-800 hover:bg-gold-50">
+                        <ExternalLink size={14} aria-hidden />
+                        Live Inventory
+                      </Button>
+                    </a>
+                  )}
                   <Button variant="outline" size="sm" className="gap-1.5">
-                    <Share2 size={14} />
+                    <Share2 size={14} aria-hidden />
                     Share
                   </Button>
                 </div>

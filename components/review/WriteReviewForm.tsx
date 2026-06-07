@@ -1,33 +1,37 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
-import { ChevronRight, Loader2, Upload, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Loader2, Car, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { StarRating } from "@/components/common/StarRating";
 import { useToast } from "@/components/ui/use-toast";
 import { reviewSchema, type ReviewInput } from "@/lib/validations";
-
-const REVIEW_TYPES = [
-  { value: "NEW_CAR_PURCHASE", label: "New Car Purchase" },
-  { value: "USED_CAR_PURCHASE", label: "Used Car Purchase" },
-  { value: "VEHICLE_SERVICE", label: "Vehicle Service" },
-  { value: "PARTS_DEPARTMENT", label: "Parts Department" },
-  { value: "FINANCING", label: "Financing Experience" },
-  { value: "WARRANTY_CLAIM", label: "Warranty Claim" },
-  { value: "TRADE_IN", label: "Trade-In Experience" },
-];
+import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 const RATING_LABELS = ["", "Poor", "Fair", "Good", "Very Good", "Excellent"];
+
+const CATEGORIES = [
+  {
+    value: "SALES_FINANCING" as const,
+    label: "Sales / Financing",
+    description: "Buying, leasing, or financing a vehicle",
+    icon: Car,
+  },
+  {
+    value: "SERVICE_PARTS" as const,
+    label: "Service / Parts",
+    description: "Maintenance, repairs, or parts department",
+    icon: Wrench,
+  },
+];
 
 interface Props {
   dealer: {
@@ -44,7 +48,6 @@ interface Props {
 export function WriteReviewForm({ dealer }: Props) {
   const router = useRouter();
   const { toast } = useToast();
-  const [step, setStep] = useState(1);
   const [hoveredRating, setHoveredRating] = useState(0);
 
   const { control, register, handleSubmit, watch, setValue, formState: { errors } } = useForm<ReviewInput>({
@@ -52,10 +55,11 @@ export function WriteReviewForm({ dealer }: Props) {
     defaultValues: {
       dealershipId: dealer.id,
       overallRating: 0,
-    },
+    } as Partial<ReviewInput>,
   });
 
   const overallRating = watch("overallRating");
+  const reviewCategory = watch("reviewCategory");
 
   const submitMutation = useMutation({
     mutationFn: async (data: ReviewInput) => {
@@ -81,7 +85,6 @@ export function WriteReviewForm({ dealer }: Props) {
 
   return (
     <div>
-      {/* Dealer header */}
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 mb-6 flex items-center gap-4">
         <div className="w-14 h-14 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center overflow-hidden shrink-0">
           {dealer.logoUrl ? (
@@ -102,27 +105,119 @@ export function WriteReviewForm({ dealer }: Props) {
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-6">
           <h2 className="text-xl font-bold text-gray-900">Write Your Review</h2>
 
-          {/* Review type */}
-          <div>
-            <Label>What type of experience are you reviewing?</Label>
-            <Controller
-              name="reviewType"
-              control={control}
-              render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="mt-1">
-                    <SelectValue placeholder="Select experience type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {REVIEW_TYPES.map((t) => (
-                      <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-            />
-            {errors.reviewType && <p className="text-red-500 text-xs mt-1">{errors.reviewType.message}</p>}
-          </div>
+          {/* Category selection */}
+          <fieldset>
+            <legend className="text-sm font-medium text-gray-900 mb-3">
+              What are you reviewing? *
+            </legend>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {CATEGORIES.map((cat) => {
+                const Icon = cat.icon;
+                const selected = reviewCategory === cat.value;
+                return (
+                  <button
+                    key={cat.value}
+                    type="button"
+                    onClick={() => setValue("reviewCategory", cat.value, { shouldValidate: true })}
+                    className={cn(
+                      "flex items-start gap-3 p-4 rounded-xl border-2 text-left transition-all",
+                      selected
+                        ? "border-gold-500 bg-gold-50 shadow-sm"
+                        : "border-gray-200 hover:border-gray-300 bg-white"
+                    )}
+                  >
+                    <div className={cn(
+                      "w-10 h-10 rounded-lg flex items-center justify-center shrink-0",
+                      selected ? "bg-gold-100 text-gold-800" : "bg-gray-100 text-gray-500"
+                    )}>
+                      <Icon size={20} aria-hidden />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900">{cat.label}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">{cat.description}</p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+            {errors.reviewCategory && (
+              <p className="text-red-500 text-xs mt-2">{errors.reviewCategory.message}</p>
+            )}
+          </fieldset>
+
+          {/* Sales-specific fields */}
+          {reviewCategory === "SALES_FINANCING" && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
+              <div>
+                <Label htmlFor="salesConsultantName">Sales Consultant Name *</Label>
+                <Input
+                  id="salesConsultantName"
+                  className="mt-1"
+                  placeholder="Who helped you?"
+                  {...register("salesConsultantName")}
+                />
+                {errors.salesConsultantName && (
+                  <p className="text-red-500 text-xs mt-1">{errors.salesConsultantName.message}</p>
+                )}
+              </div>
+              <div>
+                <Label htmlFor="vehicleModel">Vehicle Model Bought *</Label>
+                <Input
+                  id="vehicleModel"
+                  className="mt-1"
+                  placeholder="e.g. Toyota Camry XSE"
+                  {...register("vehicleModel")}
+                />
+                {errors.vehicleModel && (
+                  <p className="text-red-500 text-xs mt-1">{errors.vehicleModel.message}</p>
+                )}
+              </div>
+              <div>
+                <Label htmlFor="vehicleMake" className="text-sm">Make (optional)</Label>
+                <Input id="vehicleMake" className="mt-1" placeholder="Toyota" {...register("vehicleMake")} />
+              </div>
+              <div>
+                <Label htmlFor="vehicleYear" className="text-sm">Year (optional)</Label>
+                <Input
+                  id="vehicleYear"
+                  type="number"
+                  className="mt-1"
+                  placeholder="2024"
+                  {...register("vehicleYear", { valueAsNumber: true })}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Service-specific fields */}
+          {reviewCategory === "SERVICE_PARTS" && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
+              <div>
+                <Label htmlFor="serviceAdvisorName">Service Advisor Name *</Label>
+                <Input
+                  id="serviceAdvisorName"
+                  className="mt-1"
+                  placeholder="Who assisted you?"
+                  {...register("serviceAdvisorName")}
+                />
+                {errors.serviceAdvisorName && (
+                  <p className="text-red-500 text-xs mt-1">{errors.serviceAdvisorName.message}</p>
+                )}
+              </div>
+              <div>
+                <Label htmlFor="serviceRendered">Service Rendered *</Label>
+                <Input
+                  id="serviceRendered"
+                  className="mt-1"
+                  placeholder="e.g. Oil Change, Brake Repair"
+                  {...register("serviceRendered")}
+                />
+                {errors.serviceRendered && (
+                  <p className="text-red-500 text-xs mt-1">{errors.serviceRendered.message}</p>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Overall rating */}
           <div>
@@ -150,10 +245,10 @@ export function WriteReviewForm({ dealer }: Props) {
           {/* Sub-ratings */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
-              { name: "ratingTransparency" as const, label: "Sales Transparency" },
+              { name: "ratingTransparency" as const, label: reviewCategory === "SERVICE_PARTS" ? "Repair Transparency" : "Sales Transparency" },
               { name: "ratingPricing" as const, label: "Pricing Fairness" },
               { name: "ratingService" as const, label: "Customer Service" },
-              { name: "ratingDelivery" as const, label: "Delivery Experience" },
+              { name: "ratingDelivery" as const, label: reviewCategory === "SERVICE_PARTS" ? "Turnaround Time" : "Delivery Experience" },
               { name: "ratingAfterSales" as const, label: "After-Sales Support" },
             ].map((field) => (
               <div key={field.name}>
@@ -190,14 +285,12 @@ export function WriteReviewForm({ dealer }: Props) {
             </div>
           </div>
 
-          {/* Title */}
           <div>
             <Label htmlFor="title">Review Title *</Label>
             <Input id="title" className="mt-1" placeholder="Summarize your experience in a sentence" {...register("title")} />
             {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title.message}</p>}
           </div>
 
-          {/* Body */}
           <div>
             <Label htmlFor="body">Your Review *</Label>
             <Textarea
@@ -213,26 +306,9 @@ export function WriteReviewForm({ dealer }: Props) {
             </div>
           </div>
 
-          {/* Vehicle info */}
-          <div className="grid grid-cols-3 gap-3">
-            <div>
-              <Label htmlFor="vehicleMake" className="text-sm">Make</Label>
-              <Input id="vehicleMake" className="mt-1" placeholder="Toyota" {...register("vehicleMake")} />
-            </div>
-            <div>
-              <Label htmlFor="vehicleModel" className="text-sm">Model</Label>
-              <Input id="vehicleModel" className="mt-1" placeholder="Camry" {...register("vehicleModel")} />
-            </div>
-            <div>
-              <Label htmlFor="vehicleYear" className="text-sm">Year</Label>
-              <Input id="vehicleYear" type="number" className="mt-1" placeholder="2024" {...register("vehicleYear", { valueAsNumber: true })} />
-            </div>
-          </div>
-
-          {/* Date of visit */}
           <div>
             <Label htmlFor="visitDate">Date of Visit</Label>
-            <Input id="visitDate" type="date" className="mt-1 w-48" {...register("visitDate")} />
+            <Input id="visitDate" type="date" className="mt-1 w-full sm:w-48" {...register("visitDate")} />
           </div>
 
           <Button

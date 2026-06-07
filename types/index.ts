@@ -58,6 +58,8 @@ export interface DealershipWithRelations {
   longitude?: number | null;
   isFeatured: boolean;
   isVerified: boolean;
+  isPremiumClaimed?: boolean;
+  inventoryUrl?: string | null;
   country: { name: string; code: string };
   city?: { name: string; slug: string } | null;
   brands: Array<{ brand: { name: string; slug: string; logoUrl?: string | null }; isPrimary: boolean }>;
@@ -68,6 +70,10 @@ export interface ReviewWithRelations {
   id: string;
   dealershipId: string;
   reviewType: string;
+  reviewCategory?: string | null;
+  salesConsultantName?: string | null;
+  serviceAdvisorName?: string | null;
+  serviceRendered?: string | null;
   status: string;
   verificationStatus: string;
   overallRating: number;

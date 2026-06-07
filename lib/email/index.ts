@@ -156,58 +156,6 @@ export async function sendClaimApprovedEmail(to: string, name: string, dealerNam
   });
 }
 
-export async function sendDemoRequestEmail(data: {
-  name: string;
-  email: string;
-  phone: string;
-  dealership: string;
-  role?: string;
-  monthlyCalls?: string;
-  message?: string;
-  source?: string;
-}) {
-  const notifyTo = process.env.DEMO_NOTIFY_EMAIL || "dealers@dealervoice.io";
-  const rows = [
-    ["Name", data.name],
-    ["Email", data.email],
-    ["Phone", data.phone],
-    ["Dealership", data.dealership],
-    ["Role", data.role || "—"],
-    ["Monthly calls", data.monthlyCalls || "—"],
-    ["Source", data.source || "demo-page"],
-    ["Message", data.message || "—"],
-  ];
-  const html = rows
-    .map(([k, v]) => `<tr><td style="padding:8px 12px;font-weight:600;color:#6b7280">${k}</td><td style="padding:8px 12px">${v}</td></tr>`)
-    .join("");
-
-  await resend.emails.send({
-    from: FROM,
-    to: notifyTo,
-    reply_to: data.email,
-    subject: `Demo request: ${data.dealership} (${data.name})`,
-    html: emailTemplate({
-      title: "New demo booking request",
-      body: `<p>A dealership requested a DealerVoice demo.</p>
-<table style="width:100%;border-collapse:collapse;margin-top:16px">${html}</table>
-<p style="margin-top:20px"><strong>Reply directly</strong> to ${data.email} to schedule.</p>`,
-    }),
-  });
-
-  await resend.emails.send({
-    from: FROM,
-    to: data.email,
-    subject: "We received your DealerVoice demo request",
-    html: emailTemplate({
-      title: "Thanks — we'll be in touch",
-      body: `<p>Hi ${data.name},</p>
-<p>We received your demo request for <strong>${data.dealership}</strong>.</p>
-<p>Our team will reach out within one business day to schedule a live walkthrough.</p>
-<p>— The DealerVoice team</p>`,
-    }),
-  });
-}
-
 function emailTemplate({ title, body }: { title: string; body: string }): string {
   return `<!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">

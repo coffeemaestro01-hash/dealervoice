@@ -58,26 +58,33 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
             New platform - be among the first verified reviewers in your city
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-5">
-            Find dealerships you can{" "}
-            <span className="text-gold">trust</span>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-5">
+            Verified car dealer reviews{" "}
+            <span className="text-gold">near you</span>
           </h1>
 
-          <p className="text-lg md:text-xl text-gray-400 mb-8 max-w-xl mx-auto">
-            Read verified customer reviews, compare dealership ratings, and make confident vehicle decisions.
+          <p className="text-base sm:text-lg md:text-xl text-gray-400 mb-8 max-w-xl mx-auto">
+            Search local dealerships, read real buyer experiences, and write reviews that help your community.
+          </p>
+
+          <p className="text-sm font-semibold text-gold-300 mb-3">
+            Find Verified Car Dealer Reviews Near You
           </p>
 
           {/* Prominent search */}
           <form
             onSubmit={handleSearch}
+            role="search"
+            aria-label="Search verified car dealer reviews"
             className="flex flex-col sm:flex-row gap-2 max-w-2xl mx-auto bg-white p-2 rounded-2xl border border-white/10 shadow-2xl shadow-black/40"
           >
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} aria-hidden />
               <Input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search dealership or brand"
+                placeholder="Dealer name, brand, or city"
+                aria-label="Search dealers"
                 className="pl-12 h-14 border-0 bg-transparent text-base shadow-none focus-visible:ring-0"
               />
             </div>

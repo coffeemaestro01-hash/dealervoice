@@ -47,12 +47,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "You cannot review a dealership you are associated with." }, { status: 403 });
   }
 
-  // Check for duplicate review (same user, same dealership, same type in 30 days)
+  const reviewType =
+    data.reviewCategory === "SERVICE_PARTS" ? "VEHICLE_SERVICE" : "NEW_CAR_PURCHASE";
+
+  // Check for duplicate review (same user, same dealership, same category in 30 days)
   const existingReview = await prisma.review.findFirst({
     where: {
       authorId: session.user.id,
       dealershipId: data.dealershipId,
-      reviewType: data.reviewType,
+      reviewCategory: data.reviewCategory,
       createdAt: { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) },
       deletedAt: null,
     },
@@ -79,7 +82,8 @@ export async function POST(req: NextRequest) {
     data: {
       dealershipId: data.dealershipId,
       authorId: session.user.id,
-      reviewType: data.reviewType,
+      reviewCategory: data.reviewCategory,
+      reviewType,
       status,
       overallRating: data.overallRating,
       ratingTransparency: data.ratingTransparency,
@@ -90,6 +94,9 @@ export async function POST(req: NextRequest) {
       wouldRecommend: data.wouldRecommend,
       title: data.title,
       body: data.body,
+      salesConsultantName: data.salesConsultantName,
+      serviceAdvisorName: data.serviceAdvisorName,
+      serviceRendered: data.serviceRendered,
       vehicleMake: data.vehicleMake,
       vehicleModel: data.vehicleModel,
       vehicleYear: data.vehicleYear,
