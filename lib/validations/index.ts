@@ -103,7 +103,7 @@ export const claimSchema = z.object({
   businessEmail: z.string().email(),
   businessPhone: z.string().max(20).optional(),
   notes: z.string().max(2000).optional(),
-  documentUrl: z.string().url(),
+  documentUrl: z.string().url("Please upload a proof of ownership document"),
 });
 
 export const reportSchema = z.object({

@@ -187,7 +187,11 @@ export function ClaimModal({ dealershipId, dealershipName, dealershipSlug }: Pro
                     onChange={field.onChange}
                     onRemove={() => field.onChange("")}
                     purpose="verification"
-                    label="Upload Document (PDF/Image)"
+                    accept={{
+                      "image/*": [".jpeg", ".jpg", ".png", ".webp"],
+                      "application/pdf": [".pdf"],
+                    }}
+                    maxSize={10 * 1024 * 1024}
                   />
                 )}
               />

@@ -115,7 +115,9 @@ export function FileUpload({
                 Click to upload or drag and drop
               </p>
               <p className="text-xs text-gray-500 mt-1">
-                PNG, JPG or WebP (max. {Math.round(maxSize / 1024 / 1024)}MB)
+                {Object.keys(accept).includes("application/pdf")
+                  ? `PNG, JPG, WebP or PDF (max. ${Math.round(maxSize / 1024 / 1024)}MB)`
+                  : `PNG, JPG or WebP (max. ${Math.round(maxSize / 1024 / 1024)}MB)`}
               </p>
             </>
           )}

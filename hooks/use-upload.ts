@@ -15,37 +15,28 @@ export function useUpload() {
     setProgress(0);
 
     try {
-      // 1. Get presigned URL
-      const res = await fetch("/api/upload", {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("purpose", options.purpose);
+
+      const res = await fetch("/api/upload/file", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          filename: file.name,
-          contentType: file.type,
-          size: file.size,
-          purpose: options.purpose,
-        }),
+        body: formData,
       });
 
       if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.error || "Failed to get upload URL");
+        let message = "Failed to upload file";
+        try {
+          const error = await res.json();
+          message = error.error || message;
+        } catch {
+          /* non-JSON error body */
+        }
+        throw new Error(message);
       }
 
-      const { uploadUrl, publicUrl } = await res.json();
-
-      // 2. Upload to S3/R2/Supabase
-      const uploadRes = await fetch(uploadUrl, {
-        method: "PUT",
-        body: file,
-        headers: {
-          "Content-Type": file.type,
-        },
-      });
-
-      if (!uploadRes.ok) {
-        throw new Error("Failed to upload file to storage");
-      }
+      const { publicUrl } = await res.json();
+      if (!publicUrl) throw new Error("Upload succeeded but no URL returned");
 
       setIsUploading(false);
       setProgress(100);
