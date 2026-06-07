@@ -4,6 +4,7 @@ import Link from "next/link";
 import prisma from "@/lib/db";
 import { Badge } from "@/components/ui/badge";
 import { StarRating } from "@/components/common/StarRating";
+import { AdminReviewActions } from "./AdminReviewActions";
 
 export const dynamic = "force-dynamic";
 
@@ -66,6 +67,7 @@ export default async function AdminReviewsPage({
                   {r.author.name} · <Link href={`/dealership/${r.dealership.slug}`} className="text-gold-700 hover:underline">{r.dealership.name}</Link>
                 </p>
               </div>
+              <AdminReviewActions id={r.id} status={r.status} />
             </div>
           </div>
         ))}

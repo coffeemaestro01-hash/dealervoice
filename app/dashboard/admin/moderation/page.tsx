@@ -1,7 +1,9 @@
 import { requireAuth } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/db";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { AdminReportsPanel } from "./AdminReportsPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -23,14 +25,20 @@ export default async function AdminModerationPage() {
     <div className="p-6 lg:p-8">
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Moderation</h1>
       <div className="grid sm:grid-cols-2 gap-4 mb-8">
-        <div className="bg-white rounded-xl border border-gray-100 p-5">
+        <Link href="/dashboard/admin/reviews?status=FLAGGED" className="bg-white rounded-xl border border-gray-100 p-5 hover:border-red-200 transition-colors">
           <p className="text-sm text-gray-500">Flagged reviews</p>
           <p className="text-3xl font-bold text-red-600">{flaggedReviews}</p>
-        </div>
+          <p className="text-xs text-gold-700 mt-2">Review queue →</p>
+        </Link>
         <div className="bg-white rounded-xl border border-gray-100 p-5">
           <p className="text-sm text-gray-500">Open reports</p>
           <p className="text-3xl font-bold text-amber-600">{openReports}</p>
         </div>
+      </div>
+
+      <h2 className="font-semibold text-gray-900 mb-3">Open reports</h2>
+      <div className="bg-white rounded-xl border border-gray-100 mb-8">
+        <AdminReportsPanel />
       </div>
       <h2 className="font-semibold text-gray-900 mb-3">Recent actions</h2>
       <div className="bg-white rounded-xl border border-gray-100 divide-y divide-gray-50">

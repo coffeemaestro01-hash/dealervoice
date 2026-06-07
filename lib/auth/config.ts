@@ -29,7 +29,7 @@ export const authOptions: NextAuthOptions = {
           where: { email: credentials.email.toLowerCase() },
         });
 
-        if (!user || !user.passwordHash) return null;
+        if (!user || !user.passwordHash || user.deletedAt) return null;
         if (user.status === UserStatus.BANNED || user.status === UserStatus.SUSPENDED) {
           throw new Error("ACCOUNT_SUSPENDED");
         }
@@ -83,11 +83,15 @@ export const authOptions: NextAuthOptions = {
         try {
           const dbUser = await prisma.user.findUnique({
             where: { id: user.id },
-            select: { role: true, status: true, avatarUrl: true },
+            select: { role: true, status: true, avatarUrl: true, deletedAt: true },
           });
-          token.role = dbUser?.role ?? UserRole.CUSTOMER;
-          if (dbUser?.avatarUrl) token.picture = dbUser.avatarUrl;
-          if (dbUser?.status === UserStatus.BANNED) {
+          if (!dbUser || dbUser.deletedAt) {
+            token.banned = true;
+            return token;
+          }
+          token.role = dbUser.role ?? UserRole.CUSTOMER;
+          if (dbUser.avatarUrl) token.picture = dbUser.avatarUrl;
+          if (dbUser.status === UserStatus.BANNED || dbUser.status === UserStatus.SUSPENDED) {
             token.banned = true;
           }
         } catch {
@@ -131,7 +135,11 @@ export const authOptions: NextAuthOptions = {
       if (account?.provider !== "credentials" && user.email) {
         const email = user.email.toLowerCase().trim();
         const existing = await prisma.user.findUnique({ where: { email } });
-        if (existing?.status === UserStatus.BANNED || existing?.status === UserStatus.SUSPENDED) {
+        if (
+          existing?.deletedAt ||
+          existing?.status === UserStatus.BANNED ||
+          existing?.status === UserStatus.SUSPENDED
+        ) {
           return false;
         }
 
