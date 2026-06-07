@@ -196,7 +196,9 @@ export function ClaimModal({ dealershipId, dealershipName, dealershipSlug }: Pro
                 )}
               />
               {errors.documentUrl && <p className="text-xs text-red-500">{errors.documentUrl.message}</p>}
-              <p className="text-[10px] text-gray-500">Please provide a utility bill, business license, or tax document showing the dealership name and address.</p>
+              <p className="text-[10px] text-gray-500">
+                Upload a photo, screenshot, or PDF of a utility bill, business license, or tax document showing the dealership name and address.
+              </p>
             </div>
 
             <div className="space-y-2">

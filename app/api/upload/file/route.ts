@@ -59,7 +59,11 @@ export async function POST(req: NextRequest) {
 
   if (error) {
     console.error("[upload/file]", error);
-    return NextResponse.json({ error: "Failed to upload file" }, { status: 500 });
+    const message =
+      error.message?.includes("mime type") && file.type === "application/pdf"
+        ? "PDF uploads are not enabled on storage yet. Try a PNG or JPG screenshot of your document."
+        : error.message || "Failed to upload file";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 
   const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${key}`;
