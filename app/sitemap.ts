@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import prisma from "@/lib/db";
 import { stateSlug } from "@/lib/geo";
+import { SOLUTION_SLUGS } from "@/lib/marketing/voice";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.com";
 
@@ -36,6 +37,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/dealers`, priority: 0.9 },
     { url: `${BASE}/about`, priority: 0.6 },
     { url: `${BASE}/pricing`, priority: 0.7 },
+    { url: `${BASE}/demo`, priority: 0.9 },
     { url: `${BASE}/blog`, priority: 0.6 },
     { url: `${BASE}/contact`, priority: 0.5 },
     { url: `${BASE}/privacy`, priority: 0.3 },
@@ -75,5 +77,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
     .filter(Boolean) as MetadataRoute.Sitemap;
 
-  return [...static_pages, ...dealerPages, ...countryPages, ...statePages, ...cityPages];
+  const solutionPages = SOLUTION_SLUGS.map((slug) => ({
+    url: `${BASE}/solutions/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.75,
+  }));
+
+  return [...static_pages, ...solutionPages, ...dealerPages, ...countryPages, ...statePages, ...cityPages];
 }

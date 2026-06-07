@@ -18,10 +18,16 @@ import {
 import { cn, getInitials } from "@/lib/utils";
 
 const NAV_LINKS = [
-  { label: "Find Dealers", href: "/dealers" },
-  { label: "How It Works", href: "/about" },
   { label: "Pricing", href: "/pricing" },
-  { label: "Blog", href: "/blog" },
+  { label: "Reviews", href: "/dealers" },
+];
+
+const SOLUTION_LINKS = [
+  { label: "Toyota Dealers", href: "/solutions/toyota" },
+  { label: "Ford Dealers", href: "/solutions/ford" },
+  { label: "GM Dealers", href: "/solutions/gm" },
+  { label: "Service Departments", href: "/solutions/service" },
+  { label: "BDC Teams", href: "/solutions/bdc" },
 ];
 
 export function Navbar() {
@@ -44,11 +50,26 @@ export function Navbar() {
 
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-6">
+          <DropdownMenu>
+            <DropdownMenuTrigger className="text-sm text-gray-300 hover:text-gold-400 transition-colors font-medium flex items-center gap-1 outline-none">
+              Solutions <ChevronDown size={14} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-52">
+              {SOLUTION_LINKS.map((link) => (
+                <DropdownMenuItem key={link.href} asChild>
+                  <Link href={link.href}>{link.label}</Link>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
           {NAV_LINKS.map((link) => (
             <Link key={link.href} href={link.href} className="text-sm text-gray-300 hover:text-gold-400 transition-colors font-medium">
               {link.label}
             </Link>
           ))}
+          <Link href="/#roi-calculator" className="text-sm text-gray-300 hover:text-gold-400 transition-colors font-medium">
+            ROI Calculator
+          </Link>
         </div>
 
         {/* Actions */}
@@ -102,8 +123,8 @@ export function Navbar() {
               <Link href="/login">
                 <Button variant="ghost" size="sm" className="text-gray-200 hover:text-gold-400 hover:bg-white/5">Sign in</Button>
               </Link>
-              <Link href="/register">
-                <Button size="sm" className="bg-gold-gradient text-night-900 font-semibold hover:opacity-90 border-0">Get started</Button>
+              <Link href="/demo">
+                <Button size="sm" className="bg-gold-gradient text-night-900 font-semibold hover:opacity-90 border-0">Book Demo</Button>
               </Link>
             </>
           )}
@@ -131,6 +152,17 @@ export function Navbar() {
             className="md:hidden bg-night-800 border-t border-gold/25"
           >
             <div className="container py-4 flex flex-col gap-1">
+              <p className="px-3 pt-1 text-xs text-gray-500 uppercase tracking-wide">Solutions</p>
+              {SOLUTION_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="px-3 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-gold-400 rounded-lg"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ))}
               {NAV_LINKS.map((link) => (
                 <Link
                   key={link.href}
@@ -141,6 +173,13 @@ export function Navbar() {
                   {link.label}
                 </Link>
               ))}
+              <Link
+                href="/#roi-calculator"
+                className="px-3 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-gold-400 rounded-lg"
+                onClick={() => setMobileOpen(false)}
+              >
+                ROI Calculator
+              </Link>
               <div className="border-t border-gold/20 mt-2 pt-2 flex flex-col gap-1">
                 {user ? (
                   <>
@@ -159,8 +198,8 @@ export function Navbar() {
                     <Link href="/login" className="px-3 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-gold-400 rounded-lg" onClick={() => setMobileOpen(false)}>
                       Sign in
                     </Link>
-                    <Link href="/register" className="px-3 py-2.5 text-sm font-medium text-night-900 bg-gold-gradient rounded-lg text-center" onClick={() => setMobileOpen(false)}>
-                      Get started
+                    <Link href="/demo" className="px-3 py-2.5 text-sm font-medium text-night-900 bg-gold-gradient rounded-lg text-center" onClick={() => setMobileOpen(false)}>
+                      Book Demo
                     </Link>
                   </>
                 )}
