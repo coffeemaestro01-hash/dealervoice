@@ -58,3 +58,4 @@ check_db.js
 complete-schema.js
 test-platform.js
 *.log
+.claude/
