@@ -1,10 +1,11 @@
+import Link from "next/link";
 import { ShieldCheck, Award, Globe, Zap } from "lucide-react";
 
 const FEATURES = [
   {
     icon: ShieldCheck,
     title: "Verified Reviews",
-    description: "Every review is backed by purchase invoices, service receipts, or VIN verification.",
+    description: "Reviews can be verified with purchase invoices, service receipts, or VIN proof.",
   },
   {
     icon: Award,
@@ -19,7 +20,7 @@ const FEATURES = [
   {
     icon: Zap,
     title: "AI-Powered Insights",
-    description: "Sentiment analysis and fake review detection powered by advanced AI.",
+    description: "Moderation and fraud checks help keep reviews authentic and useful for car buyers.",
   },
 ];
 
@@ -40,7 +41,19 @@ export function TrustSection() {
                 <f.icon size={22} />
               </div>
               <h3 className="font-semibold text-white mb-2">{f.title}</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">{f.description}</p>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                {f.title === "Verified Reviews" ? (
+                  <>
+                    Reviews can be verified with purchase invoices, service receipts, or VIN proof.{" "}
+                    <Link href="/methodology" className="text-gold-400 hover:text-gold-300 hover:underline">
+                      Read our methodology
+                    </Link>
+                    .
+                  </>
+                ) : (
+                  f.description
+                )}
+              </p>
             </div>
           ))}
         </div>

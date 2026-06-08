@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Careers", description: "Join the Dea
 const PERKS = [
   { icon: Globe, title: "Remote-first", body: "Work from anywhere. We're a distributed team across time zones." },
   { icon: Rocket, title: "Real ownership", body: "Shape the product and culture from the ground up." },
-  { icon: Heart, title: "Mission-driven", body: "Build something that genuinely helps millions of car buyers." },
+  { icon: Heart, title: "Mission-driven", body: "Build something that genuinely helps car buyers make better dealership decisions." },
 ];
 
 export default function CareersPage() {

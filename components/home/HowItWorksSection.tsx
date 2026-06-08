@@ -2,34 +2,42 @@ import { Search, PenLine, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-const STEPS = [
-  {
-    step: "01",
-    icon: Search,
-    title: "Find Your Dealer",
-    description: "Search by name, brand, or location. Browse our directory of 180,000+ dealerships worldwide.",
-  },
-  {
-    step: "02",
-    icon: PenLine,
-    title: "Verify & Review",
-    description: "Upload your purchase invoice or service receipt to earn a Verified badge on your review.",
-  },
-  {
-    step: "03",
-    icon: TrendingUp,
-    title: "Make Better Decisions",
-    description: "Compare reputation scores, read verified experiences, and choose dealers you can trust.",
-  },
-];
+function formatDealerCount(n: number) {
+  if (n >= 1000) return `${(n / 1000).toFixed(1).replace(/\.0$/, "")}K+`;
+  if (n > 0) return `${n.toLocaleString()}+`;
+  return "thousands of";
+}
 
-export function HowItWorksSection() {
+export function HowItWorksSection({ dealerCount = 0 }: { dealerCount?: number }) {
+  const directoryLabel = formatDealerCount(dealerCount);
+
+  const STEPS = [
+    {
+      step: "01",
+      icon: Search,
+      title: "Search",
+      description: `Find dealerships by name, brand, or location in our growing directory of ${directoryLabel} dealerships worldwide.`,
+    },
+    {
+      step: "02",
+      icon: PenLine,
+      title: "Review",
+      description: "Share your experience. Upload a purchase invoice or service receipt to earn a Verified badge on your review.",
+    },
+    {
+      step: "03",
+      icon: TrendingUp,
+      title: "Decide",
+      description: "Compare ratings, read real experiences, and choose dealerships you can trust before you visit.",
+    },
+  ];
+
   return (
     <section className="py-16 bg-night">
       <div className="container">
         <div className="text-center mb-10">
           <h2 className="text-2xl md:text-3xl font-bold text-white">How <span className="text-gold">DealerVoice</span> works</h2>
-          <p className="text-gray-400 mt-2">Simple, transparent, and trusted by millions.</p>
+          <p className="text-gray-400 mt-2">Search → Review → Decide. Three steps to a better dealership choice.</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
@@ -51,8 +59,10 @@ export function HowItWorksSection() {
         </div>
 
         <div className="text-center mt-10">
-          <Link href="/register">
-            <Button size="lg" className="bg-gold-gradient text-night-900 font-semibold hover:opacity-90 border-0">Start for Free</Button>
+          <Link href="/dealers">
+            <Button size="lg" className="bg-gold-gradient text-night-900 font-semibold hover:opacity-90 border-0">
+              Search Reviews
+            </Button>
           </Link>
         </div>
       </div>

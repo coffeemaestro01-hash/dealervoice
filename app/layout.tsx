@@ -15,11 +15,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.io"),
   title: {
-    default: "DealerVoice - Trusted Dealership Reviews Worldwide",
+    default: "DealerVoice — Find Trusted Car Dealership Reviews Worldwide",
     template: "%s | DealerVoice",
   },
   description:
-    "Find honest, verified reviews for car dealerships worldwide. Compare ratings, read customer experiences, and choose the best dealer with confidence.",
+    "Search car dealerships worldwide, read verified buyer reviews, and compare reputation scores before you buy or service your vehicle.",
   keywords: ["car dealership reviews", "auto dealer ratings", "vehicle dealer reviews", "dealership ratings"],
   authors: [{ name: "DealerVoice" }],
   creator: "DealerVoice",

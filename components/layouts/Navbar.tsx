@@ -52,7 +52,7 @@ export function Navbar() {
               Search Dealers
             </Link>
             <Link
-              href="/dealers"
+              href="/dealers?intent=write"
               className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-200 hover:text-gold-400 px-3 py-1.5 rounded-full hover:bg-white/5 transition-colors"
             >
               <PenLine size={14} aria-hidden />
@@ -171,7 +171,7 @@ export function Navbar() {
                 Search Dealers
               </Link>
               <Link
-                href="/dealers"
+                href="/dealers?intent=write"
                 className="px-3 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-gold-400 rounded-lg flex items-center gap-2"
                 onClick={() => setMobileOpen(false)}
               >

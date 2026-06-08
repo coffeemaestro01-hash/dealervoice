@@ -93,10 +93,10 @@ export async function TrendingLocalDealers() {
               Live marketplace
             </div>
             <h2 id="trending-dealers-heading" className="text-2xl md:text-3xl font-bold text-white">
-              Trending <span className="text-gold">Local Dealers</span>
+              Featured <span className="text-gold">Dealerships</span>
             </h2>
             <p className="text-gray-400 mt-1 text-sm md:text-base">
-              Top dealerships by reviews and reputation in your network.
+              Browse dealerships worldwide — write the first review where none exist yet.
             </p>
           </div>
           <Link

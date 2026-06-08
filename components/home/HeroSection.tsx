@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Search, MapPin, ShieldCheck, Star } from "lucide-react";
+import { Search, MapPin, ShieldCheck, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -17,7 +18,7 @@ interface HeroStats {
 
 function compact(n: number) {
   if (n >= 1000) return `${(n / 1000).toFixed(1).replace(/\.0$/, "")}K+`;
-  return `${n}`;
+  return n.toLocaleString();
 }
 
 export function HeroSection({ stats }: { stats: HeroStats }) {
@@ -28,9 +29,20 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
   const TRUST_STATS = [
     { value: compact(stats.dealers), label: "Dealerships listed" },
     { value: `${stats.countries}`, label: "Countries" },
-    { value: stats.reviews > 0 ? compact(stats.reviews) : "100%", label: stats.reviews > 0 ? "Verified reviews" : "Verified reviews only" },
+    {
+      value: stats.reviews > 0 ? compact(stats.reviews) : "Open",
+      label: stats.reviews > 0 ? "Published reviews" : "Be the first reviewer",
+    },
     { value: "Free", label: "To read & review" },
   ];
+
+  const trustLine = [
+    stats.dealers > 0 ? `${compact(stats.dealers)} dealerships` : null,
+    stats.countries > 0 ? `${stats.countries} countries` : null,
+    "Global automotive review platform",
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +54,6 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
 
   return (
     <section className="relative bg-night overflow-hidden">
-      {/* soft gold ambiance */}
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_70%_60%_at_50%_-10%,rgba(251,101,20,0.12),transparent_60%)]" />
       <div className="absolute top-24 -right-20 w-96 h-96 bg-gold-500/15 rounded-full blur-[120px] pointer-events-none" />
 
@@ -55,27 +66,22 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
         >
           <div className="inline-flex items-center gap-2 bg-gold-500/10 border border-gold/40 rounded-full px-4 py-1.5 text-sm text-gold-400 font-medium mb-6">
             <ShieldCheck size={14} />
-            New platform - be among the first verified reviewers in your city
+            {trustLine}
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-5">
-            Verified car dealer reviews{" "}
-            <span className="text-gold">near you</span>
+            Find trusted car dealership reviews{" "}
+            <span className="text-gold">worldwide</span>
           </h1>
 
-          <p className="text-base sm:text-lg md:text-xl text-gray-400 mb-8 max-w-xl mx-auto">
-            Search local dealerships, read real buyer experiences, and write reviews that help your community.
+          <p className="text-base sm:text-lg md:text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+            DealerVoice helps car buyers discover real customer experiences and compare dealership reputation across global markets.
           </p>
 
-          <p className="text-sm font-semibold text-gold-300 mb-3">
-            Find Verified Car Dealer Reviews Near You
-          </p>
-
-          {/* Prominent search */}
           <form
             onSubmit={handleSearch}
             role="search"
-            aria-label="Search verified car dealer reviews"
+            aria-label="Search car dealership reviews"
             className="flex flex-col sm:flex-row gap-2 max-w-2xl mx-auto bg-white p-2 rounded-2xl border border-white/10 shadow-2xl shadow-black/40"
           >
             <div className="relative flex-1">
@@ -102,9 +108,22 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
               size="lg"
               className="h-14 px-8 bg-gold-gradient text-night-900 hover:opacity-90 font-semibold shrink-0 border-0 rounded-xl"
             >
-              Search
+              Search Reviews
             </Button>
           </form>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-5">
+            <Link href="/claim">
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-gold/50 text-gold-300 bg-transparent hover:bg-gold-500/15 gap-2 h-11"
+              >
+                <Building2 size={16} />
+                Claim Your Dealership
+              </Button>
+            </Link>
+          </div>
 
           <p className="text-gray-500 text-sm mt-4">
             Popular:{" "}
@@ -122,7 +141,6 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
           </p>
         </motion.div>
 
-        {/* Stats */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

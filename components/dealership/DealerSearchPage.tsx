@@ -3,7 +3,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { Search, SlidersHorizontal, MapPin, X } from "lucide-react";
+import { Search, SlidersHorizontal, MapPin, X, PenLine } from "lucide-react";
+import Link from "next/link";
 import { DealerCard } from "./DealerCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,6 +32,7 @@ export function DealerSearchPage({ searchParams: initialParams }: DealerSearchPa
   const [brand, setBrand] = useState((initialParams.brand as string) ?? "");
   const [sort, setSort] = useState((initialParams.sort as string) ?? "relevance");
   const [page, setPage] = useState(1);
+  const writeIntent = sp.get("intent") === "write" || initialParams.intent === "write";
 
   const params = new URLSearchParams();
   if (query) params.set("q", query);
@@ -78,7 +80,19 @@ export function DealerSearchPage({ searchParams: initialParams }: DealerSearchPa
       {/* Search header */}
       <div className="bg-white border-b border-gray-100 shadow-sm">
         <div className="container py-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Find Car Dealerships</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            {writeIntent ? "Find a dealership to review" : "Find Car Dealerships"}
+          </h1>
+          {writeIntent && (
+            <p className="text-sm text-gray-600 mb-4 max-w-2xl">
+              Search for the dealership you visited, open its profile, then click{" "}
+              <span className="font-medium text-gray-900">Write Review</span>. You can verify your review with a
+              purchase invoice or service receipt.{" "}
+              <Link href="/methodology" className="text-gold-700 hover:underline">
+                How verification works
+              </Link>
+            </p>
+          )}
           <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
@@ -121,6 +135,12 @@ export function DealerSearchPage({ searchParams: initialParams }: DealerSearchPa
       </div>
 
       <div className="container py-6">
+        {writeIntent && !isLoading && (data?.data.length ?? 0) > 0 && (
+          <div className="mb-5 flex items-start gap-3 rounded-xl border border-gold/30 bg-gold-50 px-4 py-3 text-sm text-gold-900">
+            <PenLine size={18} className="shrink-0 mt-0.5" />
+            <p>Select a dealership below, then use <strong>Write Review</strong> on its profile.</p>
+          </div>
+        )}
         <div className="flex items-center justify-between mb-5">
           <p className="text-sm text-gray-600">
             {isLoading ? "Searching..." : `${data?.total?.toLocaleString() ?? 0} dealerships found`}

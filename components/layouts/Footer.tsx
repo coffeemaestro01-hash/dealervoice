@@ -5,7 +5,7 @@ import { ManageCookiesLink } from "@/components/consent/ManageCookiesLink";
 const FOOTER_LINKS = {
   Platform: [
     { label: "Find Dealers", href: "/dealers" },
-    { label: "Write a Review", href: "/dealers" },
+    { label: "Write a Review", href: "/dealers?intent=write" },
     { label: "How It Works", href: "/about" },
     { label: "Methodology", href: "/methodology" },
     { label: "Pricing", href: "/pricing" },
@@ -42,7 +42,7 @@ export function Footer() {
           <div className="col-span-2 md:col-span-1">
             <FooterBrand height={32} />
             <p className="text-sm leading-relaxed mt-3">
-              The world&apos;s most trusted platform for car dealership reviews and reputation insights.
+              A global platform for car dealership reviews and reputation insights — built for car buyers and dealerships.
             </p>
             <div className="flex gap-2 mt-4">
               {[
@@ -84,7 +84,7 @@ export function Footer() {
           <p>© {new Date().getFullYear()} DealerVoice. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <ManageCookiesLink />
-            <span>Dealership listings across 26 countries</span>
+            <span>Dealership listings across multiple countries</span>
           </div>
         </div>
       </div>

@@ -55,7 +55,13 @@ export function DealerCard({ dealer, featured, className }: DealerCardProps) {
                   </span>
                 </div>
               </div>
-              <RatingBadge rating={dealer.overallRating} size="sm" />
+              {dealer.totalReviews > 0 ? (
+                <RatingBadge rating={dealer.overallRating} size="sm" />
+              ) : (
+                <span className="text-xs font-medium text-gray-400 bg-gray-50 border border-gray-100 rounded-lg px-2 py-0.5 shrink-0">
+                  Not yet rated
+                </span>
+              )}
             </div>
 
             <div className="flex items-center gap-2 mt-2 flex-wrap">
@@ -107,25 +113,26 @@ export function DealerCard({ dealer, featured, className }: DealerCardProps) {
         )}
       </div>
 
-      {/* Reputation bar */}
-      <div className="px-5 pb-4">
-        <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
-          <span>Reputation Score</span>
-          <span className="font-semibold text-gray-700">{dealer.reputationScore}/100</span>
+      {dealer.totalReviews > 0 && (
+        <div className="px-5 pb-4">
+          <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+            <span>Reputation Score</span>
+            <span className="font-semibold text-gray-700">{dealer.reputationScore}/100</span>
+          </div>
+          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+            <div
+              className={cn(
+                "h-full rounded-full transition-all",
+                dealer.reputationScore >= 80 ? "bg-green-500" :
+                dealer.reputationScore >= 60 ? "bg-lime-500" :
+                dealer.reputationScore >= 40 ? "bg-yellow-500" :
+                dealer.reputationScore >= 20 ? "bg-orange-500" : "bg-red-500"
+              )}
+              style={{ width: `${dealer.reputationScore}%` }}
+            />
+          </div>
         </div>
-        <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-          <div
-            className={cn(
-              "h-full rounded-full transition-all",
-              dealer.reputationScore >= 80 ? "bg-green-500" :
-              dealer.reputationScore >= 60 ? "bg-lime-500" :
-              dealer.reputationScore >= 40 ? "bg-yellow-500" :
-              dealer.reputationScore >= 20 ? "bg-orange-500" : "bg-red-500"
-            )}
-            style={{ width: `${dealer.reputationScore}%` }}
-          />
-        </div>
-      </div>
+      )}
     </Link>
   );
 }

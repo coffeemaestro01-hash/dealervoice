@@ -84,13 +84,22 @@ export function DealershipProfile({ dealer, isPremium = false }: Props) {
               {/* Rating */}
               <div className="flex items-center gap-3 sm:flex-col sm:items-end">
                 <div className="flex items-center gap-2">
-                  <RatingBadge rating={dealer.overallRating} size="lg" />
-                  <div>
-                    <StarRating rating={dealer.overallRating} size="md" />
-                    <p className="text-xs text-gray-500 mt-0.5">
-                      {formatNumber(dealer.totalReviews)} reviews
-                    </p>
-                  </div>
+                  {dealer.totalReviews > 0 ? (
+                    <>
+                      <RatingBadge rating={dealer.overallRating} size="lg" />
+                      <div>
+                        <StarRating rating={dealer.overallRating} size="md" />
+                        <p className="text-xs text-gray-500 mt-0.5">
+                          {formatNumber(dealer.totalReviews)} reviews
+                        </p>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="text-right">
+                      <p className="text-sm font-medium text-gray-500">Not yet rated</p>
+                      <p className="text-xs text-gray-400 mt-0.5">No reviews yet</p>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex flex-wrap gap-2 sm:mt-2">
@@ -122,9 +131,13 @@ export function DealershipProfile({ dealer, isPremium = false }: Props) {
         <div className="flex flex-wrap gap-4 pb-5 text-sm border-t border-gray-50 pt-4">
           <div>
             <span className="text-gray-500">Reputation</span>
-            <span className={cn("ml-1.5 font-semibold", reputationColor(dealer.reputationScore))}>
-              {dealer.reputationScore}/100
-            </span>
+            {dealer.totalReviews > 0 ? (
+              <span className={cn("ml-1.5 font-semibold", reputationColor(dealer.reputationScore))}>
+                {dealer.reputationScore}/100
+              </span>
+            ) : (
+              <span className="ml-1.5 font-semibold text-gray-400">Not yet rated</span>
+            )}
           </div>
           {dealer.responseRate > 0 && (
             <div>

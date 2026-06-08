@@ -55,7 +55,7 @@ export default async function ClaimPage({ searchParams }: { searchParams: Promis
             Claim your <span className="text-gold">dealership</span>
           </h1>
           <p className="text-lg text-gray-600 mb-8">
-            Find your dealership below to manage its profile, respond to reviews, and build trust with millions of car buyers.
+            Find your dealership below to manage its profile, respond to reviews, and build trust with car buyers on DealerVoice.
           </p>
 
           <form action="/claim" method="get" className="flex gap-2 bg-white p-2 rounded-2xl border border-gray-200 shadow-xl shadow-gray-200/60">

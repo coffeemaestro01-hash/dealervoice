@@ -16,9 +16,9 @@ import { Navbar } from "@/components/layouts/Navbar";
 import { Footer } from "@/components/layouts/Footer";
 
 export const metadata: Metadata = {
-  title: "DealerVoice — Find Verified Car Dealer Reviews Near You",
+  title: "DealerVoice — Find Trusted Car Dealership Reviews Worldwide",
   description:
-    "Search local car dealerships, read verified buyer reviews, and compare ratings. The automotive review platform trusted by car buyers nationwide.",
+    "Search car dealerships worldwide, read verified buyer reviews, and compare reputation scores before you buy or service your vehicle.",
 };
 
 async function getHeroStats() {
@@ -39,11 +39,16 @@ export default async function HomePage() {
       <Navbar />
       <main className="flex-1">
         <HeroSection stats={stats} />
+        <HowItWorksSection dealerCount={stats.dealers} />
         <TrustSection />
-        <CategoriesSection />
         <Suspense>
           <TrendingLocalDealers />
         </Suspense>
+        <Suspense>
+          <RecentReviewsSection />
+        </Suspense>
+        <CategoriesSection />
+        <BrandsSection />
         <section className="py-10 bg-night border-t border-white/5" aria-label="Sponsored automotive offers">
           <div className="container grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
             <AutomotiveAdBanner type="Tier2_OEM_Offer" slot="homepage_financing" />
@@ -51,11 +56,6 @@ export default async function HomePage() {
             <AutomotiveAdBanner type="Auto_Ecosystem_Partner" slot="homepage_insurance" />
           </div>
         </section>
-        <HowItWorksSection />
-        <Suspense>
-          <RecentReviewsSection />
-        </Suspense>
-        <BrandsSection />
         <CtaSection />
       </main>
       <Footer />

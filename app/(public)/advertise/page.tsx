@@ -17,7 +17,7 @@ export default function AdvertisePage() {
       <section className="border-b border-gray-100 bg-gray-50">
         <div className="container py-14 text-center max-w-2xl">
           <h1 className="text-4xl font-extrabold text-gray-900 mb-3">Advertise on <span className="text-gold">DealerVoice</span></h1>
-          <p className="text-lg text-gray-600">Put your dealership in front of millions of buyers at the exact moment they&apos;re choosing where to buy.</p>
+          <p className="text-lg text-gray-600">Put your dealership in front of car buyers at the exact moment they&apos;re choosing where to buy.</p>
         </div>
       </section>
       <section className="py-14">
