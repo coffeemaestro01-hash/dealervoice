@@ -53,7 +53,7 @@ const COUNTRIES: CountrySpec[] = [
   { name: "Portugal", code: "PT", code3: "PRT", dialCode: "+351", currency: "EUR", locale: "pt-PT", flagEmoji: "🇵🇹", region: "Europe", quota: 90 },
   { name: "Ireland", code: "IE", code3: "IRL", dialCode: "+353", currency: "EUR", locale: "en-IE", flagEmoji: "🇮🇪", region: "Europe", quota: 70 },
   // Asia
-  { name: "India", code: "IN", code3: "IND", dialCode: "+91", currency: "INR", locale: "en-IN", flagEmoji: "🇮🇳", region: "Asia", quota: 500 },
+  { name: "India", code: "IN", code3: "IND", dialCode: "+91", currency: "INR", locale: "en-IN", flagEmoji: "🇮🇳", region: "Asia", quota: 0 },
   { name: "Japan", code: "JP", code3: "JPN", dialCode: "+81", currency: "JPY", locale: "ja-JP", flagEmoji: "🇯🇵", region: "Asia", quota: 350 },
   { name: "South Korea", code: "KR", code3: "KOR", dialCode: "+82", currency: "KRW", locale: "ko-KR", flagEmoji: "🇰🇷", region: "Asia", quota: 200 },
   { name: "Indonesia", code: "ID", code3: "IDN", dialCode: "+62", currency: "IDR", locale: "id-ID", flagEmoji: "🇮🇩", region: "Asia", quota: 150 },
@@ -141,7 +141,7 @@ function score(tags: Record<string, string>): number {
   if (tags.brand || tags["brand:en"]) s += 2;
   if (tags["addr:street"]) s += 1;
   if (tags.opening_hours) s += 1;
-  if (tags.email || tags["contact:email"]) s += 1;
+  if (tags.email || tags["contact:email"]) s += 3;
   return s;
 }
 
@@ -164,6 +164,11 @@ async function main() {
       update: {},
     });
 
+    if (c.quota <= 0) {
+      console.log(`    ⏭ skipped (use seed-dealers-india-osm.ts for India)`);
+      continue;
+    }
+
     const nodes = await fetchOSM(c.code, c.quota);
     console.log(`    fetched ${nodes.length} OSM nodes`);
     if (nodes.length === 0) continue;
@@ -177,15 +182,19 @@ async function main() {
         const lat = n.lat ?? n.center?.lat ?? null;
         const lon = n.lon ?? n.center?.lon ?? null;
         const city = tags["addr:city"] || tags["addr:town"] || tags["addr:suburb"] || tags["addr:state"] || "";
+        const email = tags.email || tags["contact:email"] || null;
         return {
           slug: buildSlug(name, city, n.id),
           name: name.slice(0, 120),
           city,
           state: tags["addr:state"] || null,
+          district: tags["addr:district"] || tags["addr:county"] || null,
           address: [tags["addr:housenumber"], tags["addr:street"]].filter(Boolean).join(" ") || null,
           postal: tags["addr:postcode"] || null,
           phone: tags.phone || tags["contact:phone"] || null,
           website: tags.website || tags["contact:website"] || null,
+          email,
+          emailSource: email ? "osm" : null,
           lat, lon,
           brand: tags.brand || tags["brand:en"] || null,
           _score: score(tags),
@@ -217,10 +226,13 @@ async function main() {
           countryId: country.id,
           cityName: r.city || null,
           stateName: r.state,
+          districtName: r.district || null,
           address: r.address,
           postalCode: r.postal,
           phone: r.phone,
           website: r.website,
+          email: r.email || null,
+          emailSource: r.emailSource || null,
           latitude: r.lat,
           longitude: r.lon,
           overallRating: 0,

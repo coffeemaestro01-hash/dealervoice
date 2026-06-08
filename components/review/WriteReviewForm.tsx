@@ -74,7 +74,13 @@ export function WriteReviewForm({ dealer }: Props) {
     },
     onSuccess: (data) => {
       toast({ title: "Review submitted!", description: data.message });
-      router.push(`/dealership/${dealer.slug}`);
+      const flagged = data.data?.status === "FLAGGED" ? "1" : "0";
+      const params = new URLSearchParams({
+        slug: dealer.slug,
+        dealer: dealer.name,
+        flagged,
+      });
+      router.push(`/review-thank-you?${params.toString()}`);
     },
     onError: (err: Error) => {
       toast({ title: "Error", description: err.message, variant: "destructive" });

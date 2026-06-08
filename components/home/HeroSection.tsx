@@ -8,12 +8,20 @@ import { Search, MapPin, ShieldCheck, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const POPULAR = ["Toyota", "BMW", "Tesla", "Mercedes-Benz", "Ford"];
+const POPULAR = ["Maruti", "Hyundai", "Tata", "Mahindra", "Honda"];
+const POPULAR_LOCATIONS = [
+  { label: "Mumbai", href: "/dealers/in/state/mh" },
+  { label: "Bangalore", href: "/dealers/in/state/ka" },
+  { label: "Delhi NCR", href: "/dealers/in/state/dl" },
+  { label: "Chennai", href: "/dealers/in/state/tn" },
+  { label: "Pune", href: "/dealers/in/state/mh" },
+];
 
 interface HeroStats {
   dealers: number;
   countries: number;
   reviews: number;
+  indiaDealers?: number;
 }
 
 function compact(n: number) {
@@ -28,7 +36,7 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
 
   const TRUST_STATS = [
     { value: compact(stats.dealers), label: "Dealerships listed" },
-    { value: `${stats.countries}`, label: "Countries" },
+    { value: stats.indiaDealers ? compact(stats.indiaDealers) : "India", label: "In India" },
     {
       value: stats.reviews > 0 ? compact(stats.reviews) : "Open",
       label: stats.reviews > 0 ? "Published reviews" : "Be the first reviewer",
@@ -37,9 +45,9 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
   ];
 
   const trustLine = [
-    stats.dealers > 0 ? `${compact(stats.dealers)} dealerships` : null,
-    stats.countries > 0 ? `${stats.countries} countries` : null,
-    "Global automotive review platform",
+    stats.indiaDealers ? `${compact(stats.indiaDealers)} India dealerships` : null,
+    stats.dealers > 0 ? `${compact(stats.dealers)} total listings` : null,
+    "India-first · expanding worldwide",
   ]
     .filter(Boolean)
     .join(" · ");
@@ -69,12 +77,12 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
           </div>
 
           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-5">
-            Find trusted car dealership reviews{" "}
-            <span className="text-gold">worldwide</span>
+            Find trusted car dealership reviews in{" "}
+            <span className="text-gold">India</span>
           </h1>
 
           <p className="text-base sm:text-lg md:text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
-            DealerVoice helps car buyers discover real customer experiences and compare dealership reputation across global markets.
+            DealerVoice helps Indian car buyers discover real customer experiences, compare dealership reputation by state and district, and make confident purchase decisions.
           </p>
 
           <form
@@ -98,7 +106,7 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
               <Input
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                placeholder="City or country"
+                placeholder="City or state"
                 className="pl-11 h-14 border-0 sm:border-l border-white/10 bg-transparent text-base shadow-none focus-visible:ring-0 rounded-none"
               />
             </div>
@@ -125,11 +133,11 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
           </div>
 
           <p className="text-gray-500 text-sm mt-4">
-            Popular:{" "}
+            Popular brands:{" "}
             {POPULAR.map((b, i) => (
               <span key={b}>
                 <button
-                  onClick={() => router.push(`/dealers?q=${encodeURIComponent(b)}`)}
+                  onClick={() => router.push(`/dealers/in?q=${encodeURIComponent(b)}`)}
                   className="text-gold-400 hover:text-gold-300 hover:underline font-medium"
                 >
                   {b}
@@ -137,6 +145,21 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
                 {i < POPULAR.length - 1 ? ", " : ""}
               </span>
             ))}
+          </p>
+          <p className="text-gray-500 text-sm mt-2">
+            Top cities:{" "}
+            {POPULAR_LOCATIONS.map((loc, i) => (
+              <span key={loc.label}>
+                <Link href={loc.href} className="text-gold-400/80 hover:text-gold-300 hover:underline font-medium">
+                  {loc.label}
+                </Link>
+                {i < POPULAR_LOCATIONS.length - 1 ? ", " : ""}
+              </span>
+            ))}
+            {" · "}
+            <Link href="/dealers/in" className="text-gold-400 hover:text-gold-300 hover:underline font-medium">
+              All India
+            </Link>
           </p>
         </motion.div>
 

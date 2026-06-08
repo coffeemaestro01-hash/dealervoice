@@ -310,6 +310,7 @@ model Dealership {
 
   // Contact
   email               String?
+  emailSource         String?        // osm | website | manual | claimed | csv
   phone               String?
   website             String?
 
@@ -320,6 +321,7 @@ model Dealership {
   cityName            String?
   stateCode           String?
   stateName           String?
+  districtName        String?
   countryId           String
   postalCode          String?
 
@@ -400,6 +402,9 @@ model Dealership {
   @@index([reputationScore])
   @@index([isFeatured])
   @@index([latitude, longitude])
+  @@index([stateName])
+  @@index([districtName])
+  @@index([email])
 }
 
 model DealerBrand {
@@ -724,17 +729,66 @@ model ModerationAction {
 // ─────────────────────────────────────────────
 
 model AdClickEvent {
-  id        String   @id @default(cuid())
-  adType    String
-  slot      String
-  targetUrl String
-  ipAddress String?
-  userAgent String?
-  createdAt DateTime @default(now())
+  id            String   @id @default(cuid())
+  adType        String
+  slot          String
+  targetUrl     String
+  adPlacementId String?
+  ipAddress     String?
+  userAgent     String?
+  createdAt     DateTime @default(now())
 
   @@index([adType])
   @@index([slot])
   @@index([createdAt])
+}
+
+model AdImpressionEvent {
+  id            String   @id @default(cuid())
+  adType        String
+  slot          String
+  adPlacementId String?
+  ipAddress     String?
+  userAgent     String?
+  createdAt     DateTime @default(now())
+
+  @@index([slot])
+  @@index([createdAt])
+}
+
+model AdPlacement {
+  id               String   @id @default(cuid())
+  slot             String
+  adType           String
+  headline         String
+  subheadline      String
+  ctaLabel         String
+  ctaHref          String
+  badge            String
+  accent           String   @default("from-gold-600 to-amber-500")
+  countryCode      String?
+  cpcEstimatePaise Int?
+  isActive         Boolean  @default(true)
+  priority         Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([slot, isActive])
+  @@index([countryCode])
+}
+
+model Testimonial {
+  id          String   @id @default(cuid())
+  quote       String   @db.Text
+  authorName  String
+  authorCity  String?
+  authorState String?
+  isVerified  Boolean  @default(false)
+  isFeatured  Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([isFeatured, sortOrder])
 }
 
 model AnalyticsEvent {
@@ -757,6 +811,72 @@ model AnalyticsEvent {
   @@index([dealershipId])
   @@index([eventType])
   @@index([createdAt])
+}
+
+model SiteSession {
+  id          String   @id @default(cuid())
+  sessionId   String   @unique
+  visitorId   String?
+  userId      String?
+  userRole    String?
+  entryPath   String?
+  exitPath    String?
+  pageViews   Int      @default(0)
+  referrer    String?  @db.Text
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  country     String?
+  region      String?
+  city        String?
+  device      String?
+  browser     String?
+  os          String?
+  ipAddress   String?
+  startedAt   DateTime @default(now())
+  lastSeenAt  DateTime @updatedAt
+
+  @@index([visitorId])
+  @@index([userId])
+  @@index([startedAt])
+  @@index([lastSeenAt])
+  @@index([country])
+}
+
+model SiteEvent {
+  id          String   @id @default(cuid())
+  eventType   String   // page_view, navigation, search, click, form_submit, api_hit, error
+  path        String   @db.Text
+  pathPattern String?
+  queryString String?
+  method      String   @default("GET")
+  statusCode  Int?
+  sessionId   String?
+  visitorId   String?
+  userId      String?
+  userRole    String?
+  ipAddress   String?
+  country     String?
+  region      String?
+  city        String?
+  device      String?
+  browser     String?
+  os          String?
+  referrer    String?  @db.Text
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  durationMs  Int?
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  @@index([eventType])
+  @@index([pathPattern])
+  @@index([sessionId])
+  @@index([visitorId])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([country])
 }
 
 model CompetitorSet {

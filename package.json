@@ -14,6 +14,9 @@
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
     "seed:osm": "tsx scripts/seed-dealers-osm.ts",
+    "seed:india": "tsx scripts/seed-dealers-india-osm.ts",
+    "seed:ads": "tsx scripts/seed-ad-placements.ts",
+    "seed:blog": "tsx scripts/seed-blog-india.ts",
     "db:reset": "prisma migrate reset",
     "postinstall": "prisma generate"
   },
@@ -75,6 +78,7 @@
     "@types/node": "^20.14.9",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "@types/ua-parser-js": "^0.7.39",
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
     "eslint-config-next": "15.5.18",

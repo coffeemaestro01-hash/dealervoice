@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { isValidAdType } from "@/lib/ads/placements";
 
-const VALID_TYPES = ["Tier2_OEM_Offer", "Sponsored_Local_Dealer", "Auto_Ecosystem_Partner"] as const;
+const ALLOWED_EXTERNAL = [
+  "policybazaar.com",
+  "acko.com",
+  "bankbazaar.com",
+  "bajajfinserv.in",
+  "hdfcbank.com",
+  "icicibank.com",
+];
 
 function safeRedirect(target: string, base: string): string {
   if (target.startsWith("/") && !target.startsWith("//")) {
@@ -11,6 +19,10 @@ function safeRedirect(target: string, base: string): string {
     const url = new URL(target);
     const baseUrl = new URL(base);
     if (url.origin === baseUrl.origin) return url.pathname + url.search;
+    const host = url.hostname.replace(/^www\./, "");
+    if (ALLOWED_EXTERNAL.some((d) => host === d || host.endsWith(`.${d}`))) {
+      return url.toString();
+    }
   } catch {
     /* fall through */
   }
@@ -22,8 +34,9 @@ export async function GET(req: NextRequest) {
   const adType = searchParams.get("type") ?? "";
   const slot = searchParams.get("slot") ?? "unknown";
   const redirect = searchParams.get("redirect") ?? "/dealers";
+  const placementId = searchParams.get("placementId");
 
-  if (!VALID_TYPES.includes(adType as (typeof VALID_TYPES)[number])) {
+  if (!isValidAdType(adType)) {
     return NextResponse.redirect(new URL("/dealers", req.url));
   }
 
@@ -36,6 +49,7 @@ export async function GET(req: NextRequest) {
         adType,
         slot,
         targetUrl: destination,
+        adPlacementId: placementId,
         ipAddress: req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null,
         userAgent: req.headers.get("user-agent")?.slice(0, 500) ?? null,
       },
@@ -44,5 +58,8 @@ export async function GET(req: NextRequest) {
     console.error("[ads/click]", err);
   }
 
+  if (destination.startsWith("http")) {
+    return NextResponse.redirect(destination);
+  }
   return NextResponse.redirect(new URL(destination, req.url));
 }

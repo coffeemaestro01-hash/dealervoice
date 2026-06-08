@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
+import { shouldTrackPath } from "@/lib/analytics/paths";
 
 const PUBLIC_PATHS = [
   "/",
@@ -79,7 +80,17 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  // Security headers are added in next.config.ts
+  if (shouldTrackPath(pathname)) {
+    const trackUrl = new URL("/api/analytics/collect", req.url);
+    trackUrl.searchParams.set("path", pathname + req.nextUrl.search);
+    const ref = req.headers.get("referer");
+    if (ref) trackUrl.searchParams.set("ref", ref);
+    fetch(trackUrl.toString(), {
+      method: "GET",
+      headers: { cookie: req.headers.get("cookie") ?? "" },
+    }).catch(() => {});
+  }
+
   return NextResponse.next();
 }
 

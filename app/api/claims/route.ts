@@ -81,7 +81,8 @@ export async function POST(req: NextRequest) {
     await sendClaimApprovedEmail(
       session.user.email,
       session.user.name ?? "Dealer",
-      dealership.name
+      dealership.name,
+      dealership.slug
     ).catch(() => {});
   }
 

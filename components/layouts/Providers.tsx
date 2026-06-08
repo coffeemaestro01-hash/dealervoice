@@ -3,8 +3,9 @@
 import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import dynamic from "next/dynamic";
+import { SiteTracker } from "@/components/analytics/SiteTracker";
 
 const PostHogProvider = dynamic(() => import("./PostHogProvider"), { ssr: false });
 
@@ -24,7 +25,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider>
       <QueryClientProvider client={queryClient}>
-        <PostHogProvider>{children}</PostHogProvider>
+        <PostHogProvider>
+          <Suspense fallback={null}>
+            <SiteTracker />
+          </Suspense>
+          {children}
+        </PostHogProvider>
         {process.env.NODE_ENV === "development" && <ReactQueryDevtools initialIsOpen={false} />}
       </QueryClientProvider>
     </SessionProvider>

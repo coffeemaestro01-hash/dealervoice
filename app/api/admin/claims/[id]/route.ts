@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/config";
 import prisma from "@/lib/db";
 import { approveDealerClaim } from "@/lib/claims/approveClaim";
-import { sendClaimDocumentsRequiredEmail } from "@/lib/email";
+import { sendClaimApprovedEmail, sendClaimDocumentsRequiredEmail } from "@/lib/email";
 import { logAdminAction } from "@/lib/admin/audit";
 
 export async function PATCH(req: NextRequest, props: { params: Promise<{ id: string }> }) {
@@ -43,6 +43,14 @@ export async function PATCH(req: NextRequest, props: { params: Promise<{ id: str
   try {
     if (status === "APPROVED") {
       const result = await approveDealerClaim(prisma, claimId, session.user.id);
+      if (claim.submittedBy?.email) {
+        await sendClaimApprovedEmail(
+          claim.submittedBy.email,
+          claim.submittedBy.name ?? "Dealer",
+          claim.dealership.name,
+          result.dealership.slug
+        ).catch(() => {});
+      }
       await logAdminAction({
         userId: session.user.id,
         action: "claim.approved",

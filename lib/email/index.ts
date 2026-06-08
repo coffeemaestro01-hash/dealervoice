@@ -221,8 +221,17 @@ export async function sendClaimDocumentsRequiredEmail(
   });
 }
 
-export async function sendClaimApprovedEmail(to: string, name: string, dealerName: string) {
-  const url = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/dealer`;
+export async function sendClaimApprovedEmail(
+  to: string,
+  name: string,
+  dealerName: string,
+  dealerSlug?: string
+) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.io";
+  const dashboardUrl = `${appUrl}/dashboard/dealer`;
+  const inviteUrl = dealerSlug
+    ? `${appUrl}/dealership/${dealerSlug}?write=1`
+    : `${appUrl}/write-review`;
   return resend.emails.send({
     from: FROM,
     to,
@@ -231,7 +240,10 @@ export async function sendClaimApprovedEmail(to: string, name: string, dealerNam
       title: "Claim Approved!",
       body: `<p>Hi ${name},</p>
 <p>Your ownership claim for <strong>${dealerName}</strong> has been approved. You can now manage your dealership profile.</p>
-<p><a href="${url}" style="background:#16a34a;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block">Go to Dashboard</a></p>`,
+<p><strong>Grow your reputation:</strong> Share this link with customers to collect verified reviews:</p>
+<p style="background:#f9fafb;border:1px solid #e5e7eb;padding:12px 16px;border-radius:8px;word-break:break-all;font-size:13px">${inviteUrl}</p>
+<p><a href="${dashboardUrl}" style="background:#16a34a;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block;margin-right:8px">Go to Dashboard</a>
+<a href="${inviteUrl}" style="background:#C9961E;color:#0a0a0a;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block">Copy review invite link</a></p>`,
     }),
   });
 }

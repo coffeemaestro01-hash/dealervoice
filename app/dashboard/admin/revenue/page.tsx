@@ -1,12 +1,13 @@
 import { requireAdminPage } from "@/lib/admin/require-admin-page";
 import { getRevenueStats } from "@/lib/admin/stats";
+import { getAdRevenueStats } from "@/lib/ads/placements";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminRevenuePage() {
   await requireAdminPage("/dashboard/admin/revenue", "SUPER_ADMIN", "REVENUE");
-  const stats = await getRevenueStats();
+  const [stats, adStats] = await Promise.all([getRevenueStats(), getAdRevenueStats(30)]);
 
   const funnel = [
     { label: "Claims pending", value: stats.claimsPending, href: "/dashboard/admin/claims" },
@@ -49,6 +50,19 @@ export default async function AdminRevenuePage() {
       <div className="grid sm:grid-cols-2 gap-4">
         <Stat label="Leads (30d)" value={stats.leads30d} />
         <Stat label="Lead conversion" value={`${stats.leadConversionRate}%`} />
+      </div>
+
+      <div className="bg-white rounded-xl border p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="font-semibold text-gray-900">Affiliate ad revenue (30d)</h2>
+          <Link href="/dashboard/admin/ads" className="text-sm text-gold-700 hover:underline">Full report →</Link>
+        </div>
+        <div className="grid sm:grid-cols-4 gap-4">
+          <Stat label="Ad clicks" value={adStats.clicks30d} />
+          <Stat label="Impressions" value={adStats.impressions30d} />
+          <Stat label="CTR" value={`${adStats.ctr}%`} />
+          <Stat label="Est. CPC revenue" value={`₹${adStats.estimatedRevenue.toLocaleString()}`} />
+        </div>
       </div>
     </div>
   );

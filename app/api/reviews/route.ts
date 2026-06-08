@@ -9,6 +9,8 @@ import { updateDealershipAggregates } from "@/lib/reputation";
 import { deleteCachePattern } from "@/lib/redis";
 import { sendNewReviewNotification } from "@/lib/email";
 import { indexDealership } from "@/lib/search";
+import { recordSiteEvent } from "@/lib/analytics/track";
+import { buildRequestMeta } from "@/lib/analytics/parse-request";
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -131,6 +133,16 @@ export async function POST(req: NextRequest) {
   await prisma.user.update({
     where: { id: session.user.id },
     data: { totalReviews: { increment: 1 } },
+  }).catch(() => {});
+
+  recordSiteEvent({
+    eventType: "review_submit",
+    path: "/api/reviews",
+    method: "POST",
+    userId: session.user.id,
+    userRole: session.user.role as string,
+    metadata: { dealershipId: data.dealershipId, reviewId: review.id, status: review.status },
+    meta: buildRequestMeta(req),
   }).catch(() => {});
 
   return NextResponse.json(

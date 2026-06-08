@@ -4,6 +4,7 @@ import Link from "next/link";
 import prisma from "@/lib/db";
 import { DealerCard } from "@/components/dealership/DealerCard";
 import { stateSlug } from "@/lib/geo";
+import { districtHref, districtSlug } from "@/lib/geo/india";
 
 interface Props {
   params: Promise<{ country: string; state: string }>;
@@ -90,6 +91,21 @@ async function getStateData(countryCode: string, stateParam: string) {
     },
   });
 
+  const districts = await prisma.dealership.groupBy({
+    by: ["districtName"],
+    where: {
+      countryId: country.id,
+      deletedAt: null,
+      districtName: { not: null },
+      OR: stateCode
+        ? [{ stateCode }]
+        : [{ stateName: { equals: stateName, mode: "insensitive" } }],
+    },
+    _count: { id: true },
+    orderBy: { _count: { id: "desc" } },
+    take: 40,
+  });
+
   return {
     country,
     stateName,
@@ -97,6 +113,9 @@ async function getStateData(countryCode: string, stateParam: string) {
     stateParam,
     dealerCount,
     topDealers,
+    districts: districts
+      .filter((d) => d.districtName)
+      .map((d) => ({ name: d.districtName!, slug: districtSlug(d.districtName!), count: d._count.id })),
     cities: cities
       .map((c) => {
         const rec = c.cityId ? cityMap.get(c.cityId) : null;
@@ -126,7 +145,7 @@ export default async function StatePage({ params }: Props) {
   const data = await getStateData(countryCode, stateParam);
   if (!data) notFound();
 
-  const { country, stateName, dealerCount, topDealers, cities } = data;
+  const { country, stateName, dealerCount, topDealers, cities, districts } = data;
   const countryHref = `/dealers/${country.code.toLowerCase()}`;
 
   return (
@@ -150,6 +169,24 @@ export default async function StatePage({ params }: Props) {
       </div>
 
       <div className="container py-8">
+        {districts.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-lg font-semibold text-gray-900 mb-3">Districts in {stateName}</h2>
+            <div className="flex flex-wrap gap-2">
+              {districts.map((d) => (
+                <Link
+                  key={d.slug}
+                  href={districtHref(country.code, stateParam, d.name)}
+                  className="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm text-gray-700 hover:border-gold-300 hover:text-gold-800 transition-colors"
+                >
+                  {d.name}
+                  <span className="ml-1.5 text-gray-400 text-xs">{d.count}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
         {cities.length > 0 && (
           <div className="mb-8">
             <h2 className="text-lg font-semibold text-gray-900 mb-3">Cities in {stateName}</h2>

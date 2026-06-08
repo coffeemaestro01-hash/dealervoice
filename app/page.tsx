@@ -13,23 +13,31 @@ import { RecentReviewsSection } from "@/components/home/RecentReviewsSection";
 import { FirstReviewerSection } from "@/components/home/FirstReviewerSection";
 import { BrandsSection } from "@/components/home/BrandsSection";
 import { CtaSection } from "@/components/home/CtaSection";
+import { IndiaCoverageSection } from "@/components/home/IndiaCoverageSection";
+import { TestimonialsSection } from "@/components/home/TestimonialsSection";
+import { BlogStripSection } from "@/components/home/BlogStripSection";
+import { AIAuthoritySection } from "@/components/home/AIAuthoritySection";
 import { Navbar } from "@/components/layouts/Navbar";
 import { Footer } from "@/components/layouts/Footer";
 
 export const metadata: Metadata = {
-  title: "DealerVoice — Find Trusted Car Dealership Reviews Worldwide",
+  title: "DealerVoice — Trusted Car Dealership Reviews in India",
   description:
-    "Search car dealerships worldwide, read verified buyer reviews, and compare reputation scores before you buy or service your vehicle.",
+    "Find car dealerships across India by state and district. Read verified buyer reviews and compare reputation scores before you buy or service your vehicle.",
 };
 
 async function getHeroStats() {
   try {
-    const dealers = await prisma.dealership.count({ where: { deletedAt: null } });
-    const countries = await prisma.country.count({ where: { dealerCount: { gt: 0 } } });
-    const reviews = await prisma.review.count({ where: { status: "PUBLISHED", deletedAt: null } });
-    return { dealers, countries, reviews };
+    const india = await prisma.country.findUnique({ where: { code: "IN" }, select: { id: true } });
+    const [dealers, countries, reviews, indiaDealers] = await Promise.all([
+      prisma.dealership.count({ where: { deletedAt: null } }),
+      prisma.country.count({ where: { dealerCount: { gt: 0 } } }),
+      prisma.review.count({ where: { status: "PUBLISHED", deletedAt: null } }),
+      india ? prisma.dealership.count({ where: { countryId: india.id, deletedAt: null } }) : 0,
+    ]);
+    return { dealers, countries, reviews, indiaDealers };
   } catch {
-    return { dealers: 0, countries: 0, reviews: 0 };
+    return { dealers: 0, countries: 0, reviews: 0, indiaDealers: 0 };
   }
 }
 
@@ -40,6 +48,9 @@ export default async function HomePage() {
       <Navbar />
       <main className="flex-1">
         <HeroSection stats={stats} />
+        <Suspense>
+          <IndiaCoverageSection />
+        </Suspense>
         <HowItWorksSection dealerCount={stats.dealers} />
         <TrustSection />
         <Suspense>
@@ -51,15 +62,22 @@ export default async function HomePage() {
         <Suspense>
           <RecentReviewsSection />
         </Suspense>
+        <Suspense>
+          <TestimonialsSection />
+        </Suspense>
+        <Suspense>
+          <BlogStripSection />
+        </Suspense>
         <CategoriesSection />
         <BrandsSection />
         <section className="py-10 bg-night border-t border-white/5" aria-label="Sponsored automotive offers">
           <div className="container grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
-            <AutomotiveAdBanner type="Tier2_OEM_Offer" slot="homepage_financing" />
-            <AutomotiveAdBanner type="Sponsored_Local_Dealer" slot="homepage_dealer" />
-            <AutomotiveAdBanner type="Auto_Ecosystem_Partner" slot="homepage_insurance" />
+            <AutomotiveAdBanner type="Tier2_OEM_Offer" slot="homepage_financing" countryCode="IN" />
+            <AutomotiveAdBanner type="Sponsored_Local_Dealer" slot="homepage_dealer" countryCode="IN" />
+            <AutomotiveAdBanner type="Auto_Ecosystem_Partner" slot="homepage_insurance" countryCode="IN" />
           </div>
         </section>
+        <AIAuthoritySection />
         <CtaSection />
       </main>
       <Footer />
