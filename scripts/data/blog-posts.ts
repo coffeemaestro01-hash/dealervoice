@@ -24,7 +24,7 @@ export const BLOG_POSTS: BlogPostSeed[] = [
       "A DealerVoice research brief on why structured dealership reviews, machine-readable data, and AI-assisted discovery are becoming essential infrastructure for car buyers and dealers in India.",
     category: "Research",
     tags: ["ai", "research", "india", "platform", "automotive"],
-    daysAgo: 0,
+    daysAgo: 2,
     authorName: "DealerVoice Research",
     content: `<p><em>Research brief · India market · Updated June 2026</em></p>
 
@@ -261,6 +261,71 @@ export const BLOG_POSTS: BlogPostSeed[] = [
 <p>Gurgaon premium outlets and Noida value deals serve different buyers. Compare on-road breakup for the same variant within 48 hours.</p>
 <p>Read <a href="/dealers/in/state/delhi">Delhi</a> and nearby district listings; sort by recent reviews as volume grows.</p>`,
   },
+  {
+    slug: "chennai-car-dealership-reviews-guide",
+    title: "Chennai Car Dealerships: OMR, GST Road, and What to Check Before Booking",
+    excerpt: "Tamil Nadu buyers face long commutes between showroom clusters — how to compare outlets, RTO agents, and monsoon-ready delivery in Chennai.",
+    category: "Cities",
+    tags: ["chennai", "tamil-nadu", "india"],
+    daysAgo: 11,
+    content: `<h2>Chennai buys across corridors</h2>
+<p>Outlets along OMR, GST Road, and Ambattur serve different catchments. A dealer near Siruseri may be irrelevant if you live in Anna Nagar — but <strong>on-road quotes and delivery dates</strong> still vary within the same brand.</p>
+<h2>Local checklist</h2>
+<ul><li>TN registration and temporary permit timeline in writing</li><li>PDI before monsoon — check underbody and lot storage if car was outdoor stock</li><li>Exchange valuation for older hatchbacks (strong used market in Chennai)</li><li>Service centre location vs showroom — they are often kilometres apart</li></ul>
+<p>Browse <a href="/dealers/in/state/tamil-nadu">Tamil Nadu dealerships</a> on DealerVoice and read recent reviews before paying a booking amount.</p>`,
+  },
+  {
+    slug: "pune-car-dealership-reviews-guide",
+    title: "Pune Car Dealers: Hinjewadi, Pimpri-Chinchwad, and Comparison Tips",
+    excerpt: "Maharashtra's second hub mixes IT-corridor showrooms with industrial-belt outlets. What Pune buyers should verify on price and delivery.",
+    category: "Cities",
+    tags: ["pune", "maharashtra", "india"],
+    daysAgo: 10,
+    content: `<h2>Pune is not one market</h2>
+<p>Buyers near Hinjewadi often compare dealers in Pimpri-Chinchwad and Wagholi. Waiting periods for popular SUVs differ outlet to outlet even under the same OEM badge.</p>
+<h2>Before you book</h2>
+<ul><li>Get ex-showroom and on-road breakup from two Pune outlets + one Mumbai quote for leverage</li><li>Confirm who handles MH registration if you live near PCMC vs Pune RTO jurisdiction</li><li>Ask where PDI happens — some dealers use off-site yards</li></ul>
+<p>Search <a href="/dealers/in/state/maharashtra">Maharashtra listings</a> and filter by locality. Leave a review after your visit — Pune's buyer community still needs more outlet-level data.</p>`,
+  },
+  {
+    slug: "hyderabad-car-dealership-reviews-guide",
+    title: "Hyderabad Car Dealerships: Financial District to Secunderabad — Buyer Guide",
+    excerpt: "Telangana's split showroom map, fast EV uptake, and registration quirks — how to pick a trustworthy dealer in Hyderabad.",
+    category: "Cities",
+    tags: ["hyderabad", "telangana", "india"],
+    daysAgo: 9,
+    content: `<h2>Hyderabad sprawls fast</h2>
+<p>Gachibowli, Kukatpally, and Uppal outlets serve different buyers. Telangana's growth means new showrooms open often — reputation data lags behind brand ads.</p>
+<h2>Hyderabad-specific checks</h2>
+<ul><li>TS registration timeline and temporary registration for out-of-district buyers</li><li>EV charger inclusion if you are buying electric — installation lead times vary</li><li>Exchange offer documentation for fleet upgrades in IT corridors</li><li>Service bay capacity before monsoon (long wait times at busy centres)</li></ul>
+<p>Explore <a href="/dealers/in/state/telangana">Telangana dealerships</a> on DealerVoice. Factual reviews help the next buyer navigating Hyderabad's crowded dealer map.</p>`,
+  },
+  {
+    slug: "ahmedabad-car-dealership-reviews-guide",
+    title: "Ahmedabad Car Dealers: SG Highway, Navrangpura, and Gujarat On-Road Tips",
+    excerpt: "Gujarat buyers benefit from competitive pricing — but accessory bundling and delivery promises still differ. What to verify in Ahmedabad.",
+    category: "Cities",
+    tags: ["ahmedabad", "gujarat", "india"],
+    daysAgo: 8,
+    content: `<h2>Gujarat's competitive retail</h2>
+<p>Ahmedabad buyers often get strong ex-showroom deals — yet <strong>on-road inflation</strong> via accessories, insurance markup, and extended warranty packs is still common on SG Highway and Sarkhej corridors.</p>
+<h2>Local diligence</h2>
+<ul><li>Itemised quote with optional lines clearly marked</li><li>Festive-season delivery commitments in writing (high volume months)</li><li>GJ registration and insurance — compare dealer bundle vs online comprehensive</li><li>For used cars: verify RC and hypothecation closure before handover</li></ul>
+<p>See <a href="/dealers/in/state/gujarat">Gujarat listings</a> and compare outlets before Diwali or year-end rush periods.</p>`,
+  },
+  {
+    slug: "kolkata-car-dealership-reviews-guide",
+    title: "Kolkata Car Dealerships: Salt Lake, EM Bypass, and Eastern India Buyer Tips",
+    excerpt: "West Bengal humidity, used-car rust checks, and cross-state registration — a Kolkata-specific dealership checklist.",
+    category: "Cities",
+    tags: ["kolkata", "west-bengal", "india"],
+    daysAgo: 7,
+    content: `<h2>Eastern India's hub city</h2>
+<p>Kolkata buyers often cross into Salt Lake, Rajarhat, and EM Bypass clusters. Out-of-state cars and humid storage make <strong>physical inspection</strong> especially important for used purchases.</p>
+<h2>Kolkata checklist</h2>
+<ul><li>Underbody rust and flood history on monsoon-season stock</li><li>WB registration vs neighbouring state transfers if you commute cross-border</li><li>Dealer-arranged insurance vs own policy before RTO submission</li><li>Service centre weekday capacity — long queues at popular Maruti/Hyundai bays</li></ul>
+<p>Browse <a href="/dealers/in/state/west-bengal">West Bengal dealerships</a> on DealerVoice. Even a short "quote only" review helps build trust data for Kolkata buyers.</p>`,
+  },
 
   // ─── Dealer / B2B ────────────────────────────────────────────────────────
   {
@@ -366,6 +431,47 @@ export const BLOG_POSTS: BlogPostSeed[] = [
 <ul><li>Buyers trust brands but distrust individual outlets</li><li>Social proof is hyper-local and non-portable</li><li>Dealers invest in ads, not public accountability</li></ul>
 <h2>Path forward</h2>
 <p>Structured reviews + claimed profiles + transparent scores create accountability loops. DealerVoice is building that layer — density of real reviews will determine impact.</p>`,
+  },
+  {
+    slug: "dealervoice-ai-automotive-trust-press-brief",
+    title: "Press Brief: DealerVoice — Building India's AI-Readable Dealership Trust Layer",
+    excerpt:
+      "Short press summary of our research on structured dealership reviews, India-first coverage, and AI citation — for media, partners, and LinkedIn.",
+    category: "Press",
+    tags: ["press", "research", "ai", "linkedin"],
+    daysAgo: 0,
+    authorName: "DealerVoice Research",
+    content: `<p><em>Press brief · June 2026 · <a href="mailto:press@dealervoice.io">press@dealervoice.io</a></em></p>
+
+<h2>One-line summary</h2>
+<p><strong>DealerVoice</strong> is an India-first automotive dealership review platform combining structured buyer feedback, open directory data, and AI-readable publishing — so car buyers, search engines, and LLMs can cite outlet-level trust signals before purchase or service.</p>
+
+<h2>The problem</h2>
+<p>Indian car buyers trust brands but struggle to compare <em>individual dealerships</em>. On-road pricing, delivery timelines, and after-sales quality vary outlet to outlet. Useful feedback is scattered across social media and maps with inconsistent moderation.</p>
+
+<h2>What DealerVoice does</h2>
+<ul>
+<li><strong>Directory</strong> — Dealership listings across Indian states and districts (<a href="/dealers/in">dealervoice.io/dealers/in</a>)</li>
+<li><strong>Structured reviews</strong> — Ratings for transparency, pricing, sales staff, delivery, and after-sales</li>
+<li><strong>Verification</strong> — Optional purchase/service proof; published <a href="/methodology">methodology</a>; scores are not pay-to-win</li>
+<li><strong>AI authority</strong> — Schema.org markup, <a href="/llms.txt">llms.txt</a>, and research content for responsible citation</li>
+</ul>
+
+<h2>Stage (honest)</h2>
+<p>Platform is live with thousands of India dealership listings and a growing editorial library. <strong>Review density remains the critical growth lever</strong> — the trust layer compounds when real buyers contribute experiences.</p>
+
+<h2>Revenue (transparent)</h2>
+<p>Dealer profile claims/subscriptions, clearly labelled sponsored placements, and contextual insurance/finance partners — never rating manipulation.</p>
+
+<h2>Links</h2>
+<ul>
+<li>Full research: <a href="/blog/ai-automotive-dealership-review-platform-research">AI + automotive trust research</a></li>
+<li>Write a review: <a href="/write-review">dealervoice.io/write-review</a></li>
+<li>Dealer claims: <a href="mailto:dealers@dealervoice.io">dealers@dealervoice.io</a></li>
+</ul>
+
+<h2>Boilerplate</h2>
+<p>DealerVoice operates at <a href="https://dealervoice.io">dealervoice.io</a>, publishing buyer guides and dealership reputation data for India with global listings in progress.</p>`,
   },
   {
     slug: "compare-dealerships-before-test-drive",
