@@ -52,6 +52,9 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true, "max-video-preview": -1, "max-image-preview": "large" },
   },
   manifest: "/manifest.json",
+  other: {
+    "verify-admitad": "51daf7bf5c",
+  },
 };
 
 export const viewport: Viewport = {
