@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
 import type { DealershipWithRelations } from "@/types";
 import { AutomotiveAdBanner } from "@/components/ads/AutomotiveAdBanner";
+import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 import { getPremiumInventoryUrl } from "@/lib/dealer/premium";
 
 const DealerMap = dynamic(
@@ -130,6 +131,8 @@ export function DealershipSidebar({ dealer, isPremium = false }: Props) {
           className="h-48 w-full"
         />
       )}
+
+      <AdSenseUnit slotKey="dealerSidebar" format="rectangle" className="rounded-xl border border-gray-100 bg-gray-50 p-3" />
 
       {!isPremium && (
         <div className="bg-night rounded-xl border-2 border-gold/30 p-5 shadow-sm text-center">

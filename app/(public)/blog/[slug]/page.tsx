@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import prisma from "@/lib/db";
 import { Calendar, ArrowLeft } from "lucide-react";
+import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +44,7 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
           {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : ""} · {post.authorName}
         </p>
         {post.excerpt && <p className="text-lg text-gray-600 mb-8 leading-relaxed">{post.excerpt}</p>}
+        <AdSenseUnit slotKey="blogInArticle" format="fluid" layout="in-article" className="mb-8" />
         <div
           className="prose prose-gray max-w-none"
           dangerouslySetInnerHTML={{ __html: post.content.includes("<") ? post.content : post.content.replace(/\n/g, "<br />") }}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import prisma from "@/lib/db";
 import { Calendar, ArrowRight } from "lucide-react";
+import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -30,6 +31,9 @@ export default async function BlogPage() {
       </section>
 
       <section className="py-14">
+        <div className="container max-w-4xl mb-8">
+          <AdSenseUnit slotKey="blogList" format="horizontal" className="mx-auto max-w-3xl" />
+        </div>
         <div className="container grid md:grid-cols-2 gap-6 max-w-4xl">
           {posts.length === 0 ? (
             <p className="text-gray-500 col-span-2 text-center">New articles coming soon.</p>

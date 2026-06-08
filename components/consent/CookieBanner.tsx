@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { Cookie, X } from "lucide-react";
+import { dispatchConsentUpdated } from "@/lib/consent/marketing-consent";
 
 const NOTICE_VERSION = "v1.0";
 const COOKIE_NAME = "dv_consent";
@@ -13,7 +14,7 @@ type Cat = "functional" | "analytics" | "marketing";
 const CATS: { key: Cat; label: string; desc: string }[] = [
   { key: "functional", label: "Functional", desc: "Remember your preferences (e.g. language, saved searches)." },
   { key: "analytics", label: "Analytics", desc: "Help us understand how the site is used so we can improve it." },
-  { key: "marketing", label: "Marketing", desc: "Measure campaigns and show relevant content. Off by default." },
+  { key: "marketing", label: "Marketing", desc: "Google AdSense and sponsored content. Off by default." },
 ];
 
 function getCookie(name: string): string | null {
@@ -85,6 +86,7 @@ export function CookieBanner() {
     setNeedsConsent(false);
     setVisible(false);
     setExpanded(false);
+    dispatchConsentUpdated(final);
     try {
       await fetch("/api/consent", {
         method: "POST",
