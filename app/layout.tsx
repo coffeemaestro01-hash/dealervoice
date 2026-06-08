@@ -4,7 +4,7 @@ import "./globals.css";
 import { Providers } from "@/components/layouts/Providers";
 import { Toaster } from "@/components/ui/toaster";
 import { CookieBanner } from "@/components/consent/CookieBanner";
-import { AdSenseProvider } from "@/components/ads/AdSenseProvider";
+import { AdSenseHeadScript } from "@/components/ads/AdSenseHeadScript";
 import { SupportChat } from "@/components/support/SupportChat";
 
 const inter = Inter({
@@ -67,9 +67,11 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${sourceSerif.variable}`} suppressHydrationWarning>
+      <head>
+        <AdSenseHeadScript />
+      </head>
       <body className="min-h-screen bg-background font-sans antialiased">
         <Providers>{children}</Providers>
-        <AdSenseProvider />
         <Toaster />
         <CookieBanner />
         <SupportChat />
