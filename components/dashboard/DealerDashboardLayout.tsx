@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BarChart3, MessageSquare, Settings, Users, Star, TrendingUp, CreditCard, Award, LayoutDashboard, Mail } from "lucide-react";
+import { BarChart3, MessageSquare, Settings, Users, Star, TrendingUp, CreditCard, LayoutDashboard, Mail, Car } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { href: "/dashboard/dealer", icon: LayoutDashboard, label: "Overview", exact: true },
+  { href: "/dashboard/dealer/inventory", icon: Car, label: "Inventory" },
   { href: "/dashboard/dealer/leads", icon: Mail, label: "Leads" },
   { href: "/dashboard/dealer/reviews", icon: MessageSquare, label: "Reviews" },
   { href: "/dashboard/dealer/analytics", icon: BarChart3, label: "Analytics" },
