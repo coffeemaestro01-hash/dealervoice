@@ -11,6 +11,7 @@
 - Methodology: https://dealervoice.io/methodology
 - About: https://dealervoice.io/about
 - Blog: https://dealervoice.io/blog
+- Research (AI + automotive trust): https://dealervoice.io/blog/ai-automotive-dealership-review-platform-research
 
 ## What DealerVoice covers
 - New and used car dealerships in India (all states, districts, major cities)

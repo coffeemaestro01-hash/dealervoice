@@ -16,7 +16,7 @@
     "seed:osm": "tsx scripts/seed-dealers-osm.ts",
     "seed:india": "tsx scripts/seed-dealers-india-osm.ts",
     "seed:ads": "tsx scripts/seed-ad-placements.ts",
-    "seed:blog": "tsx scripts/seed-blog-india.ts",
+    "seed:blog": "tsx scripts/seed-blog-content.ts",
     "db:reset": "prisma migrate reset",
     "postinstall": "prisma generate"
   },

@@ -5,8 +5,9 @@ import { Calendar, ArrowRight } from "lucide-react";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 
 export const metadata: Metadata = {
-  title: "Blog",
-  description: "Car buying tips, dealership insights, and DealerVoice product news.",
+  title: "Blog — Car Buyer Guides, Dealer Insights & Research",
+  description:
+    "India car buying guides, dealership trust research, AI and automotive review platform insights, and dealer reputation tips from DealerVoice.",
 };
 
 export const dynamic = "force-dynamic";
@@ -15,9 +16,11 @@ export default async function BlogPage() {
   const posts = await prisma.blogPost.findMany({
     where: { isPublished: true },
     orderBy: { publishedAt: "desc" },
-    take: 20,
+    take: 50,
     select: { slug: true, title: true, excerpt: true, publishedAt: true, category: true },
   });
+
+  const categories = [...new Set(posts.map((p) => p.category).filter(Boolean))] as string[];
 
   return (
     <div className="bg-white">
@@ -26,7 +29,12 @@ export default async function BlogPage() {
           <h1 className="text-4xl font-extrabold text-gray-900 mb-3">
             The <span className="text-gold">DealerVoice</span> blog
           </h1>
-          <p className="text-lg text-gray-600">Car-buying tips, dealership insights, and product updates.</p>
+          <p className="text-lg text-gray-600">
+            Buyer guides, dealer reputation tips, and research on AI-powered automotive trust — India-first.
+          </p>
+          {posts.length > 0 && (
+            <p className="text-sm text-gray-500 mt-3">{posts.length} published articles</p>
+          )}
         </div>
       </section>
 
@@ -34,6 +42,18 @@ export default async function BlogPage() {
         <div className="container max-w-4xl mb-8">
           <AdSenseUnit slotKey="blogList" format="horizontal" className="mx-auto max-w-3xl" />
         </div>
+        {categories.length > 0 && (
+          <div className="container max-w-4xl mb-8 flex flex-wrap gap-2 justify-center">
+            {categories.map((cat) => (
+              <span
+                key={cat}
+                className="text-xs font-semibold uppercase tracking-wider text-gold-700 bg-gold-50 rounded-full px-3 py-1"
+              >
+                {cat}
+              </span>
+            ))}
+          </div>
+        )}
         <div className="container grid md:grid-cols-2 gap-6 max-w-4xl">
           {posts.length === 0 ? (
             <p className="text-gray-500 col-span-2 text-center">New articles coming soon.</p>

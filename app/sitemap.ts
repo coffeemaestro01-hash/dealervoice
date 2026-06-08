@@ -10,9 +10,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let countries: { code: string }[] = [];
   let cities: { slug: string; country: { code: string } }[] = [];
   let stateRows: { stateCode: string | null; stateName: string | null; country: { code: string } }[] = [];
+  let blogPosts: { slug: string; updatedAt: Date; publishedAt: Date | null }[] = [];
 
   try {
-    [dealerships, countries, cities, stateRows] = await Promise.all([
+    [dealerships, countries, cities, stateRows, blogPosts] = await Promise.all([
       prisma.dealership.findMany({
         where: publicDealerWhere,
         select: { slug: true, updatedAt: true },
@@ -26,6 +27,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         select: { stateCode: true, stateName: true, country: { select: { code: true } } },
         distinct: ["stateCode", "stateName", "countryId"],
         take: 5000,
+      }),
+      prisma.blogPost.findMany({
+        where: { isPublished: true },
+        select: { slug: true, updatedAt: true, publishedAt: true },
+        take: 200,
       }),
     ]);
   } catch {
@@ -76,5 +82,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
     .filter(Boolean) as MetadataRoute.Sitemap;
 
-  return [...static_pages, ...dealerPages, ...countryPages, ...statePages, ...cityPages];
+  const blogPages = blogPosts.map((p) => ({
+    url: `${BASE}/blog/${p.slug}`,
+    lastModified: p.publishedAt ?? p.updatedAt,
+    changeFrequency: "monthly" as const,
+    priority: p.slug.includes("research") ? 0.75 : 0.55,
+  }));
+
+  return [...static_pages, ...blogPages, ...dealerPages, ...countryPages, ...statePages, ...cityPages];
 }

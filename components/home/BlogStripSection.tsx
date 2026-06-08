@@ -27,7 +27,7 @@ export async function BlogStripSection() {
           <div className="flex items-center gap-3">
             <BookOpen className="text-gold-600" size={22} />
             <h2 id="blog-strip-heading" className="font-display text-2xl font-bold text-gray-900">
-              Guides for Indian car buyers
+              Latest from the blog
             </h2>
           </div>
           <Link href="/blog" className="text-sm font-semibold text-gold-700 hover:underline flex items-center gap-1">
