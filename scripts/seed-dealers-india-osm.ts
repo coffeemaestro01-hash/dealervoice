@@ -8,7 +8,9 @@
 
 import { PrismaClient } from "@prisma/client";
 import { INDIA_STATES, type IndiaState } from "../lib/geo/india";
+import { loadProjectEnv } from "./load-env";
 
+loadProjectEnv();
 const prisma = new PrismaClient();
 
 const OVERPASS_URLS = [

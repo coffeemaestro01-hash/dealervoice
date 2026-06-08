@@ -4,7 +4,9 @@
  */
 
 import { PrismaClient } from "@prisma/client";
+import { loadProjectEnv } from "./load-env";
 
+loadProjectEnv();
 const prisma = new PrismaClient();
 const UTM = "utm_source=dealervoice&utm_medium=sponsored";
 
