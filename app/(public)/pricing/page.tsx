@@ -118,7 +118,7 @@ export default async function PricingPage({
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Simple, transparent pricing</h1>
           <p className="text-lg text-gray-600 max-w-xl mx-auto">
-            Start free. Upgrade to remove ads and link your inventory. Prices in INR and USD.
+            Start free. Upgrade to remove ads and list inventory. All plans billed in INR via Razorpay (international cards where enabled).
           </p>
         </div>
 

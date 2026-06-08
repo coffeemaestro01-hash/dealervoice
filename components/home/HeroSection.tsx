@@ -10,11 +10,11 @@ import { Input } from "@/components/ui/input";
 
 const POPULAR = ["Maruti", "Hyundai", "Tata", "Mahindra", "Honda"];
 const POPULAR_LOCATIONS = [
-  { label: "Mumbai", href: "/dealers/in/state/mh" },
-  { label: "Bangalore", href: "/dealers/in/state/ka" },
-  { label: "Delhi NCR", href: "/dealers/in/state/dl" },
-  { label: "Chennai", href: "/dealers/in/state/tn" },
-  { label: "Pune", href: "/dealers/in/state/mh" },
+  { label: "India", href: "/dealers/in" },
+  { label: "United States", href: "/dealers/us" },
+  { label: "United Kingdom", href: "/dealers/gb" },
+  { label: "Mumbai", href: "/dealers/in/state/maharashtra" },
+  { label: "Texas", href: "/dealers/us" },
 ];
 
 interface HeroStats {
@@ -36,7 +36,7 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
 
   const TRUST_STATS = [
     { value: compact(stats.dealers), label: "Dealerships listed" },
-    { value: stats.indiaDealers ? compact(stats.indiaDealers) : "India", label: "In India" },
+    { value: String(stats.countries || 10), label: "Countries" },
     {
       value: stats.reviews > 0 ? compact(stats.reviews) : "Open",
       label: stats.reviews > 0 ? "Published reviews" : "Be the first reviewer",
@@ -47,7 +47,7 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
   const trustLine = [
     stats.indiaDealers ? `${compact(stats.indiaDealers)} India dealerships` : null,
     stats.dealers > 0 ? `${compact(stats.dealers)} total listings` : null,
-    "India-first · expanding worldwide",
+    "Worldwide directory · deepest coverage in India",
   ]
     .filter(Boolean)
     .join(" · ");

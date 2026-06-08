@@ -7,7 +7,8 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { TrustSection } from "@/components/home/TrustSection";
 import { CategoriesSection } from "@/components/home/CategoriesSection";
 import { TrendingLocalDealers } from "@/components/home/TrendingLocalDealers";
-import { AutomotiveAdBanner } from "@/components/ads/AutomotiveAdBanner";
+import { HomepageAds } from "@/components/home/HomepageAds";
+import { GlobalCoverageSection } from "@/components/home/GlobalCoverageSection";
 import { HowItWorksSection } from "@/components/home/HowItWorksSection";
 import { RecentReviewsSection } from "@/components/home/RecentReviewsSection";
 import { FirstReviewerSection } from "@/components/home/FirstReviewerSection";
@@ -21,9 +22,9 @@ import { Navbar } from "@/components/layouts/Navbar";
 import { Footer } from "@/components/layouts/Footer";
 
 export const metadata: Metadata = {
-  title: "DealerVoice — Trusted Car Dealership Reviews in India",
+  title: "DealerVoice — Trusted Car Dealership Reviews Worldwide",
   description:
-    "Find car dealerships across India by state and district. Read verified buyer reviews and compare reputation scores before you buy or service your vehicle.",
+    "Find car dealerships worldwide. Read verified buyer reviews, browse dealer inventory, and compare reputation scores before you buy or service your vehicle.",
 };
 
 async function getHeroStats() {
@@ -49,6 +50,9 @@ export default async function HomePage() {
       <main className="flex-1">
         <HeroSection stats={stats} />
         <Suspense>
+          <GlobalCoverageSection />
+        </Suspense>
+        <Suspense>
           <IndiaCoverageSection />
         </Suspense>
         <HowItWorksSection dealerCount={stats.dealers} />
@@ -70,13 +74,9 @@ export default async function HomePage() {
         </Suspense>
         <CategoriesSection />
         <BrandsSection />
-        <section className="py-10 bg-night border-t border-white/5" aria-label="Sponsored automotive offers">
-          <div className="container grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
-            <AutomotiveAdBanner type="Tier2_OEM_Offer" slot="homepage_financing" countryCode="IN" />
-            <AutomotiveAdBanner type="Sponsored_Local_Dealer" slot="homepage_dealer" countryCode="IN" />
-            <AutomotiveAdBanner type="Auto_Ecosystem_Partner" slot="homepage_insurance" countryCode="IN" />
-          </div>
-        </section>
+        <Suspense>
+          <HomepageAds />
+        </Suspense>
         <AIAuthoritySection />
         <CtaSection />
       </main>

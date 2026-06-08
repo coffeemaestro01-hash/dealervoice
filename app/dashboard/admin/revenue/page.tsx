@@ -20,7 +20,12 @@ export default async function AdminRevenuePage() {
     <div className="p-6 lg:p-8 space-y-8">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Revenue command center</h1>
-        <p className="text-sm text-gray-500 mt-1">MRR estimate, paid revenue, and claim → pay funnel.</p>
+        <p className="text-sm text-gray-500 mt-1">
+          MRR estimate, paid revenue, and claim → pay funnel.{" "}
+          <Link href="/dashboard/admin/income" className="text-gold-700 hover:underline">
+            Full income ledger (SUPER_ADMIN) →
+          </Link>
+        </p>
       </div>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">

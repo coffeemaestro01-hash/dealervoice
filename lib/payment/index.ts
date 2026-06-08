@@ -1,5 +1,5 @@
-// Razorpay payment integration for Indian SaaS billing
-// Handles INR-based subscriptions + international cards via Razorpay PA-CB
+// Razorpay — sole payment provider (INR settlement, global dealer signups).
+// International cards accepted where Razorpay merchant config allows; display USD equivalents on pricing only.
 
 import Razorpay from "razorpay";
 import crypto from "crypto";

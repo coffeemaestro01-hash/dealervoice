@@ -398,6 +398,8 @@ model Dealership {
   analyticsEvents  AnalyticsEvent[]
   leads            Lead[]
   teamMembers      TeamMember[]
+  vehicleListings  VehicleListing[]
+  incomeRecords    IncomeRecord[]
 
   @@index([slug])
   @@index([countryId])
@@ -739,6 +741,7 @@ model AdClickEvent {
   slot          String
   targetUrl     String
   adPlacementId String?
+  countryCode   String?
   ipAddress     String?
   userAgent     String?
   createdAt     DateTime @default(now())
@@ -746,6 +749,7 @@ model AdClickEvent {
   @@index([adType])
   @@index([slot])
   @@index([createdAt])
+  @@index([countryCode])
 }
 
 model AdImpressionEvent {
@@ -1108,4 +1112,105 @@ model TeamMember {
   dealership   Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
 
   @@index([dealershipId])
+}
+
+// ─────────────────────────────────────────────
+// GLOBAL INCOME LEDGER (all revenue streams)
+// ─────────────────────────────────────────────
+
+enum IncomeSource {
+  SUBSCRIPTION
+  SPONSORSHIP
+  AFFILIATE_CLICK
+  AFFILIATE_PAYOUT
+  ADSENSE
+  LEAD_FEE
+  INVENTORY_FEE
+  OTHER
+}
+
+enum IncomeStatus {
+  ESTIMATED
+  CONFIRMED
+  PAID
+  VOID
+}
+
+model IncomeRecord {
+  id            String        @id @default(cuid())
+  source        IncomeSource
+  status        IncomeStatus  @default(ESTIMATED)
+  amountMinor   Int
+  currency      String        @default("INR")
+  countryCode   String?
+  dealershipId  String?
+  description   String?       @db.Text
+  externalRef   String?
+  periodStart   DateTime?
+  periodEnd     DateTime?
+  metadata      Json?
+  recordedById  String?
+  createdAt     DateTime      @default(now())
+
+  dealership    Dealership?   @relation(fields: [dealershipId], references: [id], onDelete: SetNull)
+
+  @@unique([source, externalRef])
+  @@index([source])
+  @@index([status])
+  @@index([countryCode])
+  @@index([createdAt])
+  @@index([dealershipId])
+}
+
+// ─────────────────────────────────────────────
+// VEHICLE INVENTORY (global)
+// ─────────────────────────────────────────────
+
+enum VehicleCondition {
+  NEW
+  USED
+  CERTIFIED
+}
+
+enum VehicleListingSource {
+  DEALER_UPLOAD
+  CSV_IMPORT
+  AFFILIATE_FEED
+  INVENTORY_URL
+}
+
+model VehicleListing {
+  id            String               @id @default(cuid())
+  dealershipId  String
+  countryCode   String
+  currency      String               @default("INR")
+  make          String
+  model         String
+  trim          String?
+  year          Int?
+  mileageKm     Int?
+  fuelType      String?
+  transmission  String?
+  condition     VehicleCondition     @default(USED)
+  priceMinor    Int?
+  priceLabel    String?
+  color         String?
+  vin           String?
+  stockId       String?
+  photos        String[]
+  description   String?              @db.Text
+  affiliateUrl  String?
+  source        VehicleListingSource @default(DEALER_UPLOAD)
+  isActive      Boolean              @default(true)
+  listedAt      DateTime             @default(now())
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+
+  dealership    Dealership           @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+
+  @@index([dealershipId])
+  @@index([countryCode])
+  @@index([make, model])
+  @@index([isActive])
+  @@index([listedAt])
 }

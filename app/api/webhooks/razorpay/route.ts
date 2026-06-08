@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyRazorpayWebhookSignature } from "@/lib/payment";
 import { planFeatures } from "@/lib/subscription";
 import prisma from "@/lib/db";
+import { recordIncome } from "@/lib/income/ledger";
 import type { SubscriptionPlan } from "@prisma/client";
 
 export async function POST(req: NextRequest) {
@@ -83,6 +84,22 @@ export async function POST(req: NextRequest) {
               paidAt: new Date(payment.created_at * 1000),
             },
           });
+
+          const dealer = await prisma.dealership.findUnique({
+            where: { id: dealershipId },
+            select: { country: { select: { code: true } } },
+          });
+
+          await recordIncome({
+            source: "SUBSCRIPTION",
+            status: "CONFIRMED",
+            amountMinor: payment.amount,
+            currency: payment.currency?.toUpperCase() ?? "INR",
+            countryCode: dealer?.country?.code,
+            dealershipId,
+            description: `Razorpay subscription charge — ${dbSub.plan}`,
+            externalRef: payment.id,
+          }).catch(() => {});
         }
         break;
       }

@@ -11,6 +11,7 @@ import { ClaimModal } from "@/components/dealership/ClaimModal";
 import { CompetitorAdPlacement } from "@/components/dealership/CompetitorAdPlacement";
 import { ClaimProfileCTA } from "@/components/dealership/ClaimProfileCTA";
 import { PremiumInventoryCTA } from "@/components/dealership/PremiumInventoryCTA";
+import { DealerInventorySection } from "@/components/dealership/DealerInventorySection";
 import { ProfileWriteBar } from "@/components/dealership/ProfileWriteBar";
 import { isDealerPremiumClaimed } from "@/lib/dealer/premium";
 import { getCache, setCache, CACHE_KEYS, CACHE_TTL } from "@/lib/redis";
@@ -133,6 +134,13 @@ export default async function DealershipPage({ params, searchParams }: Props) {
                   countryId={dealer.countryId}
                 />
               )}
+              <DealerInventorySection
+                dealershipId={dealer.id}
+                dealerName={dealer.name}
+                countryCode={dealer.country?.code ?? "IN"}
+                inventoryUrl={dealer.inventoryUrl}
+                isPremium={isPremium}
+              />
               <RatingDistribution dealer={dealer as any} />
               <Suspense>
                 <ReviewsList dealershipId={dealer.id} page={page} />

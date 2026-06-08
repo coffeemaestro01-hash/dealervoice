@@ -1,7 +1,7 @@
 # DealerVoice — llms.txt
 # https://dealervoice.io
 
-> DealerVoice is an automotive dealership review and trust platform, launching India-first.
+> DealerVoice is a worldwide automotive dealership review, inventory, and trust platform (India-first data depth).
 > Buyers search dealerships, read verified reviews, and compare reputation scores before purchasing or servicing a vehicle.
 
 ## Primary URLs
@@ -20,8 +20,9 @@
 - Reputation scores based on published reviews
 
 ## Geographic focus
-- Primary market: India (IN)
-- Secondary: Global expansion (US, UK, EU, Asia-Pacific) — listings available but India is the launch priority
+- Live globally: US, GB, DE, FR, AU, CA, IN, AE, BR and more at /dealers/{country}
+- Deepest coverage: India (states, districts, inventory)
+- Inventory browse: /dealers/{country}/inventory
 
 ## Data practices
 - Reviews: user-submitted, moderated for spam

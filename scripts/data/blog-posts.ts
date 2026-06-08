@@ -3,7 +3,7 @@
  * Seeded via scripts/seed-blog-content.ts
  */
 
-export interface BlogPostSeed {
+export type BlogPostSeed = {
   slug: string;
   title: string;
   excerpt: string;
@@ -13,7 +13,7 @@ export interface BlogPostSeed {
   /** Days ago from seed run — controls publishedAt ordering */
   daysAgo?: number;
   authorName?: string;
-}
+};
 
 export const BLOG_POSTS: BlogPostSeed[] = [
   // ─── Flagship research ───────────────────────────────────────────────────

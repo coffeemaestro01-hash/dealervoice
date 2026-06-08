@@ -16,6 +16,8 @@
     "seed:osm": "tsx scripts/seed-dealers-osm.ts",
     "seed:india": "tsx scripts/seed-dealers-india-osm.ts",
     "seed:ads": "tsx scripts/seed-ad-placements.ts",
+    "seed:ads:global": "tsx scripts/seed-global-ads.ts",
+    "seed:global": "npm run seed:ads && npm run seed:ads:global && npm run seed:blog",
     "seed:blog": "tsx scripts/seed-blog-content.ts",
     "db:reset": "prisma migrate reset",
     "postinstall": "prisma generate"

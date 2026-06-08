@@ -1,15 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { isValidAdType } from "@/lib/ads/placements";
-
-const ALLOWED_EXTERNAL = [
-  "policybazaar.com",
-  "acko.com",
-  "bankbazaar.com",
-  "bajajfinserv.in",
-  "hdfcbank.com",
-  "icicibank.com",
-];
+import { GLOBAL_AFFILIATE_DOMAINS } from "@/lib/geo/market";
+import { recordIncome } from "@/lib/income/ledger";
+import { normalizeCountryCode } from "@/lib/geo/market";
 
 function safeRedirect(target: string, base: string): string {
   if (target.startsWith("/") && !target.startsWith("//")) {
@@ -20,7 +14,7 @@ function safeRedirect(target: string, base: string): string {
     const baseUrl = new URL(base);
     if (url.origin === baseUrl.origin) return url.pathname + url.search;
     const host = url.hostname.replace(/^www\./, "");
-    if (ALLOWED_EXTERNAL.some((d) => host === d || host.endsWith(`.${d}`))) {
+    if (GLOBAL_AFFILIATE_DOMAINS.some((d) => host === d || host.endsWith(`.${d}`))) {
       return url.toString();
     }
   } catch {
@@ -43,17 +37,41 @@ export async function GET(req: NextRequest) {
   const base = process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.io";
   const destination = safeRedirect(redirect, base);
 
+  const countryCode = normalizeCountryCode(
+    req.headers.get("x-vercel-ip-country") ?? req.headers.get("cf-ipcountry")
+  );
+
   try {
-    await prisma.adClickEvent.create({
+    const click = await prisma.adClickEvent.create({
       data: {
         adType,
         slot,
         targetUrl: destination,
         adPlacementId: placementId,
+        countryCode,
         ipAddress: req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null,
         userAgent: req.headers.get("user-agent")?.slice(0, 500) ?? null,
       },
     });
+
+    if (placementId) {
+      const placement = await prisma.adPlacement.findUnique({
+        where: { id: placementId },
+        select: { cpcEstimatePaise: true, headline: true, countryCode: true },
+      });
+      if (placement?.cpcEstimatePaise) {
+        await recordIncome({
+          source: "AFFILIATE_CLICK",
+          status: "ESTIMATED",
+          amountMinor: placement.cpcEstimatePaise,
+          currency: "INR",
+          countryCode: placement.countryCode ?? countryCode,
+          description: `Affiliate click: ${placement.headline.slice(0, 80)}`,
+          externalRef: click.id,
+          metadata: { slot, adType, targetUrl: destination },
+        }).catch(() => {});
+      }
+    }
   } catch (err) {
     console.error("[ads/click]", err);
   }
