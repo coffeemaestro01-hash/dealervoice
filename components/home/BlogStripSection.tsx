@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { ArrowRight, BookOpen } from "lucide-react";
 import prisma from "@/lib/db";
+import { RESEARCH_CATEGORY } from "@/lib/research/constants";
 
 async function getPosts() {
   try {
     return await prisma.blogPost.findMany({
-      where: { isPublished: true },
+      where: { isPublished: true, category: { not: RESEARCH_CATEGORY } },
       orderBy: { publishedAt: "desc" },
       take: 3,
       select: { slug: true, title: true, excerpt: true, category: true, publishedAt: true },

@@ -17,8 +17,12 @@
     "seed:india": "tsx scripts/seed-dealers-india-osm.ts",
     "seed:ads": "tsx scripts/seed-ad-placements.ts",
     "seed:ads:global": "tsx scripts/seed-global-ads.ts",
-    "seed:global": "npm run seed:ads && npm run seed:ads:global && npm run seed:blog",
+    "seed:global": "npm run seed:ads && npm run seed:ads:global && npm run seed:blog && npm run seed:research",
     "seed:blog": "tsx scripts/seed-blog-content.ts",
+    "seed:research": "tsx scripts/seed-research-content.ts",
+    "import:zigwheels:mumbai": "tsx scripts/import-zigwheels-mumbai.ts",
+    "import:pdf-contacts": "tsx scripts/import-pdf-contacts.ts",
+    "outreach:send-claims": "tsx scripts/send-pending-claim-emails.ts",
     "db:reset": "prisma migrate reset",
     "postinstall": "prisma generate"
   },

@@ -20,6 +20,7 @@ import { cn, getInitials } from "@/lib/utils";
 const SECONDARY_LINKS = [
   { label: "How It Works", href: "/about" },
   { label: "Blog", href: "/blog" },
+  { label: "Research", href: "/research" },
 ];
 
 export function Navbar() {

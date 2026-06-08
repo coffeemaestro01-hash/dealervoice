@@ -17,6 +17,7 @@ import { CtaSection } from "@/components/home/CtaSection";
 import { IndiaCoverageSection } from "@/components/home/IndiaCoverageSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { BlogStripSection } from "@/components/home/BlogStripSection";
+import { ResearchStripSection } from "@/components/home/ResearchStripSection";
 import { AIAuthoritySection } from "@/components/home/AIAuthoritySection";
 import { Navbar } from "@/components/layouts/Navbar";
 import { Footer } from "@/components/layouts/Footer";
@@ -71,6 +72,9 @@ export default async function HomePage() {
         </Suspense>
         <Suspense>
           <BlogStripSection />
+        </Suspense>
+        <Suspense>
+          <ResearchStripSection />
         </Suspense>
         <CategoriesSection />
         <BrandsSection />

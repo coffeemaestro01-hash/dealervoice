@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import prisma from "@/lib/db";
+import { isResearchPost } from "@/lib/research/queries";
 import { Calendar, ArrowLeft } from "lucide-react";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 
@@ -26,6 +27,7 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
     where: { slug, isPublished: true },
   });
   if (!post) notFound();
+  if (isResearchPost(post.category)) redirect(`/research/${slug}`);
 
   return (
     <article className="bg-white">

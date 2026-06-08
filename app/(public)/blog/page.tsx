@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import prisma from "@/lib/db";
+import { RESEARCH_CATEGORY } from "@/lib/research/constants";
 import { Calendar, ArrowRight } from "lucide-react";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 
@@ -14,7 +15,7 @@ export const dynamic = "force-dynamic";
 
 export default async function BlogPage() {
   const posts = await prisma.blogPost.findMany({
-    where: { isPublished: true },
+    where: { isPublished: true, category: { not: RESEARCH_CATEGORY } },
     orderBy: { publishedAt: "desc" },
     take: 50,
     select: { slug: true, title: true, excerpt: true, publishedAt: true, category: true },
