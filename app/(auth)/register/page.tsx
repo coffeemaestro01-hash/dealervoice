@@ -54,7 +54,7 @@ export default function RegisterPage() {
 
       // Auto sign-in
       await signIn("credentials", { email: data.email, password: data.password, redirect: false });
-      router.push("/");
+      router.push("/write-review?welcome=1");
     } finally {
       setIsLoading(false);
     }

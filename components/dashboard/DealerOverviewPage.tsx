@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { cn, buildDealerUrl } from "@/lib/utils";
 import type { ReviewWithRelations } from "@/types";
 import { PremiumUpgradeBanner } from "@/components/dashboard/PremiumUpgradeBanner";
+import { DealerReviewInvite } from "@/components/dashboard/DealerReviewInvite";
 
 interface StatCardProps {
   label: string;
@@ -102,6 +103,8 @@ export function DealerOverviewPage({ data }: Props) {
         isPremiumClaimed={dealership.isPremiumClaimed}
         subscription={dealership.subscription}
       />
+
+      <DealerReviewInvite slug={dealership.slug} dealerName={dealership.name} />
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">

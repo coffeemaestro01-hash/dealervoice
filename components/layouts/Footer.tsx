@@ -6,7 +6,7 @@ import { ManageCookiesLink } from "@/components/consent/ManageCookiesLink";
 const FOOTER_LINKS = {
   Platform: [
     { label: "Find Dealers", href: "/dealers" },
-    { label: "Write a Review", href: "/dealers?intent=write" },
+    { label: "Write a Review", href: "/write-review" },
     { label: "How It Works", href: "/about" },
     { label: "Methodology", href: "/methodology" },
     { label: "Pricing", href: "/pricing" },

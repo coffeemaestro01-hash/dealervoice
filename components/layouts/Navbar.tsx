@@ -19,7 +19,6 @@ import { cn, getInitials } from "@/lib/utils";
 
 const SECONDARY_LINKS = [
   { label: "How It Works", href: "/about" },
-  { label: "Pricing", href: "/pricing" },
   { label: "Blog", href: "/blog" },
 ];
 
@@ -36,14 +35,12 @@ export function Navbar() {
       : "/dashboard/customer";
 
   return (
-    <header className="sticky top-0 z-50 bg-night-800/90 backdrop-blur-md border-b border-gold/25 shadow-lg">
+    <header className="sticky top-0 z-50 bg-night-800/95 backdrop-blur-md border-b border-white/10 shadow-sm">
       <nav className="container flex items-center justify-between h-16 gap-3" aria-label="Main navigation">
         <FooterBrand height={32} />
 
-        {/* Two-door desktop nav */}
         <div className="hidden lg:flex items-center gap-5 flex-1 justify-center">
           <div className="flex items-center gap-1 rounded-full bg-white/5 border border-white/10 px-1 py-1">
-            <span className="sr-only">Consumer</span>
             <Link
               href="/dealers"
               className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-200 hover:text-gold-400 px-3 py-1.5 rounded-full hover:bg-white/5 transition-colors"
@@ -52,7 +49,7 @@ export function Navbar() {
               Search Dealers
             </Link>
             <Link
-              href="/dealers?intent=write"
+              href="/write-review"
               className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-200 hover:text-gold-400 px-3 py-1.5 rounded-full hover:bg-white/5 transition-colors"
             >
               <PenLine size={14} aria-hidden />
@@ -79,17 +76,18 @@ export function Navbar() {
           ))}
         </div>
 
-        {/* Tablet: condensed consumer links */}
         <div className="hidden md:flex lg:hidden items-center gap-3">
           <Link href="/dealers" className="text-sm text-gray-300 hover:text-gold-400 font-medium">
             Search
           </Link>
+          <Link href="/write-review" className="text-sm text-gray-300 hover:text-gold-400 font-medium">
+            Review
+          </Link>
           <Link href="/claim" className="text-sm text-gold-400 hover:text-gold-300 font-semibold">
-            Claim Profile
+            Claim
           </Link>
         </div>
 
-        {/* Actions */}
         <div className="hidden md:flex items-center gap-3 shrink-0">
           {user ? (
             <DropdownMenu>
@@ -134,7 +132,7 @@ export function Navbar() {
                 <Button variant="ghost" size="sm" className="text-gray-200 hover:text-gold-400 hover:bg-white/5">Sign in</Button>
               </Link>
               <Link href="/register">
-                <Button size="sm" className="bg-gold-gradient text-night-900 font-semibold hover:opacity-90 border-0">Get started</Button>
+                <Button size="sm" className="bg-gold-600 hover:bg-gold-700 text-white font-semibold border-0">Sign up</Button>
               </Link>
             </>
           )}
@@ -158,61 +156,41 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-night-800 border-t border-gold/25"
+            className="md:hidden bg-night-800 border-t border-white/10"
           >
             <div className="container py-4 flex flex-col gap-1">
               <p className="px-3 pt-1 pb-2 text-[10px] font-bold uppercase tracking-wider text-gray-500">Car Buyers</p>
-              <Link
-                href="/dealers"
-                className="px-3 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-gold-400 rounded-lg flex items-center gap-2"
-                onClick={() => setMobileOpen(false)}
-              >
+              <Link href="/dealers" className="px-3 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-gold-400 rounded-lg flex items-center gap-2" onClick={() => setMobileOpen(false)}>
                 <Search size={15} aria-hidden />
                 Search Dealers
               </Link>
-              <Link
-                href="/dealers?intent=write"
-                className="px-3 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-gold-400 rounded-lg flex items-center gap-2"
-                onClick={() => setMobileOpen(false)}
-              >
+              <Link href="/write-review" className="px-3 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-gold-400 rounded-lg flex items-center gap-2" onClick={() => setMobileOpen(false)}>
                 <PenLine size={15} aria-hidden />
                 Write a Review
               </Link>
 
               <p className="px-3 pt-3 pb-2 text-[10px] font-bold uppercase tracking-wider text-gray-500">Dealerships</p>
-              <Link
-                href="/claim"
-                className={cn(
-                  "px-3 py-2.5 text-sm font-semibold text-gold-400 hover:bg-gold/10 rounded-lg flex items-center gap-2",
-                  "border border-gold/20"
-                )}
-                onClick={() => setMobileOpen(false)}
-              >
+              <Link href="/claim" className={cn("px-3 py-2.5 text-sm font-semibold text-gold-400 hover:bg-gold/10 rounded-lg flex items-center gap-2", "border border-gold/20")} onClick={() => setMobileOpen(false)}>
                 <Building2 size={15} aria-hidden />
                 Claim Your Profile
               </Link>
+              <Link href="/pricing" className="px-3 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-gold-400 rounded-lg" onClick={() => setMobileOpen(false)}>
+                Pricing
+              </Link>
 
               {SECONDARY_LINKS.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="px-3 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-gold-400 rounded-lg"
-                  onClick={() => setMobileOpen(false)}
-                >
+                <Link key={link.href} href={link.href} className="px-3 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-gold-400 rounded-lg" onClick={() => setMobileOpen(false)}>
                   {link.label}
                 </Link>
               ))}
 
-              <div className="border-t border-gold/20 mt-2 pt-2 flex flex-col gap-1">
+              <div className="border-t border-white/10 mt-2 pt-2 flex flex-col gap-1">
                 {user ? (
                   <>
                     <Link href={dashboardHref} className="px-3 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-gold-400 rounded-lg" onClick={() => setMobileOpen(false)}>
                       Dashboard
                     </Link>
-                    <button
-                      onClick={() => signOut({ callbackUrl: "/" })}
-                      className="px-3 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg text-left"
-                    >
+                    <button onClick={() => signOut({ callbackUrl: "/" })} className="px-3 py-2.5 text-sm font-medium text-red-400 hover:bg-white/5 rounded-lg text-left">
                       Sign out
                     </button>
                   </>
@@ -221,8 +199,8 @@ export function Navbar() {
                     <Link href="/login" className="px-3 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-gold-400 rounded-lg" onClick={() => setMobileOpen(false)}>
                       Sign in
                     </Link>
-                    <Link href="/register" className="px-3 py-2.5 text-sm font-medium text-night-900 bg-gold-gradient rounded-lg text-center" onClick={() => setMobileOpen(false)}>
-                      Get started
+                    <Link href="/register" className="px-3 py-2.5 text-sm font-medium text-white bg-gold-600 rounded-lg text-center" onClick={() => setMobileOpen(false)}>
+                      Sign up
                     </Link>
                   </>
                 )}

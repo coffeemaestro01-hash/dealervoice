@@ -54,8 +54,7 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
 
   return (
     <section className="relative bg-night overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_70%_60%_at_50%_-10%,rgba(251,101,20,0.12),transparent_60%)]" />
-      <div className="absolute top-24 -right-20 w-96 h-96 bg-gold-500/15 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_70%_60%_at_50%_-10%,rgba(251,101,20,0.06),transparent_60%)]" />
 
       <div className="container relative py-16 md:py-24">
         <motion.div
@@ -69,7 +68,7 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
             {trustLine}
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-5">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-5">
             Find trusted car dealership reviews{" "}
             <span className="text-gold">worldwide</span>
           </h1>
@@ -106,7 +105,7 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
             <Button
               type="submit"
               size="lg"
-              className="h-14 px-8 bg-gold-gradient text-night-900 hover:opacity-90 font-semibold shrink-0 border-0 rounded-xl"
+              className="h-14 px-8 bg-gold-600 hover:bg-gold-700 text-white font-semibold shrink-0 border-0 rounded-xl"
             >
               Search Reviews
             </Button>

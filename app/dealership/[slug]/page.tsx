@@ -11,12 +11,13 @@ import { ClaimModal } from "@/components/dealership/ClaimModal";
 import { CompetitorAdPlacement } from "@/components/dealership/CompetitorAdPlacement";
 import { ClaimProfileCTA } from "@/components/dealership/ClaimProfileCTA";
 import { PremiumInventoryCTA } from "@/components/dealership/PremiumInventoryCTA";
+import { ProfileWriteBar } from "@/components/dealership/ProfileWriteBar";
 import { isDealerPremiumClaimed } from "@/lib/dealer/premium";
 import { getCache, setCache, CACHE_KEYS, CACHE_TTL } from "@/lib/redis";
 
 interface Props {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; write?: string }>;
 }
 
 async function getDealership(slug: string) {
@@ -62,7 +63,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function DealershipPage({ params, searchParams }: Props) {
   const { slug } = await params;
-  const { page: pageParam } = await searchParams;
+  const { page: pageParam, write } = await searchParams;
+  const highlightWrite = write === "1";
   const dealer = await getDealership(slug);
   if (!dealer) notFound();
 
@@ -105,8 +107,14 @@ export default async function DealershipPage({ params, searchParams }: Props) {
         <ClaimModal dealershipId={dealer.id} dealershipName={dealer.name} dealershipSlug={dealer.slug} />
       </Suspense>
 
-      <div className="min-h-screen bg-gray-50">
-        <DealershipProfile dealer={dealer as any} isPremium={isPremium} />
+      <div className="min-h-screen bg-gray-50 pb-20 md:pb-0">
+        {highlightWrite && (
+          <div className="bg-gold-50 border-b border-gold/30 px-4 py-2.5 text-center text-sm text-gold-900">
+            You&apos;re here to review <strong>{dealer.name}</strong> — tap Write Review below.
+          </div>
+        )}
+        <DealershipProfile dealer={dealer as any} isPremium={isPremium} highlightWrite={highlightWrite} />
+        <ProfileWriteBar dealershipId={dealer.id} highlight={highlightWrite} />
 
         <div className="container py-8">
           {isPremium && (

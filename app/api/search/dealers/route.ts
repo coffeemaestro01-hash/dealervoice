@@ -44,6 +44,7 @@ export async function GET(req: NextRequest) {
 
     const where: Prisma.DealershipWhereInput = {
       ...publicDealerWhere,
+      ...(sort === "needs_review" && { totalReviews: 0 }),
       ...(andClauses.length > 0 && { AND: andClauses }),
       ...(country && { country: { code: country.toUpperCase() } }),
       ...(city && { cityName: { contains: city, mode: "insensitive" } }),
@@ -54,17 +55,22 @@ export async function GET(req: NextRequest) {
     };
 
     const orderBy =
-      {
-        relevance: { reputationScore: "desc" as const },
-        rating: { overallRating: "desc" as const },
-        reviews: { totalReviews: "desc" as const },
-        reputation: { reputationScore: "desc" as const },
-        newest: { createdAt: "desc" as const },
-      }[sort ?? "relevance"] ?? { reputationScore: "desc" as const };
+      sort === "needs_review"
+        ? [{ totalReviews: "asc" as const }, { isFeatured: "desc" as const }, { createdAt: "desc" as const }]
+        : [
+            { isFeatured: "desc" as const },
+            {
+              relevance: { reputationScore: "desc" as const },
+              rating: { overallRating: "desc" as const },
+              reviews: { totalReviews: "desc" as const },
+              reputation: { reputationScore: "desc" as const },
+              newest: { createdAt: "desc" as const },
+            }[sort ?? "relevance"] ?? { reputationScore: "desc" as const },
+          ];
 
     const dealers = await prisma.dealership.findMany({
       where,
-      orderBy: [{ isFeatured: "desc" }, orderBy],
+      orderBy,
       skip: (page - 1) * limit,
       take: limit,
       include: {

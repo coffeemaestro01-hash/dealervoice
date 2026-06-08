@@ -146,8 +146,11 @@
 
   /* Card on dark */
   .card-dark {
-    background-image: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
-    border: 1px solid rgba(251,101,20,0.20);
-    backdrop-filter: blur(6px);
+    background-image: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .btn-primary {
+    @apply bg-gold-600 hover:bg-gold-700 text-white font-semibold border-0;
   }
 }

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, CheckCircle2, Send } from "lucide-react";
+import Link from "next/link";
+import { Loader2, CheckCircle2, Send, PenLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -54,6 +55,13 @@ export function QuoteRequestForm({ dealershipId, dealerName }: Props) {
           <CheckCircle2 className="mx-auto text-green-500 mb-3" size={40} />
           <p className="font-medium text-gray-900">Request sent!</p>
           <p className="text-sm text-gray-500 mt-1">{dealerName} will be in touch soon.</p>
+          <Link
+            href={`/write-review/${dealershipId}`}
+            className="inline-flex items-center gap-1.5 mt-4 text-sm font-medium text-gold-700 hover:underline"
+          >
+            <PenLine size={14} />
+            Visited recently? Write a review
+          </Link>
         </div>
       ) : (
         <form onSubmit={onSubmit} className="p-5 space-y-3">

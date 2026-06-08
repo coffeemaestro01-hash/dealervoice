@@ -24,9 +24,10 @@ interface Props {
     subscription?: { plan: string } | null;
   };
   isPremium?: boolean;
+  highlightWrite?: boolean;
 }
 
-export function DealershipProfile({ dealer, isPremium = false }: Props) {
+export function DealershipProfile({ dealer, isPremium = false, highlightWrite = false }: Props) {
   const inventoryUrl = isPremium ? getPremiumInventoryUrl(dealer) : null;
   const location = [dealer.cityName, dealer.stateName, dealer.country?.name].filter(Boolean).join(", ");
 
@@ -55,7 +56,7 @@ export function DealershipProfile({ dealer, isPremium = false }: Props) {
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h1 className="text-2xl font-bold text-gray-900">{dealer.name}</h1>
+                  <h1 className="font-display text-2xl md:text-3xl font-bold text-gray-900">{dealer.name}</h1>
                   {dealer.isVerified && (
                     <span className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 bg-gold-50 text-gold-800 border border-gold-100 rounded-full">
                       <BadgeCheck size={12} />
@@ -104,7 +105,15 @@ export function DealershipProfile({ dealer, isPremium = false }: Props) {
 
                 <div className="flex flex-wrap gap-2 sm:mt-2">
                   <Link href={`/write-review/${dealer.id}`}>
-                    <Button size="sm" className="bg-gold-800 hover:bg-gold-800 gap-1.5">
+                    <Button
+                      size="sm"
+                      className={cn(
+                        "gap-1.5 font-semibold",
+                        highlightWrite
+                          ? "bg-gold-600 hover:bg-gold-700 text-white ring-2 ring-gold-400 ring-offset-1"
+                          : "bg-gold-600 hover:bg-gold-700 text-white"
+                      )}
+                    >
                       <PenLine size={14} aria-hidden />
                       Write Review
                     </Button>

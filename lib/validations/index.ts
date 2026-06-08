@@ -136,7 +136,7 @@ export const searchSchema = z.object({
   category: z.string().optional(),
   rating: z.coerce.number().min(1).max(5).optional(),
   verified: z.coerce.boolean().optional(),
-  sort: z.enum(["rating", "reviews", "newest", "relevance", "reputation"]).optional(),
+  sort: z.enum(["rating", "reviews", "newest", "relevance", "reputation", "needs_review"]).optional(),
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(50).default(20),
 });

@@ -10,6 +10,7 @@ import { TrendingLocalDealers } from "@/components/home/TrendingLocalDealers";
 import { AutomotiveAdBanner } from "@/components/ads/AutomotiveAdBanner";
 import { HowItWorksSection } from "@/components/home/HowItWorksSection";
 import { RecentReviewsSection } from "@/components/home/RecentReviewsSection";
+import { FirstReviewerSection } from "@/components/home/FirstReviewerSection";
 import { BrandsSection } from "@/components/home/BrandsSection";
 import { CtaSection } from "@/components/home/CtaSection";
 import { Navbar } from "@/components/layouts/Navbar";
@@ -43,6 +44,9 @@ export default async function HomePage() {
         <TrustSection />
         <Suspense>
           <TrendingLocalDealers />
+        </Suspense>
+        <Suspense>
+          <FirstReviewerSection />
         </Suspense>
         <Suspense>
           <RecentReviewsSection />

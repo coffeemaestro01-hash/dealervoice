@@ -53,8 +53,9 @@ export function DealerSearchPage({ searchParams: initialParams }: DealerSearchPa
     if (location) newParams.set("location", location);
     if (brand) newParams.set("brand", brand);
     if (sort !== "relevance") newParams.set("sort", sort);
+    if (writeIntent) newParams.set("intent", "write");
     router.replace(`${pathname}?${newParams.toString()}`, { scroll: false });
-  }, [query, location, brand, sort, pathname, router]);
+  }, [query, location, brand, sort, pathname, router, writeIntent]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,9 +79,9 @@ export function DealerSearchPage({ searchParams: initialParams }: DealerSearchPa
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Search header */}
-      <div className="bg-white border-b border-gray-100 shadow-sm">
+      <div className="sticky top-16 z-30 bg-white border-b border-gray-100 shadow-sm">
         <div className="container py-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+          <h1 className="font-display text-2xl font-bold text-gray-900 mb-4">
             {writeIntent ? "Find a dealership to review" : "Find Car Dealerships"}
           </h1>
           {writeIntent && (
@@ -112,7 +113,7 @@ export function DealerSearchPage({ searchParams: initialParams }: DealerSearchPa
                 className="pl-9"
               />
             </div>
-            <Button type="submit" className="bg-gold-800 hover:bg-gold-800 shrink-0">Search</Button>
+            <Button type="submit" className="btn-primary shrink-0">Search</Button>
           </form>
 
           {/* Active filters */}
@@ -147,12 +148,26 @@ export function DealerSearchPage({ searchParams: initialParams }: DealerSearchPa
           </p>
           <div className="flex items-center gap-2">
             <SlidersHorizontal size={16} className="text-gray-400" />
-            <Select value={sort} onValueChange={(v) => { setSort(v); setPage(1); }}>
-              <SelectTrigger className="w-40 h-8 text-sm">
+            <Select
+              value={sort}
+              onValueChange={(v) => {
+                setSort(v);
+                setPage(1);
+                const newParams = new URLSearchParams();
+                if (query) newParams.set("q", query);
+                if (location) newParams.set("location", location);
+                if (brand) newParams.set("brand", brand);
+                if (v !== "relevance") newParams.set("sort", v);
+                if (writeIntent) newParams.set("intent", "write");
+                router.replace(`${pathname}?${newParams.toString()}`, { scroll: false });
+              }}
+            >
+              <SelectTrigger className="w-44 h-8 text-sm">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="relevance">Most Relevant</SelectItem>
+                <SelectItem value="needs_review">Needs First Review</SelectItem>
                 <SelectItem value="rating">Highest Rated</SelectItem>
                 <SelectItem value="reviews">Most Reviewed</SelectItem>
                 <SelectItem value="reputation">Best Reputation</SelectItem>
