@@ -1,4 +1,5 @@
 import prisma from "@/lib/db";
+import { resolveAdHref } from "@/lib/ads/affiliate";
 import {
   FALLBACK_AUTOMOTIVE_ADS,
   type AutomotiveAd,
@@ -42,7 +43,7 @@ export async function getAdForSlot(
         headline: pick.headline,
         subheadline: pick.subheadline,
         ctaLabel: pick.ctaLabel,
-        ctaHref: pick.ctaHref,
+        ctaHref: resolveAdHref(pick.ctaHref, pick.affiliateRef, pick.affiliateParam),
         badge: pick.badge,
         accent: pick.accent,
       },

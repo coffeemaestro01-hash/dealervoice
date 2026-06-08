@@ -29,9 +29,14 @@ export default async function AdminDataQualityPage() {
           </div>
         ))}
       </div>
-      <Link href="/dashboard/admin/campaigns" className="text-gold-700 hover:underline text-sm">
-        Run outreach campaign to unclaimed dealers →
-      </Link>
+      <div className="flex flex-wrap gap-4 text-sm">
+        <Link href="/dashboard/admin/outreach" className="text-gold-700 hover:underline">
+          Outreach queue (phone, no email) →
+        </Link>
+        <Link href="/dashboard/admin/campaigns" className="text-gold-700 hover:underline">
+          Email campaigns (has email) →
+        </Link>
+      </div>
     </div>
   );
 }

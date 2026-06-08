@@ -23,6 +23,7 @@ import {
   Settings,
   UsersRound,
   ClipboardCheck,
+  Phone,
 } from "lucide-react";
 
 export type AdminTeam = "founder" | "ops" | "trust" | "growth" | "platform";
@@ -52,6 +53,7 @@ export const ADMIN_NAV: AdminNavItem[] = [
   { href: "/dashboard/admin/data-quality", label: "Data quality", icon: Database, team: "growth", roles: ["SUPER_ADMIN", "REVENUE", "SUPPORT"] },
   { href: "/dashboard/admin/geo", label: "Geo coverage", icon: Globe, team: "growth", roles: ["SUPER_ADMIN", "REVENUE"] },
   { href: "/dashboard/admin/import", label: "CSV import", icon: Database, team: "growth", roles: ["SUPER_ADMIN", "REVENUE"] },
+  { href: "/dashboard/admin/outreach", label: "Outreach queue", icon: Phone, team: "growth", roles: ["SUPER_ADMIN", "REVENUE"] },
   { href: "/dashboard/admin/campaigns", label: "Campaigns", icon: Mail, team: "growth", roles: ["SUPER_ADMIN", "REVENUE"] },
   { href: "/dashboard/admin/merchandising", label: "Merchandising", icon: Sparkles, team: "growth", roles: ["SUPER_ADMIN", "REVENUE"] },
   { href: "/dashboard/admin/cms", label: "CMS", icon: FileText, team: "growth", roles: ["SUPER_ADMIN", "MODERATOR"] },

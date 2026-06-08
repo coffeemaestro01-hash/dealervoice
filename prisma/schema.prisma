@@ -314,6 +314,11 @@ model Dealership {
   phone               String?
   website             String?
 
+  // Outreach tracking (admin contact queue)
+  outreachStatus      String?        // pending | contacted | skipped | responded
+  lastOutreachAt      DateTime?
+  outreachNotes       String?        @db.Text
+
   // Address
   address             String?
   address2            String?
@@ -768,6 +773,8 @@ model AdPlacement {
   accent           String   @default("from-gold-600 to-amber-500")
   countryCode      String?
   cpcEstimatePaise Int?
+  affiliateRef     String?
+  affiliateParam   String?
   isActive         Boolean  @default(true)
   priority         Int      @default(0)
   createdAt        DateTime @default(now())
