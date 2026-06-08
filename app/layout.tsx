@@ -4,7 +4,7 @@ import "./globals.css";
 import { Providers } from "@/components/layouts/Providers";
 import { Toaster } from "@/components/ui/toaster";
 import { CookieBanner } from "@/components/consent/CookieBanner";
-import { AdSenseHeadScript } from "@/components/ads/AdSenseHeadScript";
+import { getAdSenseClientId } from "@/lib/ads/adsense";
 import { SupportChat } from "@/components/support/SupportChat";
 
 const inter = Inter({
@@ -65,10 +65,18 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const adsenseClient = getAdSenseClientId();
+
   return (
     <html lang="en" className={`${inter.variable} ${sourceSerif.variable}`} suppressHydrationWarning>
       <head>
-        <AdSenseHeadScript />
+        {adsenseClient ? (
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
+            crossOrigin="anonymous"
+          />
+        ) : null}
       </head>
       <body className="min-h-screen bg-background font-sans antialiased">
         <Providers>{children}</Providers>
