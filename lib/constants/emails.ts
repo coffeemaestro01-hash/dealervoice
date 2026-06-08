@@ -1,10 +1,12 @@
 /** Canonical DealerVoice contact addresses — always @dealervoice.io */
 export const EMAILS = {
+  /** Primary public contact — partnerships, press, general outreach */
+  outreach: "outreach@dealervoice.io",
   support: "support@dealervoice.io",
   dealers: "dealers@dealervoice.io",
-  press: "press@dealervoice.io",
-  advertise: "advertise@dealervoice.io",
-  hello: "hello@dealervoice.io",
+  press: "outreach@dealervoice.io",
+  advertise: "outreach@dealervoice.io",
+  hello: "outreach@dealervoice.io",
   careers: "careers@dealervoice.io",
   api: "api@dealervoice.io",
   privacy: "privacy@dealervoice.io",

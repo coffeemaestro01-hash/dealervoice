@@ -1,16 +1,39 @@
 import type { Metadata } from "next";
-import { Mail, MessageSquare, Building2, LifeBuoy } from "lucide-react";
+import { Mail, MessageSquare, Building2, LifeBuoy, Share2 } from "lucide-react";
 import { EMAILS } from "@/lib/constants/emails";
+import { SOCIAL_HANDLES } from "@/lib/constants/social";
+import { SocialLinks } from "@/components/common/SocialLinks";
 
 export const metadata: Metadata = {
   title: "Contact Us",
-  description: "Get in touch with the DealerVoice team - support, partnerships, press, and dealer enquiries.",
+  description: "Get in touch with DealerVoice — outreach, support, dealer enquiries, and partnerships.",
 };
 
 const CHANNELS = [
-  { icon: LifeBuoy, title: "Customer support", body: "Questions about your account or a review.", email: EMAILS.support },
-  { icon: Building2, title: "Dealer enquiries", body: "Claim your profile or learn about Pro plans.", email: EMAILS.dealers },
-  { icon: MessageSquare, title: "Press & media", body: "Interviews, data requests, and partnerships.", email: EMAILS.press },
+  {
+    icon: Mail,
+    title: "General & partnerships",
+    body: "Press, partnerships, and anything else — our team reads every message.",
+    email: EMAILS.outreach,
+  },
+  {
+    icon: LifeBuoy,
+    title: "Customer support",
+    body: "Questions about your account, a review, or privacy.",
+    email: EMAILS.support,
+  },
+  {
+    icon: Building2,
+    title: "Dealer enquiries",
+    body: "Claim your profile, billing, or Pro plans.",
+    email: EMAILS.dealers,
+  },
+  {
+    icon: MessageSquare,
+    title: "Press & advertising",
+    body: "Media enquiries, sponsored placement, and brand partnerships.",
+    email: EMAILS.outreach,
+  },
 ];
 
 export default function ContactPage() {
@@ -18,8 +41,16 @@ export default function ContactPage() {
     <div className="bg-white">
       <section className="border-b border-gray-100 bg-gray-50">
         <div className="container py-14 text-center max-w-2xl">
-          <h1 className="text-4xl font-extrabold text-gray-900 mb-4">Get in <span className="text-gold">touch</span></h1>
-          <p className="text-lg text-gray-600">We usually respond within one business day. Choose the right channel below or send us a message.</p>
+          <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
+            Get in <span className="text-gold">touch</span>
+          </h1>
+          <p className="text-lg text-gray-600">
+            We usually respond within one business day. Email{" "}
+            <a href={`mailto:${EMAILS.outreach}`} className="text-gold-700 hover:underline font-medium">
+              {EMAILS.outreach}
+            </a>{" "}
+            or choose a channel below.
+          </p>
         </div>
       </section>
 
@@ -28,34 +59,75 @@ export default function ContactPage() {
           <div className="space-y-4">
             {CHANNELS.map((c) => (
               <div key={c.title} className="flex gap-4 rounded-2xl border border-gray-100 p-6 shadow-sm">
-                <span className="grid place-items-center w-12 h-12 rounded-xl bg-gold-50 text-gold-600 shrink-0"><c.icon size={22} /></span>
+                <span className="grid place-items-center w-12 h-12 rounded-xl bg-gold-50 text-gold-600 shrink-0">
+                  <c.icon size={22} />
+                </span>
                 <div>
                   <h3 className="font-semibold text-gray-900">{c.title}</h3>
                   <p className="text-sm text-gray-600 mb-1">{c.body}</p>
-                  <a href={`mailto:${c.email}`} className="text-sm font-medium text-gold-700 hover:underline inline-flex items-center gap-1">
+                  <a
+                    href={`mailto:${c.email}`}
+                    className="text-sm font-medium text-gold-700 hover:underline inline-flex items-center gap-1"
+                  >
                     <Mail size={13} /> {c.email}
                   </a>
                 </div>
               </div>
             ))}
+
+            <div className="rounded-2xl border border-gray-100 p-6 shadow-sm">
+              <div className="flex items-center gap-2 mb-3">
+                <Share2 size={18} className="text-gold-600" />
+                <h3 className="font-semibold text-gray-900">Follow DealerVoice</h3>
+              </div>
+              <p className="text-sm text-gray-600 mb-4">
+                Updates on Instagram {SOCIAL_HANDLES.instagram} and LinkedIn ({SOCIAL_HANDLES.linkedin}).
+              </p>
+              <SocialLinks variant="inline" />
+            </div>
           </div>
 
-          <form action={`mailto:${EMAILS.support}`} method="post" encType="text/plain" className="rounded-2xl border border-gray-100 p-7 shadow-sm bg-white">
-            <h3 className="font-semibold text-gray-900 mb-4 text-lg">Send us a message</h3>
+          <form
+            action={`mailto:${EMAILS.outreach}`}
+            method="post"
+            encType="text/plain"
+            className="rounded-2xl border border-gray-100 p-7 shadow-sm bg-white"
+          >
+            <h3 className="font-semibold text-gray-900 mb-1 text-lg">Send us a message</h3>
+            <p className="text-sm text-gray-500 mb-4">Opens your email app addressed to {EMAILS.outreach}.</p>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                <input name="name" required className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-gold-500/40" />
+                <input
+                  name="name"
+                  required
+                  className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-gold-500/40"
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                <input name="email" type="email" required className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-gold-500/40" />
+                <input
+                  name="email"
+                  type="email"
+                  required
+                  className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-gold-500/40"
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                <textarea name="message" rows={5} required className="w-full rounded-lg border border-gray-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500/40" />
+                <textarea
+                  name="message"
+                  rows={5}
+                  required
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500/40"
+                />
               </div>
-              <button type="submit" className="w-full h-11 rounded-lg bg-gold-gradient text-night-900 font-semibold hover:opacity-90 transition">Send message</button>
+              <button
+                type="submit"
+                className="w-full h-11 rounded-lg bg-gold-gradient text-night-900 font-semibold hover:opacity-90 transition"
+              >
+                Send message
+              </button>
             </div>
           </form>
         </div>

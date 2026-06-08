@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     title: "DealerVoice - Trusted Dealership Reviews Worldwide",
     description: "Find honest, verified reviews for car dealerships worldwide.",
     images: ["/og-image.png"],
-    creator: "@dealervoice",
+    creator: "@dealervoice_io",
   },
   robots: {
     index: true,

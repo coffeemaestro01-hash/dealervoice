@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Heart, Globe, Rocket, Mail } from "lucide-react";
+import { EMAILS } from "@/lib/constants/emails";
 
 export const metadata: Metadata = { title: "Careers", description: "Join the DealerVoice team and help make car buying trustworthy for everyone." };
 
@@ -32,8 +33,8 @@ export default function CareersPage() {
           <div className="max-w-xl mx-auto text-center rounded-2xl border border-gray-100 p-8 shadow-sm">
             <h2 className="text-xl font-bold text-gray-900 mb-2">No open roles right now</h2>
             <p className="text-gray-600 mb-5">But we&apos;re always glad to meet talented people. Tell us how you&apos;d like to contribute.</p>
-            <a href="mailto:careers@dealervoice.io" className="inline-flex items-center gap-2 h-11 px-6 rounded-lg bg-gold-gradient text-night-900 font-semibold hover:opacity-90">
-              <Mail size={16} /> careers@dealervoice.io
+            <a href={`mailto:${EMAILS.outreach}`} className="inline-flex items-center gap-2 h-11 px-6 rounded-lg bg-gold-gradient text-night-900 font-semibold hover:opacity-90">
+              <Mail size={16} /> {EMAILS.outreach}
             </a>
           </div>
         </div>

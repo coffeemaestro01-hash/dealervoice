@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Target, TrendingUp, Users, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { EMAILS } from "@/lib/constants/emails";
 
 export const metadata: Metadata = { title: "Advertise", description: "Reach in-market car buyers on DealerVoice." };
 
@@ -32,7 +33,7 @@ export default function AdvertisePage() {
             ))}
           </div>
           <div className="text-center">
-            <a href="mailto:advertise@dealervoice.io"><Button size="lg" className="bg-gold-gradient text-night-900 font-semibold border-0 hover:opacity-90"><Mail size={16} className="mr-2" /> Talk to our team</Button></a>
+            <a href={`mailto:${EMAILS.outreach}`}><Button size="lg" className="bg-gold-gradient text-night-900 font-semibold border-0 hover:opacity-90"><Mail size={16} className="mr-2" /> Talk to our team</Button></a>
             <p className="text-sm text-gray-500 mt-4">Or <Link href="/pricing" className="text-gold-700 hover:underline">see dealer plans</Link> for built-in promotion.</p>
           </div>
         </div>

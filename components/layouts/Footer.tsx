@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { FooterBrand } from "@/components/common/Logo";
+import { SocialLinks } from "@/components/common/SocialLinks";
 import { ManageCookiesLink } from "@/components/consent/ManageCookiesLink";
+import { EMAILS } from "@/lib/constants/emails";
 
 const FOOTER_LINKS = {
   Platform: [
@@ -44,24 +46,13 @@ export function Footer() {
             <p className="text-sm leading-relaxed mt-3">
               A global platform for car dealership reviews and reputation insights — built for car buyers and dealerships.
             </p>
-            <div className="flex gap-2 mt-4">
-              {[
-                { label: "X", href: "https://x.com/dealervoice" },
-                { label: "in", href: "https://www.linkedin.com/company/dealervoice" },
-                { label: "f", href: "https://www.facebook.com/dealervoice" },
-              ].map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-8 h-8 grid place-items-center rounded-full border border-gold/30 text-gold-400 text-xs hover:bg-gold-500 hover:text-night-900 transition-colors"
-                  aria-label={`DealerVoice on ${s.label}`}
-                >
-                  {s.label}
-                </a>
-              ))}
-            </div>
+            <a
+              href={`mailto:${EMAILS.outreach}`}
+              className="text-sm text-gold-400 hover:text-gold-300 mt-2 inline-block"
+            >
+              {EMAILS.outreach}
+            </a>
+            <SocialLinks className="mt-4" />
           </div>
 
           {Object.entries(FOOTER_LINKS).map(([section, links]) => (
