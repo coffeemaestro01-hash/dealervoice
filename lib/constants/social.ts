@@ -9,3 +9,6 @@ export const SOCIAL_HANDLES = {
   instagram: "@dealervoice_io",
   linkedin: "DealerVoice",
 } as const;
+
+/** Contact email for social media profile bios only — not used on the website */
+export const SOCIAL_CONTACT_EMAIL = "outreach@dealervoice.io";

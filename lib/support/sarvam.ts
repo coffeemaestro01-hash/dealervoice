@@ -51,8 +51,10 @@ PRIVACY & DATA (India DPDP Act 2023)
 - Grievances (privacy, content, payment, account) can be raised at /grievance.
 
 CONTACT
-- General outreach & partnerships: outreach@dealervoice.io
 - Support email: support@dealervoice.io
+- Dealer enquiries: dealers@dealervoice.io
+- Press: press@dealervoice.io
+- Advertising: advertise@dealervoice.io
 - Billing email: billing@dealervoice.io
 - Social: Facebook, Instagram @dealervoice_io, LinkedIn company/dealervoice
 - For anything you cannot resolve, direct the user to the grievance channel at /grievance or to email support.

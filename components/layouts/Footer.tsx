@@ -2,7 +2,6 @@ import Link from "next/link";
 import { FooterBrand } from "@/components/common/Logo";
 import { SocialLinks } from "@/components/common/SocialLinks";
 import { ManageCookiesLink } from "@/components/consent/ManageCookiesLink";
-import { EMAILS } from "@/lib/constants/emails";
 
 const FOOTER_LINKS = {
   Platform: [
@@ -46,12 +45,6 @@ export function Footer() {
             <p className="text-sm leading-relaxed mt-3">
               A global platform for car dealership reviews and reputation insights — built for car buyers and dealerships.
             </p>
-            <a
-              href={`mailto:${EMAILS.outreach}`}
-              className="text-sm text-gold-400 hover:text-gold-300 mt-2 inline-block"
-            >
-              {EMAILS.outreach}
-            </a>
             <SocialLinks className="mt-4" />
           </div>
 

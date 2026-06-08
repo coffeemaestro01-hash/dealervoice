@@ -4,7 +4,6 @@ import prisma from "@/lib/db";
 import { Search, PenLine, ShieldCheck, TrendingUp, Users, Globe, Award, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SocialLinks } from "@/components/common/SocialLinks";
-import { EMAILS } from "@/lib/constants/emails";
 
 export const metadata: Metadata = {
   title: "How It Works & About Us",
@@ -160,10 +159,11 @@ export default async function AboutPage() {
           <div className="text-center max-w-xl mx-auto mb-10">
             <h2 className="text-2xl font-bold text-gray-900 mb-3">Connect with us</h2>
             <p className="text-gray-600 text-sm mb-4">
-              Questions or partnerships? Email{" "}
-              <a href={`mailto:${EMAILS.outreach}`} className="text-gold-700 hover:underline font-medium">
-                {EMAILS.outreach}
-              </a>
+              Questions? Visit our{" "}
+              <Link href="/contact" className="text-gold-700 hover:underline font-medium">
+                contact page
+              </Link>{" "}
+              for the right department email.
             </p>
             <div className="flex justify-center">
               <SocialLinks variant="inline" />
