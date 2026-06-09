@@ -3,22 +3,25 @@ import type { Metadata } from "next";
 import prisma from "@/lib/db";
 
 export const dynamic = "force-dynamic";
+
 import { HeroSection } from "@/components/home/HeroSection";
-import { TrustSection } from "@/components/home/TrustSection";
-import { CategoriesSection } from "@/components/home/CategoriesSection";
-import { TrendingLocalDealers } from "@/components/home/TrendingLocalDealers";
-import { HomepageAds } from "@/components/home/HomepageAds";
-import { GlobalCoverageSection } from "@/components/home/GlobalCoverageSection";
+import { BuyerJourneyStrip } from "@/components/home/BuyerJourneyStrip";
 import { HowItWorksSection } from "@/components/home/HowItWorksSection";
-import { RecentReviewsSection } from "@/components/home/RecentReviewsSection";
-import { FirstReviewerSection } from "@/components/home/FirstReviewerSection";
-import { BrandsSection } from "@/components/home/BrandsSection";
-import { CtaSection } from "@/components/home/CtaSection";
+import { TrustSection } from "@/components/home/TrustSection";
+import { AIAuthoritySection } from "@/components/home/AIAuthoritySection";
+import { GlobalCoverageSection } from "@/components/home/GlobalCoverageSection";
 import { IndiaCoverageSection } from "@/components/home/IndiaCoverageSection";
+import { TrendingLocalDealers } from "@/components/home/TrendingLocalDealers";
+import { FirstReviewerSection } from "@/components/home/FirstReviewerSection";
+import { RecentReviewsSection } from "@/components/home/RecentReviewsSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { BlogStripSection } from "@/components/home/BlogStripSection";
 import { ResearchStripSection } from "@/components/home/ResearchStripSection";
-import { AIAuthoritySection } from "@/components/home/AIAuthoritySection";
+import { CategoriesSection } from "@/components/home/CategoriesSection";
+import { BrandsSection } from "@/components/home/BrandsSection";
+import { HomepageAds } from "@/components/home/HomepageAds";
+import { CtaSection } from "@/components/home/CtaSection";
+import { DreamCarAssistant } from "@/components/trust/DreamCarAssistant";
 import { Navbar } from "@/components/layouts/Navbar";
 import { Footer } from "@/components/layouts/Footer";
 
@@ -49,15 +52,20 @@ export default async function HomePage() {
     <div className="flex flex-col min-h-screen bg-night">
       <Navbar />
       <main className="flex-1">
+        {/* Primary buyer funnel — above the fold */}
         <HeroSection stats={stats} />
+        <BuyerJourneyStrip />
+        <HowItWorksSection dealerCount={stats.dealers} />
+        <TrustSection />
+        <AIAuthoritySection />
+
+        {/* Discovery & social proof */}
         <Suspense>
           <GlobalCoverageSection />
         </Suspense>
         <Suspense>
           <IndiaCoverageSection />
         </Suspense>
-        <HowItWorksSection dealerCount={stats.dealers} />
-        <TrustSection />
         <Suspense>
           <TrendingLocalDealers />
         </Suspense>
@@ -70,6 +78,8 @@ export default async function HomePage() {
         <Suspense>
           <TestimonialsSection />
         </Suspense>
+
+        {/* Content & categories */}
         <Suspense>
           <BlogStripSection />
         </Suspense>
@@ -81,10 +91,12 @@ export default async function HomePage() {
         <Suspense>
           <HomepageAds />
         </Suspense>
-        <AIAuthoritySection />
         <CtaSection />
       </main>
       <Footer />
+
+      {/* Dream Car Assistant — floats above support chat */}
+      <DreamCarAssistant />
     </div>
   );
 }

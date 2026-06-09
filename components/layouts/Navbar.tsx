@@ -19,6 +19,7 @@ import { cn, getInitials } from "@/lib/utils";
 
 const SECONDARY_LINKS = [
   { label: "How It Works", href: "/about" },
+  { label: "Trust", href: "/trust" },
   { label: "Blog", href: "/blog" },
   { label: "Research", href: "/research" },
 ];

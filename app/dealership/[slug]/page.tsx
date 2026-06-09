@@ -15,6 +15,11 @@ import { DealerInventorySection } from "@/components/dealership/DealerInventoryS
 import { ProfileWriteBar } from "@/components/dealership/ProfileWriteBar";
 import { isDealerPremiumClaimed } from "@/lib/dealer/premium";
 import { getCache, setCache, CACHE_KEYS, CACHE_TTL } from "@/lib/redis";
+import { TrustScoreBreakdown } from "@/components/trust/TrustScoreBreakdown";
+import { AIReviewDigest } from "@/components/trust/AIReviewDigest";
+import { DreamCarAssistant } from "@/components/trust/DreamCarAssistant";
+import { computeTrustScore } from "@/lib/trust/score";
+import { generateReviewDigest } from "@/lib/ai/review-digest";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -71,6 +76,23 @@ export default async function DealershipPage({ params, searchParams }: Props) {
 
   const page = Number(pageParam ?? 1);
   const isPremium = isDealerPremiumClaimed(dealer);
+  const trustScore = computeTrustScore({
+    reputationScore: dealer.reputationScore,
+    isVerified: dealer.isVerified,
+    isPremiumClaimed: dealer.isPremiumClaimed,
+    avgRating: dealer.overallRating,
+    totalReviews: dealer.totalReviews,
+    verifiedReviews: dealer.verifiedReviews,
+    responseRate: dealer.responseRate ?? 0,
+  });
+
+  const recentReviews = await prisma.review.findMany({
+    where: { dealershipId: dealer.id, status: "PUBLISHED", deletedAt: null },
+    orderBy: { createdAt: "desc" },
+    take: 20,
+    select: { title: true, body: true, overallRating: true },
+  });
+  const reviewDigest = await generateReviewDigest(recentReviews);
 
   // Schema.org LocalBusiness + Review aggregate markup
   const jsonLd = {
@@ -155,12 +177,16 @@ export default async function DealershipPage({ params, searchParams }: Props) {
             </div>
 
             <div className="space-y-5">
+              <TrustScoreBreakdown trust={trustScore} />
+              <AIReviewDigest digest={reviewDigest} />
               <QuoteRequestForm dealershipId={dealer.id} dealerName={dealer.name} />
               <DealershipSidebar dealer={dealer as any} isPremium={isPremium} />
             </div>
           </div>
         </div>
       </div>
+
+      <DreamCarAssistant />
     </>
   );
 }

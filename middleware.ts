@@ -26,6 +26,7 @@ const PUBLIC_PATHS = [
   "/api-docs",
   "/claim",
   "/unsubscribe",
+  "/trust",
   "/dealers",
   "/dealership",
   "/verify-email",

@@ -8,13 +8,13 @@ import { Search, MapPin, ShieldCheck, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const POPULAR = ["Maruti", "Hyundai", "Tata", "Mahindra", "Honda"];
+const POPULAR = ["Toyota", "Honda", "Ford", "Hyundai", "BMW"];
 const POPULAR_LOCATIONS = [
   { label: "India", href: "/dealers/in" },
   { label: "United States", href: "/dealers/us" },
   { label: "United Kingdom", href: "/dealers/gb" },
-  { label: "Mumbai", href: "/dealers/in/state/maharashtra" },
-  { label: "Texas", href: "/dealers/us" },
+  { label: "UAE", href: "/dealers/ae" },
+  { label: "Australia", href: "/dealers/au" },
 ];
 
 interface HeroStats {
@@ -45,9 +45,9 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
   ];
 
   const trustLine = [
-    stats.indiaDealers ? `${compact(stats.indiaDealers)} India dealerships` : null,
-    stats.dealers > 0 ? `${compact(stats.dealers)} total listings` : null,
-    "Worldwide directory · deepest coverage in India",
+    stats.dealers > 0 ? `${compact(stats.dealers)} dealerships` : null,
+    stats.countries > 0 ? `${stats.countries} countries` : null,
+    "Verified reviews worldwide",
   ]
     .filter(Boolean)
     .join(" · ");
@@ -77,12 +77,14 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
           </div>
 
           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-5">
-            Find trusted car dealership reviews in{" "}
-            <span className="text-gold">India</span>
+            Find the dealership{" "}
+            <span className="text-gold">you can trust</span>
           </h1>
 
           <p className="text-base sm:text-lg md:text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
-            DealerVoice helps Indian car buyers discover real customer experiences, compare dealership reputation by state and district, and make confident purchase decisions.
+            Real reviews from verified car buyers across{" "}
+            {stats.countries > 0 ? `${stats.countries} countries` : "the world"}.
+            Compare dealership reputation, read transparent feedback, and make confident purchase decisions.
           </p>
 
           <form
@@ -137,7 +139,7 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
             {POPULAR.map((b, i) => (
               <span key={b}>
                 <button
-                  onClick={() => router.push(`/dealers/in?q=${encodeURIComponent(b)}`)}
+                  onClick={() => router.push(`/dealers?q=${encodeURIComponent(b)}`)}
                   className="text-gold-400 hover:text-gold-300 hover:underline font-medium"
                 >
                   {b}
@@ -147,7 +149,7 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
             ))}
           </p>
           <p className="text-gray-500 text-sm mt-2">
-            Top cities:{" "}
+            Top regions:{" "}
             {POPULAR_LOCATIONS.map((loc, i) => (
               <span key={loc.label}>
                 <Link href={loc.href} className="text-gold-400/80 hover:text-gold-300 hover:underline font-medium">
@@ -157,8 +159,8 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
               </span>
             ))}
             {" · "}
-            <Link href="/dealers/in" className="text-gold-400 hover:text-gold-300 hover:underline font-medium">
-              All India
+            <Link href="/dealers" className="text-gold-400 hover:text-gold-300 hover:underline font-medium">
+              All regions
             </Link>
           </p>
         </motion.div>

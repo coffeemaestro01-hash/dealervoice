@@ -9,6 +9,12 @@ import { Button } from "@/components/ui/button";
 import { cn, timeAgo, truncate, getInitials } from "@/lib/utils";
 import type { ReviewWithRelations } from "@/types";
 
+const SENTIMENT_STYLES: Record<string, string> = {
+  Positive: "bg-green-50 text-green-700 border-green-200",
+  Neutral: "bg-gray-50 text-gray-600 border-gray-200",
+  Negative: "bg-red-50 text-red-600 border-red-200",
+};
+
 const REVIEW_TYPE_LABELS: Record<string, string> = {
   NEW_CAR_PURCHASE: "New Car Purchase",
   USED_CAR_PURCHASE: "Used Car Purchase",
@@ -28,7 +34,34 @@ interface ReviewCardProps {
 
 export function ReviewCard({ review, showDealerResponse = true, onHelpful, onFlag }: ReviewCardProps) {
   const [expanded, setExpanded] = useState(false);
+  const [helpfulCount, setHelpfulCount] = useState(review.helpfulCount);
+  const [voted, setVoted] = useState<boolean | null>(null);
   const isLong = review.body.length > 400;
+
+  async function handleHelpful(isHelpful: boolean) {
+    if (voted === isHelpful) return;
+    const prev = helpfulCount;
+    setVoted(isHelpful);
+    setHelpfulCount((c) => isHelpful ? c + 1 : Math.max(0, c - (voted === true ? 1 : 0)));
+    try {
+      const res = await fetch(`/api/reviews/${review.id}/helpful`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isHelpful }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setHelpfulCount(data.helpfulCount);
+      } else {
+        setVoted(null);
+        setHelpfulCount(prev);
+      }
+    } catch {
+      setVoted(null);
+      setHelpfulCount(prev);
+    }
+    onHelpful?.(review.id, isHelpful);
+  }
 
   return (
     <article className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
@@ -55,13 +88,23 @@ export function ReviewCard({ review, showDealerResponse = true, onHelpful, onFla
       </div>
 
       {/* Type & Date */}
-      <div className="flex items-center gap-2 mt-3 text-xs text-gray-500">
+      <div className="flex items-center gap-2 mt-3 text-xs text-gray-500 flex-wrap">
         <span className="px-2 py-0.5 bg-gray-50 border border-gray-100 rounded-full">
           {REVIEW_TYPE_LABELS[review.reviewType] ?? review.reviewType}
         </span>
         {review.vehicleMake && (
           <span className="px-2 py-0.5 bg-gray-50 border border-gray-100 rounded-full">
             {[review.vehicleYear, review.vehicleMake, review.vehicleModel].filter(Boolean).join(" ")}
+          </span>
+        )}
+        {review.sentimentLabel && (
+          <span
+            className={cn(
+              "px-2 py-0.5 border rounded-full font-medium capitalize",
+              SENTIMENT_STYLES[review.sentimentLabel] ?? "bg-gray-50 text-gray-600 border-gray-200"
+            )}
+          >
+            {review.sentimentLabel}
           </span>
         )}
         <span className="ml-auto">{timeAgo(review.createdAt)}</span>
@@ -116,17 +159,17 @@ export function ReviewCard({ review, showDealerResponse = true, onHelpful, onFla
         <Button
           variant="ghost"
           size="sm"
-          className="h-7 px-2 text-xs text-gray-600 hover:text-green-600"
-          onClick={() => onHelpful?.(review.id, true)}
+          className={cn("h-7 px-2 text-xs", voted === true ? "text-green-600" : "text-gray-600 hover:text-green-600")}
+          onClick={() => handleHelpful(true)}
         >
           <ThumbsUp size={12} className="mr-1" />
-          {review.helpfulCount > 0 ? review.helpfulCount : ""} Yes
+          {helpfulCount > 0 ? helpfulCount : ""} Yes
         </Button>
         <Button
           variant="ghost"
           size="sm"
-          className="h-7 px-2 text-xs text-gray-600 hover:text-red-600"
-          onClick={() => onHelpful?.(review.id, false)}
+          className={cn("h-7 px-2 text-xs", voted === false ? "text-red-600" : "text-gray-600 hover:text-red-600")}
+          onClick={() => handleHelpful(false)}
         >
           <ThumbsDown size={12} className="mr-1" />
           No
