@@ -76,7 +76,7 @@ export default async function CountryInventoryPage({ params }: Props) {
             {listings.map((v) => (
               <Link
                 key={v.id}
-                href={`/dealership/${v.dealership.slug}`}
+                href={`/vehicles/${v.id}`}
                 className="rounded-xl border border-gray-100 p-5 hover:border-gold/40 hover:shadow-sm transition-all"
               >
                 <p className="text-xs font-semibold uppercase tracking-wider text-gold-600">

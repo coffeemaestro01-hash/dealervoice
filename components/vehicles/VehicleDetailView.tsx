@@ -76,8 +76,8 @@ export function VehicleDetailView({ vehicle, formattedPrice }: VehicleDetailProp
     <div className="min-h-screen bg-gray-50 pb-16">
       <div className="container py-6">
         {/* Breadcrumb */}
-        <nav className="text-xs text-gray-500 mb-4 flex items-center gap-1.5">
-          <Link href="/dealers" className="hover:text-gold-700">Dealers</Link>
+        <nav className="text-xs text-gray-500 mb-4 flex items-center gap-1.5 flex-wrap">
+          <Link href="/vehicles" className="hover:text-gold-700">Vehicles</Link>
           <span>/</span>
           <Link href={`/dealership/${vehicle.dealership.slug}`} className="hover:text-gold-700">{vehicle.dealership.name}</Link>
           <span>/</span>
