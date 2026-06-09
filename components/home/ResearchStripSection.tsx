@@ -29,7 +29,7 @@ export async function ResearchStripSection() {
               className="group rounded-2xl border border-white/10 overflow-hidden bg-night-800/50 hover:border-gold-500/40 transition-all"
             >
               <div className="relative h-36 bg-night-700">
-                {a.coverImage && (
+                {a.coverImage ? (
                   <Image
                     src={a.coverImage}
                     alt=""
@@ -37,6 +37,8 @@ export async function ResearchStripSection() {
                     className="object-cover opacity-80 group-hover:opacity-100 transition-opacity"
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-br from-gold-900/30 to-night-800" />
                 )}
               </div>
               <div className="p-5">

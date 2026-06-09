@@ -1,5 +1,6 @@
 import prisma from "@/lib/db";
 import { RESEARCH_CATEGORY } from "./constants";
+import { normalizeResearchCoverImage } from "./cover-image";
 
 const researchWhere = {
   isPublished: true,
@@ -7,7 +8,7 @@ const researchWhere = {
 } as const;
 
 export async function getResearchArticles(limit = 50) {
-  return prisma.blogPost.findMany({
+  const rows = await prisma.blogPost.findMany({
     where: researchWhere,
     orderBy: { publishedAt: "desc" },
     take: limit,
@@ -21,12 +22,21 @@ export async function getResearchArticles(limit = 50) {
       authorName: true,
     },
   });
+  return rows.map((row) => ({
+    ...row,
+    coverImage: normalizeResearchCoverImage(row.coverImage),
+  }));
 }
 
 export async function getResearchArticleBySlug(slug: string) {
-  return prisma.blogPost.findFirst({
+  const post = await prisma.blogPost.findFirst({
     where: { ...researchWhere, slug },
   });
+  if (!post) return null;
+  return {
+    ...post,
+    coverImage: normalizeResearchCoverImage(post.coverImage),
+  };
 }
 
 export function isResearchPost(category: string | null | undefined): boolean {
