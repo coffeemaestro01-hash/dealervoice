@@ -186,7 +186,14 @@ export default async function DealershipPage({ params, searchParams }: Props) {
         </div>
       </div>
 
-      <DreamCarAssistant />
+      <DreamCarAssistant
+        dealerContext={{
+          name: dealer.name,
+          city: dealer.cityName,
+          rating: dealer.overallRating,
+          slug: dealer.slug,
+        }}
+      />
     </>
   );
 }

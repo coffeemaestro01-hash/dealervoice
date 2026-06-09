@@ -9,6 +9,7 @@ import { RatingBadge } from "@/components/common/RatingBadge";
 import { Button } from "@/components/ui/button";
 import { cn, formatNumber, reputationColor, buildCountryUrl } from "@/lib/utils";
 import type { DealershipWithRelations } from "@/types";
+import { SaveButton } from "@/components/dealership/SaveButton";
 
 interface Props {
   dealer: DealershipWithRelations & {
@@ -126,6 +127,7 @@ export function DealershipProfile({ dealer, isPremium = false, highlightWrite = 
                       </Button>
                     </a>
                   )}
+                  <SaveButton dealershipId={dealer.id} />
                   <Button variant="outline" size="sm" className="gap-1.5">
                     <Share2 size={14} aria-hidden />
                     Share

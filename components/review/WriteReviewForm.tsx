@@ -15,6 +15,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { reviewSchema, type ReviewInput } from "@/lib/validations";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { VerificationUpload } from "@/components/review/VerificationUpload";
 
 const RATING_LABELS = ["", "Poor", "Fair", "Good", "Very Good", "Excellent"];
 
@@ -49,6 +50,7 @@ export function WriteReviewForm({ dealer }: Props) {
   const router = useRouter();
   const { toast } = useToast();
   const [hoveredRating, setHoveredRating] = useState(0);
+  const [verificationDocUrl, setVerificationDocUrl] = useState<string | null>(null);
 
   const { control, register, handleSubmit, watch, setValue, formState: { errors } } = useForm<ReviewInput>({
     resolver: zodResolver(reviewSchema),
@@ -66,7 +68,7 @@ export function WriteReviewForm({ dealer }: Props) {
       const res = await fetch("/api/reviews", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, verificationDocUrl }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? "Failed to submit review");
@@ -315,6 +317,15 @@ export function WriteReviewForm({ dealer }: Props) {
           <div>
             <Label htmlFor="visitDate">Date of Visit</Label>
             <Input id="visitDate" type="date" className="mt-1 w-full sm:w-48" {...register("visitDate")} />
+          </div>
+
+          {/* Verification upload */}
+          <div>
+            <Label className="mb-2 block">Proof of Purchase (optional)</Label>
+            <VerificationUpload
+              value={verificationDocUrl}
+              onChange={setVerificationDocUrl}
+            />
           </div>
 
           <Button

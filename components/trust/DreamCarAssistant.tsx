@@ -8,11 +8,30 @@ interface Msg {
   content: string;
 }
 
-const GREETING: Msg = {
+export interface DealerContext {
+  name: string;
+  city: string | null;
+  rating: number;
+  slug: string;
+}
+
+interface Props {
+  dealerContext?: DealerContext;
+}
+
+const GENERIC_GREETING: Msg = {
   role: "assistant",
   content:
     "Hi! I'm the Dream Car Assistant. Tell me what you're looking for — brand, city, budget, new or used — and I'll help you find the right dealer. What's your dream car?",
 };
+
+function dealerGreeting(ctx: DealerContext): Msg {
+  const ratingText = ctx.rating > 0 ? ` with a ${ctx.rating.toFixed(1)}★ rating` : "";
+  return {
+    role: "assistant",
+    content: `Hi! You're browsing **${ctx.name}**${ctx.city ? ` in ${ctx.city}` : ""}${ratingText}. I can answer questions about this dealership, compare alternatives, or help you decide if it's the right fit. What would you like to know?`,
+  };
+}
 
 const QUICK_PROMPTS = [
   "Find a Toyota dealer in Delhi",
@@ -21,9 +40,10 @@ const QUICK_PROMPTS = [
   "Compare SUV dealers in Mumbai",
 ];
 
-export function DreamCarAssistant() {
+export function DreamCarAssistant({ dealerContext }: Props = {}) {
+  const greeting = dealerContext ? dealerGreeting(dealerContext) : GENERIC_GREETING;
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Msg[]>([GREETING]);
+  const [messages, setMessages] = useState<Msg[]>([greeting]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -48,7 +68,10 @@ export function DreamCarAssistant() {
         const res = await fetch("/api/trust/assistant", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages: next.filter((_, i) => i !== 0) }),
+          body: JSON.stringify({
+            messages: next.filter((_, i) => i !== 0),
+            dealerContext: dealerContext ?? null,
+          }),
         });
         const data = await res.json();
         const reply =

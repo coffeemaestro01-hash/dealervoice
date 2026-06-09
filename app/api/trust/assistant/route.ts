@@ -22,6 +22,13 @@ RULES:
 
 DealerVoice Trust Score is 0-100, based on: avg rating (35%), verified review ratio (20%), response rate (15%), resolution rate (10%), freshness (10%), trend (10%). Claimed profiles earn up to +10 bonus points.`;
 
+const dealerContextSchema = z.object({
+  name: z.string(),
+  city: z.string().nullable().optional(),
+  rating: z.number(),
+  slug: z.string(),
+}).optional().nullable();
+
 const schema = z.object({
   messages: z
     .array(
@@ -32,14 +39,15 @@ const schema = z.object({
     )
     .min(1)
     .max(20),
+  dealerContext: dealerContextSchema,
 });
 
-async function callGemini(history: { role: string; content: string }[]): Promise<string> {
+async function callGemini(history: { role: string; content: string }[], systemPrompt = SYSTEM_PROMPT): Promise<string> {
   const apiKey = process.env.GEMINI_API_KEY!;
 
   // Gemini uses a different format: system prompt as first user turn trick
   const contents = [
-    { role: "user", parts: [{ text: SYSTEM_PROMPT + "\n\nNow begin helping the buyer." }] },
+    { role: "user", parts: [{ text: systemPrompt + "\n\nNow begin helping the buyer." }] },
     { role: "model", parts: [{ text: "Understood! I'm ready to help you find the perfect dealer." }] },
     ...history.map((m) => ({
       role: m.role === "user" ? "user" : "model",
@@ -65,7 +73,7 @@ async function callGemini(history: { role: string; content: string }[]): Promise
   return data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
 }
 
-async function callOpenAI(history: { role: string; content: string }[]): Promise<string> {
+async function callOpenAI(history: { role: string; content: string }[], systemPrompt = SYSTEM_PROMPT): Promise<string> {
   const apiKey = process.env.OPENAI_API_KEY!;
 
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -77,7 +85,7 @@ async function callOpenAI(history: { role: string; content: string }[]): Promise
     body: JSON.stringify({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: SYSTEM_PROMPT },
+        { role: "system", content: systemPrompt },
         ...history.map((m) => ({ role: m.role, content: m.content })),
       ],
       max_tokens: 400,
@@ -118,16 +126,23 @@ export async function POST(req: NextRequest) {
   }
 
   const history = parsed.data.messages;
+  const dealerCtx = parsed.data.dealerContext;
+
   if (history[history.length - 1].role !== "user") {
     return NextResponse.json({ error: "Last message must be from the user" }, { status: 400 });
   }
 
+  // Build a context-enriched system prompt when on a dealer page
+  const systemPrompt = dealerCtx
+    ? SYSTEM_PROMPT + `\n\nCURRENT DEALER CONTEXT:\nThe user is currently viewing the profile of "${dealerCtx.name}"${dealerCtx.city ? ` in ${dealerCtx.city}` : ""}. DealerVoice rating: ${dealerCtx.rating.toFixed(1)}/5. Profile: /dealership/${dealerCtx.slug}. Use this context to give relevant answers, but still follow all rules above.`
+    : SYSTEM_PROMPT;
+
   try {
     let reply = "";
     if (process.env.GEMINI_API_KEY) {
-      reply = await callGemini(history);
+      reply = await callGemini(history, systemPrompt);
     } else if (process.env.OPENAI_API_KEY) {
-      reply = await callOpenAI(history);
+      reply = await callOpenAI(history, systemPrompt);
     }
 
     if (!reply) {

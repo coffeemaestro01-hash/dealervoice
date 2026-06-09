@@ -3,6 +3,8 @@ import { z } from "zod";
 import prisma from "@/lib/db";
 import { rateLimit } from "@/lib/auth/rate-limit";
 import { sendNewLeadNotification } from "@/lib/email";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth/config";
 
 const leadSchema = z.object({
   dealershipId: z.string().min(1),
@@ -20,6 +22,9 @@ export async function POST(req: NextRequest) {
   if (!rl.success) {
     return NextResponse.json({ error: "Too many requests. Please try again shortly." }, { status: 429 });
   }
+
+  const session = await getServerSession(authOptions).catch(() => null);
+  const userId = session?.user?.id ?? null;
 
   let body: unknown;
   try { body = await req.json(); } catch {
@@ -50,6 +55,7 @@ export async function POST(req: NextRequest) {
   const lead = await prisma.lead.create({
     data: {
       dealershipId: dealer.id,
+      userId: userId,
       name: d.name.trim(),
       email: d.email.toLowerCase().trim(),
       phone: d.phone || null,

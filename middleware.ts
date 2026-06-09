@@ -33,6 +33,7 @@ const PUBLIC_PATHS = [
   "/write-review",
   "/settings",
   "/test-payment",
+  "/vehicles",
 ];
 
 const DEALER_PATHS = ["/dashboard/dealer"];

@@ -49,10 +49,12 @@ export async function DealerInventorySection({
         <ul className="space-y-3">
           {listings.map((v) => (
             <li key={v.id} className="flex items-start justify-between gap-3 rounded-lg border border-gray-50 p-3 hover:border-gold/30 transition-colors">
-              <div>
-                <p className="font-medium text-gray-900">
-                  {[v.year, v.make, v.model, v.trim].filter(Boolean).join(" ")}
-                </p>
+              <div className="flex-1 min-w-0">
+                <Link href={`/vehicles/${v.id}`} className="group">
+                  <p className="font-medium text-gray-900 group-hover:text-gold-700 transition-colors">
+                    {[v.year, v.make, v.model, v.trim].filter(Boolean).join(" ")}
+                  </p>
+                </Link>
                 <p className="text-xs text-gray-500 mt-0.5">
                   {[v.condition, v.mileageKm != null ? `${v.mileageKm.toLocaleString()} km` : null, v.fuelType]
                     .filter(Boolean)
@@ -62,13 +64,20 @@ export async function DealerInventorySection({
                   {formatPrice(v.priceMinor, v.priceLabel, v.currency)}
                 </p>
               </div>
-              {v.affiliateUrl && (
-                <a href={v.affiliateUrl} target="_blank" rel="noopener noreferrer" className="shrink-0">
-                  <Button size="sm" variant="outline" className="text-xs gap-1">
-                    View <ExternalLink size={12} />
+              <div className="flex items-center gap-2 shrink-0">
+                <Link href={`/vehicles/${v.id}`}>
+                  <Button size="sm" variant="outline" className="text-xs">
+                    Details
                   </Button>
-                </a>
-              )}
+                </Link>
+                {v.affiliateUrl && (
+                  <a href={v.affiliateUrl} target="_blank" rel="noopener noreferrer">
+                    <Button size="sm" variant="ghost" className="text-xs gap-1 px-2">
+                      <ExternalLink size={12} />
+                    </Button>
+                  </a>
+                )}
+              </div>
             </li>
           ))}
         </ul>

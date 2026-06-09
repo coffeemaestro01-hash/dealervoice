@@ -181,6 +181,8 @@ model User {
   dsrRequests      DsrRequest[]
   moderationActions ModerationAction[] @relation("ModeratorActions")
   adminNotes         AdminNote[]       @relation("AdminNoteAuthor")
+  savedDealers     SavedDealer[]
+  leads            Lead[]
 
   @@index([email])
   @@index([role])
@@ -400,6 +402,7 @@ model Dealership {
   teamMembers      TeamMember[]
   vehicleListings  VehicleListing[]
   incomeRecords    IncomeRecord[]
+  savedByUsers     SavedDealer[]
 
   @@index([slug])
   @@index([countryId])
@@ -1034,6 +1037,7 @@ enum LeadType {
 model Lead {
   id           String     @id @default(cuid())
   dealershipId String
+  userId       String?    // set when submitted by authenticated user
   name         String
   email        String
   phone        String?
@@ -1046,8 +1050,10 @@ model Lead {
   updatedAt    DateTime   @updatedAt
 
   dealership   Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+  user         User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@index([dealershipId])
+  @@index([userId])
   @@index([status])
   @@index([createdAt])
 }
@@ -1111,6 +1117,24 @@ model TeamMember {
 
   dealership   Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
 
+  @@index([dealershipId])
+}
+
+// ─────────────────────────────────────────────
+// SAVED DEALERS (buyer wishlist)
+// ─────────────────────────────────────────────
+
+model SavedDealer {
+  id           String     @id @default(cuid())
+  userId       String
+  dealershipId String
+  createdAt    DateTime   @default(now())
+
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dealership   Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, dealershipId])
+  @@index([userId])
   @@index([dealershipId])
 }
 
