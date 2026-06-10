@@ -183,6 +183,7 @@ model User {
   adminNotes         AdminNote[]       @relation("AdminNoteAuthor")
   savedDealers     SavedDealer[]
   leads            Lead[]
+  emailCampaigns   EmailCampaign[] @relation("CampaignCreator")
 
   @@index([email])
   @@index([role])
@@ -251,6 +252,7 @@ model Country {
 
   cities      City[]
   dealerships Dealership[]
+  campaigns   EmailCampaign[]
 
   @@index([code])
   @@index([isActive])
@@ -1184,6 +1186,74 @@ model IncomeRecord {
   @@index([countryCode])
   @@index([createdAt])
   @@index([dealershipId])
+}
+
+// ─────────────────────────────────────────────
+// EMAIL CAMPAIGNS
+// ─────────────────────────────────────────────
+
+enum EmailCampaignStatus {
+  DRAFT
+  SENDING
+  SENT
+  FAILED
+}
+
+enum EmailCampaignAudience {
+  UNCLAIMED
+  CLAIMED
+  ALL
+}
+
+model EmailCampaign {
+  id                 String                @id @default(cuid())
+  name               String
+  subject            String
+  bodyHtml           String                @db.Text
+  channel            String                @default("email")
+  status             EmailCampaignStatus   @default(DRAFT)
+  audience           EmailCampaignAudience @default(UNCLAIMED)
+  countryId          String?
+  recipientCount     Int                   @default(0)
+  sentCount          Int                   @default(0)
+  openCount          Int                   @default(0)
+  clickCount         Int                   @default(0)
+  unsubscribeCount   Int                   @default(0)
+  conversionCount    Int                   @default(0)
+  sentAt             DateTime?
+  createdById        String?
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+
+  country            Country?              @relation(fields: [countryId], references: [id], onDelete: SetNull)
+  createdBy          User?                 @relation("CampaignCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  recipients         CampaignRecipient[]
+
+  @@index([status])
+  @@index([sentAt])
+  @@index([createdAt])
+}
+
+model CampaignRecipient {
+  id            String        @id @default(cuid())
+  campaignId    String
+  dealershipId  String?
+  email         String
+  resendId      String?
+  delivered     Boolean       @default(false)
+  opened        Boolean       @default(false)
+  clicked       Boolean       @default(false)
+  unsubscribed  Boolean       @default(false)
+  converted     Boolean       @default(false)
+  sentAt        DateTime?
+  openedAt      DateTime?
+  clickedAt     DateTime?
+
+  campaign      EmailCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId])
+  @@index([email])
+  @@index([resendId])
 }
 
 // ─────────────────────────────────────────────
