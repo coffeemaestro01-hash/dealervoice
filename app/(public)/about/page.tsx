@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import prisma from "@/lib/db";
-import { Search, PenLine, ShieldCheck, TrendingUp, Users, Globe, Award, Star } from "lucide-react";
+import { Search, PenLine, ShieldCheck, TrendingUp, Users, Globe, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SocialLinks } from "@/components/common/SocialLinks";
+import { COMPANY, companyHqLine } from "@/lib/constants/company";
 
 export const metadata: Metadata = {
   title: "How It Works & About Us",
   description:
-    "DealerVoice is a global automotive dealership review and trust platform. Learn how we help car buyers find verified reviews and dealerships build reputation.",
+    "DealerVoice is a global automotive dealership review and trust platform, built in Chicago and available worldwide. Learn how we help car buyers and dealerships.",
 };
 
 export const dynamic = "force-dynamic";
@@ -91,15 +92,15 @@ export default async function AboutPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_-10%,rgba(251,101,20,0.10),transparent_60%)]" />
         <div className="container relative py-16 md:py-20 text-center max-w-3xl">
           <div className="inline-flex items-center gap-2 bg-gold-50 border border-gold/40 rounded-full px-4 py-1.5 text-sm text-gold-700 font-medium mb-6">
-            <Star size={14} className="fill-gold-500 text-gold-500" /> Our mission
+            <Globe size={14} /> {COMPANY.tagline}
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-5">
             Making car buying <span className="text-gold">trustworthy</span>
           </h1>
           <p className="text-lg text-gray-600">
             DealerVoice is a global automotive dealership review and trust platform — like Trustpilot, built
-            exclusively for car buyers and dealerships. We connect shoppers with verified experiences so no one
-            has to gamble on where they buy or service their vehicle.
+            exclusively for car buyers and dealerships. Founded in {COMPANY.hqCity}, we connect shoppers with
+            verified experiences across markets so no one has to gamble on where they buy or service their vehicle.
           </p>
         </div>
       </section>
@@ -128,6 +129,17 @@ export default async function AboutPage() {
       </section>
 
       <section className="py-16 bg-gray-50 border-y border-gray-100">
+        <div className="container max-w-3xl text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">Where we&apos;re from</h2>
+          <p className="text-gray-600 leading-relaxed">
+            {COMPANY.name} is designed and operated from {companyHqLine()}. Our product, data infrastructure,
+            and dealer subscriptions are US-based; our listings and reviews serve buyers and dealerships
+            globally — from Chicago to Mumbai, London, and beyond.
+          </p>
+        </div>
+      </section>
+
+      <section className="py-16">
         <div className="container">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900">What we stand for</h2>

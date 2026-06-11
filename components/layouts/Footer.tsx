@@ -2,6 +2,7 @@ import Link from "next/link";
 import { FooterBrand } from "@/components/common/Logo";
 import { SocialLinks } from "@/components/common/SocialLinks";
 import { ManageCookiesLink } from "@/components/consent/ManageCookiesLink";
+import { COMPANY } from "@/lib/constants/company";
 
 const FOOTER_LINKS = {
   Platform: [
@@ -28,7 +29,7 @@ const FOOTER_LINKS = {
     { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms of Service", href: "/terms" },
     { label: "Cookie Policy", href: "/cookies" },
-    { label: "Grievance Redressal", href: "/grievance" },
+    { label: "Support & Grievances", href: "/grievance" },
     { label: "Cancellations & Refunds", href: "/shipping-refunds" },
     { label: "BIS Compliance", href: "/bis-compliance" },
     { label: "DMCA", href: "/dmca" },
@@ -44,7 +45,7 @@ export function Footer() {
           <div className="col-span-2 md:col-span-1">
             <FooterBrand height={32} />
             <p className="text-sm leading-relaxed mt-3">
-              A global platform for car dealership reviews and reputation insights — built for car buyers and dealerships.
+              A global platform for car dealership reviews and reputation insights — {COMPANY.tagline.toLowerCase()}
             </p>
             <SocialLinks className="mt-4" />
           </div>
@@ -67,11 +68,12 @@ export function Footer() {
 
         <div className="border-t border-gold/15 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
           <div>
-            <p>© {new Date().getFullYear()} DealerVoice. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} {COMPANY.name}. All rights reserved.</p>
+            <p className="text-gray-500 mt-1">{COMPANY.tagline}</p>
           </div>
           <div className="flex items-center gap-4">
             <ManageCookiesLink />
-            <span>Dealership listings across multiple countries</span>
+            <span>Dealership listings worldwide</span>
           </div>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { COMPANY, companyHqLine } from "@/lib/constants/company";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
@@ -30,15 +31,19 @@ export default function TermsPage() {
             <p>You agree not to misuse the platform, including scraping data without permission, attempting to manipulate ratings, or interfering with the service&apos;s operation.</p>
           </section>
           <section>
-            <h2 className="text-xl font-bold text-gray-900">5. Subscriptions & payments</h2>
-            <p>Paid plans are billed in advance on a recurring basis through our payment provider. You may cancel at any time; access continues until the end of the current billing period. Fees are non-refundable except where required by law.</p>
+            <h2 className="text-xl font-bold text-gray-900">5. Subscriptions &amp; payments</h2>
+            <p>Paid plans are billed in USD on a recurring basis through Stripe. You may cancel at any time from your dashboard; access continues until the end of the current billing period. Fees are non-refundable except where required by law. See our <a href="/shipping-refunds" className="text-gold-700 hover:underline">Cancellations &amp; Refunds</a> policy.</p>
           </section>
           <section>
             <h2 className="text-xl font-bold text-gray-900">6. Disclaimers</h2>
             <p>DealerVoice is provided &quot;as is.&quot; Reviews reflect the opinions of individual users, not DealerVoice. We do not guarantee the accuracy of any review or rating.</p>
           </section>
           <section>
-            <h2 className="text-xl font-bold text-gray-900">7. Changes</h2>
+            <h2 className="text-xl font-bold text-gray-900">7. Governing law</h2>
+            <p>These terms are governed by the laws of the {COMPANY.governingLaw}, without regard to conflict-of-law principles. {COMPANY.name} is operated from {companyHqLine()} and serves users worldwide.</p>
+          </section>
+          <section>
+            <h2 className="text-xl font-bold text-gray-900">8. Changes</h2>
             <p>We may update these terms from time to time. Continued use after changes constitutes acceptance. Questions? Email <a href="mailto:legal@dealervoice.io" className="text-gold-700 hover:underline">legal@dealervoice.io</a>.</p>
           </section>
         </div>

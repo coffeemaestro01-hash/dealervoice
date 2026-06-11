@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { COMPANY, companyHqLine } from "@/lib/constants/company";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -39,7 +40,10 @@ export default function PrivacyPage() {
           </section>
           <section>
             <h2 className="text-xl font-bold text-gray-900">7. Contact</h2>
-            <p>Questions about this policy? Email <a href="mailto:privacy@dealervoice.io" className="text-gold-700 hover:underline">privacy@dealervoice.io</a>.</p>
+            <p>
+              {COMPANY.name} is operated from {companyHqLine()}. Questions about this policy? Email{" "}
+              <a href="mailto:privacy@dealervoice.io" className="text-gold-700 hover:underline">privacy@dealervoice.io</a>.
+            </p>
           </section>
         </div>
       </div>
