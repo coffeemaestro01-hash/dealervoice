@@ -3,18 +3,17 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/config";
 import prisma from "@/lib/db";
 import {
-  fetchCashfreeOrder,
-  isCashfreeOrderPaid,
-  planAmountPaise,
+  retrieveStripeCheckoutSession,
+  parseStripePlanMetadata,
+  stripeSubscriptionPeriod,
 } from "@/lib/payment";
-import { activatePaidSubscription } from "@/lib/subscription";
+import { planFeatures } from "@/lib/subscription";
 import { z } from "zod";
+import type Stripe from "stripe";
 
 const schema = z.object({
   dealershipId: z.string().cuid(),
-  plan: z.enum(["PRO", "ENTERPRISE"]),
-  interval: z.enum(["monthly", "annual"]),
-  order_id: z.string(),
+  session_id: z.string(),
 });
 
 export async function POST(req: NextRequest) {
@@ -22,57 +21,93 @@ export async function POST(req: NextRequest) {
   if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   let body: unknown;
-  try { body = await req.json(); } catch {
+  try {
+    body = await req.json();
+  } catch {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
 
   const parsed = schema.safeParse(body);
   if (!parsed.success) return NextResponse.json({ error: "Invalid request" }, { status: 422 });
 
-  const data = parsed.data;
+  const { dealershipId, session_id } = parsed.data;
 
   const staff = await prisma.dealerStaff.findFirst({
-    where: { dealershipId: data.dealershipId, userId: session.user.id, isActive: true },
+    where: { dealershipId, userId: session.user.id, isActive: true },
   });
   if (!staff) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   try {
-    const order = await fetchCashfreeOrder(data.order_id);
-    if (!isCashfreeOrderPaid(order)) {
+    const checkoutSession = await retrieveStripeCheckoutSession(session_id);
+
+    if (checkoutSession.status !== "complete") {
       return NextResponse.json({ error: "Payment not completed" }, { status: 400 });
     }
 
-    const tags = order.order_tags ?? {};
-    if (tags.dealershipId && tags.dealershipId !== data.dealershipId) {
-      return NextResponse.json({ error: "Order does not match dealership" }, { status: 400 });
+    const meta = parseStripePlanMetadata(checkoutSession.metadata);
+    if (meta.dealershipId && meta.dealershipId !== dealershipId) {
+      return NextResponse.json({ error: "Session does not match dealership" }, { status: 400 });
     }
 
-    const plan: "PRO" | "ENTERPRISE" =
-      tags.plan === "ENTERPRISE" || tags.plan === "PRO" ? tags.plan : data.plan;
-    const interval =
-      tags.interval === "annual" || tags.interval === "monthly" ? tags.interval : data.interval;
+    const subscription =
+      typeof checkoutSession.subscription === "string"
+        ? null
+        : (checkoutSession.subscription as Stripe.Subscription | null);
 
-    const expectedPaise = planAmountPaise(plan, interval);
-    const paidPaise = Math.round(order.order_amount * 100);
-    if (paidPaise < expectedPaise) {
-      return NextResponse.json({ error: "Payment amount mismatch" }, { status: 400 });
+    const subscriptionId =
+      typeof checkoutSession.subscription === "string"
+        ? checkoutSession.subscription
+        : subscription?.id;
+
+    if (!subscriptionId) {
+      return NextResponse.json({ error: "No subscription found" }, { status: 400 });
     }
 
-    const sub = await activatePaidSubscription({
-      dealershipId: data.dealershipId,
-      plan,
-      interval,
-      orderId: order.order_id,
-      paymentId: order.cf_order_id ?? order.order_id,
-      amountPaise: paidPaise,
-      currency: order.order_currency,
-      recordLedger: false,
-    });
+    const customerId =
+      typeof checkoutSession.customer === "string"
+        ? checkoutSession.customer
+        : checkoutSession.customer?.id ?? null;
+
+    const { plan, interval } = meta;
+    const features = planFeatures(plan);
+    const period = subscription
+      ? stripeSubscriptionPeriod(subscription)
+      : { start: new Date(), end: new Date() };
+
+    const [sub] = await prisma.$transaction([
+      prisma.dealerSubscription.upsert({
+        where: { dealershipId },
+        create: {
+          dealershipId,
+          plan,
+          status: "ACTIVE",
+          stripeCustomerId: customerId,
+          stripeSubscriptionId: subscriptionId,
+          currentPeriodStart: period.start,
+          currentPeriodEnd: period.end,
+          ...features,
+        },
+        update: {
+          plan,
+          status: "ACTIVE",
+          stripeCustomerId: customerId ?? undefined,
+          stripeSubscriptionId: subscriptionId,
+          currentPeriodStart: period.start,
+          currentPeriodEnd: period.end,
+          canceledAt: null,
+          ...features,
+        },
+      }),
+      prisma.dealership.update({
+        where: { id: dealershipId },
+        data: { isPremiumClaimed: true },
+      }),
+    ]);
 
     return NextResponse.json({ success: true, subscription: { plan: sub.plan, status: sub.status } });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Verification failed";
-    console.error("Cashfree verify failed:", message);
+    console.error("Stripe verify failed:", message);
     return NextResponse.json({ error: "Payment verification failed" }, { status: 500 });
   }
 }

@@ -2,14 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/config";
 import prisma from "@/lib/db";
-import {
-  createCashfreeOrder,
-  CASHFREE_ENABLED,
-  planAmountPaise,
-  cashfreeMode,
-} from "@/lib/payment";
+import { createStripeCheckoutSession, STRIPE_ENABLED } from "@/lib/payment";
 import { z } from "zod";
-import crypto from "crypto";
 
 const schema = z.object({
   dealershipId: z.string().cuid(),
@@ -21,12 +15,14 @@ export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  if (!CASHFREE_ENABLED) {
+  if (!STRIPE_ENABLED) {
     return NextResponse.json({ error: "Payments not yet configured. Please contact support." }, { status: 503 });
   }
 
   let body: unknown;
-  try { body = await req.json(); } catch {
+  try {
+    body = await req.json();
+  } catch {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
 
@@ -42,23 +38,19 @@ export async function POST(req: NextRequest) {
 
   if (!staff) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-  const amount = planAmountPaise(plan, interval);
-  const orderId = `dv_${dealershipId.slice(-8)}_${crypto.randomBytes(4).toString("hex")}`;
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://dealervoice.io";
+  const billingUrl = `${appUrl}/dashboard/dealer/billing`;
 
   try {
-    const order = await createCashfreeOrder({
-      orderId,
-      amountPaise: amount,
-      customerId: session.user.id,
-      customerEmail: session.user.email!,
-      customerName: session.user.name ?? undefined,
-      customerPhone: "9999999999",
+    const checkoutSession = await createStripeCheckoutSession({
       dealershipId,
       plan,
       interval,
-      orderNote: `DealerVoice ${plan} ${interval}`,
-      returnUrl: `${appUrl}/dashboard/dealer/billing?order_id=${orderId}`,
+      customerEmail: session.user.email!,
+      customerName: session.user.name ?? undefined,
+      stripeCustomerId: staff.dealership.subscription?.stripeCustomerId,
+      successUrl: `${billingUrl}?session_id={CHECKOUT_SESSION_ID}`,
+      cancelUrl: `${billingUrl}?canceled=1`,
     });
 
     await prisma.dealerSubscription.upsert({
@@ -67,35 +59,22 @@ export async function POST(req: NextRequest) {
         dealershipId,
         plan: "FREE",
         status: "TRIALING",
-        stripeSubscriptionId: orderId,
       },
       update: {
-        stripeSubscriptionId: orderId,
         status: "TRIALING",
       },
     });
 
     return NextResponse.json({
-      paymentSessionId: order.payment_session_id,
-      orderId: order.order_id,
-      appId: process.env.NEXT_PUBLIC_CASHFREE_APP_ID,
-      mode: cashfreeMode(),
+      sessionId: checkoutSession.id,
+      url: checkoutSession.url,
+      publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
       plan,
       interval,
-      amount,
-      currency: "INR",
-      prefill: {
-        name: session.user.name ?? undefined,
-        email: session.user.email ?? undefined,
-      },
     });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Failed to create order";
-    const statusCode = (err as { statusCode?: number })?.statusCode;
-    console.error("Cashfree checkout failed:", message);
-    return NextResponse.json(
-      { error: "Failed to start checkout" },
-      { status: statusCode === 401 ? 401 : 500 }
-    );
+    const message = err instanceof Error ? err.message : "Failed to create checkout session";
+    console.error("Stripe checkout failed:", message);
+    return NextResponse.json({ error: "Failed to start checkout" }, { status: 500 });
   }
 }

@@ -13,7 +13,7 @@ const FAQS = [
   {
     q: "How does billing work?",
     answer:
-      "All paid plans are billed in INR through Cashfree — UPI, cards, net banking, and some international cards where your merchant setup allows. USD amounts on this page are reference equivalents only.",
+      "All paid plans are billed in USD through Stripe. You can pay with major credit and debit cards. Annual billing saves approximately 17% compared to monthly.",
   },
   {
     q: "What does Pro remove from my profile?",

@@ -35,7 +35,7 @@ export async function activatePaidSubscription(params: {
   const features = planFeatures(params.plan);
   const now = new Date();
   const end = periodEnd(params.interval, now);
-  const currency = (params.currency ?? "INR").toUpperCase();
+  const currency = (params.currency ?? "USD").toUpperCase();
 
   const [sub] = await prisma.$transaction([
     prisma.dealerSubscription.upsert({
@@ -97,7 +97,7 @@ export async function activatePaidSubscription(params: {
       currency,
       countryCode: dealer?.country?.code,
       dealershipId: params.dealershipId,
-      description: `Cashfree subscription payment — ${params.plan}`,
+      description: `Stripe subscription payment — ${params.plan}`,
       externalRef: params.paymentId,
     }).catch(() => {});
   }

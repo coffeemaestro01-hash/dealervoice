@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Check, CreditCard } from "lucide-react";
 import { SubscriptionCheckoutButton } from "@/components/payment/SubscriptionCheckoutButton";
-import { PLAN_PRICES_INR } from "@/lib/payment";
+import { PLAN_PRICES_USD } from "@/lib/payment";
 import { Badge } from "@/components/ui/badge";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PremiumUpgradeBanner } from "@/components/dashboard/PremiumUpgradeBanner";
@@ -19,15 +19,15 @@ const PLANS = [
   {
     key: "PRO" as const,
     name: "Pro",
-    monthly: PLAN_PRICES_INR.PRO.monthlyDisplay,
-    annual: PLAN_PRICES_INR.PRO.annualDisplay,
+    monthly: PLAN_PRICES_USD.PRO.monthlyDisplay,
+    annual: PLAN_PRICES_USD.PRO.annualDisplay,
     features: ["5 locations", "Full analytics", "Competitor monitoring", "AI response suggestions", "Verified badge"],
   },
   {
     key: "ENTERPRISE" as const,
     name: "Enterprise",
-    monthly: PLAN_PRICES_INR.ENTERPRISE.monthlyDisplay,
-    annual: PLAN_PRICES_INR.ENTERPRISE.annualDisplay,
+    monthly: PLAN_PRICES_USD.ENTERPRISE.monthlyDisplay,
+    annual: PLAN_PRICES_USD.ENTERPRISE.annualDisplay,
     features: ["Unlimited locations", "API access", "White-label reports", "Dedicated support", "SSO / SAML"],
   },
 ];
@@ -46,6 +46,21 @@ export function BillingPage() {
       .then((d) => setDealership(d.data))
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    const sessionId = searchParams?.get("session_id");
+    if (!sessionId || !dealership?.id) return;
+
+    fetch("/api/subscriptions/verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ dealershipId: dealership.id, session_id: sessionId }),
+    })
+      .then((r) => r.json())
+      .then(() => router.replace("/dashboard/dealer/billing"))
+      .then(() => router.refresh())
+      .catch(() => {});
+  }, [searchParams, dealership?.id, router]);
 
   const currentPlan = dealership?.subscription?.plan ?? "FREE";
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { load } from "@cashfreepayments/cashfree-js";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -39,43 +38,13 @@ export function SubscriptionCheckoutButton({
       const checkout = await res.json();
       if (!res.ok) throw new Error(checkout.error ?? "Could not start checkout.");
 
-      if (!checkout.paymentSessionId) throw new Error("Payments are not configured.");
+      if (!checkout.url) throw new Error("Payments are not configured.");
 
-      const cashfree = await load({ mode: checkout.mode ?? "sandbox" });
-      if (!cashfree) throw new Error("Could not load payment window.");
-
-      const result = await cashfree.checkout({
-        paymentSessionId: checkout.paymentSessionId,
-        redirectTarget: "_modal",
-      });
-
-      if (result?.error) {
-        throw new Error(result.error.message ?? "Payment failed.");
-      }
-
-      const v = await fetch("/api/subscriptions/verify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          dealershipId,
-          plan,
-          interval,
-          order_id: checkout.orderId,
-        }),
-      });
-      const vj = await v.json();
-      if (v.ok && vj.success) {
-        onSuccess?.();
-      } else {
-        const m = vj.error ?? "Payment could not be verified.";
-        setError(m);
-        onError?.(m);
-      }
+      window.location.href = checkout.url;
     } catch (e: unknown) {
       const m = e instanceof Error ? e.message : "Something went wrong.";
       setError(m);
       onError?.(m);
-    } finally {
       setLoading(false);
     }
   }, [dealershipId, plan, interval, onSuccess, onError]);
