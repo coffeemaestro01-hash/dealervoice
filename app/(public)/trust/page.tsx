@@ -125,7 +125,7 @@ export default function TrustPage() {
         <div className="container max-w-4xl">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">How reviews work</h2>
           <p className="text-gray-500 mb-8">
-            Every review on DealerVoice goes through a four-step process before it reaches a dealer's
+            Every review on DealerVoice goes through a four-step process before it reaches a dealer&apos;s
             profile.
           </p>
           <div className="grid sm:grid-cols-2 gap-5">

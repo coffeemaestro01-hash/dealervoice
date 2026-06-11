@@ -37,7 +37,7 @@ export default async function DealerSettingsPage() {
     <div className="p-6 md:p-8 max-w-4xl mx-auto">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">Dealership Settings</h1>
-        <p className="text-gray-500 mt-1">Manage your dealership's public profile and contact information.</p>
+        <p className="text-gray-500 mt-1">Manage your dealership&apos;s public profile and contact information.</p>
       </div>
 
       <DealerSettingsForm dealership={dealership} />

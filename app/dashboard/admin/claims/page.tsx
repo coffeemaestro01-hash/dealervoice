@@ -98,7 +98,7 @@ export default async function AdminClaimsPage() {
                 {claim.notes && (
                   <div className="space-y-1 text-sm bg-gray-50 p-3 rounded-lg border border-gray-100">
                     <p className="font-semibold text-gray-900">Notes from applicant</p>
-                    <p className="text-gray-600 italic">"{claim.notes}"</p>
+                    <p className="text-gray-600 italic">&ldquo;{claim.notes}&rdquo;</p>
                   </div>
                 )}
 

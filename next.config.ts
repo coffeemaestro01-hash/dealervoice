@@ -4,6 +4,7 @@ import path from "path";
 const IS_DOCKER = process.env.DEPLOY_TARGET === "docker";
 
 const nextConfig: NextConfig = {
+  outputFileTracingRoot: path.join(__dirname),
   // standalone output only for Docker — Vercel handles its own bundling
   ...(IS_DOCKER && { output: "standalone" }),
 

@@ -144,7 +144,7 @@ export function DealerSettingsForm({ dealership }: Props) {
             <ImageIcon className="w-5 h-5 text-gold-600" /> Branding
           </CardTitle>
           <CardDescription>
-            Update your dealership's logo and cover image.
+            Update your dealership&apos;s logo and cover image.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
