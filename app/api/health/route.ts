@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { getAdmitadAccessToken, isAdmitadConfigured, listAdmitadPrograms } from "@/lib/ads/admitad-api";
 
 export async function GET() {
   const checks: Record<string, string> = { api: "ok" };
@@ -18,6 +19,18 @@ export async function GET() {
     checks.publicDealers = String(count);
   } catch {
     checks.publicDealers = "error";
+  }
+
+  if (isAdmitadConfigured()) {
+    checks.admitad = "configured";
+    const token = await getAdmitadAccessToken();
+    checks.admitadToken = token ? "ok" : "failed";
+    if (token) {
+      const programs = await listAdmitadPrograms(3);
+      checks.admitadPrograms = programs.length > 0 ? `connected (${programs.length}+)` : "no_programs_yet";
+    }
+  } else {
+    checks.admitad = "missing_env";
   }
 
   const healthy = checks.database === "ok";
