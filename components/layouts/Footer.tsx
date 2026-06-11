@@ -2,6 +2,7 @@ import Link from "next/link";
 import { FooterBrand } from "@/components/common/Logo";
 import { SocialLinks } from "@/components/common/SocialLinks";
 import { ManageCookiesLink } from "@/components/consent/ManageCookiesLink";
+import { BUSINESS, businessAddressLine, businessPhoneHref } from "@/lib/constants/business";
 
 const FOOTER_LINKS = {
   Platform: [
@@ -66,7 +67,21 @@ export function Footer() {
         </div>
 
         <div className="border-t border-gold/15 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
-          <p>© {new Date().getFullYear()} DealerVoice. All rights reserved.</p>
+          <div>
+            <p>© {new Date().getFullYear()} {BUSINESS.legalName}. All rights reserved.</p>
+            <p className="text-gray-500 mt-1">
+              DealerVoice is operated by {BUSINESS.legalName}
+              {businessAddressLine() ? ` · ${businessAddressLine()}` : ""}
+              {BUSINESS.phone && businessPhoneHref() ? (
+                <>
+                  {" · "}
+                  <a href={businessPhoneHref()!} className="hover:text-gold-300 transition-colors">
+                    {BUSINESS.phone}
+                  </a>
+                </>
+              ) : null}
+            </p>
+          </div>
           <div className="flex items-center gap-4">
             <ManageCookiesLink />
             <span>Dealership listings across multiple countries</span>

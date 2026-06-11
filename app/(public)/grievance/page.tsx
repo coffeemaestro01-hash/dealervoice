@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ShieldAlert, Clock, Mail } from "lucide-react";
+import { BusinessLegalBlock } from "@/components/common/BusinessLegalBlock";
 
 export const metadata: Metadata = {
   title: "Grievance Redressal",
@@ -41,10 +42,9 @@ export default function GrievancePage() {
               <li><strong>Data Protection Officer (DPDP Act):</strong> <a href="mailto:dpo@dealervoice.io" className="text-gold-700 hover:underline">dpo@dealervoice.io</a></li>
               <li><strong>Hours:</strong> Monday-Friday, 10:00-18:00 IST</li>
             </ul>
-            <p className="text-sm text-gray-500 mt-4">
-              Full registered company details (registered office, CIN, and named officer) will be published here once company
-              registration is finalized. In the meantime, all grievances are monitored and actioned at the contacts above.
-            </p>
+            <div className="mt-4 pt-4 border-t border-gold/20">
+              <BusinessLegalBlock compact />
+            </div>
           </div>
 
           {/* SLAs */}
