@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { getAdmitadAccessToken, isAdmitadConfigured, listAdmitadPrograms } from "@/lib/ads/admitad-api";
+import { CASHFREE_ENABLED } from "@/lib/payment";
 
 export async function GET() {
   const checks: Record<string, string> = { api: "ok" };
@@ -32,6 +33,8 @@ export async function GET() {
   } else {
     checks.admitad = "missing_env";
   }
+
+  checks.cashfree = CASHFREE_ENABLED ? "configured" : "missing_env";
 
   const healthy = checks.database === "ok";
   return NextResponse.json(

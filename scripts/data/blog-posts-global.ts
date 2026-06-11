@@ -49,7 +49,7 @@ export const GLOBAL_BLOG_POSTS: BlogPostSeed[] = [
 <h2>What buyers get</h2>
 <ul><li>Dealership search by country and city</li><li>Structured reviews (sales vs service)</li><li>Dealer inventory listings (growing)</li><li>Published reputation methodology</li></ul>
 <h2>What dealers get</h2>
-<ul><li>Free profile claim</li><li>Pro: inventory link, analytics, no competitor ads — billed via Razorpay (INR)</li><li>Public review responses</li></ul>
+<ul><li>Free profile claim</li><li>Pro: inventory link, analytics, no competitor ads — billed via Cashfree (INR)</li><li>Public review responses</li></ul>
 <h2>Research</h2>
 <p><a href="/blog/ai-automotive-dealership-review-platform-research">AI + automotive trust research</a></p>`,
   },

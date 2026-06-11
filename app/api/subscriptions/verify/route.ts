@@ -3,32 +3,19 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/config";
 import prisma from "@/lib/db";
 import {
-  verifyRazorpayPaymentSignature,
-  verifyRazorpaySubscriptionSignature,
+  fetchCashfreeOrder,
+  isCashfreeOrderPaid,
+  planAmountPaise,
 } from "@/lib/payment";
-import { planFeatures, periodEnd } from "@/lib/subscription";
+import { activatePaidSubscription } from "@/lib/subscription";
 import { z } from "zod";
 
-const schema = z.discriminatedUnion("mode", [
-  z.object({
-    mode: z.literal("order"),
-    dealershipId: z.string().cuid(),
-    plan: z.enum(["PRO", "ENTERPRISE"]),
-    interval: z.enum(["monthly", "annual"]),
-    razorpay_order_id: z.string(),
-    razorpay_payment_id: z.string(),
-    razorpay_signature: z.string(),
-  }),
-  z.object({
-    mode: z.literal("subscription"),
-    dealershipId: z.string().cuid(),
-    plan: z.enum(["PRO", "ENTERPRISE"]),
-    interval: z.enum(["monthly", "annual"]),
-    razorpay_payment_id: z.string(),
-    razorpay_subscription_id: z.string(),
-    razorpay_signature: z.string(),
-  }),
-]);
+const schema = z.object({
+  dealershipId: z.string().cuid(),
+  plan: z.enum(["PRO", "ENTERPRISE"]),
+  interval: z.enum(["monthly", "annual"]),
+  order_id: z.string(),
+});
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -49,53 +36,43 @@ export async function POST(req: NextRequest) {
   });
   if (!staff) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-  if (data.mode === "order") {
-    const valid = verifyRazorpayPaymentSignature({
-      orderId: data.razorpay_order_id,
-      paymentId: data.razorpay_payment_id,
-      signature: data.razorpay_signature,
+  try {
+    const order = await fetchCashfreeOrder(data.order_id);
+    if (!isCashfreeOrderPaid(order)) {
+      return NextResponse.json({ error: "Payment not completed" }, { status: 400 });
+    }
+
+    const tags = order.order_tags ?? {};
+    if (tags.dealershipId && tags.dealershipId !== data.dealershipId) {
+      return NextResponse.json({ error: "Order does not match dealership" }, { status: 400 });
+    }
+
+    const plan: "PRO" | "ENTERPRISE" =
+      tags.plan === "ENTERPRISE" || tags.plan === "PRO" ? tags.plan : data.plan;
+    const interval =
+      tags.interval === "annual" || tags.interval === "monthly" ? tags.interval : data.interval;
+
+    const expectedPaise = planAmountPaise(plan, interval);
+    const paidPaise = Math.round(order.order_amount * 100);
+    if (paidPaise < expectedPaise) {
+      return NextResponse.json({ error: "Payment amount mismatch" }, { status: 400 });
+    }
+
+    const sub = await activatePaidSubscription({
+      dealershipId: data.dealershipId,
+      plan,
+      interval,
+      orderId: order.order_id,
+      paymentId: order.cf_order_id ?? order.order_id,
+      amountPaise: paidPaise,
+      currency: order.order_currency,
+      recordLedger: false,
     });
-    if (!valid) return NextResponse.json({ error: "Invalid payment signature" }, { status: 400 });
-  } else {
-    const valid = verifyRazorpaySubscriptionSignature({
-      paymentId: data.razorpay_payment_id,
-      subscriptionId: data.razorpay_subscription_id,
-      signature: data.razorpay_signature,
-    });
-    if (!valid) return NextResponse.json({ error: "Invalid payment signature" }, { status: 400 });
+
+    return NextResponse.json({ success: true, subscription: { plan: sub.plan, status: sub.status } });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Verification failed";
+    console.error("Cashfree verify failed:", message);
+    return NextResponse.json({ error: "Payment verification failed" }, { status: 500 });
   }
-
-  const features = planFeatures(data.plan);
-  const now = new Date();
-  const end = periodEnd(data.interval, now);
-
-  const [sub] = await prisma.$transaction([
-    prisma.dealerSubscription.upsert({
-      where: { dealershipId: data.dealershipId },
-      create: {
-        dealershipId: data.dealershipId,
-        plan: data.plan,
-        status: "ACTIVE",
-        stripeSubscriptionId: data.mode === "subscription" ? data.razorpay_subscription_id : null,
-        currentPeriodStart: now,
-        currentPeriodEnd: end,
-        ...features,
-      },
-      update: {
-        plan: data.plan,
-        status: "ACTIVE",
-        stripeSubscriptionId: data.mode === "subscription" ? data.razorpay_subscription_id : undefined,
-        currentPeriodStart: now,
-        currentPeriodEnd: end,
-        canceledAt: null,
-        ...features,
-      },
-    }),
-    prisma.dealership.update({
-      where: { id: data.dealershipId },
-      data: { isPremiumClaimed: true },
-    }),
-  ]);
-
-  return NextResponse.json({ success: true, subscription: { plan: sub.plan, status: sub.status } });
 }

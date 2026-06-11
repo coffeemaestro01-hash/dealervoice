@@ -44,11 +44,11 @@ export const GLOBAL_LAUNCH_PHASES: LaunchPhase[] = [
   {
     id: "phase-3",
     number: 3,
-    title: "Dealer B2B (Razorpay)",
-    summary: "Pro/Enterprise via Razorpay INR; subscriptions flow to income ledger.",
+    title: "Dealer B2B (Cashfree)",
+    summary: "Pro/Enterprise via Cashfree INR; subscriptions flow to income ledger.",
     revenueStreams: ["Pro subscription ₹16,999/mo", "Enterprise ₹41,999/mo", "Lead fees (roadmap)"],
     deliverables: [
-      "Razorpay checkout + webhooks",
+      "Cashfree checkout + webhooks",
       "Invoice → IncomeRecord on payment",
       "Premium inventory link + no competitor ads",
       "Global pricing display (INR settlement)",
@@ -87,11 +87,11 @@ export const GLOBAL_LAUNCH_PHASES: LaunchPhase[] = [
 
 export const REVENUE_STREAM_GUIDE = [
   {
-    stream: "Subscriptions (Razorpay)",
+    stream: "Subscriptions (Cashfree)",
     whoPays: "Dealers — Pro / Enterprise",
     howMuch: "₹16,999–₹41,999/mo INR",
     tracking: "IncomeRecord SUBSCRIPTION · CONFIRMED on webhook",
-    yourAction: "Enable Razorpay live keys; dealers upgrade from billing page",
+    yourAction: "Enable Cashfree live keys; dealers upgrade from billing page",
   },
   {
     stream: "Affiliate commissions",

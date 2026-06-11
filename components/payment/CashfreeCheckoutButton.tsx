@@ -6,20 +6,21 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Props {
-  dealershipId: string;
-  plan: "PRO" | "ENTERPRISE";
-  interval?: "monthly" | "annual";
+  /** amount in paise (>= 100) */
+  amount: number;
+  currency?: string;
   label?: string;
+  receipt?: string;
   className?: string;
-  onSuccess?: () => void;
+  onSuccess?: (data: { paymentId: string; orderId: string }) => void;
   onError?: (message: string) => void;
 }
 
-export function SubscriptionCheckoutButton({
-  dealershipId,
-  plan,
-  interval = "monthly",
-  label = "Upgrade now",
+export function CashfreeCheckoutButton({
+  amount,
+  currency = "INR",
+  label = "Pay now",
+  receipt,
   className,
   onSuccess,
   onError,
@@ -31,21 +32,21 @@ export function SubscriptionCheckoutButton({
     setError("");
     setLoading(true);
     try {
-      const res = await fetch("/api/subscriptions/checkout", {
+      const res = await fetch("/api/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ dealershipId, plan, interval }),
+        body: JSON.stringify({ amount, currency, receipt }),
       });
-      const checkout = await res.json();
-      if (!res.ok) throw new Error(checkout.error ?? "Could not start checkout.");
+      const order = await res.json();
+      if (!res.ok) throw new Error(order.error ?? "Could not start checkout.");
 
-      if (!checkout.paymentSessionId) throw new Error("Payments are not configured.");
+      if (!order.payment_session_id) throw new Error("Payments are not configured.");
 
-      const cashfree = await load({ mode: checkout.mode ?? "sandbox" });
-      if (!cashfree) throw new Error("Could not load payment window.");
+      const cashfree = await load({ mode: order.mode ?? "sandbox" });
+      if (!cashfree) throw new Error("Could not load the payment window.");
 
       const result = await cashfree.checkout({
-        paymentSessionId: checkout.paymentSessionId,
+        paymentSessionId: order.payment_session_id,
         redirectTarget: "_modal",
       });
 
@@ -53,19 +54,14 @@ export function SubscriptionCheckoutButton({
         throw new Error(result.error.message ?? "Payment failed.");
       }
 
-      const v = await fetch("/api/subscriptions/verify", {
+      const v = await fetch("/api/verify-payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          dealershipId,
-          plan,
-          interval,
-          order_id: checkout.orderId,
-        }),
+        body: JSON.stringify({ order_id: order.order_id }),
       });
       const vj = await v.json();
       if (v.ok && vj.success) {
-        onSuccess?.();
+        onSuccess?.({ paymentId: vj.paymentId, orderId: vj.orderId });
       } else {
         const m = vj.error ?? "Payment could not be verified.";
         setError(m);
@@ -78,14 +74,14 @@ export function SubscriptionCheckoutButton({
     } finally {
       setLoading(false);
     }
-  }, [dealershipId, plan, interval, onSuccess, onError]);
+  }, [amount, currency, receipt, onSuccess, onError]);
 
   return (
     <div>
       <Button
         onClick={handleClick}
         disabled={loading}
-        className={className ?? "bg-gold-gradient text-night-900 font-semibold border-0 hover:opacity-90 w-full"}
+        className={className ?? "bg-gold-gradient text-night-900 font-semibold border-0 hover:opacity-90"}
       >
         {loading ? <><Loader2 size={16} className="animate-spin mr-2" />Processing…</> : label}
       </Button>

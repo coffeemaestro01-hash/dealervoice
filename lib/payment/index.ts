@@ -1,117 +1,68 @@
-// Razorpay — sole payment provider (INR settlement, global dealer signups).
-// International cards accepted where Razorpay merchant config allows; display USD equivalents on pricing only.
+// Cashfree Payment Gateway — sole payment provider (INR settlement, global dealer signups).
+// International cards accepted where Cashfree merchant config allows; display USD equivalents on pricing only.
 
-import Razorpay from "razorpay";
 import crypto from "crypto";
 
-const RAZORPAY_ENABLED = !!(process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET);
+const API_VERSION = "2023-08-01";
 
-let _razorpay: Razorpay | null = null;
-function getRazorpay(): Razorpay {
-  if (!_razorpay) {
-    _razorpay = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY_ID!,
-      key_secret: process.env.RAZORPAY_KEY_SECRET!,
-    });
-  }
-  return _razorpay;
+export const CASHFREE_ENABLED = !!(
+  process.env.CASHFREE_APP_ID && process.env.CASHFREE_SECRET_KEY
+);
+
+function cashfreeBaseUrl(): string {
+  return process.env.CASHFREE_ENV === "production"
+    ? "https://api.cashfree.com/pg"
+    : "https://sandbox.cashfree.com/pg";
 }
 
-// Plan IDs - create these in Razorpay dashboard or via API
-export const RAZORPAY_PLANS = {
-  PRO_MONTHLY: process.env.RAZORPAY_PRO_MONTHLY_PLAN_ID || "",
-  PRO_ANNUAL: process.env.RAZORPAY_PRO_ANNUAL_PLAN_ID || "",
-  ENTERPRISE_MONTHLY: process.env.RAZORPAY_ENTERPRISE_MONTHLY_PLAN_ID || "",
-  ENTERPRISE_ANNUAL: process.env.RAZORPAY_ENTERPRISE_ANNUAL_PLAN_ID || "",
-};
+export function cashfreeMode(): "sandbox" | "production" {
+  return process.env.CASHFREE_ENV === "production" ? "production" : "sandbox";
+}
+
+function cashfreeHeaders(): Record<string, string> {
+  return {
+    "Content-Type": "application/json",
+    "x-api-version": API_VERSION,
+    "x-client-id": process.env.CASHFREE_APP_ID!,
+    "x-client-secret": process.env.CASHFREE_SECRET_KEY!,
+  };
+}
 
 // Prices in INR paise (1 INR = 100 paise)
-// At ~83 INR/USD: $49 ≈ ₹4,099 | $149 ≈ ₹12,399
 export const PLAN_PRICES_INR = {
   PRO: { monthly: 1699900, annual: 16999900, monthlyDisplay: "₹16,999", annualDisplay: "₹1,69,999" },
   ENTERPRISE: { monthly: 4199900, annual: 41999900, monthlyDisplay: "₹41,999", annualDisplay: "₹4,19,999" },
 };
 
-// For international billing display (USD)
 export const PLAN_PRICES_USD = {
   PRO: { monthly: 199, annual: 1990 },
   ENTERPRISE: { monthly: 499, annual: 4990 },
 };
 
-export interface CreateSubscriptionParams {
-  planId: string;
-  customerId?: string;
-  customerEmail: string;
-  customerName: string;
-  dealershipId: string;
-  totalCount?: number; // billing cycles, 0 = infinite
+export interface CashfreeOrder {
+  order_id: string;
+  order_amount: number;
+  order_currency: string;
+  order_status: string;
+  payment_session_id?: string;
+  order_tags?: Record<string, string>;
+  order_note?: string;
+  cf_order_id?: string;
 }
 
-export async function createRazorpaySubscription(params: CreateSubscriptionParams) {
-  if (!RAZORPAY_ENABLED) throw new Error("Payment gateway not configured");
-  const rp = getRazorpay();
-
-  const subscription = await rp.subscriptions.create({
-    plan_id: params.planId,
-    customer_notify: 1,
-    total_count: params.totalCount ?? 120, // 10 years max
-    notes: {
-      dealershipId: params.dealershipId,
-      customerEmail: params.customerEmail,
-    },
-  });
-
-  return subscription;
-}
-
-export async function createRazorpayOrder(amountPaise: number, currency = "INR", receiptId: string) {
-  if (!RAZORPAY_ENABLED) throw new Error("Payment gateway not configured");
-  const rp = getRazorpay();
-  return rp.orders.create({
-    amount: amountPaise,
-    currency,
-    receipt: receiptId,
-  });
-}
-
-export async function cancelRazorpaySubscription(subscriptionId: string, cancelAtCycleEnd = true) {
-  if (!RAZORPAY_ENABLED) throw new Error("Payment gateway not configured");
-  const rp = getRazorpay();
-  return rp.subscriptions.cancel(subscriptionId, cancelAtCycleEnd);
-}
-
-export function verifyRazorpayWebhookSignature(body: string, signature: string): boolean {
-  const expectedSignature = crypto
-    .createHmac("sha256", process.env.RAZORPAY_WEBHOOK_SECRET!)
-    .update(body)
-    .digest("hex");
-  return expectedSignature === signature;
-}
-
-export function verifyRazorpayPaymentSignature(params: {
+export interface CreateCashfreeOrderParams {
   orderId: string;
-  paymentId: string;
-  signature: string;
-}): boolean {
-  const body = `${params.orderId}|${params.paymentId}`;
-  const expectedSignature = crypto
-    .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET!)
-    .update(body)
-    .digest("hex");
-  return expectedSignature === params.signature;
-}
-
-export function verifyRazorpaySubscriptionSignature(params: {
-  paymentId: string;
-  subscriptionId: string;
-  signature: string;
-}): boolean {
-  const body = `${params.paymentId}|${params.subscriptionId}`;
-  const expectedSignature = crypto
-    .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET!)
-    .update(body)
-    .digest("hex");
-  return expectedSignature === params.signature;
+  amountPaise: number;
+  currency?: string;
+  customerId: string;
+  customerEmail: string;
+  customerName?: string;
+  customerPhone: string;
+  dealershipId?: string;
+  plan?: string;
+  interval?: string;
+  orderNote?: string;
+  returnUrl?: string;
 }
 
 export function planAmountPaise(plan: "PRO" | "ENTERPRISE", interval: "monthly" | "annual") {
@@ -119,4 +70,88 @@ export function planAmountPaise(plan: "PRO" | "ENTERPRISE", interval: "monthly" 
   return interval === "annual" ? prices.annual : prices.monthly;
 }
 
-export { RAZORPAY_ENABLED };
+function paiseToRupees(amountPaise: number): number {
+  return Math.round(amountPaise) / 100;
+}
+
+export async function createCashfreeOrder(params: CreateCashfreeOrderParams): Promise<CashfreeOrder> {
+  if (!CASHFREE_ENABLED) throw new Error("Payment gateway not configured");
+
+  const orderTags: Record<string, string> = {};
+  if (params.dealershipId) orderTags.dealershipId = params.dealershipId;
+  if (params.plan) orderTags.plan = params.plan;
+  if (params.interval) orderTags.interval = params.interval;
+
+  const body: Record<string, unknown> = {
+    order_id: params.orderId,
+    order_amount: paiseToRupees(params.amountPaise),
+    order_currency: params.currency ?? "INR",
+    customer_details: {
+      customer_id: params.customerId,
+      customer_email: params.customerEmail,
+      customer_name: params.customerName,
+      customer_phone: params.customerPhone,
+    },
+  };
+
+  if (params.orderNote) body.order_note = params.orderNote;
+  if (Object.keys(orderTags).length > 0) body.order_tags = orderTags;
+  if (params.returnUrl) {
+    body.order_meta = { return_url: params.returnUrl };
+  }
+
+  const res = await fetch(`${cashfreeBaseUrl()}/orders`, {
+    method: "POST",
+    headers: cashfreeHeaders(),
+    body: JSON.stringify(body),
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    const msg = data?.message ?? data?.error?.message ?? "Failed to create Cashfree order";
+    const err = new Error(msg) as Error & { statusCode?: number };
+    err.statusCode = res.status;
+    throw err;
+  }
+
+  return data as CashfreeOrder;
+}
+
+export async function fetchCashfreeOrder(orderId: string): Promise<CashfreeOrder> {
+  if (!CASHFREE_ENABLED) throw new Error("Payment gateway not configured");
+
+  const res = await fetch(`${cashfreeBaseUrl()}/orders/${encodeURIComponent(orderId)}`, {
+    method: "GET",
+    headers: cashfreeHeaders(),
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    const msg = data?.message ?? data?.error?.message ?? "Failed to fetch Cashfree order";
+    const err = new Error(msg) as Error & { statusCode?: number };
+    err.statusCode = res.status;
+    throw err;
+  }
+
+  return data as CashfreeOrder;
+}
+
+export function verifyCashfreeWebhookSignature(
+  rawBody: string,
+  signature: string,
+  timestamp: string
+): boolean {
+  const secret = process.env.CASHFREE_WEBHOOK_SECRET ?? process.env.CASHFREE_SECRET_KEY;
+  if (!secret || !signature || !timestamp) return false;
+
+  const expected = crypto
+    .createHmac("sha256", secret)
+    .update(timestamp + rawBody)
+    .digest("base64");
+
+  return expected === signature;
+}
+
+export function isCashfreeOrderPaid(order: CashfreeOrder): boolean {
+  return order.order_status === "PAID";
+}

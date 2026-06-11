@@ -4,9 +4,9 @@ import { useState } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { Navbar } from "@/components/layouts/Navbar";
 import { Footer } from "@/components/layouts/Footer";
-import { RazorpayCheckoutButton } from "@/components/payment/RazorpayCheckoutButton";
+import { CashfreeCheckoutButton } from "@/components/payment/CashfreeCheckoutButton";
 
-// Temporary sandbox page to test the Razorpay Standard Checkout flow end-to-end.
+// Temporary sandbox page to test the Cashfree checkout flow end-to-end.
 // Requires login (the /api/create-order endpoint is auth-gated).
 export default function TestPaymentPage() {
   const [result, setResult] = useState<{ ok: boolean; msg: string } | null>(null);
@@ -16,15 +16,14 @@ export default function TestPaymentPage() {
       <Navbar />
       <main className="flex-1 grid place-items-center py-20">
         <div className="w-full max-w-md mx-auto bg-white rounded-2xl border border-gold/20 shadow-gold p-8 text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-1">Razorpay test checkout</h1>
-          <p className="text-gray-500 text-sm mb-6">Sandbox payment of ₹199. Use a Razorpay test card.</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-1">Cashfree test checkout</h1>
+          <p className="text-gray-500 text-sm mb-6">Sandbox payment of ₹199. Use a Cashfree test card.</p>
 
           <div className="flex justify-center">
-            <RazorpayCheckoutButton
+            <CashfreeCheckoutButton
               amount={19900}
               currency="INR"
               label="Pay ₹199 (test)"
-              description="DealerVoice test payment"
               onSuccess={(d) => setResult({ ok: true, msg: `Verified! Payment ${d.paymentId}` })}
               onError={(m) => setResult({ ok: false, msg: m })}
             />
@@ -38,10 +37,10 @@ export default function TestPaymentPage() {
           )}
 
           <div className="mt-6 text-left text-xs text-gray-500 bg-gray-50 rounded-lg p-3 space-y-1">
-            <p className="font-semibold text-gray-700">Test card</p>
+            <p className="font-semibold text-gray-700">Sandbox test card</p>
             <p>Card: <span className="font-mono">4111 1111 1111 1111</span></p>
             <p>Expiry: any future date · CVV: any 3 digits</p>
-            <p>UPI: <span className="font-mono">success@razorpay</span></p>
+            <p>UPI: use Cashfree sandbox test UPI flow</p>
           </div>
         </div>
       </main>

@@ -41,7 +41,7 @@ export default async function AdminHealthPage() {
       <ul className="mt-6 text-sm text-gray-500 space-y-1">
         <li>Resend: verify domain at resend.com/domains</li>
         <li>Supabase: storage bucket dealer-assets</li>
-        <li>Razorpay: webhooks logged in Payments</li>
+        <li>Cashfree: webhooks logged in Payments</li>
         <li>Crons: /api/cron/* (reputation, geo, digest)</li>
       </ul>
     </div>

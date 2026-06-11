@@ -261,7 +261,7 @@ export function PricingPageView({ plans, dealerBanner, stats }: Props) {
               </Button>
             </a>
           </div>
-          <p className="text-xs text-gray-400 mt-6">Payments via Razorpay · INR settlement</p>
+          <p className="text-xs text-gray-400 mt-6">Payments via Cashfree · INR settlement</p>
         </div>
       </section>
     </div>

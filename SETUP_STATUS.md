@@ -17,7 +17,7 @@
 - ✅ Next.js 15.5 with TypeScript setup
 - ✅ React 19 with Tailwind CSS and shadcn/ui components
 - ✅ NextAuth.js v4 configured for authentication
-- ✅ Razorpay payment integration (instead of Stripe)
+- ✅ Cashfree payment integration
 - ✅ Leaflet.js + OpenStreetMap for maps (no API keys needed)
 - ✅ Vercel deployment (live at https://dealervoice-psi.vercel.app)
 - ✅ CI/CD with GitHub Actions
@@ -26,7 +26,7 @@
 ### Deployment
 - ✅ Vercel build is green (latest deployment: 2eb1YBJE)
 - ✅ Production URL: https://dealervoice-psi.vercel.app
-- ✅ Environment variables set for Supabase, Razorpay, NextAuth, Resend
+- ✅ Environment variables set for Supabase, Cashfree, NextAuth, Resend
 
 ## 🔧 PENDING FIXES & IMPROVEMENTS
 
@@ -94,10 +94,11 @@ Password: Admin@123!
    - Write a review
    - View review on dealership page
 
-3. **Configure Razorpay**
-   - Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in Vercel environment
-   - Set plan IDs for PRO and ENTERPRISE tiers
-   - Set RAZORPAY_WEBHOOK_SECRET for payment webhooks
+3. **Configure Cashfree**
+   - Set CASHFREE_APP_ID and CASHFREE_SECRET_KEY in Vercel environment
+   - Set CASHFREE_WEBHOOK_SECRET and NEXT_PUBLIC_CASHFREE_APP_ID
+   - Set CASHFREE_ENV to `sandbox` or `production`
+   - Webhook URL: `https://dealervoice.io/api/webhooks/cashfree`
 
 4. **Configure OAuth (Optional for Launch)**
    - Add Google OAuth credentials
@@ -115,7 +116,7 @@ Password: Admin@123!
 - **Backend**: Next.js API routes, Prisma ORM
 - **Database**: PostgreSQL (Supabase)
 - **Auth**: NextAuth.js v4
-- **Payments**: Razorpay (India-optimized)
+- **Payments**: Cashfree Payment Gateway (India-optimized)
 - **Maps**: Leaflet.js + OpenStreetMap (free)
 - **Hosting**: Vercel
 - **Email**: Resend
@@ -126,7 +127,7 @@ Password: Admin@123!
 - Supabase password should be rotated after launch: Settings → Database → Reset Password
 - All free tier services are zero-cost
 - No credit card required for initial deployment
-- Razorpay supports international cards via PA-CB license
+- Cashfree supports UPI, cards, net banking, and international cards per merchant setup
 
 ---
 Generated: 2026-05-31

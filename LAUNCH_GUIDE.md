@@ -89,12 +89,12 @@ Currently the "Sign in with Google/Facebook/Apple" buttons need keys:
 > If you don't add these, just hide the social buttons — email login works fine.
 
 ### Priority 3 — Payments (only when you start charging)
-- **Razorpay** → https://razorpay.com (Indian founder friendly)
+- **Cashfree** → https://merchant.cashfree.com (Indian founder friendly)
   1. Sign up, complete KYC (PAN, bank account)
-  2. Create subscription **Plans** for PRO and ENTERPRISE
-  3. Add env: `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`,
-     plan IDs (`RAZORPAY_PLAN_PRO_*`, `RAZORPAY_PLAN_ENTERPRISE_*`)
-  4. Webhook URL: `https://dealervoice-psi.vercel.app/api/webhooks/razorpay`
+  2. Add env: `CASHFREE_APP_ID`, `CASHFREE_SECRET_KEY`, `CASHFREE_WEBHOOK_SECRET`,
+     `NEXT_PUBLIC_CASHFREE_APP_ID`, `CASHFREE_ENV` (`sandbox` or `production`)
+  3. Webhook URL: `https://dealervoice.io/api/webhooks/cashfree`
+  4. Enable `PAYMENT_SUCCESS_WEBHOOK` in Cashfree dashboard
 - Without this: Free tier works; paid upgrade buttons won't complete checkout.
 
 ### Priority 4 — Nice-to-haves (all optional, app degrades gracefully)
@@ -117,7 +117,7 @@ Currently the "Sign in with Google/Facebook/Apple" buttons need keys:
 6. [ ] Replace the 6 demo dealers with real ones (or keep as samples)
 7. [ ] Add a custom domain (optional but more professional)
 8. [ ] Invite a handful of waitlist users, watch Vercel logs for errors
-9. [ ] Add **Razorpay** only when you're ready to take payments
+9. [ ] Add **Cashfree** only when you're ready to take payments
 
 ---
 

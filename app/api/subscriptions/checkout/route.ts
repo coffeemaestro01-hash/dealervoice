@@ -3,11 +3,10 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/config";
 import prisma from "@/lib/db";
 import {
-  createRazorpaySubscription,
-  createRazorpayOrder,
-  RAZORPAY_PLANS,
-  RAZORPAY_ENABLED,
+  createCashfreeOrder,
+  CASHFREE_ENABLED,
   planAmountPaise,
+  cashfreeMode,
 } from "@/lib/payment";
 import { z } from "zod";
 import crypto from "crypto";
@@ -22,7 +21,7 @@ export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  if (!RAZORPAY_ENABLED) {
+  if (!CASHFREE_ENABLED) {
     return NextResponse.json({ error: "Payments not yet configured. Please contact support." }, { status: 503 });
   }
 
@@ -43,21 +42,23 @@ export async function POST(req: NextRequest) {
 
   if (!staff) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-  const planKey = `${plan}_${interval.toUpperCase()}` as keyof typeof RAZORPAY_PLANS;
-  const planId = RAZORPAY_PLANS[planKey];
-  const keyId = process.env.RAZORPAY_KEY_ID;
-  const prefill = {
-    name: session.user.name ?? undefined,
-    email: session.user.email ?? undefined,
-  };
+  const amount = planAmountPaise(plan, interval);
+  const orderId = `dv_${dealershipId.slice(-8)}_${crypto.randomBytes(4).toString("hex")}`;
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://dealervoice.io";
 
-  // Recurring subscription when Razorpay plan IDs are configured
-  if (planId) {
-    const subscription = await createRazorpaySubscription({
-      planId,
+  try {
+    const order = await createCashfreeOrder({
+      orderId,
+      amountPaise: amount,
+      customerId: session.user.id,
       customerEmail: session.user.email!,
-      customerName: session.user.name!,
+      customerName: session.user.name ?? undefined,
+      customerPhone: "9999999999",
       dealershipId,
+      plan,
+      interval,
+      orderNote: `DealerVoice ${plan} ${interval}`,
+      returnUrl: `${appUrl}/dashboard/dealer/billing?order_id=${orderId}`,
     });
 
     await prisma.dealerSubscription.upsert({
@@ -66,38 +67,35 @@ export async function POST(req: NextRequest) {
         dealershipId,
         plan: "FREE",
         status: "TRIALING",
-        stripeSubscriptionId: subscription.id,
+        stripeSubscriptionId: orderId,
       },
       update: {
-        stripeSubscriptionId: subscription.id,
+        stripeSubscriptionId: orderId,
         status: "TRIALING",
       },
     });
 
     return NextResponse.json({
-      mode: "subscription",
-      subscriptionId: subscription.id,
-      keyId,
+      paymentSessionId: order.payment_session_id,
+      orderId: order.order_id,
+      appId: process.env.NEXT_PUBLIC_CASHFREE_APP_ID,
+      mode: cashfreeMode(),
       plan,
       interval,
-      prefill,
+      amount,
+      currency: "INR",
+      prefill: {
+        name: session.user.name ?? undefined,
+        email: session.user.email ?? undefined,
+      },
     });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Failed to create order";
+    const statusCode = (err as { statusCode?: number })?.statusCode;
+    console.error("Cashfree checkout failed:", message);
+    return NextResponse.json(
+      { error: "Failed to start checkout" },
+      { status: statusCode === 401 ? 401 : 500 }
+    );
   }
-
-  // Fallback: one-time order checkout (works without pre-created Razorpay plans)
-  const amount = planAmountPaise(plan, interval);
-  const receipt = `dv_${dealershipId.slice(-8)}_${crypto.randomBytes(4).toString("hex")}`;
-  const order = await createRazorpayOrder(amount, "INR", receipt);
-
-  return NextResponse.json({
-    mode: "order",
-    orderId: order.id,
-    amount: order.amount,
-    currency: order.currency,
-    keyId,
-    plan,
-    interval,
-    dealershipId,
-    prefill,
-  });
 }

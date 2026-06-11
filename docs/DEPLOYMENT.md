@@ -22,8 +22,11 @@ cp .env.example .env.local
 |---|---|
 | `DATABASE_URL` | PostgreSQL connection string |
 | `NEXTAUTH_SECRET` | 32+ char random string (`openssl rand -base64 32`) |
-| `STRIPE_SECRET_KEY` | Stripe secret key |
-| `STRIPE_WEBHOOK_SECRET` | From Stripe dashboard → Webhooks |
+| `CASHFREE_APP_ID` | Cashfree PG app ID |
+| `CASHFREE_SECRET_KEY` | Cashfree PG secret key |
+| `CASHFREE_WEBHOOK_SECRET` | From Cashfree dashboard → Webhooks |
+| `NEXT_PUBLIC_CASHFREE_APP_ID` | Public Cashfree app ID (frontend) |
+| `CASHFREE_ENV` | `sandbox` or `production` |
 | `OPENAI_API_KEY` | For AI features |
 | `RESEND_API_KEY` | For transactional email |
 | `AWS_ACCESS_KEY_ID` | For S3 file uploads |
@@ -45,18 +48,14 @@ npx tsx scripts/setup-search.ts
 
 ---
 
-## 3. Stripe Setup
+## 3. Cashfree Setup
 
-1. Create products in Stripe Dashboard:
-   - **Pro Monthly** → $49/month
-   - **Pro Annual** → $479/year
-   - **Enterprise Monthly** → $149/month
-   - **Enterprise Annual** → $1,439/year
+1. Sign up at https://merchant.cashfree.com and complete KYC
 
-2. Add the price IDs to `.env.local`
+2. Add env vars: `CASHFREE_APP_ID`, `CASHFREE_SECRET_KEY`, `CASHFREE_WEBHOOK_SECRET`, `NEXT_PUBLIC_CASHFREE_APP_ID`, `CASHFREE_ENV`
 
-3. Configure webhook endpoint: `https://yourdomain.com/api/webhooks/stripe`
-   - Events: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.paid`
+3. Configure webhook endpoint: `https://yourdomain.com/api/webhooks/cashfree`
+   - Enable `PAYMENT_SUCCESS_WEBHOOK` (API version `2023-08-01`)
 
 ---
 
@@ -136,7 +135,7 @@ The pipeline runs automatically on push to `main`:
 ## 8. Post-Deployment Checklist
 
 - [ ] Verify `/api/auth/register` works (create a test account)
-- [ ] Verify Stripe webhook receives events
+- [ ] Verify Cashfree webhook receives events
 - [ ] Verify email sending via Resend
 - [ ] Verify file uploads to S3
 - [ ] Verify Meilisearch indexing

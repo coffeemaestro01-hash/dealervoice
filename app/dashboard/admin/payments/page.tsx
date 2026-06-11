@@ -8,7 +8,11 @@ export default async function AdminPaymentsPage() {
   await requireAdminPage("/dashboard/admin/payments", "SUPER_ADMIN", "REVENUE");
 
   const [webhooks, invoices] = await Promise.all([
-    prisma.webhookLog.findMany({ orderBy: { createdAt: "desc" }, take: 40 }),
+    prisma.webhookLog.findMany({
+      where: { provider: "cashfree" },
+      orderBy: { createdAt: "desc" },
+      take: 40,
+    }),
     prisma.invoice.findMany({
       orderBy: { createdAt: "desc" },
       take: 20,
@@ -21,7 +25,7 @@ export default async function AdminPaymentsPage() {
       <h1 className="text-2xl font-bold text-gray-900">Payments & webhooks</h1>
 
       <section>
-        <h2 className="font-semibold mb-3">Razorpay webhook log</h2>
+        <h2 className="font-semibold mb-3">Cashfree webhook log</h2>
         <div className="bg-white rounded-xl border divide-y max-h-96 overflow-y-auto">
           {webhooks.length === 0 ? (
             <p className="p-6 text-gray-500 text-sm">No webhook events yet.</p>
