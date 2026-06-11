@@ -67,6 +67,8 @@ export interface CreateStripeCheckoutParams {
   stripeCustomerId?: string | null;
   successUrl: string;
   cancelUrl: string;
+  stripePromotionCodeId?: string;
+  promotionCode?: string;
 }
 
 export async function createStripeCheckoutSession(
@@ -98,6 +100,7 @@ export async function createStripeCheckoutSession(
     dealershipId: params.dealershipId,
     plan: params.plan,
     interval: params.interval,
+    ...(params.promotionCode ? { promotionCode: params.promotionCode } : {}),
   };
 
   return stripe.checkout.sessions.create({
@@ -109,7 +112,10 @@ export async function createStripeCheckoutSession(
     subscription_data: { metadata },
     success_url: params.successUrl,
     cancel_url: params.cancelUrl,
-    allow_promotion_codes: true,
+    discounts: params.stripePromotionCodeId
+      ? [{ promotion_code: params.stripePromotionCodeId }]
+      : undefined,
+    allow_promotion_codes: !params.stripePromotionCodeId,
   });
 }
 

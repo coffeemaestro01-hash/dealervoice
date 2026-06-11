@@ -38,6 +38,7 @@ export function BillingPage() {
   const showUpgrade = searchParams?.get("upgrade") === "1";
   const [dealership, setDealership] = useState<Dealership | null>(null);
   const [interval, setInterval] = useState<"monthly" | "annual">("monthly");
+  const [promotionCode, setPromotionCode] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -123,6 +124,21 @@ export function BillingPage() {
         ))}
       </div>
 
+      <div className="bg-white rounded-xl border border-gray-100 p-5 mb-6 shadow-sm">
+        <label htmlFor="promo-code" className="text-sm font-medium text-gray-700">
+          Promotion code
+        </label>
+        <p className="text-xs text-gray-500 mt-0.5 mb-2">Optional — applied at Stripe checkout (e.g. PRO1USD for $1 Pro monthly).</p>
+        <input
+          id="promo-code"
+          type="text"
+          value={promotionCode}
+          onChange={(e) => setPromotionCode(e.target.value.toUpperCase())}
+          placeholder="PRO1USD"
+          className="w-full max-w-xs rounded-lg border border-gray-200 px-3 py-2 text-sm font-mono uppercase"
+        />
+      </div>
+
       <div className="grid md:grid-cols-2 gap-5">
         {PLANS.map((plan) => {
           const isCurrent = currentPlan === plan.key;
@@ -153,6 +169,7 @@ export function BillingPage() {
                     dealershipId={dealership.id}
                     plan={plan.key}
                     interval={interval}
+                    promotionCode={promotionCode}
                     label={`Upgrade to ${plan.name}`}
                     onSuccess={() => router.refresh()}
                   />

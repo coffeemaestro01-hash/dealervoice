@@ -3,12 +3,14 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/config";
 import prisma from "@/lib/db";
 import { createStripeCheckoutSession, STRIPE_ENABLED } from "@/lib/payment";
+import { findValidPromotion } from "@/lib/promotions";
 import { z } from "zod";
 
 const schema = z.object({
   dealershipId: z.string().cuid(),
   plan: z.enum(["PRO", "ENTERPRISE"]),
   interval: z.enum(["monthly", "annual"]).default("monthly"),
+  promotionCode: z.string().min(3).max(32).optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -29,7 +31,19 @@ export async function POST(req: NextRequest) {
   const parsed = schema.safeParse(body);
   if (!parsed.success) return NextResponse.json({ error: "Invalid request" }, { status: 422 });
 
-  const { dealershipId, plan, interval } = parsed.data;
+  const { dealershipId, plan, interval, promotionCode } = parsed.data;
+
+  let stripePromotionCodeId: string | undefined;
+  let appliedPromoCode: string | undefined;
+
+  if (promotionCode) {
+    const promo = await findValidPromotion(promotionCode, plan, interval);
+    if (!promo) {
+      return NextResponse.json({ error: "Invalid or expired promotion code" }, { status: 422 });
+    }
+    stripePromotionCodeId = promo.stripePromotionCodeId;
+    appliedPromoCode = promo.code;
+  }
 
   const staff = await prisma.dealerStaff.findFirst({
     where: { dealershipId, userId: session.user.id, isActive: true },
@@ -51,6 +65,8 @@ export async function POST(req: NextRequest) {
       stripeCustomerId: staff.dealership.subscription?.stripeCustomerId,
       successUrl: `${billingUrl}?session_id={CHECKOUT_SESSION_ID}`,
       cancelUrl: `${billingUrl}?canceled=1`,
+      stripePromotionCodeId,
+      promotionCode: appliedPromoCode,
     });
 
     await prisma.dealerSubscription.upsert({
@@ -71,6 +87,7 @@ export async function POST(req: NextRequest) {
       publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
       plan,
       interval,
+      promotionCode: appliedPromoCode,
     });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Failed to create checkout session";

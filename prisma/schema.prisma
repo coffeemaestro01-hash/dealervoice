@@ -110,6 +110,11 @@ enum SubscriptionStatus {
   PAUSED
 }
 
+enum PromotionDiscountType {
+  FIXED
+  PERCENT
+}
+
 enum ModerationActionType {
   REVIEW_REMOVED
   REVIEW_APPROVED
@@ -690,6 +695,29 @@ model Invoice {
   subscription   DealerSubscription @relation(fields: [subscriptionId], references: [id])
 
   @@index([subscriptionId])
+}
+
+model PromotionCode {
+  id                    String                 @id @default(cuid())
+  code                  String                 @unique
+  label                 String?
+  plan                  SubscriptionPlan?
+  interval              String?                // monthly | annual
+  discountType          PromotionDiscountType  @default(FIXED)
+  fixedPriceUsdCents    Int?                   // discounted recurring price in USD cents (FIXED)
+  percentOff            Int?                   // percentage off list price (PERCENT)
+  stripeCouponId        String
+  stripePromotionCodeId String                 @unique
+  active                Boolean                @default(true)
+  maxRedemptions        Int?
+  timesRedeemed         Int                    @default(0)
+  expiresAt             DateTime?
+  createdById           String?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+
+  @@index([code])
+  @@index([active])
 }
 
 // ─────────────────────────────────────────────

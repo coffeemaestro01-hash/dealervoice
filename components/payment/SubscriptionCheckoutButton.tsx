@@ -8,6 +8,7 @@ interface Props {
   dealershipId: string;
   plan: "PRO" | "ENTERPRISE";
   interval?: "monthly" | "annual";
+  promotionCode?: string;
   label?: string;
   className?: string;
   onSuccess?: () => void;
@@ -18,6 +19,7 @@ export function SubscriptionCheckoutButton({
   dealershipId,
   plan,
   interval = "monthly",
+  promotionCode,
   label = "Upgrade now",
   className,
   onSuccess,
@@ -33,7 +35,12 @@ export function SubscriptionCheckoutButton({
       const res = await fetch("/api/subscriptions/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ dealershipId, plan, interval }),
+        body: JSON.stringify({
+          dealershipId,
+          plan,
+          interval,
+          ...(promotionCode?.trim() ? { promotionCode: promotionCode.trim() } : {}),
+        }),
       });
       const checkout = await res.json();
       if (!res.ok) throw new Error(checkout.error ?? "Could not start checkout.");
@@ -47,7 +54,7 @@ export function SubscriptionCheckoutButton({
       onError?.(m);
       setLoading(false);
     }
-  }, [dealershipId, plan, interval, onSuccess, onError]);
+  }, [dealershipId, plan, interval, promotionCode, onSuccess, onError]);
 
   return (
     <div>
