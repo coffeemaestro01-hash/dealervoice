@@ -128,13 +128,14 @@ export function BillingPage() {
         <label htmlFor="promo-code" className="text-sm font-medium text-gray-700">
           Promotion code
         </label>
-        <p className="text-xs text-gray-500 mt-0.5 mb-2">Optional — applied at Stripe checkout (e.g. PRO1USD for $1 Pro monthly).</p>
+        <p className="text-xs text-gray-500 mt-0.5 mb-2">Optional — applied at checkout if you have one.</p>
         <input
           id="promo-code"
           type="text"
           value={promotionCode}
           onChange={(e) => setPromotionCode(e.target.value.toUpperCase())}
-          placeholder="PRO1USD"
+          placeholder="Enter code"
+          autoComplete="off"
           className="w-full max-w-xs rounded-lg border border-gray-200 px-3 py-2 text-sm font-mono uppercase"
         />
       </div>
