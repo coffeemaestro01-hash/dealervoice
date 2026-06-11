@@ -1,3 +1,5 @@
+import { buildAdmitadLink, isAdmitadMode } from "./admitad";
+
 /** Merge admin-pasted affiliate ref into outbound ad URL. */
 export function resolveAdHref(
   baseHref: string,
@@ -5,6 +7,11 @@ export function resolveAdHref(
   affiliateParam?: string | null
 ): string {
   if (!affiliateRef?.trim() || baseHref.startsWith("/")) return baseHref;
+
+  if (isAdmitadMode(affiliateParam)) {
+    return buildAdmitadLink(affiliateRef, baseHref);
+  }
+
   try {
     const url = new URL(baseHref);
     const param = affiliateParam?.trim() || "utm_content";

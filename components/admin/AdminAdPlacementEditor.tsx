@@ -63,9 +63,18 @@ export function AdminAdPlacementEditor({ placements }: { placements: PlacementRo
 
   return (
     <div className="space-y-6">
-      <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-900">
-        <strong>Affiliate IDs:</strong> Paste your partner ref in <em>Affiliate ref</em> (e.g. PolicyBazaar sub-id) or edit the full <em>Destination URL</em>.
-        Use <em>Param name</em> for the query key (default <code>utm_content</code>). Changes go live immediately — no deploy needed.
+      <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-900 space-y-2">
+        <p>
+          <strong>Affiliate IDs:</strong> Paste your partner ref in <em>Affiliate ref</em> or edit the full{" "}
+          <em>Destination URL</em>. Use <em>Param name</em> for the query key (default <code>utm_content</code>).
+          Changes go live immediately — no deploy needed.
+        </p>
+        <p>
+          <strong>Admitad (active):</strong> Set <em>Param name</em> to <code>admitad</code> and paste the{" "}
+          <strong>program ID</strong> from Admitad → Tools → Deeplink generator into <em>Affiliate ref</em>.
+          Keep <em>Destination URL</em> as the merchant landing page (PolicyBazaar, Acko, etc.). Optional env{" "}
+          <code>ADMITAD_SUBID=dealervoice</code> tags all clicks in your Admitad reports.
+        </p>
       </div>
 
       {placements.map((p) => {
@@ -74,11 +83,15 @@ export function AdminAdPlacementEditor({ placements }: { placements: PlacementRo
         const param = (val(p, "affiliateParam") as string) ?? "utm_content";
         let preview = resolved;
         if (ref && !resolved.startsWith("/")) {
-          try {
-            const u = new URL(resolved);
-            u.searchParams.set(param || "utm_content", ref);
-            preview = u.toString();
-          } catch { /* keep */ }
+          if (param.toLowerCase() === "admitad" || param.toLowerCase() === "g") {
+            preview = `https://ad.admitad.com/g/${ref}/?ulp=${encodeURIComponent(resolved)}`;
+          } else {
+            try {
+              const u = new URL(resolved);
+              u.searchParams.set(param || "utm_content", ref);
+              preview = u.toString();
+            } catch { /* keep */ }
+          }
         }
 
         return (

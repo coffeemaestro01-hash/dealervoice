@@ -36,5 +36,6 @@ node scripts/db-push-direct.mjs
 
 - [ ] Record AdSense / affiliate payouts in Platform income
 - [ ] Outreach 20 dealers (Admin → Outreach queue)
-- [ ] Paste affiliate tracking links when Admitad programs approve
+- [x] Admitad adspace verified (meta tag on site)
+- [ ] Join Admitad programs (PolicyBazaar, Acko, BankBazaar) and paste program IDs in Admin → Ad revenue (param: `admitad`)
 - [ ] Get 5 dealers to upload inventory (Pro or manual seed)

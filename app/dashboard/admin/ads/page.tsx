@@ -4,6 +4,7 @@ import { resolveAdHref } from "@/lib/ads/affiliate";
 import prisma from "@/lib/db";
 import Link from "next/link";
 import { AdminAdPlacementEditor } from "@/components/admin/AdminAdPlacementEditor";
+import { AdmitadConnectionPanel } from "@/components/admin/AdmitadConnectionPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +28,8 @@ export default async function AdminAdsPage() {
         <Stat label="CTR" value={`${stats.ctr}%`} />
         <Stat label="Est. affiliate revenue" value={`₹${stats.estimatedRevenue.toLocaleString()}`} />
       </div>
+
+      <AdmitadConnectionPanel />
 
       <div>
         <h2 className="font-semibold text-gray-900 mb-4">Edit placements & affiliate IDs</h2>
