@@ -8,6 +8,7 @@ import {
   stripeSubscriptionPeriod,
 } from "@/lib/payment";
 import { planFeatures } from "@/lib/subscription";
+import { maybeSendSubscriptionWelcomeEmail } from "@/lib/subscription/welcome-email";
 import { z } from "zod";
 import type Stripe from "stripe";
 
@@ -103,6 +104,8 @@ export async function POST(req: NextRequest) {
         data: { isPremiumClaimed: true },
       }),
     ]);
+
+    await maybeSendSubscriptionWelcomeEmail(dealershipId, plan, interval).catch(() => {});
 
     return NextResponse.json({ success: true, subscription: { plan: sub.plan, status: sub.status } });
   } catch (err: unknown) {

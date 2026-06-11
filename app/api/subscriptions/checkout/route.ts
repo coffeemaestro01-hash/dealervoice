@@ -91,7 +91,11 @@ export async function POST(req: NextRequest) {
     });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Failed to create checkout session";
-    console.error("Stripe checkout failed:", message);
-    return NextResponse.json({ error: "Failed to start checkout" }, { status: 500 });
+    console.error("Stripe checkout failed:", message, err);
+    const isPromo = !!appliedPromoCode;
+    const clientMessage = isPromo
+      ? `Could not apply promotion code. ${message.includes("promotion") || message.includes("coupon") ? message : "Check the code, plan, and billing interval, then try again."}`
+      : "Failed to start checkout";
+    return NextResponse.json({ error: clientMessage }, { status: 500 });
   }
 }

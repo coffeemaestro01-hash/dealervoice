@@ -221,6 +221,57 @@ export async function sendClaimDocumentsRequiredEmail(
   });
 }
 
+export async function sendSubscriptionWelcomeEmail(
+  to: string,
+  params: {
+    name: string;
+    dealerName: string;
+    dealerSlug: string;
+    plan: "PRO" | "ENTERPRISE";
+    interval: "monthly" | "annual";
+  }
+) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.io";
+  const planLabel = params.plan === "ENTERPRISE" ? "Enterprise" : "Pro";
+  const billingLabel = params.interval === "annual" ? "annual" : "monthly";
+  const dashboardUrl = `${appUrl}/dashboard/dealer`;
+  const settingsUrl = `${appUrl}/dashboard/dealer/settings`;
+  const analyticsUrl = `${appUrl}/dashboard/dealer/analytics`;
+  const reviewUrl = `${appUrl}/dealership/${params.dealerSlug}?write=1`;
+
+  const proSteps = [
+    "Complete your dealership profile so buyers trust what they see.",
+    "Share your review invite link with recent customers.",
+    "Check analytics to see how your reputation compares locally.",
+    "Use AI response suggestions when new reviews come in.",
+  ];
+  const enterpriseSteps = [
+    ...proSteps,
+    "Explore API access and white-label reports in your dashboard.",
+  ];
+  const steps = params.plan === "ENTERPRISE" ? enterpriseSteps : proSteps;
+
+  return resend.emails.send({
+    from: FROM,
+    to,
+    subject: `Welcome to DealerVoice ${planLabel}!`,
+    html: emailTemplate({
+      title: `You're on ${planLabel}`,
+      body: `<p>Hi ${params.name},</p>
+<p>Thank you for subscribing — <strong>${params.dealerName}</strong> is now on DealerVoice <strong>${planLabel}</strong> (${billingLabel} billing).</p>
+<p style="margin:20px 0"><strong>Your quick-start checklist:</strong></p>
+<ol style="padding-left:20px;color:#444;line-height:1.8">${steps.map((s) => `<li>${s}</li>`).join("")}</ol>
+<p><a href="${dashboardUrl}" style="background:#C9961E;color:#0a0a0a;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block;font-weight:600;margin-right:8px">Open dashboard</a>
+<a href="${settingsUrl}" style="background:#0a0a0a;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block">Complete profile</a></p>
+<p style="margin-top:20px"><strong>Collect verified reviews:</strong></p>
+<p style="background:#f9fafb;border:1px solid #e5e7eb;padding:12px 16px;border-radius:8px;word-break:break-all;font-size:13px">${reviewUrl}</p>
+<p style="margin-top:16px"><a href="${analyticsUrl}" style="color:#C9961E">View analytics →</a></p>
+<p style="color:#777;font-size:14px;margin-top:24px">Questions? Reply to this email or contact <a href="mailto:${EMAILS.support}" style="color:#C9961E">${EMAILS.support}</a>.</p>
+<p style="color:#999;font-size:12px">Built in Chicago. Available worldwide.</p>`,
+    }),
+  });
+}
+
 export async function sendClaimApprovedEmail(
   to: string,
   name: string,

@@ -668,6 +668,8 @@ model DealerSubscription {
   whiteLabel           Boolean            @default(false)
   competitorMonitoring Boolean            @default(false)
 
+  welcomeEmailSentAt   DateTime?
+
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
 

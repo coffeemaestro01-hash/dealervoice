@@ -6,6 +6,7 @@ import {
   retrieveStripeSubscription,
 } from "@/lib/payment";
 import { incrementPromotionRedemption } from "@/lib/promotions";
+import { maybeSendSubscriptionWelcomeEmail } from "@/lib/subscription/welcome-email";
 import { planFeatures } from "@/lib/subscription";
 import { recordIncome } from "@/lib/income/ledger";
 import prisma from "@/lib/db";
@@ -172,6 +173,15 @@ export async function POST(req: NextRequest) {
               : session.subscription.id;
           const stripeSub = await retrieveStripeSubscription(subId);
           await syncSubscription(stripeSub, true);
+
+          const meta = parseStripePlanMetadata(stripeSub.metadata);
+          if (meta.dealershipId) {
+            await maybeSendSubscriptionWelcomeEmail(
+              meta.dealershipId,
+              meta.plan,
+              meta.interval
+            ).catch(() => {});
+          }
 
           const promoCode = session.metadata?.promotionCode;
           if (promoCode) {

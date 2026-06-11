@@ -12,6 +12,8 @@
     "db:migrate:sprint2": "tsx scripts/migrate-sprint2-db.ts",
     "db:migrate:campaigns": "tsx scripts/migrate-campaigns-db.ts",
     "db:migrate:promotions": "tsx scripts/migrate-promotions-db.ts",
+    "seed:promotions": "tsx scripts/seed-default-promotion.ts",
+    "db:migrate:welcome-email": "tsx scripts/migrate-welcome-email-db.ts",
     "db:migrate": "prisma migrate dev",
     "db:migrate:prod": "prisma migrate deploy",
     "db:studio": "prisma studio",
