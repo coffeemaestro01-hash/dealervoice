@@ -11,8 +11,32 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Loader2, Save, Globe, Phone, Mail, Clock, ImageIcon, Building2, Sparkles } from "lucide-react";
+import { Loader2, Save, Globe, Phone, Clock, ImageIcon, Building2, Sparkles, MapPin } from "lucide-react";
 import { FileUpload } from "@/components/common/FileUpload";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+const CATEGORY_OPTIONS = [
+  { value: "NEW_VEHICLE", label: "New vehicles" },
+  { value: "USED_VEHICLE", label: "Used vehicles" },
+  { value: "LUXURY", label: "Luxury" },
+  { value: "COMMERCIAL", label: "Commercial" },
+  { value: "MOTORCYCLE", label: "Motorcycle" },
+  { value: "EV", label: "Electric (EV)" },
+  { value: "MULTI_BRAND", label: "Multi-brand" },
+] as const;
+
+function resolveAiContext(values: DealershipInput, dealership: Props["dealership"]) {
+  const name = values.name?.trim() || dealership.name?.trim();
+  const category = values.category || dealership.category || "NEW_VEHICLE";
+  const city =
+    values.cityName?.trim() ||
+    dealership.cityName?.trim() ||
+    dealership.city?.name?.trim() ||
+    "";
+  const state = values.stateName?.trim() || dealership.stateName?.trim() || dealership.city?.stateName?.trim() || "";
+  const country = dealership.country?.name || "United States";
+  return { name, category, city, state, country };
+}
 
 interface Props {
   dealership: any;
@@ -45,8 +69,8 @@ export function DealerSettingsForm({ dealership }: Props) {
       website: dealership.website || "",
       inventoryUrl: dealership.inventoryUrl || "",
       address: dealership.address || "",
-      cityName: dealership.cityName || "",
-      stateName: dealership.stateName || "",
+      cityName: dealership.cityName || dealership.city?.name || "",
+      stateName: dealership.stateName || dealership.city?.stateName || "",
       countryId: dealership.countryId,
       postalCode: dealership.postalCode || "",
     },
@@ -84,10 +108,17 @@ export function DealerSettingsForm({ dealership }: Props) {
 
   const handleGenerateAI = async () => {
     const values = getValues();
-    if (!values.name || !values.category || !values.cityName) {
+    const ctx = resolveAiContext(values, dealership);
+
+    const missing: string[] = [];
+    if (!ctx.name) missing.push("dealership name");
+    if (!ctx.city) missing.push("city");
+    if (!ctx.category) missing.push("category");
+
+    if (missing.length > 0) {
       toast({
-        title: "Missing Information",
-        description: "Please enter your dealership name, category, and city first.",
+        title: "Missing information",
+        description: `Add ${missing.join(" and ")} in the fields below, then try again.`,
         variant: "destructive",
       });
       return;
@@ -100,11 +131,11 @@ export function DealerSettingsForm({ dealership }: Props) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           dealershipId: dealership.id,
-          name: values.name,
-          category: values.category,
-          city: values.cityName,
-          state: values.stateName,
-          country: dealership.country?.name || "India",
+          name: ctx.name,
+          category: ctx.category,
+          city: ctx.city,
+          state: ctx.state,
+          country: ctx.country,
           website: values.website,
         }),
       });
@@ -219,6 +250,45 @@ export function DealerSettingsForm({ dealership }: Props) {
             <Input id="name" {...register("name")} />
             {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
           </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label>Category</Label>
+              <Controller
+                name="category"
+                control={control}
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {CATEGORY_OPTIONS.map((opt) => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+              {errors.category && <p className="text-xs text-red-500">{errors.category.message}</p>}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="cityName">City</Label>
+              <Input id="cityName" placeholder="Rocklin" {...register("cityName")} />
+              {errors.cityName && <p className="text-xs text-red-500">{errors.cityName.message}</p>}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="stateName">State / Region</Label>
+              <Input id="stateName" placeholder="California" {...register("stateName")} />
+              {errors.stateName && <p className="text-xs text-red-500">{errors.stateName.message}</p>}
+            </div>
+          </div>
+          <p className="text-xs text-gray-500 flex items-center gap-1">
+            <MapPin className="w-3 h-3" />
+            Category and city are required for Generate with AI.
+          </p>
 
           <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
