@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-import { Mail, MessageSquare, Building2, LifeBuoy, Share2, Phone } from "lucide-react";
+import { Mail, MessageSquare, Building2, LifeBuoy, Share2 } from "lucide-react";
 import { EMAILS } from "@/lib/constants/emails";
 import { SOCIAL_HANDLES } from "@/lib/constants/social";
 import { SocialLinks } from "@/components/common/SocialLinks";
-import { BusinessLegalBlock } from "@/components/common/BusinessLegalBlock";
-import { BUSINESS, businessPhoneHref } from "@/lib/constants/business";
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -42,19 +40,6 @@ export default function ContactPage() {
                 </div>
               </div>
             ))}
-
-            <div className="rounded-2xl border border-gray-100 p-6 shadow-sm">
-              <h3 className="font-semibold text-gray-900 mb-3">Business contact</h3>
-              <BusinessLegalBlock />
-              {BUSINESS.phone && businessPhoneHref() && (
-                <a
-                  href={businessPhoneHref()!}
-                  className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-gold-700 hover:underline"
-                >
-                  <Phone size={14} /> Call {BUSINESS.phone}
-                </a>
-              )}
-            </div>
 
             <div className="rounded-2xl border border-gray-100 p-6 shadow-sm">
               <div className="flex items-center gap-2 mb-3">
