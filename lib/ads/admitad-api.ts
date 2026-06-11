@@ -33,6 +33,7 @@ export async function getAdmitadAccessToken(): Promise<string | null> {
   const basic = Buffer.from(`${creds.id}:${creds.secret}`).toString("base64");
   const body = new URLSearchParams({
     grant_type: "client_credentials",
+    client_id: creds.id,
     scope: "advcampaigns advcampaigns_for_website",
   });
 
@@ -48,6 +49,7 @@ export async function getAdmitadAccessToken(): Promise<string | null> {
   if (!res.ok) {
     const err = await res.text();
     console.error("[admitad] token error", res.status, err.slice(0, 200));
+    cache = null;
     return null;
   }
 
