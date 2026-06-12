@@ -92,15 +92,25 @@ export function formatCurrency(amount: number, currency = "USD"): string {
   return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(amount / 100);
 }
 
+import { stateSlug } from "@/lib/geo";
+
 export function buildDealerUrl(dealer: {
   slug: string;
   countryCode?: string;
   country?: { code: string };
-  cityName?: string;
+  cityName?: string | null;
+  stateCode?: string | null;
+  stateName?: string | null;
   city?: { name: string; slug?: string };
 }): string {
-  const country = (dealer.countryCode || dealer.country?.code || "intl").toLowerCase();
-  const city = (dealer.city?.slug || slugify(dealer.cityName || dealer.city?.name || "all"));
+  const countryCode = dealer.countryCode || dealer.country?.code;
+  if (countryCode?.toUpperCase() === "US" && (dealer.stateCode || dealer.stateName)) {
+    const state = stateSlug(dealer.stateCode, dealer.stateName);
+    const city = slugify(dealer.cityName || dealer.city?.name || "unknown");
+    if (state) return `/dealers/${state}/${city}/${dealer.slug}`;
+  }
+  const country = (countryCode || "intl").toLowerCase();
+  const city = dealer.city?.slug || slugify(dealer.cityName || dealer.city?.name || "all");
   return `/dealers/${country}/${city}/${dealer.slug}`;
 }
 

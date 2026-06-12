@@ -2,11 +2,19 @@ import { MetadataRoute } from "next";
 import prisma from "@/lib/db";
 import { publicDealerWhere } from "@/lib/dealer/status";
 import { stateSlug } from "@/lib/geo";
+import { dealerCanonicalPath } from "@/lib/dealers/seo-url";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.io";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  let dealerships: { slug: string; updatedAt: Date }[] = [];
+  let dealerships: {
+    slug: string;
+    updatedAt: Date;
+    cityName: string | null;
+    stateCode: string | null;
+    stateName: string | null;
+    country: { code: string };
+  }[] = [];
   let countries: { code: string }[] = [];
   let cities: { slug: string; country: { code: string } }[] = [];
   let stateRows: { stateCode: string | null; stateName: string | null; country: { code: string } }[] = [];
@@ -16,7 +24,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     [dealerships, countries, cities, stateRows, blogPosts] = await Promise.all([
       prisma.dealership.findMany({
         where: publicDealerWhere,
-        select: { slug: true, updatedAt: true },
+        select: {
+          slug: true,
+          updatedAt: true,
+          cityName: true,
+          stateCode: true,
+          stateName: true,
+          country: { select: { code: true } },
+        },
         orderBy: { reputationScore: "desc" },
         take: 50_000,
       }),
@@ -50,7 +65,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ].map((p) => ({ url: p.url, lastModified: new Date(), changeFrequency: "weekly" as const, priority: p.priority }));
 
   const dealerPages = dealerships.map((d) => ({
-    url: `${BASE}/dealership/${d.slug}`,
+    url: `${BASE}${dealerCanonicalPath(d)}`,
     lastModified: d.updatedAt,
     changeFrequency: "daily" as const,
     priority: 0.8,

@@ -1,199 +1,40 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { Suspense } from "react";
-import prisma from "@/lib/db";
-import { DealershipProfile } from "@/components/dealership/DealershipProfile";
-import { ReviewsList } from "@/components/review/ReviewsList";
-import { DealershipSidebar } from "@/components/dealership/DealershipSidebar";
-import { QuoteRequestForm } from "@/components/dealership/QuoteRequestForm";
-import { RatingDistribution } from "@/components/dealership/RatingDistribution";
-import { ClaimModal } from "@/components/dealership/ClaimModal";
-import { CompetitorAdPlacement } from "@/components/dealership/CompetitorAdPlacement";
-import { ClaimProfileCTA } from "@/components/dealership/ClaimProfileCTA";
-import { PremiumInventoryCTA } from "@/components/dealership/PremiumInventoryCTA";
-import { DealerInventorySection } from "@/components/dealership/DealerInventorySection";
-import { ProfileWriteBar } from "@/components/dealership/ProfileWriteBar";
-import { isDealerPremiumClaimed } from "@/lib/dealer/premium";
-import { getCache, setCache, CACHE_KEYS, CACHE_TTL } from "@/lib/redis";
-import { TrustScoreBreakdown } from "@/components/trust/TrustScoreBreakdown";
-import { AIReviewDigest } from "@/components/trust/AIReviewDigest";
-import { DreamCarAssistant } from "@/components/trust/DreamCarAssistant";
-import { computeTrustScore } from "@/lib/trust/score";
-import { generateReviewDigest } from "@/lib/ai/review-digest";
+import { permanentRedirect, notFound } from "next/navigation";
+import { DealershipRoute } from "@/components/dealership/DealershipRoute";
+import { buildDealershipMetadata, getDealershipBySlug } from "@/lib/dealers/load-dealership";
+import { dealerCanonicalPath } from "@/lib/dealers/seo-url";
 
 interface Props {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ page?: string; write?: string }>;
 }
 
-async function getDealership(slug: string) {
-  const cached = await getCache(CACHE_KEYS.dealership(slug));
-  if (cached) return cached as Awaited<ReturnType<typeof fetchDealership>>;
-  const data = await fetchDealership(slug);
-  if (data) await setCache(CACHE_KEYS.dealership(slug), data, CACHE_TTL.MEDIUM);
-  return data;
-}
-
-async function fetchDealership(slug: string) {
-  return prisma.dealership.findUnique({
-    where: { slug, deletedAt: null },
-    include: {
-      country: true,
-      city: true,
-      brands: { include: { brand: true }, orderBy: { isPrimary: "desc" } },
-      awards: { orderBy: { year: "desc" } },
-      subscription: { select: { plan: true } },
-      media: { where: { type: "IMAGE" }, take: 10 },
-      _count: { select: { reviews: { where: { status: "PUBLISHED" } } } },
-    },
-  });
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const dealer = await getDealership(slug);
-  if (!dealer) return {};
-  const location = [dealer.cityName, dealer.stateName, dealer.country?.name].filter(Boolean).join(", ");
-  return {
-    title: `${dealer.name} Reviews - ${location}`,
-    description:
-      dealer.description ??
-      `Read ${dealer.totalReviews} verified reviews for ${dealer.name} in ${location}. Overall rating: ${dealer.overallRating.toFixed(1)}/5.`,
-    openGraph: {
-      title: `${dealer.name} - ${dealer.overallRating.toFixed(1)}★ (${dealer.totalReviews} reviews)`,
-      description: dealer.description ?? `Dealership reviews for ${dealer.name}`,
-      images: dealer.coverImageUrl ? [{ url: dealer.coverImageUrl }] : [],
-    },
-  };
+  return buildDealershipMetadata(slug);
 }
 
 export default async function DealershipPage({ params, searchParams }: Props) {
   const { slug } = await params;
   const { page: pageParam, write } = await searchParams;
-  const highlightWrite = write === "1";
-  const dealer = await getDealership(slug);
+
+  const dealer = await getDealershipBySlug(slug);
   if (!dealer) notFound();
 
-  const page = Number(pageParam ?? 1);
-  const isPremium = isDealerPremiumClaimed(dealer);
-  const trustScore = computeTrustScore({
-    reputationScore: dealer.reputationScore,
-    isVerified: dealer.isVerified,
-    isPremiumClaimed: dealer.isPremiumClaimed,
-    avgRating: dealer.overallRating,
-    totalReviews: dealer.totalReviews,
-    verifiedReviews: dealer.verifiedReviews,
-    responseRate: dealer.responseRate ?? 0,
-  });
-
-  const recentReviews = await prisma.review.findMany({
-    where: { dealershipId: dealer.id, status: "PUBLISHED", deletedAt: null },
-    orderBy: { createdAt: "desc" },
-    take: 20,
-    select: { title: true, body: true, overallRating: true },
-  });
-  const reviewDigest = await generateReviewDigest(recentReviews);
-
-  // Schema.org LocalBusiness + Review aggregate markup
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "AutoDealer",
-    name: dealer.name,
-    description: dealer.description,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: dealer.address,
-      addressLocality: dealer.cityName,
-      addressRegion: dealer.stateName,
-      addressCountry: dealer.country?.code,
-      postalCode: dealer.postalCode,
-    },
-    telephone: dealer.phone,
-    url: dealer.website,
-    aggregateRating:
-      dealer.totalReviews > 0
-        ? {
-            "@type": "AggregateRating",
-            ratingValue: dealer.overallRating.toFixed(1),
-            reviewCount: dealer.totalReviews,
-            bestRating: "5",
-            worstRating: "1",
-          }
-        : undefined,
-  };
+  const canonical = dealerCanonicalPath(dealer);
+  if (canonical !== `/dealership/${slug}`) {
+    const qs = new URLSearchParams();
+    if (pageParam) qs.set("page", pageParam);
+    if (write === "1") qs.set("write", "1");
+    const suffix = qs.toString() ? `?${qs}` : "";
+    permanentRedirect(`${canonical}${suffix}`);
+  }
 
   return (
-    <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-
-      <Suspense>
-        <ClaimModal dealershipId={dealer.id} dealershipName={dealer.name} dealershipSlug={dealer.slug} />
-      </Suspense>
-
-      <div className="min-h-screen bg-gray-50 pb-20 md:pb-0">
-        {highlightWrite && (
-          <div className="bg-gold-50 border-b border-gold/30 px-4 py-2.5 text-center text-sm text-gold-900">
-            You&apos;re here to review <strong>{dealer.name}</strong> — tap Write Review below.
-          </div>
-        )}
-        <DealershipProfile dealer={dealer as any} isPremium={isPremium} highlightWrite={highlightWrite} />
-        <ProfileWriteBar dealershipId={dealer.id} highlight={highlightWrite} />
-
-        <div className="container py-8">
-          {isPremium && (
-            <div className="mb-6">
-              <PremiumInventoryCTA dealer={dealer} />
-            </div>
-          )}
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-6">
-              {!isPremium && (
-                <CompetitorAdPlacement
-                  dealershipId={dealer.id}
-                  cityId={dealer.cityId}
-                  stateName={dealer.stateName}
-                  countryId={dealer.countryId}
-                />
-              )}
-              <DealerInventorySection
-                dealershipId={dealer.id}
-                dealerName={dealer.name}
-                countryCode={dealer.country?.code ?? "US"}
-                inventoryUrl={dealer.inventoryUrl}
-                isPremium={isPremium}
-              />
-              <RatingDistribution dealer={dealer as any} />
-              <Suspense>
-                <ReviewsList dealershipId={dealer.id} page={page} />
-              </Suspense>
-              {!isPremium && (
-                <ClaimProfileCTA
-                  dealerId={dealer.id}
-                  dealerName={dealer.name}
-                  dealerSlug={dealer.slug}
-                />
-              )}
-            </div>
-
-            <div className="space-y-5">
-              <TrustScoreBreakdown trust={trustScore} />
-              <AIReviewDigest digest={reviewDigest} />
-              <QuoteRequestForm dealershipId={dealer.id} dealerName={dealer.name} />
-              <DealershipSidebar dealer={dealer as any} isPremium={isPremium} />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <DreamCarAssistant
-        dealerContext={{
-          name: dealer.name,
-          city: dealer.cityName,
-          rating: dealer.overallRating,
-          slug: dealer.slug,
-        }}
-      />
-    </>
+    <DealershipRoute
+      slug={slug}
+      page={Number(pageParam ?? 1)}
+      highlightWrite={write === "1"}
+    />
   );
 }

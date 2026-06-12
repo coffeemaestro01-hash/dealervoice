@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import prisma from "@/lib/db";
 import { publicDealerWhere } from "@/lib/dealer/status";
 import { DealerCard } from "@/components/dealership/DealerCard";
 import Link from "next/link";
 import { stateHref, stateSlug } from "@/lib/geo";
+import { isUsStateSlug, US_STATE_BY_SLUG } from "@/lib/geo/us-states";
+import { citySlug } from "@/lib/dealers/seo-url";
 
 interface Props {
   params: Promise<{ country: string }>;
@@ -61,6 +63,88 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CountryPage({ params }: Props) {
   const { country: countryCode } = await params;
+
+  // US SEO paths: /dealers/illinois → state directory
+  if (isUsStateSlug(countryCode)) {
+    const state = US_STATE_BY_SLUG[countryCode.toLowerCase()];
+    const us = await prisma.country.findUnique({ where: { code: "US" } });
+    if (!us) notFound();
+
+    const dealers = await prisma.dealership.findMany({
+      where: {
+        countryId: us.id,
+        ...publicDealerWhere,
+        OR: [
+          { stateCode: { equals: state.code, mode: "insensitive" } },
+          { stateName: { contains: state.name, mode: "insensitive" } },
+        ],
+      },
+      take: 24,
+      orderBy: { reputationScore: "desc" },
+      include: {
+        country: { select: { name: true, code: true } },
+        brands: { include: { brand: { select: { name: true, slug: true, logoUrl: true } } }, take: 3 },
+        subscription: { select: { plan: true } },
+      },
+    });
+
+    const cityCounts = await prisma.dealership.groupBy({
+      by: ["cityName"],
+      where: {
+        countryId: us.id,
+        ...publicDealerWhere,
+        OR: [
+          { stateCode: { equals: state.code, mode: "insensitive" } },
+          { stateName: { contains: state.name, mode: "insensitive" } },
+        ],
+        cityName: { not: null },
+      },
+      _count: { id: true },
+      orderBy: { _count: { id: "desc" } },
+      take: 30,
+    });
+
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="bg-white border-b border-gray-100">
+          <div className="container py-8">
+            <nav className="text-sm text-gray-500 mb-2">
+              <Link href="/dealers" className="hover:text-gold-700">Dealers</Link>
+              {" / "}
+              <span className="text-gray-900">{state.name}</span>
+            </nav>
+            <h1 className="text-3xl font-bold text-gray-900">Franchised dealers in {state.name}</h1>
+            <p className="text-gray-600 mt-2">{dealers.length}+ dealerships indexed</p>
+          </div>
+        </div>
+        <div className="container py-8">
+          {cityCounts.length > 0 && (
+            <div className="mb-8">
+              <h2 className="text-lg font-semibold text-gray-900 mb-3">Browse by city</h2>
+              <div className="flex flex-wrap gap-2">
+                {cityCounts.map((c) => (
+                  <Link
+                    key={c.cityName!}
+                    href={`/dealers/${countryCode}/${citySlug(c.cityName)}`}
+                    className="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm text-gray-700 hover:border-gold-300"
+                  >
+                    {c.cityName}
+                    <span className="ml-1.5 text-gray-400 text-xs">{c._count.id}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {dealers.map((d) => (
+              <DealerCard key={d.id} dealer={d as any} />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const country = await getCountryData(countryCode);
   if (!country) notFound();
 

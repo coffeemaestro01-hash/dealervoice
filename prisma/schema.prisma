@@ -392,12 +392,19 @@ model Dealership {
   inventoryUrl        String?
   claimedAt           DateTime?
 
+  // Franchise marketplace positioning
+  isFranchised        Boolean        @default(false)
+  isPublished         Boolean        @default(true)
+  googleMapsUrl       String?
+  dealerGroupId       String?
+
   createdAt           DateTime       @default(now())
   updatedAt           DateTime       @updatedAt
   deletedAt           DateTime?
 
   country          Country            @relation(fields: [countryId], references: [id])
   city             City?              @relation(fields: [cityId], references: [id])
+  dealerGroup      DealerGroup?       @relation(fields: [dealerGroupId], references: [id])
   brands           DealerBrand[]
   reviews          Review[]
   claims           DealerClaim[]
@@ -428,6 +435,23 @@ model Dealership {
   @@index([stateName])
   @@index([districtName])
   @@index([email])
+  @@index([isFranchised])
+  @@index([isPublished])
+  @@index([dealerGroupId])
+}
+
+model DealerGroup {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  website     String?
+  headquarters String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  dealerships Dealership[]
+
+  @@index([slug])
 }
 
 model DealerBrand {

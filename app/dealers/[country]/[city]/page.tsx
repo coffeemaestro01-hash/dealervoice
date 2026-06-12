@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import prisma from "@/lib/db";
+import { publicDealerFilter } from "@/lib/dealer/status";
 import { DealerCard } from "@/components/dealership/DealerCard";
+import { isUsStateSlug, US_STATE_BY_SLUG } from "@/lib/geo/us-states";
+import { citySlug } from "@/lib/dealers/seo-url";
 
 interface Props {
   params: Promise<{ country: string; city: string }>;
@@ -51,8 +54,59 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function CityPage({ params }: Props) {
-  const { country: countryCode, city: citySlug } = await params;
-  const data = await getCityData(countryCode, citySlug);
+  const { country: countryCode, city: citySlugParam } = await params;
+
+  if (isUsStateSlug(countryCode)) {
+    const state = US_STATE_BY_SLUG[countryCode.toLowerCase()];
+    const us = await prisma.country.findUnique({ where: { code: "US" } });
+    if (!us) notFound();
+
+    const dealers = await prisma.dealership.findMany({
+      where: {
+        countryId: us.id,
+        ...publicDealerFilter(),
+        OR: [
+          { stateCode: { equals: state.code, mode: "insensitive" } },
+          { stateName: { contains: state.name, mode: "insensitive" } },
+        ],
+      },
+      take: 200,
+      orderBy: { reputationScore: "desc" },
+      include: {
+        country: { select: { name: true, code: true } },
+        brands: { include: { brand: { select: { name: true, slug: true, logoUrl: true } } }, take: 3 },
+        subscription: { select: { plan: true } },
+      },
+    });
+
+    const filtered = dealers.filter((d) => citySlug(d.cityName) === citySlugParam);
+    const cityLabel = filtered[0]?.cityName ?? citySlugParam.replace(/-/g, " ");
+    if (filtered.length === 0) notFound();
+
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="bg-white border-b border-gray-100">
+          <div className="container py-8">
+            <nav className="text-sm text-gray-500 mb-2">
+              <Link href="/dealers" className="hover:text-gold-700">Dealers</Link>
+              {" / "}
+              <Link href={`/dealers/${countryCode}`} className="hover:text-gold-700">{state.name}</Link>
+              {" / "}
+              <span className="text-gray-900">{cityLabel}</span>
+            </nav>
+            <h1 className="text-3xl font-bold text-gray-900">Car dealerships in {cityLabel}, {state.name}</h1>
+          </div>
+        </div>
+        <div className="container py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {filtered.map((d) => (
+            <DealerCard key={d.id} dealer={d as any} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  const data = await getCityData(countryCode, citySlugParam);
   if (!data) notFound();
 
   const { country, city } = data;
