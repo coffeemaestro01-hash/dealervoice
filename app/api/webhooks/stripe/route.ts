@@ -7,6 +7,7 @@ import {
 } from "@/lib/payment";
 import { incrementPromotionRedemption } from "@/lib/promotions";
 import { maybeSendSubscriptionWelcomeEmail } from "@/lib/subscription/welcome-email";
+import { maybeSendAdminSubscriptionAlert } from "@/lib/subscription/admin-alert";
 import { planFeatures } from "@/lib/subscription";
 import { recordIncome } from "@/lib/income/ledger";
 import prisma from "@/lib/db";
@@ -180,6 +181,14 @@ export async function POST(req: NextRequest) {
               meta.dealershipId,
               meta.plan,
               meta.interval
+            ).catch(() => {});
+
+            const promoCode = session.metadata?.promotionCode;
+            await maybeSendAdminSubscriptionAlert(
+              meta.dealershipId,
+              meta.plan,
+              meta.interval,
+              promoCode
             ).catch(() => {});
           }
 

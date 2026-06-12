@@ -56,6 +56,7 @@ CONTACT
 - Press: press@dealervoice.io
 - Advertising: advertise@dealervoice.io
 - Billing email: billing@dealervoice.io
+- WhatsApp Business: +1 (872) 347-0915 (https://wa.me/18723470915)
 - Social: Facebook, Instagram @dealervoice_io, LinkedIn company/dealervoice
 - For anything you cannot resolve, direct the user to the grievance channel at /grievance or to email support.
 `.trim();

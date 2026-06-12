@@ -19,6 +19,7 @@ export type CreatePromotionInput = {
   maxRedemptions?: number;
   expiresAt?: Date;
   createdById?: string;
+  dealershipId?: string;
 } & PromotionDiscountFields;
 
 export function normalizePromoCode(code: string): string {
@@ -87,6 +88,7 @@ export async function createStripePromotion(input: CreatePromotionInput) {
       plan: input.plan,
       interval: input.interval,
       discountType: input.discountType,
+      ...(input.dealershipId ? { dealershipId: input.dealershipId } : {}),
     },
   });
 
@@ -110,11 +112,17 @@ export async function createPromotionRecord(input: CreatePromotionInput) {
       maxRedemptions: input.maxRedemptions,
       expiresAt: input.expiresAt,
       createdById: input.createdById,
+      dealershipId: input.dealershipId,
     },
   });
 }
 
-export async function findValidPromotion(code: string, plan: PlanKey, interval: BillingInterval) {
+export async function findValidPromotion(
+  code: string,
+  plan: PlanKey,
+  interval: BillingInterval,
+  dealershipId?: string
+) {
   const normalized = normalizePromoCode(code);
   const promo = await prisma.promotionCode.findUnique({ where: { code: normalized } });
   if (!promo || !promo.active) return null;
@@ -122,6 +130,7 @@ export async function findValidPromotion(code: string, plan: PlanKey, interval: 
   if (promo.maxRedemptions != null && promo.timesRedeemed >= promo.maxRedemptions) return null;
   if (promo.plan && promo.plan !== plan) return null;
   if (promo.interval && promo.interval !== interval) return null;
+  if (promo.dealershipId && promo.dealershipId !== dealershipId) return null;
   return promo;
 }
 
@@ -154,6 +163,45 @@ export async function ensureDefaultProOneDollarPromo(createdById?: string) {
 
 export function formatPromoPrice(cents: number): string {
   return `$${(cents / 100).toFixed(cents % 100 === 0 ? 0 : 2)}`;
+}
+
+function dealerPromoCodeFromSlug(slug: string): string {
+  const base = slug.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 18);
+  return normalizePromoCode(`DV${base || "DEALER"}`);
+}
+
+/** One-time Pro monthly pilot code tied to a single dealership */
+export async function createDealerPromotion(dealershipId: string, createdById?: string) {
+  const existing = await prisma.promotionCode.findFirst({
+    where: { dealershipId, active: true },
+    orderBy: { createdAt: "desc" },
+  });
+  if (existing) return existing;
+
+  const dealer = await prisma.dealership.findUnique({
+    where: { id: dealershipId },
+    select: { slug: true, name: true },
+  });
+  if (!dealer) throw new Error("Dealership not found");
+
+  let code = dealerPromoCodeFromSlug(dealer.slug);
+  let suffix = 0;
+  while (await prisma.promotionCode.findUnique({ where: { code } })) {
+    suffix += 1;
+    code = normalizePromoCode(`${dealerPromoCodeFromSlug(dealer.slug).slice(0, 28)}${suffix}`);
+  }
+
+  return createPromotionRecord({
+    code,
+    label: `${dealer.name} — pilot Pro $1/mo`,
+    plan: "PRO",
+    interval: "monthly",
+    discountType: "FIXED",
+    fixedPriceUsdCents: 100,
+    maxRedemptions: 1,
+    createdById,
+    dealershipId,
+  });
 }
 
 export function formatPromotionDiscount(

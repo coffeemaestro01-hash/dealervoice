@@ -26,6 +26,8 @@ type Promotion = {
   timesRedeemed: number;
   expiresAt: string | null;
   createdAt: string;
+  dealershipId: string | null;
+  dealership?: { name: string; slug: string } | null;
 };
 
 type DiscountType = "FIXED" | "PERCENT";
@@ -141,7 +143,7 @@ export function AdminPromotionsManager() {
             Promotions & discounts
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            Stripe promotion codes for subscription discounts. Dealers enter codes at checkout on the billing page.
+            Stripe promotion codes for subscription discounts. Per-dealer codes are auto-created in the outreach drip (step 3).
           </p>
         </div>
         <Button
@@ -311,6 +313,7 @@ export function AdminPromotionsManager() {
           <table className="w-full text-sm">
             <thead className="bg-gray-50 border-b border-gray-100">
               <tr>
+                <th className="text-left px-4 py-3 font-medium text-gray-500">Dealer</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-500">Code</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-500">Plan</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-500">Discount</th>
@@ -322,6 +325,13 @@ export function AdminPromotionsManager() {
             <tbody>
               {promotions.map((p) => (
                 <tr key={p.id} className="border-b border-gray-50 last:border-0">
+                  <td className="px-4 py-3 text-gray-600 text-xs">
+                    {p.dealership ? (
+                      <span title={p.dealership.slug}>{p.dealership.name}</span>
+                    ) : (
+                      <span className="text-gray-400">Global</span>
+                    )}
+                  </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
                       <span className="font-mono font-semibold text-gray-900">{p.code}</span>

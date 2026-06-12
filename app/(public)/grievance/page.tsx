@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ShieldAlert, Clock, Mail } from "lucide-react";
 import { COMPANY, companyHqLine } from "@/lib/constants/company";
+import { WHATSAPP_BUSINESS } from "@/lib/constants/social";
 
 export const metadata: Metadata = {
   title: "Support & Grievances",
@@ -38,6 +39,9 @@ export default function GrievancePage() {
               <li><strong>General grievances:</strong> <a href="mailto:grievance@dealervoice.io" className="text-gold-700 hover:underline">grievance@dealervoice.io</a></li>
               <li><strong>Privacy / data rights:</strong> <a href="mailto:dpo@dealervoice.io" className="text-gold-700 hover:underline">dpo@dealervoice.io</a></li>
               <li><strong>Billing:</strong> <a href="mailto:billing@dealervoice.io" className="text-gold-700 hover:underline">billing@dealervoice.io</a></li>
+              <li><strong>WhatsApp Business:</strong>{" "}
+                <a href={WHATSAPP_BUSINESS.href} target="_blank" rel="noopener noreferrer" className="text-gold-700 hover:underline">{WHATSAPP_BUSINESS.display}</a>
+              </li>
               <li><strong>Hours:</strong> Monday–Friday, 9:00–17:00 US Central (Chicago)</li>
             </ul>
           </div>

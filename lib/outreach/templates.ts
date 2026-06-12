@@ -1,4 +1,7 @@
 import { APP_URL, EMAILS } from "@/lib/constants/emails";
+import { WHATSAPP_BUSINESS } from "@/lib/constants/social";
+
+export type OutreachMarket = "US" | "IN";
 
 export interface DealerOutreachContext {
   name: string;
@@ -7,6 +10,17 @@ export interface DealerOutreachContext {
   stateName?: string | null;
   phone?: string | null;
   website?: string | null;
+  market?: OutreachMarket;
+}
+
+function marketOf(ctx: DealerOutreachContext): OutreachMarket {
+  return ctx.market ?? "US";
+}
+
+function platformLabel(market: OutreachMarket): string {
+  return market === "IN"
+    ? "India's dealership review platform"
+    : "a car dealership review platform built in Chicago, trusted by buyers nationwide";
 }
 
 export function claimUrl(slug: string) {
@@ -21,13 +35,18 @@ export function reviewInviteUrl(slug: string) {
   return `${APP_URL}/dealership/${slug}?write=1`;
 }
 
+export function billingUrl() {
+  return `${APP_URL}/dashboard/dealer/billing`;
+}
+
 export function buildClaimEmail(ctx: DealerOutreachContext) {
+  const market = marketOf(ctx);
   const location = [ctx.cityName, ctx.stateName].filter(Boolean).join(", ");
   return {
     subject: `${ctx.name} — claim your free DealerVoice profile`,
     body: `Hi,
 
-Your dealership${location ? ` in ${location}` : ""} is listed on DealerVoice — India's dealership review platform.
+Your dealership${location ? ` in ${location}` : ""} is listed on DealerVoice — ${platformLabel(market)}.
 
 Claim your profile (free) to:
 • Respond to customer reviews
@@ -38,7 +57,7 @@ Claim here: ${claimUrl(ctx.slug)}
 
 Your listing: ${profileUrl(ctx.slug)}
 
-Questions? Reply or email ${EMAILS.dealers}
+Questions? Reply, email ${EMAILS.dealers}, or WhatsApp ${WHATSAPP_BUSINESS.display}
 
 — DealerVoice Team
 ${EMAILS.dealers}`,
@@ -46,11 +65,12 @@ ${EMAILS.dealers}`,
 }
 
 export function buildReviewInviteEmail(ctx: DealerOutreachContext) {
+  const location = [ctx.cityName, ctx.stateName].filter(Boolean).join(", ") || "your market";
   return {
     subject: `Ask customers to review ${ctx.name} on DealerVoice`,
     body: `Hi,
 
-Share this link with recent buyers — verified reviews build trust in ${[ctx.cityName, ctx.stateName].filter(Boolean).join(", ") || "your market"}:
+Share this link with recent buyers — verified reviews build trust in ${location}:
 
 ${reviewInviteUrl(ctx.slug)}
 
@@ -62,21 +82,106 @@ ${EMAILS.dealers}`,
 }
 
 export function buildWhatsAppClaim(ctx: DealerOutreachContext) {
-  return `Hi, this is DealerVoice. ${ctx.name} is listed on our India dealership review platform. Claim your free profile here: ${claimUrl(ctx.slug)} — respond to reviews & share a review link with customers. Questions: ${EMAILS.dealers}`;
+  const market = marketOf(ctx);
+  const region = market === "IN" ? "India" : "the U.S.";
+  return `Hi, this is DealerVoice. ${ctx.name} is listed on our ${region} dealership review platform. Claim your free profile here: ${claimUrl(ctx.slug)} — respond to reviews & share a review link with customers. Questions: ${EMAILS.dealers} or WhatsApp ${WHATSAPP_BUSINESS.display}`;
 }
 
 export function buildPhoneScript(ctx: DealerOutreachContext) {
+  const market = marketOf(ctx);
+  const region = market === "IN" ? "across India" : "across the United States";
   return [
-    `Opening: "Hi, I'm calling from DealerVoice — we list car dealerships across India with verified buyer reviews."`,
+    `Opening: "Hi, I'm calling from DealerVoice — we list car dealerships ${region} with verified buyer reviews."`,
     `Hook: "${ctx.name} is already on our site at ${profileUrl(ctx.slug)}"`,
     `Ask: "Are you the owner or manager? We offer a free profile claim so you can respond to reviews."`,
     `Close: "I can text you the claim link, or visit ${claimUrl(ctx.slug)}"`,
+    `WhatsApp us: ${WHATSAPP_BUSINESS.display}`,
     `Follow-up email: ${EMAILS.dealers}`,
   ].join("\n\n");
 }
 
-export function whatsappHref(phone: string, message: string) {
+export function whatsappHref(phone: string, message: string, market: OutreachMarket = "US") {
   const digits = phone.replace(/\D/g, "");
-  const normalized = digits.startsWith("91") ? digits : `91${digits}`;
+  let normalized = digits;
+  if (market === "IN") {
+    normalized = digits.startsWith("91") ? digits : `91${digits}`;
+  } else if (market === "US") {
+    normalized = digits.startsWith("1") && digits.length === 11 ? digits : `1${digits.replace(/^1/, "")}`;
+  }
   return `https://wa.me/${normalized}?text=${encodeURIComponent(message)}`;
+}
+
+export type DripStep = 1 | 2 | 3;
+
+export function buildDripEmail(ctx: DealerOutreachContext, step: DripStep, promoCode?: string) {
+  const location = [ctx.cityName, ctx.stateName].filter(Boolean).join(", ");
+  const market = marketOf(ctx);
+
+  if (step === 1) {
+    return {
+      subject: `${ctx.name} is on DealerVoice — claim your free profile`,
+      body: `Hi,
+
+We wanted to let you know that ${ctx.name}${location ? ` in ${location}` : ""} is already listed on DealerVoice.
+
+Car buyers use DealerVoice to compare dealerships, read reviews, and request quotes before they visit the lot. Your profile is live here:
+
+${profileUrl(ctx.slug)}
+
+Claiming is free and takes about two minutes. Once claimed, you can respond to reviews and share a review invite link with customers.
+
+Claim your profile: ${claimUrl(ctx.slug)}
+
+Questions? WhatsApp ${WHATSAPP_BUSINESS.display} or email ${EMAILS.dealers}
+
+— DealerVoice
+${EMAILS.dealers}`,
+    };
+  }
+
+  if (step === 2) {
+    const localHook =
+      market === "US" && location
+        ? `Buyers in ${location} are searching for transparent, well-reviewed dealers.`
+        : "Buyers in your market are searching for transparent, well-reviewed dealers.";
+    return {
+      subject: `Buyers are comparing dealers near ${ctx.cityName ?? ctx.name}`,
+      body: `Hi,
+
+Quick follow-up about your DealerVoice listing for ${ctx.name}.
+
+${localHook} Dealers who claim their profile and collect reviews typically see more qualified leads — because buyers trust stores that respond publicly.
+
+Your listing: ${profileUrl(ctx.slug)}
+Claim (free): ${claimUrl(ctx.slug)}
+
+If you have questions, reply to this email or WhatsApp ${WHATSAPP_BUSINESS.display}.
+
+— DealerVoice
+${EMAILS.dealers}`,
+    };
+  }
+
+  const codeLine = promoCode
+    ? `Use code ${promoCode} at checkout for Pro at $1/month (normally $199/month). This code is exclusive to ${ctx.name}.`
+    : "Reply if you'd like a pilot discount on Pro — we have limited partner pricing for early dealers.";
+
+  return {
+    subject: `Pilot offer for ${ctx.name} — Pro for $1/month`,
+    body: `Hi,
+
+Last note from us about ${ctx.name} on DealerVoice.
+
+Pro unlocks review invite tools, analytics, competitor monitoring, and removes third-party ads from your profile page.
+
+${codeLine}
+
+1. Claim your profile: ${claimUrl(ctx.slug)}
+2. Upgrade at billing: ${billingUrl()}
+
+Questions? ${EMAILS.dealers} · WhatsApp ${WHATSAPP_BUSINESS.display}
+
+— DealerVoice
+Built in Chicago · Available worldwide`,
+  };
 }

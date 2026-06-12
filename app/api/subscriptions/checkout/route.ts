@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
   let appliedPromoCode: string | undefined;
 
   if (promotionCode) {
-    const promo = await findValidPromotion(promotionCode, plan, interval);
+    const promo = await findValidPromotion(promotionCode, plan, interval, dealershipId);
     if (!promo) {
       return NextResponse.json({ error: "Invalid or expired promotion code" }, { status: 422 });
     }

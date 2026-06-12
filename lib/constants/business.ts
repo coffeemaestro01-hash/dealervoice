@@ -1,7 +1,10 @@
 /** Legal entity details for payment-gateway KYC and public compliance pages. Set in Vercel env. */
+import { WHATSAPP_BUSINESS } from "@/lib/constants/social";
+
 export const BUSINESS = {
   legalName: process.env.NEXT_PUBLIC_BUSINESS_LEGAL_NAME || "DealerVoice",
-  phone: process.env.NEXT_PUBLIC_BUSINESS_PHONE || "",
+  phone: process.env.NEXT_PUBLIC_BUSINESS_PHONE || WHATSAPP_BUSINESS.display,
+  whatsapp: WHATSAPP_BUSINESS.display,
   address: process.env.NEXT_PUBLIC_BUSINESS_ADDRESS || "",
   city: process.env.NEXT_PUBLIC_BUSINESS_CITY || "Chicago",
   state: process.env.NEXT_PUBLIC_BUSINESS_STATE || "Illinois",
@@ -17,7 +20,9 @@ export function businessAddressLine(): string {
 }
 
 export function businessPhoneHref(): string | null {
-  if (!BUSINESS.phone) return null;
-  const digits = BUSINESS.phone.replace(/\D/g, "");
-  return digits ? `tel:+${digits.startsWith("91") ? digits : `91${digits}`}` : null;
+  const raw = process.env.NEXT_PUBLIC_BUSINESS_PHONE || WHATSAPP_BUSINESS.e164;
+  const digits = raw.replace(/\D/g, "");
+  if (!digits) return null;
+  const e164 = digits.length === 10 ? `1${digits}` : digits;
+  return `tel:+${e164}`;
 }

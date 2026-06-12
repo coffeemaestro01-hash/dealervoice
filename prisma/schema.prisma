@@ -327,6 +327,10 @@ model Dealership {
   outreachStatus      String?        // pending | contacted | skipped | responded
   lastOutreachAt      DateTime?
   outreachNotes       String?        @db.Text
+  outreachDripStep    Int            @default(0) // 0=none, 1-3=sent, 3=complete
+  outreachDripActive  Boolean        @default(false)
+  nextOutreachAt      DateTime?
+  outreachDripStartedAt DateTime?
 
   // Address
   address             String?
@@ -410,6 +414,7 @@ model Dealership {
   vehicleListings  VehicleListing[]
   incomeRecords    IncomeRecord[]
   savedByUsers     SavedDealer[]
+  promotionCodes   PromotionCode[]
 
   @@index([slug])
   @@index([countryId])
@@ -669,6 +674,7 @@ model DealerSubscription {
   competitorMonitoring Boolean            @default(false)
 
   welcomeEmailSentAt   DateTime?
+  adminAlertSentAt     DateTime?
 
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
@@ -715,11 +721,15 @@ model PromotionCode {
   timesRedeemed         Int                    @default(0)
   expiresAt             DateTime?
   createdById           String?
+  dealershipId          String?
   createdAt             DateTime               @default(now())
   updatedAt             DateTime               @updatedAt
 
+  dealership            Dealership?            @relation(fields: [dealershipId], references: [id])
+
   @@index([code])
   @@index([active])
+  @@index([dealershipId])
 }
 
 // ─────────────────────────────────────────────

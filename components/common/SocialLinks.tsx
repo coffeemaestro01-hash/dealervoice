@@ -1,11 +1,12 @@
-import { Facebook, Instagram, Linkedin } from "lucide-react";
-import { SOCIAL_LINKS } from "@/lib/constants/social";
+import { Facebook, Instagram, Linkedin, MessageCircle } from "lucide-react";
+import { SOCIAL_LINKS, WHATSAPP_BUSINESS } from "@/lib/constants/social";
 import { cn } from "@/lib/utils";
 
 const ITEMS = [
   { key: "facebook" as const, label: "Facebook", href: SOCIAL_LINKS.facebook, Icon: Facebook },
   { key: "instagram" as const, label: "Instagram", href: SOCIAL_LINKS.instagram, Icon: Instagram },
   { key: "linkedin" as const, label: "LinkedIn", href: SOCIAL_LINKS.linkedin, Icon: Linkedin },
+  { key: "whatsapp" as const, label: "WhatsApp", href: WHATSAPP_BUSINESS.href, Icon: MessageCircle },
 ];
 
 interface SocialLinksProps {

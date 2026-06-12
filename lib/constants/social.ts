@@ -5,6 +5,18 @@ export const SOCIAL_LINKS = {
   linkedin: "https://www.linkedin.com/company/dealervoice/",
 } as const;
 
+/** DealerVoice WhatsApp Business (US) */
+export const WHATSAPP_BUSINESS = {
+  e164: "18723470915",
+  display: "+1 (872) 347-0915",
+  href: "https://wa.me/18723470915",
+} as const;
+
+export function whatsappBusinessHref(message?: string): string {
+  if (!message) return WHATSAPP_BUSINESS.href;
+  return `${WHATSAPP_BUSINESS.href}?text=${encodeURIComponent(message)}`;
+}
+
 export const SOCIAL_HANDLES = {
   instagram: "@dealervoice_io",
   linkedin: "DealerVoice",

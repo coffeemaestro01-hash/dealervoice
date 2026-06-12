@@ -45,6 +45,9 @@ export async function GET() {
 
   const promotions = await prisma.promotionCode.findMany({
     orderBy: { createdAt: "desc" },
+    include: {
+      dealership: { select: { name: true, slug: true } },
+    },
   });
 
   return NextResponse.json({ promotions });

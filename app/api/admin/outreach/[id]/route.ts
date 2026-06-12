@@ -3,12 +3,14 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/config";
 import prisma from "@/lib/db";
 import { logAdminAction } from "@/lib/admin/audit";
+import { startOutreachDrip } from "@/lib/outreach/drip";
 import { z } from "zod";
 
 const patchSchema = z.object({
   outreachStatus: z.enum(["pending", "contacted", "skipped", "responded"]).optional(),
   outreachNotes: z.string().max(2000).optional(),
   email: z.string().email().optional(),
+  startDrip: z.boolean().optional(),
 });
 
 export async function PATCH(req: NextRequest, props: { params: Promise<{ id: string }> }) {
@@ -35,7 +37,7 @@ export async function PATCH(req: NextRequest, props: { params: Promise<{ id: str
   const dealer = await prisma.dealership.update({
     where: { id: params.id },
     data,
-    select: { id: true, name: true, outreachStatus: true, lastOutreachAt: true },
+    select: { id: true, name: true, outreachStatus: true, lastOutreachAt: true, outreachDripStep: true },
   });
 
   await logAdminAction({
@@ -45,6 +47,12 @@ export async function PATCH(req: NextRequest, props: { params: Promise<{ id: str
     resourceId: params.id,
     newValues: parsed.data,
   });
+
+  if (parsed.data.startDrip && parsed.data.email && dealer.outreachDripStep === 0) {
+    await startOutreachDrip(params.id, session.user.id).catch((err) => {
+      console.error("startOutreachDrip after PATCH:", err);
+    });
+  }
 
   return NextResponse.json({ data: dealer });
 }

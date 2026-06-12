@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { Mail, MessageSquare, Building2, LifeBuoy, Share2 } from "lucide-react";
+import { Mail, MessageSquare, Building2, LifeBuoy, Share2, MessageCircle } from "lucide-react";
 import { EMAILS } from "@/lib/constants/emails";
-import { SOCIAL_HANDLES } from "@/lib/constants/social";
+import { SOCIAL_HANDLES, WHATSAPP_BUSINESS } from "@/lib/constants/social";
 import { SocialLinks } from "@/components/common/SocialLinks";
 
 export const metadata: Metadata = {
@@ -40,6 +40,26 @@ export default function ContactPage() {
                 </div>
               </div>
             ))}
+
+            <div className="flex gap-4 rounded-2xl border border-green-100 bg-green-50/50 p-6 shadow-sm">
+              <span className="grid place-items-center w-12 h-12 rounded-xl bg-green-100 text-green-700 shrink-0">
+                <MessageCircle size={22} />
+              </span>
+              <div>
+                <h3 className="font-semibold text-gray-900">WhatsApp Business</h3>
+                <p className="text-sm text-gray-600 mb-1">
+                  Fast replies for dealers and buyers — claim help, billing questions, or general support.
+                </p>
+                <a
+                  href={WHATSAPP_BUSINESS.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-medium text-green-700 hover:underline inline-flex items-center gap-1"
+                >
+                  <MessageCircle size={13} /> {WHATSAPP_BUSINESS.display}
+                </a>
+              </div>
+            </div>
 
             <div className="rounded-2xl border border-gray-100 p-6 shadow-sm">
               <div className="flex items-center gap-2 mb-3">
