@@ -34,7 +34,7 @@ export async function GlobalCoverageSection() {
           {countries.map((c) => (
             <Link
               key={c.code}
-              href={c.code === "IN" ? "/dealers/in" : `/dealers/${c.code.toLowerCase()}`}
+              href={`/dealers/${c.code.toLowerCase()}`}
               className="rounded-xl border border-white/10 card-dark p-4 hover:border-gold/30 transition-colors group"
             >
               <p className="text-xs font-bold uppercase tracking-wider text-gold-500">{c.code}</p>
@@ -49,8 +49,8 @@ export async function GlobalCoverageSection() {
           <Link href="/dealers" className="text-gold-400 hover:text-gold-300 inline-flex items-center gap-1 font-medium">
             All countries <ArrowRight size={14} />
           </Link>
-          <Link href="/dealers/in/inventory" className="text-gray-400 hover:text-gold-300">
-            India inventory →
+          <Link href="/chicago" className="text-gray-400 hover:text-gold-300">
+            Chicago dealers →
           </Link>
           <Link href="/dealers/us/inventory" className="text-gray-400 hover:text-gold-300">
             US inventory →

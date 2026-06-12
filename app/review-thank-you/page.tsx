@@ -4,7 +4,7 @@ import { CheckCircle2, Share2, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Thank You — Your Review Helps Buyers Across India",
+  title: "Thank You — Your Review Helps Buyers",
   description: "Your dealership review has been submitted on DealerVoice.",
 };
 
@@ -27,8 +27,8 @@ export default async function ReviewThankYouPage({ searchParams }: Props) {
           {isModeration
             ? "Our team will review your submission shortly. Once approved, it will appear on the dealership profile."
             : dealer
-              ? `Your experience at ${dealer} is now live. You're helping car buyers across India make informed decisions.`
-              : "Your review is live. You're helping car buyers across India make informed decisions."}
+              ? `Your experience at ${dealer} is now live. You're helping car buyers make informed decisions.`
+              : "Your review is live. You're helping car buyers make informed decisions."}
         </p>
 
         <div className="mt-8 space-y-3">
@@ -45,10 +45,10 @@ export default async function ReviewThankYouPage({ searchParams }: Props) {
               Review another dealership
             </Button>
           </Link>
-          <Link href="/dealers/in" className="block">
+          <Link href="/chicago" className="block">
             <Button variant="ghost" className="w-full gap-2 text-gray-600">
               <Building2 size={16} />
-              Browse India dealerships
+              Browse Chicago dealerships
             </Button>
           </Link>
         </div>

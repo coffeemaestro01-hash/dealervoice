@@ -22,7 +22,7 @@ export interface ChatMessage {
 // evolves. (No solo/AI-operation details — those stay internal.)
 const KNOWLEDGE = `
 ABOUT DEALERVOICE
-- DealerVoice is a trusted reviews and reputation platform for car dealerships, in India and worldwide.
+- DealerVoice is a trusted reviews and reputation platform for car dealerships, based in Chicago, Illinois, serving buyers across the United States and worldwide.
 - Customers read and write honest, verified reviews. Dealers claim their profile and build their reputation.
 
 REPUTATION SCORE
@@ -46,11 +46,12 @@ PRICING (paid plans for dealers)
 - Paid plans unlock tools and features, never a higher rating.
 - Billing: plans are billed in advance, monthly or annual. Cancel anytime from the dashboard or by emailing billing@dealervoice.io; access continues to the end of the billing period.
 
-PRIVACY & DATA (India DPDP Act 2023)
+PRIVACY & DATA
 - Users can download their data, request corrections, delete their account, or nominate someone, all from /settings/privacy. Requests are completed within 30 days.
 - Grievances (privacy, content, payment, account) can be raised at /grievance.
 
 CONTACT
+- Primary inbox: info@dealervoice.io
 - Support email: support@dealervoice.io
 - Dealer enquiries: dealers@dealervoice.io
 - Press: press@dealervoice.io
@@ -65,7 +66,7 @@ const SYSTEM_PROMPT = `You are the DealerVoice support assistant. You help visit
 
 Use ONLY the information in the knowledge base below. If you do not know an answer or it is outside DealerVoice, say so honestly and point the person to support@dealervoice.io or the grievance channel at /grievance. Do not invent features, prices, or policies.
 
-Be warm, concise, and clear. Keep replies short (a few sentences). Use plain language. Do not use em-dashes. You may answer in the user's language (including Indian languages).
+Be warm, concise, and clear. Keep replies short (a few sentences). Use plain language. Do not use em-dashes.
 
 KNOWLEDGE BASE:
 ${KNOWLEDGE}`;

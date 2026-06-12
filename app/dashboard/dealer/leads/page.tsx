@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mail, Phone, Calendar, User } from "lucide-react";
+import { DealerLeadActions } from "@/components/dashboard/DealerLeadActions";
+import { Mail, Phone } from "lucide-react";
 
 async function getLeads(userId: string) {
   const staff = await prisma.dealerStaff.findFirst({
@@ -75,6 +76,7 @@ export default async function DealerLeadsPage() {
                           <Phone size={10} /> {lead.phone}
                         </span>
                       )}
+                      <DealerLeadActions leadId={lead.id} status={lead.status} />
                     </div>
                   </TableCell>
                   <TableCell>

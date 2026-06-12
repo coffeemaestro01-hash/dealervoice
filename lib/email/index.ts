@@ -1,5 +1,5 @@
 import { Resend } from "resend";
-import { EMAILS } from "@/lib/constants/emails";
+import { EMAILS, PRIMARY_INBOX } from "@/lib/constants/emails";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -105,7 +105,7 @@ ${stat("Total members", s.totalUsers.toLocaleString(), `+${s.newUsers7d} this we
 ${stat("Published reviews", s.totalReviews.toLocaleString(), `+${s.newReviews7d} this week`)}
 </tr><tr>
 ${stat("New leads", s.newLeads7d, "this week")}
-${stat("Revenue (₹)", s.revenueInr.toLocaleString(), `${s.paidSubscriptions} paid plans`)}
+${stat("Revenue", `$${s.revenueInr.toLocaleString()}`, `${s.paidSubscriptions} paid plans`)}
 ${stat("Needs your action", s.pendingClaims + s.pendingReports, `${s.pendingClaims} claims · ${s.pendingReports} reports`)}
 </tr></table>
 <h3 style="margin:24px 0 8px;color:#0a0a0a">🏆 Top-rated dealers</h3>
@@ -126,18 +126,19 @@ export async function sendDsrConfirmation(to: string, name: string, kind: string
     nominate: "nominee registration",
   };
   const label = labels[kind] ?? kind;
-  const due = slaDueAt.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
+  const due = slaDueAt.toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" });
   return resend.emails.send({
     from: FROM,
     to,
+    reply_to: PRIMARY_INBOX,
     subject: `We received your ${label} request`,
     html: emailTemplate({
       title: "Request received",
       body: `<p>Hi ${name},</p>
-<p>We've received your <strong>${label}</strong> request under the Digital Personal Data Protection Act, 2023.</p>
-<p>We'll complete it by <strong>${due}</strong> (within 30 days, as the Act requires). You can track it anytime under
+<p>We've received your <strong>${label}</strong> request.</p>
+<p>We'll complete it by <strong>${due}</strong> (within 30 days). You can track it anytime under
 <a href="${process.env.NEXT_PUBLIC_APP_URL}/settings/privacy" style="color:#C9961E">Privacy &amp; Your Data</a>.</p>
-<p>Questions? Reply here or email <a href="mailto:dpo@dealervoice.io" style="color:#C9961E">dpo@dealervoice.io</a>.</p>`,
+<p>Questions? Reply here or email <a href="mailto:${PRIMARY_INBOX}" style="color:#C9961E">${PRIMARY_INBOX}</a>.</p>`,
     }),
   });
 }
@@ -146,10 +147,11 @@ export async function sendAdminNotification(
   subject: string,
   htmlBody: string
 ) {
-  const to = process.env.ADMIN_NOTIFICATION_EMAIL || EMAILS.dealers;
+  const to = process.env.ADMIN_NOTIFICATION_EMAIL || PRIMARY_INBOX;
   return resend.emails.send({
     from: FROM,
     to,
+    reply_to: PRIMARY_INBOX,
     subject,
     html: emailTemplate({ title: subject, body: htmlBody }),
   });

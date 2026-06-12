@@ -5,15 +5,24 @@ import { Users, Store, MessageSquare, Flag, DollarSign, TrendingUp } from "lucid
 export const dynamic = "force-dynamic";
 
 async function getAdminStats() {
-  const [users, dealers, reviews, pendingReports, pendingClaims, revenue] = await Promise.all([
+  const [users, dealers, reviews, pendingReports, pendingClaims, revenue, drip] = await Promise.all([
     prisma.user.count({ where: { deletedAt: null } }),
     prisma.dealership.count({ where: { deletedAt: null } }),
     prisma.review.count({ where: { status: "PUBLISHED", deletedAt: null } }),
     prisma.report.count({ where: { status: "PENDING" } }),
     prisma.dealerClaim.count({ where: { status: "PENDING" } }),
     prisma.invoice.aggregate({ _sum: { amount: true }, where: { status: "paid" } }),
+    import("@/lib/outreach/discover-emails").then((m) => m.getOutreachDripStats()),
   ]);
-  return { users, dealers, reviews, pendingReports, pendingClaims, revenue: (revenue._sum.amount ?? 0) / 100 };
+  return {
+    users,
+    dealers,
+    reviews,
+    pendingReports,
+    pendingClaims,
+    revenue: (revenue._sum.amount ?? 0) / 100,
+    drip,
+  };
 }
 
 async function getRecentActivity() {
@@ -39,7 +48,15 @@ async function getRecentActivity() {
 }
 
 export default async function AdminOverviewPage() {
-  let stats: Awaited<ReturnType<typeof getAdminStats>> = { users: 0, dealers: 0, reviews: 0, pendingReports: 0, pendingClaims: 0, revenue: 0 };
+  let stats: Awaited<ReturnType<typeof getAdminStats>> = {
+    users: 0,
+    dealers: 0,
+    reviews: 0,
+    pendingReports: 0,
+    pendingClaims: 0,
+    revenue: 0,
+    drip: { withEmail: 0, dripActive: 0, dripComplete: 0, notStarted: 0, illinoisWithEmail: 0 },
+  };
   let activity: Awaited<ReturnType<typeof getRecentActivity>> = { recentReviews: [], recentUsers: [], recentClaims: [] };
 
   try {
@@ -78,6 +95,20 @@ export default async function AdminOverviewPage() {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm mb-8">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <h2 className="font-semibold text-gray-900">Outreach drip (US · Chicago focus)</h2>
+          <a href="/dashboard/admin/outreach" className="text-sm text-gold-700 hover:underline">Open queue →</a>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
+          <div><p className="text-2xl font-bold">{stats.drip.illinoisWithEmail}</p><p className="text-xs text-gray-500">IL w/ email</p></div>
+          <div><p className="text-2xl font-bold">{stats.drip.notStarted}</p><p className="text-xs text-gray-500">Ready for drip</p></div>
+          <div><p className="text-2xl font-bold">{stats.drip.dripActive}</p><p className="text-xs text-gray-500">Active drips</p></div>
+          <div><p className="text-2xl font-bold">{stats.drip.dripComplete}</p><p className="text-xs text-gray-500">Drip complete</p></div>
+          <div><p className="text-2xl font-bold">{stats.drip.withEmail}</p><p className="text-xs text-gray-500">US w/ email</p></div>
+        </div>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">

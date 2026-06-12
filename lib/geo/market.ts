@@ -1,6 +1,6 @@
 /** Resolve visitor market for ads, content, and income attribution. */
 
-const MARKET_PRIORITY = ["IN", "US", "GB", "AU", "CA", "DE", "AE"] as const;
+const MARKET_PRIORITY = ["US", "CA", "GB", "AU", "DE", "AE"] as const;
 export type MarketCode = (typeof MARKET_PRIORITY)[number] | string;
 
 export function normalizeCountryCode(code: string | null | undefined): string | null {

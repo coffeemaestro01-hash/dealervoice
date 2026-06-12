@@ -49,7 +49,7 @@ export async function TestimonialsSection() {
             What car buyers are saying
           </h2>
           <p className="text-gray-600 mt-2">
-            Real experiences from people researching and buying from dealerships in India.
+            Real experiences from people researching and buying from dealerships nationwide.
           </p>
         </div>
 
@@ -81,7 +81,7 @@ export async function TestimonialsSection() {
         ) : (
           <div className="text-center max-w-md mx-auto rounded-2xl border border-dashed border-gray-200 bg-white p-8">
             <p className="text-gray-600 text-sm">
-              Be among the first to share your dealership experience. Your review helps other buyers across India.
+              Be among the first to share your dealership experience. Your review helps other buyers make confident decisions.
             </p>
             <Link
               href="/write-review"

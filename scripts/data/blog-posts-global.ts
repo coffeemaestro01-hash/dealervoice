@@ -39,17 +39,17 @@ export const GLOBAL_BLOG_POSTS: BlogPostSeed[] = [
   {
     slug: "dealervoice-global-launch-brief",
     title: "DealerVoice Goes Worldwide: Reviews, Inventory, and Dealer Trust",
-    excerpt: "We're live globally — dealership directory, structured reviews, and inventory in every market. India led; the world follows.",
+    excerpt: "We're live globally — dealership directory, structured reviews, and inventory. Built in Chicago, serving buyers across the United States and worldwide.",
     category: "Press",
     tags: ["global", "launch", "press"],
     daysAgo: 1,
     content: `<p><em>Global launch brief · June 2026</em></p>
 <h2>One platform, every market</h2>
-<p>DealerVoice is now positioned as a <strong>worldwide</strong> automotive dealership review and inventory platform. India remains our deepest directory; US, UK, Australia, Canada, Germany, UAE, and more are browseable today.</p>
+<p>DealerVoice is a <strong>worldwide</strong> automotive dealership review and inventory platform, headquartered in Chicago, Illinois. Our primary market is the United States; UK, Australia, Canada, Germany, UAE, and more are browseable today.</p>
 <h2>What buyers get</h2>
 <ul><li>Dealership search by country and city</li><li>Structured reviews (sales vs service)</li><li>Dealer inventory listings (growing)</li><li>Published reputation methodology</li></ul>
 <h2>What dealers get</h2>
-<ul><li>Free profile claim</li><li>Pro: inventory link, analytics, no competitor ads — billed via Cashfree (INR)</li><li>Public review responses</li></ul>
+<ul><li>Free profile claim</li><li>Pro: inventory link, analytics, no competitor ads — billed via Stripe (USD)</li><li>Public review responses</li></ul>
 <h2>Research</h2>
 <p><a href="/blog/ai-automotive-dealership-review-platform-research">AI + automotive trust research</a></p>`,
   },

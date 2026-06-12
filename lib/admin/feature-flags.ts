@@ -11,6 +11,15 @@ const DEFAULTS: Record<string, boolean | string | number> = {
 export async function getFeatureFlag<T extends boolean | string | number>(
   key: keyof typeof DEFAULTS
 ): Promise<T> {
+  if (key === "SLACK_ALERTS_ENABLED" && process.env.SLACK_WEBHOOK_URL) {
+    try {
+      const row = await prisma.platformSetting.findUnique({ where: { key } });
+      if (row?.value !== undefined) return row.value as T;
+    } catch {
+      /* table may not exist yet */
+    }
+    return true as T;
+  }
   try {
     const row = await prisma.platformSetting.findUnique({ where: { key } });
     if (row?.value !== undefined) return row.value as T;

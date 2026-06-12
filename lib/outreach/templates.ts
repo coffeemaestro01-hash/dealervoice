@@ -1,7 +1,7 @@
 import { APP_URL, EMAILS } from "@/lib/constants/emails";
 import { WHATSAPP_BUSINESS } from "@/lib/constants/social";
 
-export type OutreachMarket = "US" | "IN";
+export type OutreachMarket = "US";
 
 export interface DealerOutreachContext {
   name: string;
@@ -13,14 +13,12 @@ export interface DealerOutreachContext {
   market?: OutreachMarket;
 }
 
-function marketOf(ctx: DealerOutreachContext): OutreachMarket {
-  return ctx.market ?? "US";
+function marketOf(_ctx: DealerOutreachContext): OutreachMarket {
+  return "US";
 }
 
-function platformLabel(market: OutreachMarket): string {
-  return market === "IN"
-    ? "India's dealership review platform"
-    : "a car dealership review platform built in Chicago, trusted by buyers nationwide";
+function platformLabel(_market: OutreachMarket): string {
+  return "a car dealership review platform built in Chicago, trusted by buyers nationwide";
 }
 
 export function claimUrl(slug: string) {
@@ -82,16 +80,12 @@ ${EMAILS.dealers}`,
 }
 
 export function buildWhatsAppClaim(ctx: DealerOutreachContext) {
-  const market = marketOf(ctx);
-  const region = market === "IN" ? "India" : "the U.S.";
-  return `Hi, this is DealerVoice. ${ctx.name} is listed on our ${region} dealership review platform. Claim your free profile here: ${claimUrl(ctx.slug)} — respond to reviews & share a review link with customers. Questions: ${EMAILS.dealers} or WhatsApp ${WHATSAPP_BUSINESS.display}`;
+  return `Hi, this is DealerVoice. ${ctx.name} is listed on our U.S. dealership review platform. Claim your free profile here: ${claimUrl(ctx.slug)} — respond to reviews & share a review link with customers. Questions: ${EMAILS.dealers} or WhatsApp ${WHATSAPP_BUSINESS.display}`;
 }
 
 export function buildPhoneScript(ctx: DealerOutreachContext) {
-  const market = marketOf(ctx);
-  const region = market === "IN" ? "across India" : "across the United States";
   return [
-    `Opening: "Hi, I'm calling from DealerVoice — we list car dealerships ${region} with verified buyer reviews."`,
+    `Opening: "Hi, I'm calling from DealerVoice — we list car dealerships across the United States with verified buyer reviews."`,
     `Hook: "${ctx.name} is already on our site at ${profileUrl(ctx.slug)}"`,
     `Ask: "Are you the owner or manager? We offer a free profile claim so you can respond to reviews."`,
     `Close: "I can text you the claim link, or visit ${claimUrl(ctx.slug)}"`,
@@ -100,14 +94,10 @@ export function buildPhoneScript(ctx: DealerOutreachContext) {
   ].join("\n\n");
 }
 
-export function whatsappHref(phone: string, message: string, market: OutreachMarket = "US") {
+export function whatsappHref(phone: string, message: string, _market: OutreachMarket = "US") {
   const digits = phone.replace(/\D/g, "");
-  let normalized = digits;
-  if (market === "IN") {
-    normalized = digits.startsWith("91") ? digits : `91${digits}`;
-  } else if (market === "US") {
-    normalized = digits.startsWith("1") && digits.length === 11 ? digits : `1${digits.replace(/^1/, "")}`;
-  }
+  const normalized =
+    digits.startsWith("1") && digits.length === 11 ? digits : `1${digits.replace(/^1/, "")}`;
   return `https://wa.me/${normalized}?text=${encodeURIComponent(message)}`;
 }
 

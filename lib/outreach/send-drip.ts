@@ -1,5 +1,5 @@
 import { Resend } from "resend";
-import { EMAILS } from "@/lib/constants/emails";
+import { EMAILS, PRIMARY_INBOX } from "@/lib/constants/emails";
 import {
   buildDripEmail,
   type DealerOutreachContext,
@@ -39,7 +39,7 @@ export async function sendDripEmail(
   return getResend().emails.send({
     from: FROM,
     to: email,
-    reply_to: EMAILS.dealers,
+    reply_to: PRIMARY_INBOX,
     subject,
     text: body,
     html: `<div style="font-family:Inter,sans-serif;line-height:1.6;color:#111;max-width:560px">${bodyToHtml(body)}</div>`,
@@ -59,8 +59,6 @@ export function dealerOutreachContext(
   },
   market?: OutreachMarket
 ): DealerOutreachContext {
-  const resolvedMarket =
-    market ?? (dealer.country?.code === "IN" ? "IN" : "US");
   return {
     name: dealer.name,
     slug: dealer.slug,
@@ -68,7 +66,7 @@ export function dealerOutreachContext(
     stateName: dealer.stateName,
     phone: dealer.phone,
     website: dealer.website,
-    market: resolvedMarket,
+    market: market ?? "US",
   };
 }
 

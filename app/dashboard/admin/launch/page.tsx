@@ -25,7 +25,7 @@ export default async function AdminLaunchPage() {
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Global launch tracker</h1>
         <p className="text-sm text-gray-500 mt-1">
-          Five-phase worldwide rollout — India proved the model; all markets share one product.
+          Five-phase worldwide rollout — Chicago and Illinois first; U.S. expansion, then global markets.
         </p>
         <Link href="/dashboard/admin/income" className="text-sm text-gold-700 hover:underline mt-2 inline-block">
           View platform income →

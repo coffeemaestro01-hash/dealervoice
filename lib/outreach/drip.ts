@@ -145,7 +145,7 @@ export async function processDueOutreachDrips(limit = 50) {
 }
 
 /** Auto-enroll US unclaimed dealers with email who haven't started a drip yet */
-export async function autoStartOutreachDrips(limit = 20, countryCode = "US") {
+export async function autoStartOutreachDrips(limit = 20, countryCode = "US", stateName?: string) {
   const country = await prisma.country.findUnique({
     where: { code: countryCode },
     select: { id: true },
@@ -162,6 +162,7 @@ export async function autoStartOutreachDrips(limit = 20, countryCode = "US") {
       outreachStatus: { not: "skipped" },
       email: { not: null },
       NOT: { email: "" },
+      ...(stateName ? { stateName: { contains: stateName, mode: "insensitive" as const } } : {}),
     },
     take: limit,
     orderBy: { createdAt: "asc" },

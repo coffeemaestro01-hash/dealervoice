@@ -24,6 +24,7 @@ const PUBLIC_PATHS = [
   "/careers",
   "/advertise",
   "/api-docs",
+  "/chicago",
   "/claim",
   "/unsubscribe",
   "/trust",
@@ -41,6 +42,12 @@ const ADMIN_PATHS = ["/dashboard/admin"];
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+
+  // Illinois / U.S. positioning — redirect legacy India marketing routes
+  if (pathname === "/dealers/in" || pathname.startsWith("/dealers/in/")) {
+    const dest = pathname.includes("/inventory") ? "/dealers/us/inventory" : "/chicago";
+    return NextResponse.redirect(new URL(dest, req.url), 308);
+  }
 
   // SEO + static assets — never gate
   if (

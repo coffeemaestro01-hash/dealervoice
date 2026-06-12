@@ -415,6 +415,7 @@ model Dealership {
   incomeRecords    IncomeRecord[]
   savedByUsers     SavedDealer[]
   promotionCodes   PromotionCode[]
+  apiKey           DealerApiKey?
 
   @@index([slug])
   @@index([countryId])
@@ -730,6 +731,19 @@ model PromotionCode {
   @@index([code])
   @@index([active])
   @@index([dealershipId])
+}
+
+model DealerApiKey {
+  id           String     @id @default(cuid())
+  dealershipId String     @unique
+  keyHash      String
+  keyPrefix    String
+  createdAt    DateTime   @default(now())
+  lastUsedAt   DateTime?
+
+  dealership   Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+
+  @@index([keyHash])
 }
 
 // ─────────────────────────────────────────────
@@ -1088,6 +1102,9 @@ model Lead {
   type         LeadType   @default(QUOTE)
   status       LeadStatus @default(NEW)
   source       String?    // page/path the lead came from
+  feeCents     Int?
+  feeChargedAt DateTime?
+  feeExternalRef String?  @unique
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 

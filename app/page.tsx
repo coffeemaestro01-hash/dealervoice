@@ -10,7 +10,7 @@ import { HowItWorksSection } from "@/components/home/HowItWorksSection";
 import { TrustSection } from "@/components/home/TrustSection";
 import { AIAuthoritySection } from "@/components/home/AIAuthoritySection";
 import { GlobalCoverageSection } from "@/components/home/GlobalCoverageSection";
-import { IndiaCoverageSection } from "@/components/home/IndiaCoverageSection";
+import { ChicagoCoverageSection } from "@/components/home/ChicagoCoverageSection";
 import { TrendingLocalDealers } from "@/components/home/TrendingLocalDealers";
 import { FirstReviewerSection } from "@/components/home/FirstReviewerSection";
 import { RecentReviewsSection } from "@/components/home/RecentReviewsSection";
@@ -33,16 +33,14 @@ export const metadata: Metadata = {
 
 async function getHeroStats() {
   try {
-    const india = await prisma.country.findUnique({ where: { code: "IN" }, select: { id: true } });
-    const [dealers, countries, reviews, indiaDealers] = await Promise.all([
+    const [dealers, countries, reviews] = await Promise.all([
       prisma.dealership.count({ where: { deletedAt: null } }),
       prisma.country.count({ where: { dealerCount: { gt: 0 } } }),
       prisma.review.count({ where: { status: "PUBLISHED", deletedAt: null } }),
-      india ? prisma.dealership.count({ where: { countryId: india.id, deletedAt: null } }) : 0,
     ]);
-    return { dealers, countries, reviews, indiaDealers };
+    return { dealers, countries, reviews };
   } catch {
-    return { dealers: 0, countries: 0, reviews: 0, indiaDealers: 0 };
+    return { dealers: 0, countries: 0, reviews: 0 };
   }
 }
 
@@ -64,7 +62,7 @@ export default async function HomePage() {
           <GlobalCoverageSection />
         </Suspense>
         <Suspense>
-          <IndiaCoverageSection />
+          <ChicagoCoverageSection />
         </Suspense>
         <Suspense>
           <TrendingLocalDealers />

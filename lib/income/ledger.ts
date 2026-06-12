@@ -30,7 +30,7 @@ export async function recordIncome(input: RecordIncomeInput) {
       source: input.source,
       status: input.status ?? "ESTIMATED",
       amountMinor: input.amountMinor,
-      currency: input.currency ?? "INR",
+      currency: input.currency ?? "USD",
       countryCode: input.countryCode?.toUpperCase() ?? null,
       dealershipId: input.dealershipId ?? null,
       description: input.description,
@@ -117,7 +117,7 @@ export async function getIncomeDashboard(days = 30): Promise<IncomeDashboardStat
   };
 }
 
-export function formatIncomeMinor(amountMinor: number, currency = "INR"): string {
+export function formatIncomeMinor(amountMinor: number, currency = "USD"): string {
   const major = amountMinor / 100;
   if (currency === "INR") return `₹${major.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`;
   return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(major);

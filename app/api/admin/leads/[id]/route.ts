@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth/config";
 import prisma from "@/lib/db";
 import { isStaffRole } from "@/lib/admin/permissions";
 import { logAdminAction } from "@/lib/admin/audit";
+import { markLeadConverted } from "@/lib/leads/fees";
 import { z } from "zod";
 
 const patchSchema = z.object({
@@ -19,6 +20,18 @@ export async function PATCH(req: NextRequest, props: { params: Promise<{ id: str
 
   const parsed = patchSchema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Invalid status" }, { status: 422 });
+
+  if (parsed.data.status === "CONVERTED") {
+    const result = await markLeadConverted(id, session.user.id);
+    await logAdminAction({
+      userId: session.user.id,
+      action: "lead.status_update",
+      resource: "Lead",
+      resourceId: id,
+      newValues: { status: parsed.data.status, billing: result.billing },
+    });
+    return NextResponse.json({ data: result.lead, billing: result.billing });
+  }
 
   const lead = await prisma.lead.update({
     where: { id },

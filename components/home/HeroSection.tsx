@@ -10,10 +10,10 @@ import { Input } from "@/components/ui/input";
 
 const POPULAR = ["Toyota", "Honda", "Ford", "Hyundai", "BMW"];
 const POPULAR_LOCATIONS = [
-  { label: "India", href: "/dealers/in" },
+  { label: "Chicago, IL", href: "/chicago" },
   { label: "United States", href: "/dealers/us" },
   { label: "United Kingdom", href: "/dealers/gb" },
-  { label: "UAE", href: "/dealers/ae" },
+  { label: "Canada", href: "/dealers/ca" },
   { label: "Australia", href: "/dealers/au" },
 ];
 
@@ -21,7 +21,7 @@ interface HeroStats {
   dealers: number;
   countries: number;
   reviews: number;
-  indiaDealers?: number;
+  indiaDealers?: number; // legacy prop — unused
 }
 
 function compact(n: number) {

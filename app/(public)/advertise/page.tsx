@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { Target, TrendingUp, Users, Mail } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { EMAILS } from "@/lib/constants/emails";
+import { Target, TrendingUp, Users } from "lucide-react";
+import { SponsorshipCheckoutButtons, AdvertiseCta } from "@/components/advertise/SponsorshipCheckout";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth/config";
+import prisma from "@/lib/db";
 
 export const metadata: Metadata = { title: "Advertise", description: "Reach in-market car buyers on DealerVoice." };
 
@@ -12,13 +13,23 @@ const REASONS = [
   { icon: TrendingUp, title: "Measurable results", body: "Transparent reporting on impressions, clicks, and profile visits." },
 ];
 
-export default function AdvertisePage() {
+export default async function AdvertisePage() {
+  const session = await getServerSession(authOptions);
+  let dealershipId: string | undefined;
+  if (session?.user?.id) {
+    const staff = await prisma.dealerStaff.findFirst({
+      where: { userId: session.user.id, isActive: true },
+      select: { dealershipId: true },
+    });
+    dealershipId = staff?.dealershipId;
+  }
+
   return (
     <div className="bg-white">
       <section className="border-b border-gray-100 bg-gray-50">
         <div className="container py-14 text-center max-w-2xl">
           <h1 className="text-4xl font-extrabold text-gray-900 mb-3">Advertise on <span className="text-gold">DealerVoice</span></h1>
-          <p className="text-lg text-gray-600">Put your dealership in front of car buyers at the exact moment they&apos;re choosing where to buy.</p>
+          <p className="text-lg text-gray-600">Featured placement billed automatically via Stripe — no manual invoicing.</p>
         </div>
       </section>
       <section className="py-14">
@@ -32,9 +43,9 @@ export default function AdvertisePage() {
               </div>
             ))}
           </div>
+          <SponsorshipCheckoutButtons dealershipId={dealershipId} />
           <div className="text-center">
-            <a href={`mailto:${EMAILS.advertise}`}><Button size="lg" className="bg-gold-gradient text-night-900 font-semibold border-0 hover:opacity-90"><Mail size={16} className="mr-2" /> Talk to our team</Button></a>
-            <p className="text-sm text-gray-500 mt-4">Or <Link href="/pricing" className="text-gold-700 hover:underline">see dealer plans</Link> for built-in promotion.</p>
+            <AdvertiseCta />
           </div>
         </div>
       </section>

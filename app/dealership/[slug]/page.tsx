@@ -159,7 +159,7 @@ export default async function DealershipPage({ params, searchParams }: Props) {
               <DealerInventorySection
                 dealershipId={dealer.id}
                 dealerName={dealer.name}
-                countryCode={dealer.country?.code ?? "IN"}
+                countryCode={dealer.country?.code ?? "US"}
                 inventoryUrl={dealer.inventoryUrl}
                 isPremium={isPremium}
               />

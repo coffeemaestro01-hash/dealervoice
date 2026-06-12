@@ -4,7 +4,7 @@ Track progress in **Admin → Launch tracker** and money in **Admin → Platform
 
 ## Payment: Stripe (USD)
 
-Dealer billing runs through **Stripe** (USD). Built in Chicago, available worldwide. DealerVoice is operated from Illinois, USA; company registration will be formalized as revenue scales.
+Dealer billing runs through **Stripe** (USD). Built in Chicago, available worldwide.
 
 **Webhook URL:** `https://dealervoice.io/api/webhooks/stripe`
 
@@ -12,32 +12,40 @@ Dealer billing runs through **Stripe** (USD). Built in Chicago, available worldw
 
 | Phase | Focus | Status | Where money shows |
 |-------|--------|--------|-------------------|
-| **1** | Geo affiliate ads, AdSense, outreach | Shipped | Income → AFFILIATE_CLICK, ADSENSE (manual) |
-| **2** | Global inventory MVP | Shipped | SEO traffic → affiliate; listing CTAs |
-| **3** | Stripe Pro/Enterprise | In progress | Income → SUBSCRIPTION on webhook |
-| **4** | Worldwide content (US/UK blogs, global homepage) | Shipped | Organic → ads + affiliates |
-| **5** | Sponsorship ledger, lead fees, payout imports | In progress | SPONSORSHIP, LEAD_FEE, AFFILIATE_PAYOUT |
+| **1** | Affiliates, outreach drip, /chicago | Shipped | AFFILIATE_CLICK |
+| **2** | Inventory + Enterprise API sync | Shipped | SEO + listing CTAs |
+| **3** | Stripe Pro/Enterprise + promos | Live | SUBSCRIPTION |
+| **4** | Lead fees + sponsorship checkout | Shipped | LEAD_FEE, SPONSORSHIP |
+| **5** | Chicago wedge — reviews + 5 Pro dealers | In progress | All streams |
 
-## Revenue streams (your checklist)
+## Automated ops (no manual work)
 
-1. **Affiliate** — Paste Admitad (IN) + US/UK program links in Admin → Ad revenue per country.
-2. **AdSense** — After approval, record monthly payout in Admin → Platform income.
-3. **Subscriptions** — Enable live Stripe keys; dealers pay on billing page (USD).
-4. **Sponsorship** — Sell city slots; record payment in Platform income.
-5. **Leads** — Quote form live; bill dealers when you enable lead fees (Phase 5).
-6. **Inventory** — Pro dealers add listings; drives search + insurance CTAs.
+| Cron | Schedule | What it does |
+|------|----------|--------------|
+| `/api/cron/outreach-drip` | Daily 10:00 UTC | Sends drip follow-ups; starts IL drips |
+| `/api/cron/discover-emails` | Tue 6:00 UTC | Scrapes dealer websites for emails (Illinois) |
+
+## Revenue streams
+
+1. **Subscriptions** — Pro $199/mo, Enterprise $499/mo (Stripe). Per-dealer promo codes via outreach drip.
+2. **Lead fees** — $49 when dealer marks quote **Converted** (Stripe invoice auto-charged).
+3. **Sponsorship** — `/advertise` → Stripe checkout ($299 city / $499 homepage, 30 days). Auto-activates sponsor flag.
+4. **Affiliate / AdSense** — Parked until external approvals.
 
 ## Commands
 
 ```bash
-npm run seed:global          # India + global ads + all blog posts
-node scripts/db-push-direct.mjs
+npm run db:migrate:monetization-v2
+npm run outreach:discover-emails -- --state Illinois --limit 50
+npm run resend:domain-setup
 ```
 
-## Your weekly ops
+## Slack alerts
 
-- [ ] Record AdSense / affiliate payouts in Platform income
-- [ ] Outreach 20 dealers (Admin → Outreach queue)
-- [x] Admitad adspace verified (meta tag on site)
-- [ ] Join Admitad programs (PolicyBazaar, Acko, BankBazaar) and paste program IDs in Admin → Ad revenue (param: `admitad`)
-- [ ] Get 5 dealers to upload inventory (Pro or manual seed)
+Set `SLACK_WEBHOOK_URL` in Vercel → Incoming Webhook from dealervoice.slack.com. Alerts auto-enable when URL is present.
+
+## Chicago wedge (Phase 5)
+
+- Landing: https://dealervoice.io/chicago
+- Goal: 5+ Pro dealers, 50+ real reviews in Illinois
+- WhatsApp Business: +1 (872) 347-0915

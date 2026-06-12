@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import { Copy, Phone, MessageCircle, Mail, Check, SkipForward, ExternalLink, Zap, Loader2 } from "lucide-react";
+import { Copy, Phone, MessageCircle, Mail, Check, SkipForward, ExternalLink, Zap, Loader2, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -52,24 +52,24 @@ export function AdminOutreachQueue() {
   const [state, setState] = useState("");
   const [status, setStatus] = useState("pending");
   const [hasWebsite, setHasWebsite] = useState(false);
-  const [country, setCountry] = useState<"US" | "IN">("US");
   const [mode, setMode] = useState<"phone" | "drip">("drip");
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [manualEmail, setManualEmail] = useState<Record<string, string>>({});
+  const [generatingPromo, setGeneratingPromo] = useState<string | null>(null);
   const [startingDrip, setStartingDrip] = useState<string | null>(null);
 
   const params = new URLSearchParams({
     page: String(page),
     limit: "50",
     status,
-    country,
+    country: "US",
     mode,
   });
   if (state) params.set("state", state);
   if (hasWebsite) params.set("hasWebsite", "1");
 
   const { data, isLoading } = useQuery({
-    queryKey: ["outreach-queue", page, state, status, hasWebsite, country, mode],
+    queryKey: ["outreach-queue", page, state, status, hasWebsite, mode],
     queryFn: () => fetchQueue(params),
   });
 
@@ -98,6 +98,25 @@ export function AdminOutreachQueue() {
     },
   });
 
+  async function generatePromo(id: string) {
+    setGeneratingPromo(id);
+    try {
+      const res = await fetch(`/api/admin/dealerships/${id}/promotion`, { method: "POST" });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? "Failed");
+      copy(json.promotion.code, "promo code");
+      toast({ title: "Dealer promo created", description: json.promotion.code });
+    } catch (err) {
+      toast({
+        title: "Promo failed",
+        description: err instanceof Error ? err.message : "Unknown error",
+        variant: "destructive",
+      });
+    } finally {
+      setGeneratingPromo(null);
+    }
+  }
+
   async function startDrip(id: string) {
     setStartingDrip(id);
     try {
@@ -122,24 +141,13 @@ export function AdminOutreachQueue() {
     toast({ title: `Copied ${label}` });
   }
 
-  const market: OutreachMarket = country;
+  const market: OutreachMarket = "US";
 
   if (isLoading) return <p className="text-sm text-gray-500">Loading contact queue…</p>;
 
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap gap-3 items-center">
-        <select
-          className="border rounded-md px-3 h-10 text-sm font-medium"
-          value={country}
-          onChange={(e) => {
-            setCountry(e.target.value as "US" | "IN");
-            setPage(1);
-          }}
-        >
-          <option value="US">United States</option>
-          <option value="IN">India</option>
-        </select>
         <select
           className="border rounded-md px-3 h-10 text-sm"
           value={mode}
@@ -283,6 +291,18 @@ export function AdminOutreachQueue() {
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-2">
+                  {mode === "drip" && d.email && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="gap-1"
+                      disabled={generatingPromo === d.id}
+                      onClick={() => generatePromo(d.id)}
+                    >
+                      {generatingPromo === d.id ? <Loader2 size={14} className="animate-spin" /> : <Tag size={14} />}
+                      Promo code
+                    </Button>
+                  )}
                   {mode === "drip" && d.email && d.outreachDripStep === 0 && (
                     <Button
                       size="sm"

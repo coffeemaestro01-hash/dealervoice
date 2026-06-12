@@ -29,7 +29,7 @@ export async function AutomotiveAdBanner({
   className,
   compact,
   slot = "homepage",
-  countryCode = "IN",
+  countryCode = "US",
 }: Props) {
   const { ad: resolved, placementId } = await getAdForSlot(slot, type, countryCode);
   const content: AutomotiveAd = { ...resolved, ...ad, type };

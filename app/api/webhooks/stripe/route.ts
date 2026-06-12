@@ -8,8 +8,10 @@ import {
 import { incrementPromotionRedemption } from "@/lib/promotions";
 import { maybeSendSubscriptionWelcomeEmail } from "@/lib/subscription/welcome-email";
 import { maybeSendAdminSubscriptionAlert } from "@/lib/subscription/admin-alert";
-import { planFeatures } from "@/lib/subscription";
+import { ensureDealerApiKey } from "@/lib/api/dealer-keys";
 import { recordIncome } from "@/lib/income/ledger";
+import { sponsorshipUntil } from "@/lib/sponsorship/checkout";
+import { planFeatures } from "@/lib/subscription";
 import prisma from "@/lib/db";
 import type { SubscriptionPlan, SubscriptionStatus } from "@prisma/client";
 import type Stripe from "stripe";
@@ -83,6 +85,9 @@ async function syncSubscription(
       where: { id: dealershipId },
       data: { isPremiumClaimed: true },
     });
+    if (plan === "ENTERPRISE") {
+      await ensureDealerApiKey(dealershipId).catch(() => {});
+    }
   }
 
   if (recordLedger && status === "ACTIVE") {
@@ -195,6 +200,33 @@ export async function POST(req: NextRequest) {
           const promoCode = session.metadata?.promotionCode;
           if (promoCode) {
             await incrementPromotionRedemption(promoCode).catch(() => {});
+          }
+        } else if (session.mode === "payment" && session.metadata?.type === "sponsorship") {
+          const dealershipId = session.metadata.dealershipId;
+          const days = Number(session.metadata.days ?? 30);
+          const sponsorLabel = session.metadata.sponsorLabel || null;
+          const tier = session.metadata.tier ?? "city_30";
+
+          if (dealershipId) {
+            await prisma.dealership.update({
+              where: { id: dealershipId },
+              data: {
+                isSponsored: true,
+                sponsorLabel,
+                sponsoredUntil: sponsorshipUntil(days),
+                ...(tier === "homepage_30" ? { homepagePinOrder: 1 } : {}),
+              },
+            });
+
+            await recordIncome({
+              source: "SPONSORSHIP",
+              status: "CONFIRMED",
+              amountMinor: session.amount_total ?? 0,
+              currency: (session.currency ?? "usd").toUpperCase(),
+              dealershipId,
+              description: `Sponsorship checkout — ${tier}`,
+              externalRef: session.id,
+            }).catch(() => {});
           }
         }
         break;

@@ -7,9 +7,9 @@ import { Input } from "@/components/ui/input";
 
 const COUNTRIES = [
   { code: "", label: "All regions" },
-  { code: "IN", label: "India" },
   { code: "US", label: "United States" },
   { code: "GB", label: "United Kingdom" },
+  { code: "CA", label: "Canada" },
   { code: "AU", label: "Australia" },
   { code: "AE", label: "UAE" },
 ];

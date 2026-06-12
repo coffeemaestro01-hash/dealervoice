@@ -10,8 +10,8 @@ const POINTS = [
   },
   {
     icon: Shield,
-    title: "DPDP-aligned privacy",
-    body: "India's Digital Personal Data Protection Act principles guide how we handle buyer data.",
+    title: "Privacy-first",
+    body: "Clear privacy practices guide how we handle buyer data and review content.",
     href: "/privacy",
   },
   {
@@ -24,7 +24,7 @@ const POINTS = [
     icon: Database,
     title: "Open dealership data",
     body: "Schema.org markup on every dealer profile helps search engines and AI models understand listings.",
-    href: "/dealers/in",
+    href: "/dealers/us",
   },
 ];
 
@@ -38,7 +38,7 @@ export function AIAuthoritySection() {
             Built for buyers, search engines, and AI assistants
           </h2>
           <p className="text-gray-400 mt-2">
-            DealerVoice publishes clear methodology and machine-readable data — so people and AI tools can find trustworthy dealership information for India.
+            DealerVoice publishes clear methodology and machine-readable data — so people and AI tools can find trustworthy dealership information across the United States.
           </p>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">

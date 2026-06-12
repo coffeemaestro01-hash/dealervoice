@@ -7,6 +7,7 @@ import { COMPANY } from "@/lib/constants/company";
 const FOOTER_LINKS = {
   Platform: [
     { label: "Find Dealers", href: "/dealers" },
+    { label: "Chicago dealers", href: "/chicago" },
     { label: "Write a Review", href: "/write-review" },
     { label: "How It Works", href: "/about" },
     { label: "Methodology", href: "/methodology" },
