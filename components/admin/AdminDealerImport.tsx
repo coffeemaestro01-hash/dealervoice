@@ -40,7 +40,7 @@ export function AdminDealerImport() {
       <div className="rounded-lg bg-gray-50 border border-gray-100 p-4 text-xs text-gray-600 font-mono mb-4">
         name,state,city,district,phone,website,email,address
         <br />
-        Joe's Auto Sales,Illinois,Chicago,Cook County,+1 (312) 555-0100,https://example.com,sales@example.com,Downtown
+        Joe&apos;s Auto Sales,Illinois,Chicago,Cook County,+1 (312) 555-0100,https://example.com,sales@example.com,Downtown
       </div>
       <label className="block">
         <input type="file" accept=".csv,text/csv" className="hidden" onChange={handleFile} disabled={loading} />
