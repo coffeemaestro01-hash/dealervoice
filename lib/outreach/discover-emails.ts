@@ -3,6 +3,16 @@ import { usStateWhere } from "@/lib/outreach/regions";
 
 const EMAIL_REGEX = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
 const SKIP_LOCAL = ["noreply", "no-reply", "donotreply", "privacy", "abuse", "postmaster"];
+const SKIP_EMAIL_FRAGMENTS = ["sentry.io", "wixpress.com", "cloudflare.com", "schema.org", "example.com"];
+
+function isUsableEmail(email: string) {
+  const e = email.toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/.test(e)) return false;
+  if (SKIP_LOCAL.some((s) => e.startsWith(s))) return false;
+  if (SKIP_EMAIL_FRAGMENTS.some((f) => e.includes(f))) return false;
+  if (/\.(png|jpg|jpeg|gif|webp|svg)$/.test(e)) return false;
+  return true;
+}
 
 function normalizeWebsite(url: string) {
   const trimmed = url.trim();
@@ -12,7 +22,7 @@ function normalizeWebsite(url: string) {
 function pickBestEmail(emails: string[]) {
   const scored = emails
     .map((e) => e.toLowerCase())
-    .filter((e) => !SKIP_LOCAL.some((s) => e.startsWith(s)))
+    .filter(isUsableEmail)
     .map((e) => ({
       e,
       score: (e.includes("sales") ? 3 : 0) + (e.includes("info") ? 2 : 0) + (e.includes("contact") ? 2 : 0),

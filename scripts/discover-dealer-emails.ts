@@ -11,15 +11,25 @@ loadProjectEnv();
 const prisma = new PrismaClient();
 
 const EMAIL_REGEX = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
-const SKIP_DOMAINS = ["example.com", "sentry.io", "wixpress.com", "cloudflare.com", "schema.org"];
+const SKIP_DOMAINS = ["example.com", "sentry.io", "ingest.sentry.io", "wixpress.com", "cloudflare.com", "schema.org"];
 const SKIP_LOCAL = ["noreply", "no-reply", "donotreply", "privacy", "abuse", "postmaster"];
+
+function isUsableEmail(email: string) {
+  const e = email.toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/.test(e)) return false;
+  if (SKIP_LOCAL.some((s) => e.startsWith(s))) return false;
+  if (SKIP_DOMAINS.some((d) => e.endsWith(`@${d}`) || e.includes(d))) return false;
+  if (/\.(png|jpg|jpeg|gif|webp|svg)$/.test(e)) return false;
+  return true;
+}
 
 function parseArgs() {
   const args = process.argv.slice(2);
+  const allUs = args.includes("--all-us");
   const limit = Number(args[args.indexOf("--limit") + 1] ?? 40);
-  const state = args.includes("--state") ? args[args.indexOf("--state") + 1] : "Illinois";
+  const state = allUs ? undefined : args.includes("--state") ? args[args.indexOf("--state") + 1] : "Illinois";
   const dryRun = args.includes("--dry-run");
-  return { limit, state, dryRun };
+  return { limit, state, dryRun, allUs };
 }
 
 function normalizeWebsite(url: string) {
@@ -31,8 +41,7 @@ function normalizeWebsite(url: string) {
 function pickBestEmail(emails: string[]) {
   const scored = emails
     .map((e) => e.toLowerCase())
-    .filter((e) => !SKIP_LOCAL.some((s) => e.startsWith(s)))
-    .filter((e) => !SKIP_DOMAINS.some((d) => e.endsWith(`@${d}`)))
+    .filter(isUsableEmail)
     .map((e) => {
       let score = 0;
       if (e.includes("sales")) score += 3;
@@ -81,7 +90,7 @@ async function discoverForWebsite(website: string) {
 }
 
 async function main() {
-  const { limit, state, dryRun } = parseArgs();
+  const { limit, state, dryRun, allUs } = parseArgs();
 
   const us = await prisma.country.findUnique({ where: { code: "US" }, select: { id: true } });
   if (!us) throw new Error("US country not found");
@@ -101,7 +110,7 @@ async function main() {
     select: { id: true, name: true, website: true, cityName: true, stateName: true },
   });
 
-  console.log(`Scanning ${dealers.length} dealers in ${state}…${dryRun ? " (dry run)" : ""}\n`);
+  console.log(`Scanning ${dealers.length} dealers${allUs ? " (all US)" : ` in ${state}`}…${dryRun ? " (dry run)" : ""}\n`);
 
   let updated = 0;
   for (const d of dealers) {
