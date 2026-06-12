@@ -70,7 +70,7 @@ export async function GET(req: NextRequest) {
           source: "AFFILIATE_CLICK",
           status: "ESTIMATED",
           amountMinor: placement.cpcEstimatePaise,
-          currency: "INR",
+          currency: "USD",
           countryCode: placement.countryCode ?? countryCode,
           description: `Affiliate click: ${placement.headline.slice(0, 80)}`,
           externalRef: click.id,

@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
       isActive: item.isActive,
       stockId: item.stockId,
       countryCode,
-      currency: countryCode === "IN" ? "INR" : "USD",
+      currency: "USD",
       source: "CSV_IMPORT" as const,
     };
 

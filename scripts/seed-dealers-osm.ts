@@ -53,7 +53,6 @@ const COUNTRIES: CountrySpec[] = [
   { name: "Portugal", code: "PT", code3: "PRT", dialCode: "+351", currency: "EUR", locale: "pt-PT", flagEmoji: "🇵🇹", region: "Europe", quota: 90 },
   { name: "Ireland", code: "IE", code3: "IRL", dialCode: "+353", currency: "EUR", locale: "en-IE", flagEmoji: "🇮🇪", region: "Europe", quota: 70 },
   // Asia
-  { name: "India", code: "IN", code3: "IND", dialCode: "+91", currency: "INR", locale: "en-IN", flagEmoji: "🇮🇳", region: "Asia", quota: 0 },
   { name: "Japan", code: "JP", code3: "JPN", dialCode: "+81", currency: "JPY", locale: "ja-JP", flagEmoji: "🇯🇵", region: "Asia", quota: 350 },
   { name: "South Korea", code: "KR", code3: "KOR", dialCode: "+82", currency: "KRW", locale: "ko-KR", flagEmoji: "🇰🇷", region: "Asia", quota: 200 },
   { name: "Indonesia", code: "ID", code3: "IDN", dialCode: "+62", currency: "IDR", locale: "id-ID", flagEmoji: "🇮🇩", region: "Asia", quota: 150 },
@@ -165,7 +164,7 @@ async function main() {
     });
 
     if (c.quota <= 0) {
-      console.log(`    ⏭ skipped (use seed-dealers-india-osm.ts for India)`);
+      console.log(`    ⏭ skipped (quota 0)`);
       continue;
     }
 

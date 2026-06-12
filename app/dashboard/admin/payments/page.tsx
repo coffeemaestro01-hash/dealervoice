@@ -9,7 +9,7 @@ export default async function AdminPaymentsPage() {
 
   const [webhooks, invoices] = await Promise.all([
     prisma.webhookLog.findMany({
-      where: { provider: "cashfree" },
+      where: { provider: "stripe" },
       orderBy: { createdAt: "desc" },
       take: 40,
     }),
@@ -23,9 +23,10 @@ export default async function AdminPaymentsPage() {
   return (
     <div className="p-6 lg:p-8 space-y-8">
       <h1 className="text-2xl font-bold text-gray-900">Payments & webhooks</h1>
+      <p className="text-sm text-gray-500">Stripe is the sole payment provider for subscriptions and platform billing.</p>
 
       <section>
-        <h2 className="font-semibold mb-3">Cashfree webhook log</h2>
+        <h2 className="font-semibold mb-3">Stripe webhook log</h2>
         <div className="bg-white rounded-xl border divide-y max-h-96 overflow-y-auto">
           {webhooks.length === 0 ? (
             <p className="p-6 text-gray-500 text-sm">No webhook events yet.</p>
@@ -44,12 +45,21 @@ export default async function AdminPaymentsPage() {
       <section>
         <h2 className="font-semibold mb-3">Recent invoices</h2>
         <div className="bg-white rounded-xl border divide-y">
-          {invoices.map((inv) => (
-            <div key={inv.id} className="px-4 py-3 flex justify-between text-sm">
-              <span>{inv.subscription.dealership.name}</span>
-              <span>₹{(inv.amount / 100).toLocaleString()} · {inv.status}</span>
-            </div>
-          ))}
+          {invoices.length === 0 ? (
+            <p className="p-6 text-gray-500 text-sm">No invoices yet.</p>
+          ) : (
+            invoices.map((inv) => (
+              <div key={inv.id} className="px-4 py-3 flex justify-between text-sm">
+                <span>{inv.subscription.dealership.name}</span>
+                <span>
+                  {new Intl.NumberFormat("en-US", { style: "currency", currency: inv.currency || "USD" }).format(
+                    inv.amount / 100
+                  )}{" "}
+                  · {inv.status}
+                </span>
+              </div>
+            ))
+          )}
         </div>
       </section>
     </div>

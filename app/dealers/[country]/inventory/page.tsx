@@ -45,7 +45,7 @@ export default async function CountryInventoryPage({ params }: Props) {
       <section className="border-b border-gray-100 bg-gray-50">
         <div className="container py-10 max-w-4xl">
           <Link
-            href={code === "IN" ? "/dealers/in" : `/dealers/${country}`}
+            href={`/dealers/${country}`}
             className="inline-flex items-center gap-1 text-sm text-gold-700 hover:underline mb-4"
           >
             <ArrowLeft size={14} /> Back to {label} dealers

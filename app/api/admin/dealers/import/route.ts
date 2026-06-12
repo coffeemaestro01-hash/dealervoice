@@ -39,8 +39,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "No data rows found" }, { status: 422 });
   }
 
-  const country = await prisma.country.findUnique({ where: { code: "IN" } });
-  if (!country) return NextResponse.json({ error: "India country record missing" }, { status: 500 });
+  const country = await prisma.country.findUnique({ where: { code: "US" } });
+  if (!country) return NextResponse.json({ error: "United States country record missing" }, { status: 500 });
 
   let imported = 0;
   let skipped = 0;

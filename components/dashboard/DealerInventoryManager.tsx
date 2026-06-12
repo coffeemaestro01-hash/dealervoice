@@ -35,7 +35,9 @@ function formatPrice(priceMinor: number | null, priceLabel: string | null, curre
   if (priceLabel) return priceLabel;
   if (priceMinor == null) return "—";
   const major = priceMinor / 100;
-  return currency === "INR" ? `₹${major.toLocaleString("en-IN")}` : `${currency} ${major.toLocaleString()}`;
+  return currency === "USD"
+    ? `$${major.toLocaleString("en-US")}`
+    : `${currency} ${major.toLocaleString("en-US")}`;
 }
 
 export function DealerInventoryManager({ dealershipId, dealershipName, currency, listings }: Props) {
@@ -143,7 +145,7 @@ export function DealerInventoryManager({ dealershipId, dealershipName, currency,
               <Input type="number" value={form.year} onChange={set("year")} placeholder="2023" />
             </div>
             <div>
-              <Label>Price ({currency === "INR" ? "₹" : currency})</Label>
+              <Label>Price ({currency === "USD" ? "$" : currency})</Label>
               <Input type="number" step="0.01" value={form.priceInr} onChange={set("priceInr")} placeholder="1299000" />
             </div>
             <div>

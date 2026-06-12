@@ -1,5 +1,5 @@
 /**
- * Seed live India affiliate ad placements.
+ * Seed U.S. affiliate ad placements.
  * Usage: DATABASE_URL=... npx tsx scripts/seed-ad-placements.ts
  */
 
@@ -14,54 +14,41 @@ const PLACEMENTS = [
   {
     slot: "homepage_financing",
     adType: "Tier2_OEM_Offer",
-    headline: "Compare car loan rates in minutes",
-    subheadline: "Check eligibility across leading Indian banks — no dealership pressure.",
-    ctaLabel: "Check loan offers",
-    ctaHref: `https://www.bankbazaar.com/car-loan.html?${UTM}&utm_campaign=financing`,
-    badge: "Car Loan · India",
+    headline: "Compare auto loan rates in minutes",
+    subheadline: "Check eligibility from national lenders — no dealership pressure.",
+    ctaLabel: "Explore financing",
+    ctaHref: `https://www.bankrate.com/loans/auto-loans/?${UTM}&utm_campaign=financing`,
+    badge: "Auto financing · U.S.",
     accent: "from-gold-600 to-amber-500",
-    countryCode: "IN",
-    cpcEstimatePaise: 4500,
+    countryCode: "US",
+    cpcEstimatePaise: 450,
     priority: 10,
   },
   {
     slot: "homepage_insurance",
     adType: "Auto_Ecosystem_Partner",
-    headline: "Save on car insurance in India",
-    subheadline: "Compare comprehensive & third-party policies from top insurers — takes under 2 minutes.",
+    headline: "Save on car insurance",
+    subheadline: "Compare policies from top U.S. insurers — takes under 2 minutes.",
     ctaLabel: "Get a quote",
-    ctaHref: `https://www.policybazaar.com/motor-insurance/car-insurance/?${UTM}&utm_campaign=insurance`,
+    ctaHref: `https://www.progressive.com/auto/?${UTM}&utm_campaign=insurance`,
     badge: "Insurance Partner",
     accent: "from-indigo-700 to-blue-800",
-    countryCode: "IN",
-    cpcEstimatePaise: 8500,
+    countryCode: "US",
+    cpcEstimatePaise: 850,
     priority: 10,
   },
   {
     slot: "homepage_dealer",
     adType: "Sponsored_Local_Dealer",
     headline: "Promote your dealership on DealerVoice",
-    subheadline: "Reach in-market car buyers researching dealers in your city. Sponsored slots from ₹15k/month.",
+    subheadline: "Reach in-market buyers in Chicago and nationwide. Sponsored slots from $299/month.",
     ctaLabel: "Advertise with us",
     ctaHref: "/advertise",
     badge: "Sponsored listing",
     accent: "from-slate-800 to-slate-900",
-    countryCode: "IN",
+    countryCode: "US",
     cpcEstimatePaise: 0,
     priority: 10,
-  },
-  {
-    slot: "homepage_insurance",
-    adType: "Auto_Ecosystem_Partner",
-    headline: "Instant car insurance with Acko",
-    subheadline: "Buy or renew car insurance online — zero paperwork, instant policy.",
-    ctaLabel: "Insure now",
-    ctaHref: `https://www.acko.com/car-insurance/?${UTM}&utm_campaign=acko_insurance`,
-    badge: "Acko Insurance",
-    accent: "from-purple-700 to-violet-800",
-    countryCode: "IN",
-    cpcEstimatePaise: 6000,
-    priority: 5,
   },
 ];
 
@@ -83,5 +70,8 @@ async function main() {
 }
 
 main()
-  .catch((e) => { console.error(e); process.exit(1); })
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
   .finally(() => prisma.$disconnect());

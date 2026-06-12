@@ -16,7 +16,6 @@ export function resolveAdCountry(visitorCountry: string | null | undefined): str
 }
 
 export const MARKET_LABELS: Record<string, string> = {
-  IN: "India",
   US: "United States",
   GB: "United Kingdom",
   AU: "Australia",
@@ -26,24 +25,15 @@ export const MARKET_LABELS: Record<string, string> = {
 };
 
 export const GLOBAL_AFFILIATE_DOMAINS = [
-  "policybazaar.com",
-  "acko.com",
-  "bankbazaar.com",
   "progressive.com",
   "geico.com",
+  "bankrate.com",
   "cargurus.com",
   "edmunds.com",
   "autotrader.com",
   "confused.com",
   "gocompare.com",
   "carsales.com.au",
-  "cardekho.com",
-  "carwale.com",
-  "cars24.com",
-  "bajajfinserv.in",
-  "hdfcbank.com",
-  "icicibank.com",
-  "bankrate.com",
   "comparethemarket.com.au",
 ];
 

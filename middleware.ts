@@ -33,7 +33,6 @@ const PUBLIC_PATHS = [
   "/verify-email",
   "/write-review",
   "/settings",
-  "/test-payment",
   "/vehicles",
 ];
 
@@ -53,6 +52,7 @@ export async function middleware(req: NextRequest) {
   if (
     pathname === "/sitemap.xml" ||
     pathname === "/robots.txt" ||
+    pathname === "/llms.txt" ||
     pathname === "/ads.txt" ||
     pathname.startsWith("/_next") ||
     pathname.match(/\.(ico|png|jpg|jpeg|svg|webp|css|js|woff|woff2)$/)

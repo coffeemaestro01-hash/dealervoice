@@ -1,14 +1,11 @@
 /**
- * Seed full DealerVoice blog library (guides, research, dealer content).
+ * Seed full DealerVoice blog library (U.S.-focused guides and press).
  * Usage: npm run seed:blog
  */
 
 import { PrismaClient } from "@prisma/client";
 import { loadProjectEnv } from "./load-env";
 import { BLOG_POSTS } from "./data/blog-posts";
-import { GLOBAL_BLOG_POSTS } from "./data/blog-posts-global";
-
-const ALL_POSTS = [...BLOG_POSTS, ...GLOBAL_BLOG_POSTS];
 
 loadProjectEnv();
 const prisma = new PrismaClient();
@@ -21,9 +18,9 @@ function publishedAt(daysAgo = 0): Date {
 }
 
 async function main() {
-  console.log(`📝 Seeding ${ALL_POSTS.length} blog posts…`);
+  console.log(`📝 Seeding ${BLOG_POSTS.length} blog posts…`);
 
-  for (const p of ALL_POSTS) {
+  for (const p of BLOG_POSTS) {
     const authorName = p.authorName ?? "DealerVoice Editorial";
     const published = publishedAt(p.daysAgo ?? 0);
 

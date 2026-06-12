@@ -11,3 +11,15 @@ export function stateHref(countryCode: string, stateCode?: string | null, stateN
   if (!slug) return null;
   return `/dealers/${countryCode.toLowerCase()}/state/${slug}`;
 }
+
+export function districtSlug(name: string): string {
+  return name
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+export function districtHref(countryCode: string, stateSlugParam: string, districtName: string) {
+  return `/dealers/${countryCode.toLowerCase()}/state/${stateSlugParam}/district/${districtSlug(districtName)}`;
+}

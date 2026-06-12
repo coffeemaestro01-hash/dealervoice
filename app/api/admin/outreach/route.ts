@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/config";
 import prisma from "@/lib/db";
-import { INDIA_LAUNCH_STATES } from "@/lib/geo/india";
 import { US_PRIORITY_STATES } from "@/lib/geo/us";
 
 export async function GET(req: NextRequest) {
@@ -126,7 +125,7 @@ export async function GET(req: NextRequest) {
       dealers,
       country: country.code,
       mode,
-      launchStates: country.code === "IN" ? INDIA_LAUNCH_STATES : US_PRIORITY_STATES,
+      launchStates: US_PRIORITY_STATES,
       stateCounts: stateCounts
         .filter((s) => s.stateName)
         .map((s) => ({ state: s.stateName!, count: s._count.id })),

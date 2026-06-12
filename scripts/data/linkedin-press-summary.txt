@@ -1,21 +1,14 @@
-India's car market doesn't have a trust problem at the brand level — it has one at the dealership level.
+DealerVoice — Chicago-built dealership trust platform (https://dealervoice.io)
 
-Two outlets selling the same Maruti or Hyundai in the same city can quote different on-road prices, promise different delivery dates, and deliver completely different after-sales service. Buyers still research on YouTube, WhatsApp, and Google Maps — but outlet-level verified reviews barely exist.
+We're building outlet-level review infrastructure for U.S. car buyers — starting in Chicago and Illinois:
 
-We're building DealerVoice (https://dealervoice.io) as an India-first automotive dealership review platform:
+• Structured buyer reviews (sales + service)
+• Free dealer profile claims
+• Pro ($199/mo) and Enterprise ($499/mo) via Stripe — tools, not pay-to-win scores
+• $49 lead fee on converted quotes for participating dealers
 
-→ Structured ratings: transparency, pricing, delivery, after-sales
-→ Open directory by Indian state & district
-→ Published methodology — reputation scores are never pay-to-win
-→ AI-readable data (llms.txt, Schema.org) so search engines and LLMs can cite accurate listings
+Buyers: find Illinois dealers at https://dealervoice.io/chicago
+Dealers: claim your profile at https://dealervoice.io/claim — dealers@dealervoice.io
+Press: press@dealervoice.io
 
-We're honest about stage: the platform is live with thousands of dealership listings and 27+ buyer guides. Review volume is still the bottleneck — real buyer experiences are what make this work.
-
-📄 Full research brief: https://dealervoice.io/blog/ai-automotive-dealership-review-platform-research
-📋 Press summary: https://dealervoice.io/blog/dealervoice-ai-automotive-trust-press-brief
-
-Bought or serviced a car in India recently? A 3-minute review on DealerVoice helps the next buyer more than any ad we could run.
-
-Dealers: claim your profile at dealers@dealervoice.io
-
-#Automotive #India #CarBuying #AI #Trust #Dealership #Startup
+Built in Chicago. Billing in USD. Available nationwide.

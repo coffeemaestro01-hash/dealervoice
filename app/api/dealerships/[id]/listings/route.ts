@@ -56,7 +56,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
     data: {
       dealershipId: id,
       countryCode: dealer.country.code,
-      currency: parsed.data.currency ?? dealer.country.currency ?? "INR",
+      currency: parsed.data.currency ?? dealer.country.currency ?? "USD",
       ...parsed.data,
     },
   });

@@ -4,7 +4,7 @@ import Link from "next/link";
 import prisma from "@/lib/db";
 import { DealerCard } from "@/components/dealership/DealerCard";
 import { stateSlug } from "@/lib/geo";
-import { districtHref, districtSlug } from "@/lib/geo/india";
+import { districtHref, districtSlug } from "@/lib/geo";
 
 interface Props {
   params: Promise<{ country: string; state: string }>;

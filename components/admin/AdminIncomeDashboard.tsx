@@ -49,7 +49,7 @@ export function AdminIncomeDashboard({ initial }: { initial: IncomeDashboardStat
       body: JSON.stringify({
         source: form.source,
         amountMinor,
-        currency: "INR",
+        currency: "USD",
         status: "CONFIRMED",
         description: form.description,
         externalRef: form.externalRef || undefined,
@@ -122,14 +122,14 @@ export function AdminIncomeDashboard({ initial }: { initial: IncomeDashboardStat
             </select>
           </label>
           <label className="text-sm">
-            <span className="text-gray-600">Amount (INR)</span>
+            <span className="text-gray-600">Amount (USD)</span>
             <input
               type="number"
               step="0.01"
               className="mt-1 w-full border rounded-lg h-10 px-3"
               value={form.amountMajor}
               onChange={(e) => setForm((f) => ({ ...f, amountMajor: e.target.value }))}
-              placeholder="e.g. 4500"
+              placeholder="e.g. 199"
             />
           </label>
           <label className="text-sm sm:col-span-2">
@@ -157,7 +157,7 @@ export function AdminIncomeDashboard({ initial }: { initial: IncomeDashboardStat
               className="mt-1 w-full border rounded-lg h-10 px-3"
               value={form.countryCode}
               onChange={(e) => setForm((f) => ({ ...f, countryCode: e.target.value.toUpperCase() }))}
-              placeholder="IN"
+              placeholder="US"
               maxLength={2}
             />
           </label>

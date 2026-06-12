@@ -63,7 +63,7 @@ export default async function DealerInventoryPage() {
       <DealerInventoryManager
         dealershipId={dealer.id}
         dealershipName={dealer.name}
-        currency={dealer.country.currency ?? "INR"}
+        currency={dealer.country.currency ?? "USD"}
         listings={dealer.vehicleListings}
       />
     </div>

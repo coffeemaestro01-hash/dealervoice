@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import prisma from "@/lib/db";
 import { DealerCard } from "@/components/dealership/DealerCard";
-import { findIndiaState, districtSlug } from "@/lib/geo/india";
+import { districtSlug } from "@/lib/geo";
 import { stateSlug, stateHref } from "@/lib/geo";
 
 interface Props {
@@ -17,15 +17,12 @@ async function getDistrictData(countryCode: string, stateParam: string, district
   });
   if (!country) return null;
 
-  const indiaState = countryCode.toUpperCase() === "IN" ? findIndiaState(stateParam) : undefined;
-  const stateFilter = indiaState
-    ? { stateName: { equals: indiaState.name, mode: "insensitive" as const } }
-    : {
-        OR: [
-          { stateCode: { equals: stateParam, mode: "insensitive" as const } },
-          { stateName: { contains: stateParam.replace(/-/g, " "), mode: "insensitive" as const } },
-        ],
-      };
+  const stateFilter = {
+    OR: [
+      { stateCode: { equals: stateParam, mode: "insensitive" as const } },
+      { stateName: { contains: stateParam.replace(/-/g, " "), mode: "insensitive" as const } },
+    ],
+  };
 
   const sample = await prisma.dealership.findFirst({
     where: { countryId: country.id, deletedAt: null, ...stateFilter, districtName: { not: null } },

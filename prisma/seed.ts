@@ -15,7 +15,6 @@ async function main() {
     { name: "Australia", code: "AU", code3: "AUS", dialCode: "+61", currency: "AUD", locale: "en-AU", flagEmoji: "🇦🇺" },
     { name: "Canada", code: "CA", code3: "CAN", dialCode: "+1", currency: "CAD", locale: "en-CA", flagEmoji: "🇨🇦" },
     { name: "Japan", code: "JP", code3: "JPN", dialCode: "+81", currency: "JPY", locale: "ja-JP", flagEmoji: "🇯🇵" },
-    { name: "India", code: "IN", code3: "IND", dialCode: "+91", currency: "INR", locale: "en-IN", flagEmoji: "🇮🇳" },
     { name: "United Arab Emirates", code: "AE", code3: "ARE", dialCode: "+971", currency: "AED", locale: "ar-AE", flagEmoji: "🇦🇪" },
     { name: "Brazil", code: "BR", code3: "BRA", dialCode: "+55", currency: "BRL", locale: "pt-BR", flagEmoji: "🇧🇷" },
   ];

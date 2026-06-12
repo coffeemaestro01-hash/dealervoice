@@ -14,17 +14,17 @@ interface Props {
 
 function formatCurrency(amount: number, currency: string) {
   try {
-    return new Intl.NumberFormat("en-IN", {
+    return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency,
       maximumFractionDigits: 0,
     }).format(amount);
   } catch {
-    return `${currency} ${amount.toLocaleString("en-IN")}`;
+    return `${currency} ${amount.toLocaleString("en-US")}`;
   }
 }
 
-export function FinanceCalculator({ defaultPrice = 0, currency = "INR" }: Props) {
+export function FinanceCalculator({ defaultPrice = 0, currency = "USD" }: Props) {
   const defaultPriceMajor = Math.round(defaultPrice / 100);
 
   const [principal, setPrincipal] = useState(defaultPriceMajor || "");

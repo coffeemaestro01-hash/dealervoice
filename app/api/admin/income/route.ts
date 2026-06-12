@@ -17,7 +17,7 @@ const createSchema = z.object({
     "OTHER",
   ]),
   amountMinor: z.number().int().positive(),
-  currency: z.string().length(3).default("INR"),
+  currency: z.string().length(3).default("USD"),
   status: z.enum(["ESTIMATED", "CONFIRMED", "PAID", "VOID"]).default("CONFIRMED"),
   countryCode: z.string().length(2).optional(),
   dealershipId: z.string().cuid().optional(),
