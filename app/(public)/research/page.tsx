@@ -7,7 +7,7 @@ import { getResearchArticles } from "@/lib/research/queries";
 export const metadata: Metadata = {
   title: "Research — Dealership Trust, Reviews & Platform Insights",
   description:
-    "Editorial research on India's dealership trust infrastructure, premium dealer perspectives, CEO interviews, and why outlet-level reviews matter in 2026.",
+    "Editorial research on dealership trust, premium dealer perspectives, and why outlet-level reviews matter in 2026.",
 };
 
 export const dynamic = "force-dynamic";
@@ -27,7 +27,7 @@ export default async function ResearchPage() {
             Trust infrastructure for <span className="text-gold-400">automotive retail</span>
           </h1>
           <p className="text-lg text-gray-400 leading-relaxed">
-            Photo-rich editorial on dealership reputation in India and globally — CEO interviews,
+            Photo-rich editorial on dealership reputation worldwide — CEO interviews,
             premium dealer voices, and platform research you will not find in the blog.
           </p>
           {articles.length > 0 && (

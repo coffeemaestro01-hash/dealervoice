@@ -81,10 +81,16 @@ export default async function ClaimPage({ searchParams }: { searchParams: Promis
               {results.length > 0 ? `Results for “${q}”` : `No matches for “${q}”`}
             </h2>
             {results.length === 0 ? (
-              <p className="text-gray-600 text-sm">
-                We couldn&apos;t find that dealership. Try a different spelling, or{" "}
-                <a href="mailto:dealers@dealervoice.io" className="text-gold-700 hover:underline">contact us</a> to add it.
-              </p>
+              <div className="space-y-4">
+                <p className="text-gray-600 text-sm">
+                  We couldn&apos;t find that dealership. Try a different spelling, or list it yourself — it&apos;s free.
+                </p>
+                <Link href={`/register-dealership${q ? `?name=${encodeURIComponent(q)}` : ""}`}>
+                  <Button className="bg-gold-gradient text-night-900 font-semibold border-0">
+                    List your dealership
+                  </Button>
+                </Link>
+              </div>
             ) : (
               <div className="space-y-3">
                 {results.map((d) => (

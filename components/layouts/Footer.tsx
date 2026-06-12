@@ -14,6 +14,7 @@ const FOOTER_LINKS = {
   ],
   Business: [
     { label: "Claim Your Dealership", href: "/claim" },
+    { label: "List Your Dealership", href: "/register-dealership" },
     { label: "Dealer Dashboard", href: "/dashboard/dealer" },
     { label: "Advertise", href: "/advertise" },
     { label: "API Access", href: "/api-docs" },
@@ -31,7 +32,7 @@ const FOOTER_LINKS = {
     { label: "Cookie Policy", href: "/cookies" },
     { label: "Support & Grievances", href: "/grievance" },
     { label: "Cancellations & Refunds", href: "/shipping-refunds" },
-    { label: "BIS Compliance", href: "/bis-compliance" },
+    { label: "Review Standards", href: "/bis-compliance" },
     { label: "DMCA", href: "/dmca" },
   ],
 };

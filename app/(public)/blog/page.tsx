@@ -8,7 +8,7 @@ import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 export const metadata: Metadata = {
   title: "Blog — Car Buyer Guides, Dealer Insights & Research",
   description:
-    "India car buying guides, dealership trust research, AI and automotive review platform insights, and dealer reputation tips from DealerVoice.",
+    "Global car buying guides, dealership trust research, and dealer reputation tips from DealerVoice — built in Chicago, available worldwide.",
 };
 
 export const dynamic = "force-dynamic";
@@ -31,7 +31,7 @@ export default async function BlogPage() {
             The <span className="text-gold">DealerVoice</span> blog
           </h1>
           <p className="text-lg text-gray-600">
-            Buyer guides, dealer reputation tips, and research on AI-powered automotive trust — India-first.
+            Buyer guides, dealer reputation tips, and research on automotive trust — for dealerships and buyers worldwide.
           </p>
           {posts.length > 0 && (
             <p className="text-sm text-gray-500 mt-3">{posts.length} published articles</p>

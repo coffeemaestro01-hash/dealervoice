@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import prisma from "@/lib/db";
-import { PLAN_PRICES_INR, PLAN_PRICES_USD } from "@/lib/payment";
+import { PLAN_PRICES_USD } from "@/lib/payment";
 import { PricingPageView, type PricingPlan } from "@/components/pricing/PricingPageView";
 
 export const metadata: Metadata = {
@@ -20,7 +20,7 @@ function buildPlans(dealerId?: string): PricingPlan[] {
       name: "DealerVoice Free",
       tagline: "Claim & get discovered",
       intro: "Build visibility and establish a credible dealership presence. Perfect for getting started with reviews and profile management.",
-      priceInr: "₹0",
+      priceUsd: "Free",
       period: "",
       benefits: [
         "Claim and manage your dealership profile",
@@ -36,10 +36,9 @@ function buildPlans(dealerId?: string): PricingPlan[] {
       name: "DealerVoice Pro",
       tagline: "Remove ads & grow reputation",
       intro: "Access advanced features to enhance your profile, list inventory, and give buyers a competitor-free view of your dealership.",
-      priceInr: PLAN_PRICES_INR.PRO.monthlyDisplay,
       priceUsd: `$${PLAN_PRICES_USD.PRO.monthly}/month`,
       period: "/month",
-      annualNote: `${PLAN_PRICES_INR.PRO.annualDisplay}/year billed annually (save ~20%)`,
+      annualNote: `$${PLAN_PRICES_USD.PRO.annual}/year billed annually (save ~17%)`,
       benefits: [
         "Remove competitor ads on your profile",
         "Live inventory link on profile & city browse",
@@ -57,7 +56,7 @@ function buildPlans(dealerId?: string): PricingPlan[] {
       name: "DealerVoice Enterprise",
       tagline: "For dealer groups & chains",
       intro: "Maximize exposure across locations and integrate DealerVoice into your group operations with dedicated support.",
-      priceInr: "",
+      priceUsd: "Custom",
       period: "",
       customPrice: true,
       includesLabel: "Includes all Pro benefits",

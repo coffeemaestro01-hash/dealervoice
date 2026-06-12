@@ -189,9 +189,21 @@ export function DealerSearchPage({ searchParams: initialParams }: DealerSearchPa
 
         {/* Empty state */}
         {!isLoading && !isFetching && data?.data.length === 0 && (
-          <div className="text-center py-20">
+          <div className="text-center py-20 max-w-md mx-auto">
             <p className="text-gray-500 text-lg">No dealerships found</p>
             <p className="text-gray-400 text-sm mt-1">Try adjusting your search terms</p>
+            <div className="mt-6 space-y-3">
+              <Link
+                href={`/register-dealership${query ? `?name=${encodeURIComponent(query)}${location ? `&city=${encodeURIComponent(location)}` : ""}` : ""}`}
+              >
+                <Button className="bg-gold-gradient text-night-900 font-semibold border-0">
+                  List your dealership
+                </Button>
+              </Link>
+              <p className="text-xs text-gray-400">
+                Already listed? <Link href="/claim" className="text-gold-700 hover:underline">Claim your profile</Link>
+              </p>
+            </div>
           </div>
         )}
 

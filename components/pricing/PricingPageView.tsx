@@ -8,8 +8,7 @@ export interface PricingPlan {
   name: string;
   tagline: string;
   intro: string;
-  priceInr: string;
-  priceUsd?: string;
+  priceUsd: string;
   period: string;
   annualNote?: string;
   includesLabel?: string;
@@ -30,15 +29,15 @@ interface Props {
 const TESTIMONIALS = [
   {
     quote:
-      "Buyers compare us against three other Hyundai outlets in Mumbai. A claimed DealerVoice profile with no competitor ads keeps the conversation on our delivery and service — not someone else's banner.",
-    name: "Rajesh Mehta",
-    role: "General Manager, premium Mumbai dealership",
+      "Buyers compare us against three other Ford outlets in Chicago. A claimed DealerVoice profile with no competitor ads keeps the conversation on our delivery and service — not someone else's banner.",
+    name: "Mike Torres",
+    role: "General Manager, Chicago-area dealership",
   },
   {
     quote:
       "We list inventory on Pro and share the review link after every delivery. It is the simplest way to build outlet-level trust without running another ad campaign.",
-    name: "Priya Nair",
-    role: "Owner, multi-brand dealer group",
+    name: "Sarah Chen",
+    role: "Owner, multi-location dealer group",
   },
 ];
 
@@ -110,12 +109,9 @@ export function PricingPageView({ plans, dealerBanner, stats }: Props) {
                   ) : (
                     <>
                       <p className="text-4xl font-bold text-gray-900 tracking-tight">
-                        {plan.priceInr}
+                        {plan.priceUsd}
                         {plan.period && <span className="text-lg font-medium text-gray-500">{plan.period}</span>}
                       </p>
-                      {plan.priceUsd && (
-                        <p className="text-sm text-gray-400 mt-1">≈ {plan.priceUsd} reference</p>
-                      )}
                     </>
                   )}
                   {plan.annualNote && (

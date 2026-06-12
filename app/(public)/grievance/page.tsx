@@ -55,11 +55,12 @@ export default function GrievancePage() {
           </div>
 
           <div className="rounded-xl border border-gray-100 bg-gray-50 p-5 text-sm text-gray-600">
-            <h3 className="font-semibold text-gray-900 mb-2">Users in India</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">Illinois &amp; U.S. users</h3>
             <p>
-              Where applicable under India&apos;s IT Rules 2021 and DPDP Act 2023, grievances may also be addressed to the
-              contacts above. We comply with local consumer and data-protection requirements for users in jurisdictions
-              where we operate.
+              {COMPANY.name} is operated from {companyHqLine()}. Disputes may be governed by the laws of the State of
+              Illinois, United States, as described in our{" "}
+              <a href="/terms" className="text-gold-700 hover:underline">Terms of Service</a>. We comply with applicable
+              U.S. federal and state consumer-protection and privacy requirements.
             </p>
           </div>
 
