@@ -5,6 +5,7 @@
 
 import { PrismaClient } from "@prisma/client";
 import { loadProjectEnv } from "./load-env";
+import { usStateWhere } from "../lib/outreach/regions";
 
 loadProjectEnv();
 const prisma = new PrismaClient();
@@ -93,7 +94,7 @@ async function main() {
       OR: [{ email: null }, { email: "" }],
       website: { not: null },
       NOT: { website: "" },
-      ...(state ? { stateName: { contains: state, mode: "insensitive" } } : {}),
+      ...(state ? usStateWhere(state) : {}),
     },
     take: limit,
     orderBy: { cityName: "asc" },

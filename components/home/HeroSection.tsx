@@ -21,7 +21,6 @@ interface HeroStats {
   dealers: number;
   countries: number;
   reviews: number;
-  indiaDealers?: number; // legacy prop — unused
 }
 
 function compact(n: number) {

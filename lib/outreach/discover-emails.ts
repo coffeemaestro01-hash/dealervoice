@@ -1,4 +1,5 @@
 import prisma from "@/lib/db";
+import { usStateWhere } from "@/lib/outreach/regions";
 
 const EMAIL_REGEX = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
 const SKIP_LOCAL = ["noreply", "no-reply", "donotreply", "privacy", "abuse", "postmaster"];
@@ -60,9 +61,7 @@ export async function discoverDealerEmailsBatch(opts: { state?: string; limit?: 
       OR: [{ email: null }, { email: "" }],
       website: { not: null },
       NOT: { website: "" },
-      ...(opts.state
-        ? { stateName: { contains: opts.state, mode: "insensitive" as const } }
-        : {}),
+      ...(opts.state ? usStateWhere(opts.state) : {}),
     },
     take: opts.limit ?? 30,
     select: { id: true, name: true, website: true },
@@ -107,7 +106,7 @@ export async function getOutreachDripStats() {
     prisma.dealership.count({
       where: {
         ...base,
-        stateName: { contains: "Illinois", mode: "insensitive" },
+        ...usStateWhere("Illinois"),
         email: { not: null },
         NOT: { email: "" },
       },

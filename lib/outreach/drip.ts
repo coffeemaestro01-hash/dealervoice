@@ -1,5 +1,6 @@
 import prisma from "@/lib/db";
 import { createDealerPromotion } from "@/lib/promotions";
+import { usStateWhere } from "@/lib/outreach/regions";
 import {
   dealerOutreachContext,
   DRIP_STEP_DELAYS_DAYS,
@@ -162,7 +163,7 @@ export async function autoStartOutreachDrips(limit = 20, countryCode = "US", sta
       outreachStatus: { not: "skipped" },
       email: { not: null },
       NOT: { email: "" },
-      ...(stateName ? { stateName: { contains: stateName, mode: "insensitive" as const } } : {}),
+      ...(stateName ? usStateWhere(stateName) : {}),
     },
     take: limit,
     orderBy: { createdAt: "asc" },

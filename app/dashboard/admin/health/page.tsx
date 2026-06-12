@@ -42,7 +42,7 @@ export default async function AdminHealthPage() {
         <li>Resend: verify domain at resend.com/domains</li>
         <li>Supabase: storage bucket dealer-assets</li>
         <li>Stripe: webhooks logged in Payments</li>
-        <li>Crons: /api/cron/* (reputation, geo, digest)</li>
+        <li>Crons: reputation (03:00 UTC), geo (04:00), discover-emails (Tue 06:00), digest (Mon 08:00), outreach-drip (10:00)</li>
       </ul>
     </div>
   );
