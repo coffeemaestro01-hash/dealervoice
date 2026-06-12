@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Link from "next/link";
 import { Megaphone, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { AutomotiveAd } from "@/lib/ads/automotive";
@@ -59,10 +58,10 @@ export function AdBannerClient({ content, href, className, compact, placementId,
           >
             {content.subheadline}
           </p>
-          <Link
+          <a
             href={href}
-            target={href.startsWith("http") ? "_blank" : undefined}
-            rel={href.startsWith("http") ? "noopener sponsored" : undefined}
+            target="_blank"
+            rel="noopener sponsored noreferrer"
             className={cn(
               "inline-flex items-center gap-1.5 mt-4 font-semibold rounded-lg w-fit",
               "bg-white/15 hover:bg-white/25 transition-colors",
@@ -71,7 +70,7 @@ export function AdBannerClient({ content, href, className, compact, placementId,
           >
             {content.ctaLabel}
             <ArrowRight size={14} aria-hidden />
-          </Link>
+          </a>
         </div>
       </div>
     </aside>

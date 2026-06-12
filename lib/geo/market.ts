@@ -43,4 +43,13 @@ export const GLOBAL_AFFILIATE_DOMAINS = [
   "bajajfinserv.in",
   "hdfcbank.com",
   "icicibank.com",
+  "bankrate.com",
+  "comparethemarket.com.au",
+];
+
+/** Third-party affiliate tracking / redirect hosts (e.g. Admitad, partner networks). */
+export const AFFILIATE_TRACKER_DOMAINS = [
+  "zmgig.com",
+  "ad.admitad.com",
+  "admitad.com",
 ];
