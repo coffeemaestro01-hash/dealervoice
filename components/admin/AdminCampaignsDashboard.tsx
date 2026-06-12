@@ -165,8 +165,8 @@ export function AdminCampaignsDashboard() {
                         <p className="text-sm text-gray-500 truncate">{c.subject}</p>
                         <p className="text-xs text-gray-400 mt-1">
                           {c.sentAt
-                            ? new Date(c.sentAt).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })
-                            : `Created ${new Date(c.createdAt).toLocaleDateString("en-IN")}`}
+                            ? new Date(c.sentAt).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })
+                            : `Created ${new Date(c.createdAt).toLocaleDateString("en-US")}`}
                           {c.country ? ` · ${c.country.name}` : ""}
                           <span className="text-gray-300"> · #{c.id.slice(-6)}</span>
                         </p>

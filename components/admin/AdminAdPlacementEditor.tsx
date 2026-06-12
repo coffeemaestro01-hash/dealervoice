@@ -137,7 +137,7 @@ export function AdminAdPlacementEditor({ placements }: { placements: PlacementRo
                 />
               </div>
               <div>
-                <label className="text-xs text-gray-500">Est. CPC (₹)</label>
+                <label className="text-xs text-gray-500">Est. CPC (USD)</label>
                 <Input
                   type="number"
                   value={((val(p, "cpcEstimatePaise") as number) ?? 0) / 100}

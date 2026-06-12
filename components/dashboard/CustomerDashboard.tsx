@@ -104,7 +104,7 @@ function DealerLogo({ dealer }: { dealer: DealerMini }) {
 }
 
 function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+  return new Date(dateStr).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" });
 }
 
 export function CustomerDashboard({ user, reviews, leads, savedDealers }: Props) {

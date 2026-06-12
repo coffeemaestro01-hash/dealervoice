@@ -30,6 +30,7 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+.cursor/
 *.swp
 *.swo
 
@@ -55,6 +56,7 @@ node_modules/
 .next/
 .env*.local
 check_db.js
+test_db.js
 complete-schema.js
 test-platform.js
 *.log

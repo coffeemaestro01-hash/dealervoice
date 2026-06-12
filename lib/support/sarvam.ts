@@ -149,7 +149,7 @@ export async function transcribeAudio(
 
   const data = await res.json();
   const transcript: string = (data?.transcript ?? "").trim();
-  const languageCode: string = data?.language_code || "en-IN";
+  const languageCode: string = data?.language_code || "en-US";
   return { transcript, languageCode };
 }
 
@@ -159,7 +159,7 @@ export async function transcribeAudio(
  */
 export async function synthesizeSpeech(
   text: string,
-  languageCode = "en-IN"
+  languageCode = "en-US"
 ): Promise<string> {
   const apiKey = process.env.SARVAM_API_KEY;
   if (!apiKey) throw new Error("SARVAM_NOT_CONFIGURED");
@@ -172,7 +172,7 @@ export async function synthesizeSpeech(
     },
     body: JSON.stringify({
       text: text.slice(0, TTS_MAX_CHARS),
-      target_language_code: languageCode || "en-IN",
+      target_language_code: languageCode || "en-US",
       model: TTS_MODEL,
     }),
   });

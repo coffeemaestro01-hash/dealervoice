@@ -1,12 +1,11 @@
-# DealerVoice – Production Deployment Guide
+# DealerVoice — Production Deployment Guide
 
 ## Prerequisites
 
-- Docker & Docker Compose v2
 - Node.js 20+
-- PostgreSQL 16 (or use Docker)
-- A domain with DNS pointing to your server
-- SSL certificate (Let's Encrypt recommended)
+- PostgreSQL 16 (Neon, Supabase, or Vercel Postgres)
+- Domain with DNS pointing to Vercel (or Docker host)
+- Stripe account (USD billing)
 
 ---
 
@@ -17,157 +16,87 @@ cp .env.example .env.local
 # Fill in ALL required values — see comments in .env.example
 ```
 
-**Critical values to set:**
+**Critical values:**
+
 | Variable | Description |
 |---|---|
 | `DATABASE_URL` | PostgreSQL connection string |
 | `NEXTAUTH_SECRET` | 32+ char random string (`openssl rand -base64 32`) |
-| `CASHFREE_APP_ID` | Cashfree PG app ID |
-| `CASHFREE_SECRET_KEY` | Cashfree PG secret key |
-| `CASHFREE_WEBHOOK_SECRET` | From Cashfree dashboard → Webhooks |
-| `NEXT_PUBLIC_CASHFREE_APP_ID` | Public Cashfree app ID (frontend) |
-| `CASHFREE_ENV` | `sandbox` or `production` |
-| `OPENAI_API_KEY` | For AI features |
-| `RESEND_API_KEY` | For transactional email |
-| `AWS_ACCESS_KEY_ID` | For S3 file uploads |
+| `NEXTAUTH_URL` | `https://dealervoice.io` |
+| `STRIPE_SECRET_KEY` | Stripe secret key (live or test) |
+| `STRIPE_WEBHOOK_SECRET` | From Stripe Dashboard → Webhooks |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key |
+| `STRIPE_PRICE_PRO_MONTHLY` | Price ID for Pro $199/mo |
+| `STRIPE_PRICE_ENTERPRISE_MONTHLY` | Price ID for Enterprise $499/mo |
+| `CRON_SECRET` | Random string for Vercel cron auth |
+| `RESEND_API_KEY` | Transactional email |
+| `EMAIL_FROM` | e.g. `DealerVoice <noreply@send.dealervoice.io>` |
+
+Optional: `SLACK_WEBHOOK_URL`, `MEILISEARCH_*`, `SUPABASE_*` (file uploads), `OPENAI_API_KEY` / `GEMINI_API_KEY`.
 
 ---
 
 ## 2. Database Setup
 
 ```bash
-# Push schema to database
 npx prisma migrate deploy
-
-# Seed initial data (countries, brands, admin user)
 npm run db:seed
-
-# Setup Meilisearch indexes
-npx tsx scripts/setup-search.ts
+npm run seed:blog
+npm run seed:research
+npm run db:migrate:monetization-v2   # if not yet applied
 ```
 
 ---
 
-## 3. Cashfree Setup
+## 3. Stripe Setup
 
-1. Sign up at https://merchant.cashfree.com and complete KYC
-
-2. Add env vars: `CASHFREE_APP_ID`, `CASHFREE_SECRET_KEY`, `CASHFREE_WEBHOOK_SECRET`, `NEXT_PUBLIC_CASHFREE_APP_ID`, `CASHFREE_ENV`
-
-3. Configure webhook endpoint: `https://yourdomain.com/api/webhooks/cashfree`
-   - Enable `PAYMENT_SUCCESS_WEBHOOK` (API version `2023-08-01`)
+1. Create products/prices in Stripe Dashboard (Pro $199/mo, Enterprise $499/mo).
+2. Add env vars above to Vercel.
+3. Webhook endpoint: `https://dealervoice.io/api/webhooks/stripe`
+   - Events: `checkout.session.completed`, `customer.subscription.*`, `invoice.*`
+4. Test with promo code `PRO1USD` (create in Admin → Promotions).
 
 ---
 
-## 4. Docker Deployment
+## 4. Vercel Deployment (recommended)
 
 ```bash
-# Build and start all services
+vercel env pull .env.local   # optional
+git push origin main         # auto-deploys
+```
+
+Crons are defined in `vercel.json` (outreach drip, email discovery, digest, reputation).
+
+---
+
+## 5. Docker Deployment (optional)
+
+```bash
 docker compose up -d --build
-
-# Run migrations inside container
-docker compose exec app npx prisma migrate deploy
-
-# View logs
-docker compose logs -f app
-
-# Scale the app (for load balancing)
-docker compose up -d --scale app=3
-```
-
----
-
-## 5. SSL / Nginx
-
-```bash
-# Install certbot
-apt install certbot
-
-# Get certificate
-certbot certonly --standalone -d yourdomain.com -d www.yourdomain.com
-
-# Copy to docker/certs/
-cp /etc/letsencrypt/live/yourdomain.com/fullchain.pem docker/certs/
-cp /etc/letsencrypt/live/yourdomain.com/privkey.pem docker/certs/
-
-# Update nginx.conf with your domain, then restart nginx
-docker compose restart nginx
-```
-
----
-
-## 6. Vercel Deployment (Alternative)
-
-```bash
-npm i -g vercel
-
-# Link project
-vercel
-
-# Set environment variables
-vercel env add DATABASE_URL production
-# ... repeat for all env vars
-
-# Deploy
-vercel --prod
-```
-
-> **Note:** For Vercel, use a managed PostgreSQL (Supabase, Neon, or Vercel Postgres) and a Redis-compatible service (Upstash).
-
----
-
-## 7. CI/CD (GitHub Actions)
-
-Required repository secrets:
-```
-STAGING_HOST, STAGING_USER, STAGING_SSH_KEY
-PROD_HOST, PROD_USER, PROD_SSH_KEY
-```
-
-The pipeline runs automatically on push to `main`:
-1. Type check → Lint → Tests
-2. Build & push Docker image to GHCR
-3. Deploy to staging
-4. Deploy to production (requires manual approval via GitHub Environments)
-
----
-
-## 8. Post-Deployment Checklist
-
-- [ ] Verify `/api/auth/register` works (create a test account)
-- [ ] Verify Cashfree webhook receives events
-- [ ] Verify email sending via Resend
-- [ ] Verify file uploads to S3
-- [ ] Verify Meilisearch indexing
-- [ ] Run `npm run db:seed` in production
-- [ ] Set up monitoring (Sentry, Datadog, or similar)
-- [ ] Configure Cloudflare CDN for the domain
-- [ ] Set up database backups (daily `pg_dump`)
-
----
-
-## 9. Maintenance
-
-```bash
-# Database backup
-docker compose exec postgres pg_dump -U dealervoice dealervoice > backup_$(date +%Y%m%d).sql
-
-# View application logs
-docker compose logs -f app --tail=100
-
-# Update to latest image
-docker compose pull && docker compose up -d
-
-# Run Prisma migrations after schema changes
 docker compose exec app npx prisma migrate deploy
 ```
 
+Stripe webhook path: `/api/webhooks/stripe` (see `docker/nginx.conf`).
+
 ---
 
-## 10. Performance Tuning
+## 6. Post-Deployment Checklist
 
-- Enable Redis caching (already wired in — ensure `REDIS_URL` is set)
-- Configure Cloudflare caching rules for `/dealership/*` pages (cache for 5 minutes)
-- Set PostgreSQL `shared_buffers = 256MB` and `work_mem = 16MB` for production
-- Enable Next.js ISR for high-traffic dealership pages
-- Use a CDN (Cloudflare or AWS CloudFront) for static assets and images
+- [ ] `npm run smoke` → 22/22 against production URL
+- [ ] Stripe webhook receives test event
+- [ ] Resend domain verified; test welcome email
+- [ ] Admin login works (`/dashboard/admin`)
+- [ ] `/chicago` and `/dealers/us` load
+- [ ] Cron jobs visible on Admin → Health
+
+---
+
+## 7. Maintenance
+
+```bash
+npm run smoke
+npm run outreach:discover-emails -- --all-us --limit 50
+npm run seed:blog    # re-upsert US content + unpublish legacy India slugs
+```
+
+Primary launch doc: **`GLOBAL_LAUNCH.md`** at repo root.

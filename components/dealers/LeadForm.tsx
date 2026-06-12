@@ -91,7 +91,7 @@ export function LeadForm({ dealerId, dealerName }: Props) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="phone">Phone</Label>
-              <Input id="phone" placeholder="+91 98765 43210" {...register("phone")} />
+              <Input id="phone" placeholder="+1 (312) 555-0100" {...register("phone")} />
               {errors.phone && <p className="text-xs text-red-500">{errors.phone.message}</p>}
             </div>
           </div>

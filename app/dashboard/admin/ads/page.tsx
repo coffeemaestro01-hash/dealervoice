@@ -26,7 +26,7 @@ export default async function AdminAdsPage() {
         <Stat label="Clicks (30d)" value={stats.clicks30d} />
         <Stat label="Impressions (30d)" value={stats.impressions30d} />
         <Stat label="CTR" value={`${stats.ctr}%`} />
-        <Stat label="Est. affiliate revenue" value={`₹${stats.estimatedRevenue.toLocaleString()}`} />
+        <Stat label="Est. affiliate revenue" value={`$${stats.estimatedRevenue.toLocaleString("en-US")}`} />
       </div>
 
       <AdmitadConnectionPanel />

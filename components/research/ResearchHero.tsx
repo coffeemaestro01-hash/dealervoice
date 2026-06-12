@@ -52,7 +52,7 @@ export function ResearchHero({ title, excerpt, coverImage, publishedAt, authorNa
           {publishedAt && (
             <span className="inline-flex items-center gap-1.5">
               <Calendar size={14} className="text-gold-500" />
-              {publishedAt.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}
+              {publishedAt.toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" })}
             </span>
           )}
         </div>

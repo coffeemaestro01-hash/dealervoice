@@ -4,7 +4,7 @@ Track progress in **Admin → Launch tracker** and money in **Admin → Platform
 
 ## Payment: Stripe (USD)
 
-Dealer billing runs through **Stripe** (USD). Built in Chicago, available worldwide.
+Dealer billing runs through **Stripe** (USD). Built in Chicago, US-first GTM.
 
 **Webhook URL:** `https://dealervoice.io/api/webhooks/stripe`
 

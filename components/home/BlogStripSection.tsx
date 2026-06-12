@@ -51,7 +51,7 @@ export async function BlogStripSection() {
               {p.excerpt && <p className="text-sm text-gray-600 mt-2 line-clamp-3">{p.excerpt}</p>}
               {p.publishedAt && (
                 <time className="text-xs text-gray-400 mt-3 block" dateTime={p.publishedAt.toISOString()}>
-                  {p.publishedAt.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                  {p.publishedAt.toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })}
                 </time>
               )}
             </Link>

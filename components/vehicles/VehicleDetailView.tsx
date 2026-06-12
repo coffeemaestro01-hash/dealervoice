@@ -65,7 +65,7 @@ export function VehicleDetailView({ vehicle, formattedPrice }: VehicleDetailProp
 
   const specs = [
     vehicle.year ? { icon: CalendarDays, label: "Year", value: String(vehicle.year) } : null,
-    vehicle.mileageKm != null ? { icon: Gauge, label: "Mileage", value: `${vehicle.mileageKm.toLocaleString("en-IN")} km` } : null,
+    vehicle.mileageKm != null ? { icon: Gauge, label: "Mileage", value: `${vehicle.mileageKm.toLocaleString("en-US")} km` } : null,
     vehicle.fuelType ? { icon: Fuel, label: "Fuel", value: vehicle.fuelType } : null,
     vehicle.transmission ? { icon: Settings2, label: "Transmission", value: vehicle.transmission } : null,
     vehicle.color ? { icon: Palette, label: "Color", value: vehicle.color } : null,
@@ -376,7 +376,7 @@ function VehicleLeadModal({
               </div>
               <div>
                 <label className="text-xs font-medium text-gray-700">Phone</label>
-                <input value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-1 w-full h-9 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:border-gold-400" placeholder="+91..." />
+                <input value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-1 w-full h-9 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:border-gold-400" placeholder="+1 (312) 555-0100" />
               </div>
             </div>
             <div>

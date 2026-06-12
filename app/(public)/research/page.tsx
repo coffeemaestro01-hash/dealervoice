@@ -84,7 +84,7 @@ export default async function ResearchPage() {
                       <span className="inline-flex items-center gap-1.5">
                         <Calendar size={12} />
                         {article.publishedAt
-                          ? new Date(article.publishedAt).toLocaleDateString("en-IN", {
+                          ? new Date(article.publishedAt).toLocaleDateString("en-US", {
                               day: "numeric",
                               month: "short",
                               year: "numeric",

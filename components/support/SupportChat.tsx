@@ -86,7 +86,7 @@ export function SupportChat() {
             ? data.reply
             : data.error ?? "Sorry, something went wrong. Please email support@dealervoice.io.";
         setMessages((m) => [...m, { role: "assistant", content: reply }]);
-        if (opts?.speak && res.ok && data.reply) speak(reply, opts.lang ?? "en-IN");
+        if (opts?.speak && res.ok && data.reply) speak(reply, opts.lang ?? "en-US");
       } catch {
         setMessages((m) => [
           ...m,

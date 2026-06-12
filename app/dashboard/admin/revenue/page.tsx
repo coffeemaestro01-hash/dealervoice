@@ -29,8 +29,8 @@ export default async function AdminRevenuePage() {
       </div>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Stat label="Total paid revenue" value={`₹${stats.totalRevenue.toLocaleString()}`} />
-        <Stat label="MRR estimate" value={`₹${stats.mrrEstimate.toLocaleString()}`} />
+        <Stat label="Total paid revenue" value={`$${stats.totalRevenue.toLocaleString("en-US")}`} />
+        <Stat label="MRR estimate" value={`$${stats.mrrEstimate.toLocaleString("en-US")}`} />
         <Stat label="Pro plans" value={stats.proCount} />
         <Stat label="Enterprise" value={stats.enterpriseCount} />
       </div>
@@ -66,7 +66,7 @@ export default async function AdminRevenuePage() {
           <Stat label="Ad clicks" value={adStats.clicks30d} />
           <Stat label="Impressions" value={adStats.impressions30d} />
           <Stat label="CTR" value={`${adStats.ctr}%`} />
-          <Stat label="Est. CPC revenue" value={`₹${adStats.estimatedRevenue.toLocaleString()}`} />
+          <Stat label="Est. CPC revenue" value={`$${adStats.estimatedRevenue.toLocaleString("en-US")}`} />
         </div>
       </div>
     </div>
