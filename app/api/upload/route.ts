@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/config";
-import { supabaseAdmin } from "@/lib/supabase";
+import { getSupabaseAdmin } from "@/lib/supabase";
 import { rateLimit } from "@/lib/auth/rate-limit";
 import crypto from "crypto";
 import { z } from "zod";
@@ -42,6 +42,10 @@ export async function POST(req: NextRequest) {
 
   const { filename, contentType, size, purpose } = parsed.data;
 
+  if (!SUPABASE_URL) {
+    return NextResponse.json({ error: "Uploads not configured" }, { status: 503 });
+  }
+
   if (!ALLOWED_TYPES.includes(contentType)) {
     return NextResponse.json({ error: "File type not allowed" }, { status: 400 });
   }
@@ -50,7 +54,7 @@ export async function POST(req: NextRequest) {
   const key = `${purpose}/${session.user.id}/${crypto.randomBytes(16).toString("hex")}.${ext}`;
 
   // Generate signed upload URL via Supabase
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await getSupabaseAdmin()
     .storage
     .from(BUCKET)
     .createSignedUploadUrl(key);

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/config";
-import { supabaseAdmin } from "@/lib/supabase";
+import { getSupabaseAdmin } from "@/lib/supabase";
 import { rateLimit } from "@/lib/auth/rate-limit";
 import crypto from "crypto";
 
@@ -47,12 +47,15 @@ export async function POST(req: NextRequest) {
   if (file.size > MAX_SIZE) {
     return NextResponse.json({ error: "File too large (max 20MB)" }, { status: 400 });
   }
+  if (!SUPABASE_URL) {
+    return NextResponse.json({ error: "Uploads not configured" }, { status: 503 });
+  }
 
   const ext = file.name.split(".").pop() ?? "bin";
   const key = `${purpose}/${session.user.id}/${crypto.randomBytes(16).toString("hex")}.${ext}`;
   const buffer = Buffer.from(await file.arrayBuffer());
 
-  const { error } = await supabaseAdmin.storage.from(BUCKET).upload(key, buffer, {
+  const { error } = await getSupabaseAdmin().storage.from(BUCKET).upload(key, buffer, {
     contentType: file.type,
     upsert: false,
   });
