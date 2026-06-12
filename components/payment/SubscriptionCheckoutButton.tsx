@@ -54,7 +54,7 @@ export function SubscriptionCheckoutButton({
       onError?.(m);
       setLoading(false);
     }
-  }, [dealershipId, plan, interval, promotionCode, onSuccess, onError]);
+  }, [dealershipId, plan, interval, promotionCode, onError]);
 
   return (
     <div>
