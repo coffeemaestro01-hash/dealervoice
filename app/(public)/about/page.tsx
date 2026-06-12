@@ -134,7 +134,7 @@ export default async function AboutPage() {
           <p className="text-gray-600 leading-relaxed">
             {COMPANY.name} is designed and operated from {companyHqLine()}. Our product, data infrastructure,
             and dealer subscriptions are US-based; our listings and reviews serve buyers and dealerships
-            globally — from Chicago to Mumbai, London, and beyond.
+            across the United States — starting with Chicago and expanding nationwide.
           </p>
         </div>
       </section>

@@ -89,7 +89,7 @@ export function AdminCreateCampaignForm({ countries }: { countries: { id: string
 
         <div>
           <label className="text-xs font-medium text-gray-600 mb-1 block">Campaign name</label>
-          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Mumbai unclaimed dealers — March 2026" />
+          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Chicago unclaimed dealers — March 2026" />
         </div>
         <div>
           <label className="text-xs font-medium text-gray-600 mb-1 block">Subject line</label>

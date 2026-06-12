@@ -34,10 +34,10 @@ function dealerGreeting(ctx: DealerContext): Msg {
 }
 
 const QUICK_PROMPTS = [
-  "Find a Toyota dealer in Delhi",
+  "Find a Toyota dealer in Chicago",
   "Best luxury car dealers near me",
   "Which dealers have good after-sales?",
-  "Compare SUV dealers in Mumbai",
+  "Compare SUV dealers in Illinois",
 ];
 
 export function DreamCarAssistant({ dealerContext }: Props = {}) {
@@ -185,7 +185,7 @@ export function DreamCarAssistant({ dealerContext }: Props = {}) {
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="e.g. Hyundai dealer in Bangalore with good service..."
+              placeholder="e.g. Hyundai dealer in Chicago with good service..."
               maxLength={500}
               className="flex-1 h-10 rounded-full border border-gray-200 px-4 text-sm focus:outline-none focus:border-gold-400/60 bg-gray-50"
               disabled={loading}
