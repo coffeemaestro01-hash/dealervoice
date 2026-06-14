@@ -12,7 +12,9 @@ loadProjectEnv();
 const prisma = new PrismaClient();
 
 async function main() {
-  const limit = Number(process.argv[process.argv.indexOf("--limit") + 1] ?? 5000);
+  const limitIdx = process.argv.indexOf("--limit");
+  const parsed = limitIdx >= 0 ? Number(process.argv[limitIdx + 1]) : 5000;
+  const limit = Number.isFinite(parsed) && parsed > 0 ? parsed : 5000;
   const dealers = await prisma.dealership.findMany({
     where: { deletedAt: null },
     take: limit,
