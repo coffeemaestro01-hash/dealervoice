@@ -12,6 +12,8 @@ import { ensureDealerApiKey } from "@/lib/api/dealer-keys";
 import { recordIncome } from "@/lib/income/ledger";
 import { sponsorshipUntil } from "@/lib/sponsorship/checkout";
 import { planFeatures } from "@/lib/subscription";
+import { recordDealerInvoice } from "@/lib/billing/record-invoice";
+import { sendDealerInvoiceEmail } from "@/lib/billing/send-invoice-email";
 import prisma from "@/lib/db";
 import type { SubscriptionPlan, SubscriptionStatus } from "@prisma/client";
 import type Stripe from "stripe";
@@ -124,6 +126,32 @@ function invoiceSubscriptionId(invoice: Stripe.Invoice): string | null {
 }
 
 async function handleInvoicePaid(invoice: Stripe.Invoice) {
+  if (!invoice.id) return;
+
+  const metaType = invoice.metadata?.type;
+  const metaDealershipId = invoice.metadata?.dealershipId;
+
+  if (metaType === "lead_fee" && metaDealershipId) {
+    const recorded = await recordDealerInvoice({
+      dealershipId: metaDealershipId,
+      stripeInvoiceId: invoice.id,
+      type: "LEAD_FEE",
+      description:
+        invoice.lines?.data?.[0]?.description ??
+        `Lead fee${invoice.metadata?.leadId ? ` — ${invoice.metadata.leadId}` : ""}`,
+      amount: invoice.amount_paid,
+      currency: invoice.currency.toUpperCase(),
+      status: "paid",
+      pdfUrl: invoice.invoice_pdf ?? null,
+      invoiceDate: new Date((invoice.created ?? Date.now() / 1000) * 1000),
+      paidAt: invoice.status_transitions?.paid_at
+        ? new Date(invoice.status_transitions.paid_at * 1000)
+        : new Date(),
+    });
+    await sendDealerInvoiceEmail(recorded.id).catch(() => {});
+    return;
+  }
+
   const subscriptionId = invoiceSubscriptionId(invoice);
   if (!subscriptionId) return;
 
@@ -133,27 +161,28 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
   const sub = await prisma.dealerSubscription.findFirst({
     where: { stripeSubscriptionId: subscriptionId },
   });
-  if (!sub || !invoice.id) return;
+  if (!sub) return;
 
-  const existing = await prisma.invoice.findUnique({
-    where: { stripeInvoiceId: invoice.id },
-  });
-  if (existing) return;
+  const description =
+    invoice.lines?.data?.[0]?.description ?? `DealerVoice ${sub.plan} subscription`;
 
-  await prisma.invoice.create({
-    data: {
-      subscriptionId: sub.id,
-      stripeInvoiceId: invoice.id,
-      amount: invoice.amount_paid,
-      currency: invoice.currency.toUpperCase(),
-      status: "paid",
-      invoiceDate: new Date((invoice.created ?? Date.now() / 1000) * 1000),
-      paidAt: invoice.status_transitions?.paid_at
-        ? new Date(invoice.status_transitions.paid_at * 1000)
-        : new Date(),
-      pdfUrl: invoice.invoice_pdf ?? undefined,
-    },
+  const recorded = await recordDealerInvoice({
+    dealershipId: sub.dealershipId,
+    subscriptionId: sub.id,
+    stripeInvoiceId: invoice.id,
+    type: "SUBSCRIPTION",
+    description,
+    amount: invoice.amount_paid,
+    currency: invoice.currency.toUpperCase(),
+    status: "paid",
+    pdfUrl: invoice.invoice_pdf ?? null,
+    invoiceDate: new Date((invoice.created ?? Date.now() / 1000) * 1000),
+    paidAt: invoice.status_transitions?.paid_at
+      ? new Date(invoice.status_transitions.paid_at * 1000)
+      : new Date(),
   });
+
+  await sendDealerInvoiceEmail(recorded.id).catch(() => {});
 }
 
 export async function POST(req: NextRequest) {
@@ -227,6 +256,19 @@ export async function POST(req: NextRequest) {
               description: `Sponsorship checkout — ${tier}`,
               externalRef: session.id,
             }).catch(() => {});
+
+            const recorded = await recordDealerInvoice({
+              dealershipId,
+              stripeInvoiceId: session.id,
+              type: "SPONSORSHIP",
+              description: `Sponsorship — ${tier.replace(/_/g, " ")} (${days} days)`,
+              amount: session.amount_total ?? 0,
+              currency: (session.currency ?? "usd").toUpperCase(),
+              status: "paid",
+              invoiceDate: new Date(),
+              paidAt: new Date(),
+            });
+            await sendDealerInvoiceEmail(recorded.id).catch(() => {});
           }
         }
         break;

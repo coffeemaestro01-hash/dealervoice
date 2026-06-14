@@ -1,6 +1,7 @@
 import type { SubscriptionPlan } from "@prisma/client";
 import prisma from "@/lib/db";
 import { recordIncome } from "@/lib/income/ledger";
+import { recordDealerInvoice } from "@/lib/billing/record-invoice";
 
 export const PLAN_FEATURES: Record<
   SubscriptionPlan,
@@ -66,22 +67,18 @@ export async function activatePaidSubscription(params: {
   ]);
 
   if (params.paymentId) {
-    const existing = await prisma.invoice.findUnique({
-      where: { stripeInvoiceId: params.paymentId },
+    await recordDealerInvoice({
+      dealershipId: params.dealershipId,
+      subscriptionId: sub.id,
+      stripeInvoiceId: params.paymentId,
+      type: "SUBSCRIPTION",
+      description: `DealerVoice ${params.plan} subscription`,
+      amount: params.amountPaise,
+      currency,
+      status: "paid",
+      invoiceDate: now,
+      paidAt: now,
     });
-    if (!existing) {
-      await prisma.invoice.create({
-        data: {
-          subscriptionId: sub.id,
-          stripeInvoiceId: params.paymentId,
-          amount: params.amountPaise,
-          currency,
-          status: "paid",
-          invoiceDate: now,
-          paidAt: now,
-        },
-      });
-    }
   }
 
   if (params.recordLedger && params.paymentId) {

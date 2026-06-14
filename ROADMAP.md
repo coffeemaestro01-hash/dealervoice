@@ -18,6 +18,20 @@
 | Search | Prisma + Redis | Meilisearch indexed but unused |
 | SEO | Sitemap + JSON-LD on profile | No programmatic “best dealers in X” pages |
 | Payments | Stripe USD + outreach crons | Good |
+| Billing v2 | Dealer invoices, Resend emails, Customer Portal | Done |
+| Support | Dealer tickets + admin queue | Done |
+
+---
+
+## Billing v2 & support (done)
+
+- [x] Dealership-scoped `Invoice` model (subscription, lead fee, sponsorship)
+- [x] Invoice numbering (`DV-YYYY-NNNNN`) + Resend emails from `billing@dealervoice.io`
+- [x] Stripe Customer Portal (`Manage billing` in dealer dashboard)
+- [x] Support tickets (dealer create/view, admin reply/close)
+- [x] Migration: `npm run db:migrate:billing-v2`
+
+See [OPERATIONS.md](./OPERATIONS.md) for Stripe Dashboard settings and n8n guidance.
 
 ---
 

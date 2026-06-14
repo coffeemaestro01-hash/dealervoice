@@ -21,7 +21,14 @@ export async function GET() {
           responseRate: true,
           totalReviews: true,
           isPremiumClaimed: true,
-          subscription: { select: { plan: true, status: true, currentPeriodEnd: true } },
+          subscription: {
+            select: {
+              plan: true,
+              status: true,
+              currentPeriodEnd: true,
+              stripeCustomerId: true,
+            },
+          },
         },
       },
     },

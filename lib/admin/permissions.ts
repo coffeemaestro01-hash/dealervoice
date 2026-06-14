@@ -25,6 +25,7 @@ import {
   ClipboardCheck,
   Phone,
   Tag,
+  LifeBuoy,
 } from "lucide-react";
 
 export type AdminTeam = "founder" | "ops" | "trust" | "growth" | "platform";
@@ -48,6 +49,7 @@ export const ADMIN_NAV: AdminNavItem[] = [
   { href: "/dashboard/admin/ads", label: "Ad revenue", icon: DollarSign, team: "founder", roles: ["SUPER_ADMIN", "REVENUE"] },
   { href: "/dashboard/admin/payments", label: "Payments", icon: Wallet, team: "founder", roles: ["SUPER_ADMIN", "REVENUE"] },
   { href: "/dashboard/admin/inbox", label: "Unified inbox", icon: Flag, team: "ops", roles: ["SUPER_ADMIN", "SUPPORT", "MODERATOR"] },
+  { href: "/dashboard/admin/support", label: "Support tickets", icon: LifeBuoy, team: "ops", roles: ["SUPER_ADMIN", "SUPPORT", "REVENUE"] },
   { href: "/dashboard/admin/users", label: "Users", icon: Users, team: "trust", roles: ["SUPER_ADMIN", "MODERATOR", "SUPPORT"] },
   { href: "/dashboard/admin/dealerships", label: "Dealerships", icon: Store, team: "ops", roles: ["SUPER_ADMIN", "MODERATOR", "SUPPORT", "REVENUE"] },
   { href: "/dashboard/admin/claims", label: "Claims", icon: ClipboardCheck, team: "ops", roles: ["SUPER_ADMIN", "SUPPORT", "MODERATOR"] },

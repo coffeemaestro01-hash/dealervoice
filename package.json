@@ -16,6 +16,7 @@
     "db:migrate:welcome-email": "tsx scripts/migrate-welcome-email-db.ts",
     "db:migrate:outreach-automation": "tsx scripts/migrate-outreach-automation-db.ts",
     "db:migrate:franchise-v1": "tsx scripts/migrate-franchise-v1-db.ts",
+    "db:migrate:billing-v2": "tsx scripts/migrate-billing-v2-db.ts",
     "backfill:franchised": "tsx scripts/backfill-franchised-dealers.ts",
     "outreach:discover-emails": "tsx scripts/discover-dealer-emails.ts",
     "resend:domain-setup": "tsx scripts/resend-domain-setup.ts",

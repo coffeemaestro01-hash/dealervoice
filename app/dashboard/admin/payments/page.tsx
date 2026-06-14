@@ -16,7 +16,10 @@ export default async function AdminPaymentsPage() {
     prisma.invoice.findMany({
       orderBy: { createdAt: "desc" },
       take: 20,
-      include: { subscription: { include: { dealership: { select: { name: true } } } } },
+      include: {
+        dealership: { select: { name: true } },
+        subscription: { include: { dealership: { select: { name: true } } } },
+      },
     }),
   ]);
 
@@ -50,7 +53,7 @@ export default async function AdminPaymentsPage() {
           ) : (
             invoices.map((inv) => (
               <div key={inv.id} className="px-4 py-3 flex justify-between text-sm">
-                <span>{inv.subscription.dealership.name}</span>
+                <span>{inv.dealership.name}</span>
                 <span>
                   {new Intl.NumberFormat("en-US", { style: "currency", currency: inv.currency || "USD" }).format(
                     inv.amount / 100

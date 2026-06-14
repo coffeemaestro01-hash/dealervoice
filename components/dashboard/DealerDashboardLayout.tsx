@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BarChart3, MessageSquare, Settings, Users, Star, TrendingUp, CreditCard, LayoutDashboard, Mail, Car } from "lucide-react";
+import { BarChart3, MessageSquare, Settings, Users, Star, TrendingUp, CreditCard, LayoutDashboard, Mail, Car, LifeBuoy } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
@@ -13,6 +13,7 @@ const NAV_ITEMS = [
   { href: "/dashboard/dealer/analytics", icon: BarChart3, label: "Analytics" },
   { href: "/dashboard/dealer/competitors", icon: TrendingUp, label: "Competitors" },
   { href: "/dashboard/dealer/team", icon: Users, label: "Team" },
+  { href: "/dashboard/dealer/support", icon: LifeBuoy, label: "Support" },
   { href: "/dashboard/dealer/settings", icon: Settings, label: "Settings" },
 ];
 

@@ -8,7 +8,7 @@ export default async function AdminInboxPage() {
   await requireAdminPage("/dashboard/admin/inbox", "SUPER_ADMIN", "SUPPORT", "MODERATOR");
 
   const prisma = (await import("@/lib/db")).default;
-  const [claims, reports, leads, flaggedReviews, dsrOpen] = await Promise.all([
+  const [claims, reports, leads, flaggedReviews, dsrOpen, openTickets] = await Promise.all([
     prisma.dealerClaim.findMany({
       where: { status: { in: ["PENDING", "DOCUMENTS_REQUIRED"] } },
       take: 15,
@@ -39,6 +39,15 @@ export default async function AdminInboxPage() {
       orderBy: { createdAt: "desc" },
       include: { user: { select: { name: true, email: true } } },
     }),
+    prisma.supportTicket.findMany({
+      where: { status: { in: ["OPEN", "IN_PROGRESS"] } },
+      take: 15,
+      orderBy: { createdAt: "desc" },
+      include: {
+        user: { select: { name: true } },
+        dealership: { select: { name: true } },
+      },
+    }),
   ]);
 
   return (
@@ -67,6 +76,12 @@ export default async function AdminInboxPage() {
       <InboxSection title="Flagged reviews" count={flaggedReviews.length} href="/dashboard/admin/reviews?status=FLAGGED">
         {flaggedReviews.map((r) => (
           <Item key={r.id} title={r.dealership.name} sub={r.author.name} />
+        ))}
+      </InboxSection>
+
+      <InboxSection title="Open support tickets" count={openTickets.length} href="/dashboard/admin/support">
+        {openTickets.map((t) => (
+          <Item key={t.id} title={t.subject} sub={`${t.dealership?.name ?? "No dealer"} · ${t.user.name}`} />
         ))}
       </InboxSection>
 

@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Check, CreditCard } from "lucide-react";
+import { Check, CreditCard, ExternalLink, FileText } from "lucide-react";
 import { SubscriptionCheckoutButton } from "@/components/payment/SubscriptionCheckoutButton";
 import { PLAN_PRICES_USD } from "@/lib/payment";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PremiumUpgradeBanner } from "@/components/dashboard/PremiumUpgradeBanner";
 
@@ -12,7 +13,36 @@ interface Dealership {
   id: string;
   name: string;
   isPremiumClaimed?: boolean;
-  subscription?: { plan: string; status: string; currentPeriodEnd?: string | null } | null;
+  subscription?: {
+    plan: string;
+    status: string;
+    currentPeriodEnd?: string | null;
+    stripeCustomerId?: string | null;
+  } | null;
+}
+
+interface InvoiceRow {
+  id: string;
+  invoiceNumber: string | null;
+  type: string;
+  description: string | null;
+  amount: number;
+  currency: string;
+  status: string;
+  pdfUrl: string | null;
+  invoiceDate: string;
+  paidAt: string | null;
+}
+
+function formatMoney(cents: number, currency: string) {
+  try {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: currency.toUpperCase(),
+    }).format(cents / 100);
+  } catch {
+    return `${currency} ${(cents / 100).toFixed(2)}`;
+  }
 }
 
 const PLANS = [
@@ -37,14 +67,21 @@ export function BillingPage() {
   const searchParams = useSearchParams();
   const showUpgrade = searchParams?.get("upgrade") === "1";
   const [dealership, setDealership] = useState<Dealership | null>(null);
+  const [invoices, setInvoices] = useState<InvoiceRow[]>([]);
   const [interval, setInterval] = useState<"monthly" | "annual">("monthly");
   const [promotionCode, setPromotionCode] = useState("");
   const [loading, setLoading] = useState(true);
+  const [portalLoading, setPortalLoading] = useState(false);
 
   useEffect(() => {
-    fetch("/api/users/me/dealership")
-      .then((r) => r.json())
-      .then((d) => setDealership(d.data))
+    Promise.all([
+      fetch("/api/users/me/dealership").then((r) => r.json()),
+      fetch("/api/dealer/invoices").then((r) => r.json()),
+    ])
+      .then(([dealerRes, invoiceRes]) => {
+        setDealership(dealerRes.data);
+        setInvoices(invoiceRes.data ?? []);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -64,6 +101,23 @@ export function BillingPage() {
   }, [searchParams, dealership?.id, router]);
 
   const currentPlan = dealership?.subscription?.plan ?? "FREE";
+  const hasStripeCustomer = !!dealership?.subscription?.stripeCustomerId;
+
+  async function openBillingPortal() {
+    if (!dealership?.id) return;
+    setPortalLoading(true);
+    try {
+      const res = await fetch("/api/billing/portal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ dealershipId: dealership.id }),
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } finally {
+      setPortalLoading(false);
+    }
+  }
 
   if (loading) {
     return <div className="p-8 text-gray-500">Loading billing…</div>;
@@ -108,7 +162,66 @@ export function BillingPage() {
             Renews {new Date(dealership.subscription.currentPeriodEnd).toLocaleDateString()}
           </p>
         )}
+        {hasStripeCustomer && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="mt-4"
+            onClick={openBillingPortal}
+            disabled={portalLoading}
+          >
+            {portalLoading ? "Opening…" : "Manage billing"}
+          </Button>
+        )}
       </div>
+
+      {invoices.length > 0 && (
+        <div className="bg-white rounded-xl border border-gray-100 p-5 mb-8 shadow-sm">
+          <div className="flex items-center gap-2 mb-4">
+            <FileText size={18} className="text-gold-700" />
+            <h2 className="font-semibold text-gray-900">Invoice history</h2>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-gray-500 border-b">
+                  <th className="pb-2 pr-4 font-medium">Invoice</th>
+                  <th className="pb-2 pr-4 font-medium">Type</th>
+                  <th className="pb-2 pr-4 font-medium">Amount</th>
+                  <th className="pb-2 pr-4 font-medium">Date</th>
+                  <th className="pb-2 font-medium">PDF</th>
+                </tr>
+              </thead>
+              <tbody>
+                {invoices.map((inv) => (
+                  <tr key={inv.id} className="border-b last:border-0">
+                    <td className="py-3 pr-4 font-mono text-xs">{inv.invoiceNumber ?? inv.id.slice(0, 8)}</td>
+                    <td className="py-3 pr-4 capitalize">{inv.type.toLowerCase().replace(/_/g, " ")}</td>
+                    <td className="py-3 pr-4">{formatMoney(inv.amount, inv.currency)}</td>
+                    <td className="py-3 pr-4 text-gray-500">
+                      {new Date(inv.paidAt ?? inv.invoiceDate).toLocaleDateString()}
+                    </td>
+                    <td className="py-3">
+                      {inv.pdfUrl ? (
+                        <a
+                          href={inv.pdfUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-gold-700 hover:underline"
+                        >
+                          PDF <ExternalLink size={12} />
+                        </a>
+                      ) : (
+                        <span className="text-gray-300">—</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
       <div className="flex gap-2 mb-6">
         {(["monthly", "annual"] as const).map((i) => (
