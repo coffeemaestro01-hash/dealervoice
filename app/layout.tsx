@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
 import { Inter, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/layouts/Providers";
@@ -7,7 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { CookieBanner } from "@/components/consent/CookieBanner";
 import { getAdSenseClientId } from "@/lib/ads/adsense";
 import { SupportChat } from "@/components/support/SupportChat";
-import { GA_MEASUREMENT_ID } from "@/lib/analytics/google-analytics";
+import { GoogleTagSnippet } from "@/components/analytics/GoogleTagSnippet";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -71,30 +70,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="en" className={`${inter.variable} ${sourceSerif.variable}`} suppressHydrationWarning>
-      {GA_MEASUREMENT_ID ? (
-        <>
-          <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-            strategy="beforeInteractive"
-          />
-          <Script id="google-analytics-gtag" strategy="beforeInteractive">
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${GA_MEASUREMENT_ID}', { send_page_view: false });
-              gtag('consent', 'default', {
-                analytics_storage: 'denied',
-                ad_storage: 'denied',
-                ad_user_data: 'denied',
-                ad_personalization: 'denied',
-                wait_for_update: 500
-              });
-            `}
-          </Script>
-        </>
-      ) : null}
       <head>
+        <GoogleTagSnippet />
         {adsenseClient ? (
           <script
             async
