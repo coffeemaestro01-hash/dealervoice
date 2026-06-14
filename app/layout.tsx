@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { CookieBanner } from "@/components/consent/CookieBanner";
 import { getAdSenseClientId } from "@/lib/ads/adsense";
 import { SupportChat } from "@/components/support/SupportChat";
+import { GoogleAnalyticsScripts } from "@/components/analytics/GoogleAnalyticsScripts";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -70,6 +71,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${sourceSerif.variable}`} suppressHydrationWarning>
       <head>
+        <GoogleAnalyticsScripts />
         {adsenseClient ? (
           <script
             async

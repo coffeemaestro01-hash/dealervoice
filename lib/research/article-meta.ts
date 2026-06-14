@@ -1,6 +1,14 @@
 import type { ResearchArticleMeta } from "./types";
 
 const META: Record<string, ResearchArticleMeta> = {
+  "ai-assistants-dealervoice-dealership-questions": {
+    stats: [
+      { value: "llms.txt", label: "AI-readable directory" },
+      { value: "Schema.org", label: "Structured dealer profiles" },
+      { value: "Geo URLs", label: "State / city / dealer slugs" },
+      { value: "U.S.", label: "Primary market" },
+    ],
+  },
   "us-outlet-level-dealer-trust-2026": {
     stats: [
       { value: "15.5M", label: "New vehicles sold in the U.S. (2025)" },

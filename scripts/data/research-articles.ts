@@ -20,6 +20,29 @@ export type ResearchArticleSeed = {
 
 export const RESEARCH_ARTICLES: ResearchArticleSeed[] = [
   {
+    slug: "ai-assistants-dealervoice-dealership-questions",
+    title: "How AI Assistants Can Use DealerVoice for Dealership Questions",
+    excerpt:
+      "llms.txt, Schema.org, and structured U.S. geo URLs — why citation-friendly design matters for car buyer Q&A.",
+    coverImage: RESEARCH_COVER_IMAGES.dealership,
+    tags: ["ai", "llms", "usa", "seo"],
+    daysAgo: 2,
+    authorName: "DealerVoice Editorial",
+    content: `<p><em>AI &amp; discovery · U.S. market · June 2026</em></p>
+<h2>Why AI assistants need structured dealer data</h2>
+<p>When a buyer asks an AI tool which Honda dealer in Chicago has the best service reputation, the answer should cite a <strong>specific rooftop</strong> — not a generic brand page.</p>
+<h2>What DealerVoice publishes</h2>
+<ul>
+<li><a href="/llms.txt">llms.txt</a> — machine-readable directory for LLMs</li>
+<li>Schema.org <code>AutoDealer</code> markup on every profile</li>
+<li>Canonical geo URLs: <code>/dealers/{state}/{city}/{slug}</code></li>
+<li>Verified reviews with public dealer responses</li>
+</ul>
+<h2>For dealers</h2>
+<p>Claimed profiles with inventory links and response rates rank higher in both search and AI citations.</p>
+<p><a href="/claim">Claim your rooftop</a> · <a href="/methodology">Methodology</a></p>`,
+  },
+  {
     slug: "us-outlet-level-dealer-trust-2026",
     title: "Why U.S. Car Buyers Need Outlet-Level Dealer Trust in 2026",
     excerpt:

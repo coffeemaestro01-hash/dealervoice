@@ -19,6 +19,27 @@ function publishedAt(daysAgo = 0): Date {
   return d;
 }
 
+async function unpublishStaleResearchPosts() {
+  const currentSlugs = new Set(RESEARCH_ARTICLES.map((a) => a.slug));
+
+  const published = await prisma.blogPost.findMany({
+    where: { category: RESEARCH_CATEGORY, isPublished: true },
+    select: { id: true, slug: true },
+  });
+
+  const stale = published.filter((p) => !currentSlugs.has(p.slug));
+
+  if (stale.length === 0) return;
+  console.log(`🧹 Unpublishing ${stale.length} stale research posts…`);
+  for (const p of stale) {
+    await prisma.blogPost.update({
+      where: { id: p.id },
+      data: { isPublished: false },
+    });
+    console.log(`  🚫 ${p.slug}`);
+  }
+}
+
 async function main() {
   console.log(`📚 Seeding ${RESEARCH_ARTICLES.length} research articles…`);
 
@@ -59,6 +80,8 @@ async function main() {
     });
     console.log(`  ✅ ${article.slug}`);
   }
+
+  await unpublishStaleResearchPosts();
 
   console.log("Done.");
 }
