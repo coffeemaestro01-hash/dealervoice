@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Suspense, useState } from "react";
 import dynamic from "next/dynamic";
 import { SiteTracker } from "@/components/analytics/SiteTracker";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 
 const PostHogProvider = dynamic(() => import("./PostHogProvider"), { ssr: false });
 
@@ -28,6 +29,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <PostHogProvider>
           <Suspense fallback={null}>
             <SiteTracker />
+            <GoogleAnalytics />
           </Suspense>
           {children}
         </PostHogProvider>

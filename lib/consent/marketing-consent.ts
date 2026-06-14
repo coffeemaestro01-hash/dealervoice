@@ -6,8 +6,7 @@ export type ConsentChoices = {
   marketing: boolean;
 };
 
-/** Read marketing consent from the dv_consent cookie (client only). */
-export function readMarketingConsent(): boolean | null {
+function readConsentChoices(): ConsentChoices | null {
   if (typeof document === "undefined") return null;
 
   const match = document.cookie.match(new RegExp(`(?:^|; )${CONSENT_COOKIE}=([^;]*)`));
@@ -15,14 +14,29 @@ export function readMarketingConsent(): boolean | null {
 
   try {
     const parsed = JSON.parse(decodeURIComponent(match[1]));
-    if (typeof parsed?.choices?.marketing === "boolean") {
-      return parsed.choices.marketing;
+    const c = parsed?.choices;
+    if (
+      typeof c?.functional === "boolean" &&
+      typeof c?.analytics === "boolean" &&
+      typeof c?.marketing === "boolean"
+    ) {
+      return c as ConsentChoices;
     }
   } catch {
     return null;
   }
 
   return null;
+}
+
+/** Read marketing consent from the dv_consent cookie (client only). */
+export function readMarketingConsent(): boolean | null {
+  return readConsentChoices()?.marketing ?? null;
+}
+
+/** Read analytics consent from the dv_consent cookie (client only). */
+export function readAnalyticsConsent(): boolean | null {
+  return readConsentChoices()?.analytics ?? null;
 }
 
 export function dispatchConsentUpdated(choices: ConsentChoices) {

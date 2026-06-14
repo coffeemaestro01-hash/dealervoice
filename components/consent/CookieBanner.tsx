@@ -13,7 +13,7 @@ const SCROLL_THRESHOLD = 160;
 type Cat = "functional" | "analytics" | "marketing";
 const CATS: { key: Cat; label: string; desc: string }[] = [
   { key: "functional", label: "Functional", desc: "Remember your preferences (e.g. language, saved searches)." },
-  { key: "analytics", label: "Analytics", desc: "Help us understand how the site is used so we can improve it." },
+  { key: "analytics", label: "Analytics", desc: "Google Analytics — help us understand how the site is used so we can improve it." },
   { key: "marketing", label: "Marketing", desc: "Google AdSense and sponsored content. Off by default." },
 ];
 
