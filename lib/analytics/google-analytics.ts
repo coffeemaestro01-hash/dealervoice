@@ -1,6 +1,6 @@
 /** Google Analytics — hardcoded fallback so production never ships without the tag. */
 export const GA_MEASUREMENT_ID =
-  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-41BP7KW82E";
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-5S5QK4W9TS";
 
 export function updateGoogleAnalyticsConsent(analyticsGranted: boolean) {
   if (typeof window === "undefined" || !window.gtag || !GA_MEASUREMENT_ID) return;
