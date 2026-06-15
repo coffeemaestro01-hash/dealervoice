@@ -10,6 +10,13 @@ import type { DripStep } from "@/lib/outreach/templates";
 
 const MS_DAY = 24 * 60 * 60 * 1000;
 
+/** Prisma `{ not: 'skipped' }` excludes null — most uncontacted dealers have null status. */
+function outreachEligibleWhere() {
+  return {
+    OR: [{ outreachStatus: null }, { outreachStatus: { not: "skipped" as const } }],
+  };
+}
+
 function addDays(date: Date, days: number) {
   return new Date(date.getTime() + days * MS_DAY);
 }
@@ -115,7 +122,7 @@ export async function processDueOutreachDrips(limit = 50) {
       outreachDripActive: true,
       outreachDripStep: { in: [1, 2] },
       nextOutreachAt: { lte: now },
-      outreachStatus: { not: "skipped" },
+      ...outreachEligibleWhere(),
       email: { not: null },
       NOT: { email: "" },
     },
@@ -160,10 +167,9 @@ export async function autoStartOutreachDrips(limit = 20, countryCode = "US", sta
       claimedAt: null,
       outreachDripStep: 0,
       outreachDripActive: false,
-      outreachStatus: { not: "skipped" },
       email: { not: null },
       NOT: { email: "" },
-      ...(stateName ? usStateWhere(stateName) : {}),
+      AND: [outreachEligibleWhere(), ...(stateName ? [usStateWhere(stateName)] : [])],
     },
     take: limit,
     orderBy: { createdAt: "asc" },

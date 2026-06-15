@@ -43,7 +43,7 @@ See [OPERATIONS.md](./OPERATIONS.md) for Stripe Dashboard settings and n8n guida
 - [x] `/dealership/{slug}` → 301 to canonical geo URL (US)
 - [x] OSM importer: franchised-only + `DealerBrand` links
 - [x] `publicDealerWhere` + geo pages use consistent filters
-- [ ] Backfill script: tag existing dealers franchised + brand links
+- [x] Backfill script: tag existing dealers franchised + brand links *(718 / 8,842 as of June 8 — run `npm run backfill:franchised -- --limit 15000` to finish)*
 - [ ] Admin: franchised-only toggle on import CSV
 
 **Exit:** US dealer pages rank at geo URLs; new imports are franchise-only.

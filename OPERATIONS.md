@@ -30,7 +30,7 @@ npx prisma generate
 
 ## Automation (n8n only)
 
-Use **n8n** for peripheral glue (Slack notifications, Notion sync, optional digest triggers). **Do not use Make.com.**
+Use **n8n** for peripheral glue (Slack notifications, Notion sync, optional digest triggers) and **social posting** (your external workflow). **Do not use Make.com.**
 
 Examples:
 
