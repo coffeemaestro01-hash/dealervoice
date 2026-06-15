@@ -11,11 +11,13 @@ loadProjectEnv();
 const prisma = new PrismaClient();
 
 const EMAIL_REGEX = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
-const SKIP_DOMAINS = ["example.com", "sentry.io", "ingest.sentry.io", "wixpress.com", "cloudflare.com", "schema.org"];
-const SKIP_LOCAL = ["noreply", "no-reply", "donotreply", "privacy", "abuse", "postmaster"];
+const SKIP_DOMAINS = ["example.com", "email.com", "domain.com", "sentry.io", "ingest.sentry.io", "wixpress.com", "cloudflare.com", "schema.org"];
+const SKIP_LOCAL = ["noreply", "no-reply", "donotreply", "privacy", "abuse", "postmaster", "you", "user", "yourname", "name"];
+const SKIP_EXACT = new Set(["you@email.com", "user@domain.com", "name@example.com", "email@example.com"]);
 
 function isUsableEmail(email: string) {
   const e = email.toLowerCase();
+  if (SKIP_EXACT.has(e)) return false;
   if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/.test(e)) return false;
   if (SKIP_LOCAL.some((s) => e.startsWith(s))) return false;
   if (SKIP_DOMAINS.some((d) => e.endsWith(`@${d}`) || e.includes(d))) return false;
