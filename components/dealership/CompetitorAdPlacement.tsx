@@ -9,6 +9,7 @@ interface Props {
   cityId?: string | null;
   stateName?: string | null;
   countryId: string;
+  countryCode?: string | null;
 }
 
 async function getNearbyDealers({ dealershipId, cityId, stateName, countryId }: Props) {
@@ -40,14 +41,15 @@ async function getNearbyDealers({ dealershipId, cityId, stateName, countryId }: 
 }
 
 export async function CompetitorAdPlacement(props: Props) {
+  const countryCode = props.countryCode ?? "US";
   let nearby: Awaited<ReturnType<typeof getNearbyDealers>> = [];
   try {
     nearby = await getNearbyDealers(props);
   } catch {
     return (
       <section aria-label="Sponsored dealer alternatives" className="space-y-4">
-        <AutomotiveAdBanner type="Sponsored_Local_Dealer" slot="profile_competitor_fallback" />
-        <AutomotiveAdBanner type="Tier2_OEM_Offer" compact slot="profile_financing_fallback" />
+        <AutomotiveAdBanner type="Sponsored_Local_Dealer" slot="profile_competitor_fallback" countryCode={countryCode} />
+        <AutomotiveAdBanner type="Tier2_OEM_Offer" compact slot="profile_financing_fallback" countryCode={countryCode} />
       </section>
     );
   }
@@ -92,11 +94,11 @@ export async function CompetitorAdPlacement(props: Props) {
           ))}
         </ul>
       ) : (
-        <AutomotiveAdBanner type="Sponsored_Local_Dealer" slot="profile_competitor" />
+        <AutomotiveAdBanner type="Sponsored_Local_Dealer" slot="profile_competitor" countryCode={countryCode} />
       )}
 
       <div className="mt-4 pt-4 border-t border-gold/20">
-        <AutomotiveAdBanner type="Tier2_OEM_Offer" compact slot="profile_financing" />
+        <AutomotiveAdBanner type="Tier2_OEM_Offer" compact slot="profile_financing" countryCode={countryCode} />
       </div>
     </section>
   );

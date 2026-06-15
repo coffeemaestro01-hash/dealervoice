@@ -110,6 +110,7 @@ export async function DealershipRoute({ slug, page = 1, highlightWrite = false }
                   cityId={dealer.cityId}
                   stateName={dealer.stateName}
                   countryId={dealer.countryId}
+                  countryCode={dealer.country?.code ?? "US"}
                 />
               )}
               <DealerInventorySection

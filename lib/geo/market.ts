@@ -1,6 +1,6 @@
 /** Resolve visitor market for ads, content, and income attribution. */
 
-const MARKET_PRIORITY = ["US", "CA", "GB", "AU", "DE", "AE"] as const;
+const MARKET_PRIORITY = ["US", "CA", "GB", "AU", "DE", "AE", "IN"] as const;
 export type MarketCode = (typeof MARKET_PRIORITY)[number] | string;
 
 export function normalizeCountryCode(code: string | null | undefined): string | null {
@@ -22,6 +22,7 @@ export const MARKET_LABELS: Record<string, string> = {
   CA: "Canada",
   DE: "Germany",
   AE: "UAE",
+  IN: "India",
 };
 
 export const GLOBAL_AFFILIATE_DOMAINS = [
@@ -40,6 +41,8 @@ export const GLOBAL_AFFILIATE_DOMAINS = [
 /** Third-party affiliate tracking / redirect hosts (e.g. Admitad, partner networks). */
 export const AFFILIATE_TRACKER_DOMAINS = [
   "zmgig.com",
+  "tjzuh.com",
+  "ewwhk.com",
   "ad.admitad.com",
   "admitad.com",
 ];
