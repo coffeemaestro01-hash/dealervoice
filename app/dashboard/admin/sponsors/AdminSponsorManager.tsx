@@ -37,7 +37,7 @@ export function AdminSponsorManager({
   }
 
   return (
-    <div className="bg-white rounded-xl border p-5 space-y-3 max-w-lg">
+    <div className="bg-card rounded-xl border p-5 space-y-3 max-w-lg">
       <h2 className="font-semibold">Add / update sponsor</h2>
       <select className="w-full h-10 border rounded-md px-3 text-sm" value={selected} onChange={(e) => setSelected(e.target.value)}>
         {dealers.map((d) => (
@@ -47,7 +47,7 @@ export function AdminSponsorManager({
       <Input placeholder="Badge label" value={label} onChange={(e) => setLabel(e.target.value)} />
       <Input type="date" value={until} onChange={(e) => setUntil(e.target.value)} />
       <div className="flex gap-2">
-        <Button disabled={busy} onClick={() => save(true)} className="bg-gold-gradient text-night-900 font-semibold border-0">
+        <Button disabled={busy} onClick={() => save(true)} className="bg-ember text-night-900 font-semibold border-0">
           Enable sponsor
         </Button>
         <Button disabled={busy} variant="outline" onClick={() => save(false)}>Remove</Button>

@@ -167,7 +167,7 @@ export function SupportChat() {
         <button
           aria-label="Open support chat"
           onClick={() => setOpen(true)}
-          className="fixed bottom-5 right-5 z-50 grid place-items-center w-14 h-14 rounded-full bg-gold-gradient text-night-900 shadow-gold hover:opacity-90 transition"
+          className="fixed bottom-5 right-5 z-50 grid place-items-center w-14 h-14 rounded-full bg-ember text-night-900 shadow-ember hover:opacity-90 transition"
         >
           <MessageCircle size={24} />
         </button>
@@ -175,25 +175,25 @@ export function SupportChat() {
 
       {/* Panel */}
       {open && (
-        <div className="fixed bottom-5 right-5 z-50 w-[92vw] max-w-sm h-[70vh] max-h-[560px] flex flex-col rounded-2xl bg-white border border-gold/20 shadow-gold overflow-hidden">
-          <header className="flex items-center justify-between px-4 py-3 bg-night-gradient text-white">
+        <div className="fixed bottom-5 right-5 z-50 w-[92vw] max-w-sm h-[70vh] max-h-[560px] flex flex-col rounded-2xl bg-card border border-primary/30 shadow-ember overflow-hidden">
+          <header className="flex items-center justify-between px-4 py-3 bg-pearl text-foreground">
             <div>
               <p className="font-semibold leading-tight">DealerVoice Support</p>
-              <p className="text-xs text-white/60 leading-tight">AI assistant · type or talk</p>
+              <p className="text-xs text-foreground leading-tight">AI assistant · type or talk</p>
             </div>
-            <button aria-label="Close support chat" onClick={() => setOpen(false)} className="text-white/70 hover:text-white">
+            <button aria-label="Close support chat" onClick={() => setOpen(false)} className="text-foreground hover:text-foreground">
               <X size={20} />
             </button>
           </header>
 
-          <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 py-4 space-y-3 bg-gray-50">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 py-4 space-y-3 bg-muted">
             {messages.map((m, i) => (
               <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div
                   className={`max-w-[82%] rounded-2xl px-3.5 py-2 text-sm whitespace-pre-wrap ${
                     m.role === "user"
-                      ? "bg-gold-gradient text-night-900 font-medium rounded-br-sm"
-                      : "bg-white text-gray-800 border border-gray-100 rounded-bl-sm"
+                      ? "bg-ember text-night-900 font-medium rounded-br-sm"
+                      : "bg-card text-foreground border border-border rounded-bl-sm"
                   }`}
                 >
                   {m.content}
@@ -202,7 +202,7 @@ export function SupportChat() {
             ))}
             {(loading || status) && (
               <div className="flex justify-start">
-                <div className="bg-white border border-gray-100 rounded-2xl rounded-bl-sm px-3.5 py-2 text-gray-400 text-xs flex items-center gap-2">
+                <div className="bg-card border border-border rounded-2xl rounded-bl-sm px-3.5 py-2 text-muted-foreground text-xs flex items-center gap-2">
                   <Loader2 size={14} className="animate-spin" />
                   {status || "Thinking..."}
                 </div>
@@ -215,7 +215,7 @@ export function SupportChat() {
               e.preventDefault();
               sendTyped();
             }}
-            className="flex items-center gap-2 p-3 border-t border-gray-100 bg-white"
+            className="flex items-center gap-2 p-3 border-t border-border bg-card"
           >
             <button
               type="button"
@@ -223,7 +223,7 @@ export function SupportChat() {
               disabled={loading && !recording}
               aria-label={recording ? "Stop recording" : "Record voice message"}
               className={`grid place-items-center w-10 h-10 rounded-full shrink-0 transition disabled:opacity-40 ${
-                recording ? "bg-red-600 text-white animate-pulse" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                recording ? "bg-destructive/10 text-foreground animate-pulse" : "bg-muted text-muted-foreground hover:bg-muted"
               }`}
             >
               {recording ? <Square size={16} /> : <Mic size={18} />}
@@ -234,13 +234,13 @@ export function SupportChat() {
               placeholder={recording ? "Listening..." : "Type your question..."}
               maxLength={2000}
               disabled={recording}
-              className="flex-1 h-10 rounded-full border border-gray-200 px-4 text-sm focus:outline-none focus:border-gold/50 disabled:bg-gray-50"
+              className="flex-1 h-10 rounded-full border border-border px-4 text-sm focus:outline-none focus:border-primary/30 disabled:bg-muted"
             />
             <button
               type="submit"
               disabled={loading || !input.trim()}
               aria-label="Send"
-              className="grid place-items-center w-10 h-10 rounded-full bg-gold-gradient text-night-900 disabled:opacity-40 hover:opacity-90 transition shrink-0"
+              className="grid place-items-center w-10 h-10 rounded-full bg-ember text-night-900 disabled:opacity-40 hover:opacity-90 transition shrink-0"
             >
               <Send size={18} />
             </button>

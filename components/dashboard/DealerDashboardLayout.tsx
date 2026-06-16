@@ -21,15 +21,15 @@ export function DealerDashboardLayout({ children }: { children: React.ReactNode 
   const pathname = usePathname();
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-muted flex">
       {/* Sidebar */}
-      <aside className="hidden lg:flex flex-col w-56 bg-white border-r border-gray-100 fixed h-full z-10">
-        <div className="p-5 border-b border-gray-100">
-          <Link href="/" className="flex items-center gap-2 font-bold text-gold-800">
+      <aside className="hidden lg:flex flex-col w-56 bg-card border-r border-border fixed h-full z-10">
+        <div className="p-5 border-b border-border">
+          <Link href="/" className="flex items-center gap-2 font-bold text-primary">
             <Star className="fill-current" size={18} />
             DealerVoice
           </Link>
-          <span className="text-xs text-gray-500 mt-0.5 block">Dealer Dashboard</span>
+          <span className="text-xs text-muted-foreground mt-0.5 block">Dealer Dashboard</span>
         </div>
 
         <nav className="p-3 flex-1">
@@ -42,8 +42,8 @@ export function DealerDashboardLayout({ children }: { children: React.ReactNode 
                 className={cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mb-0.5",
                   active
-                    ? "bg-gold-50 text-gold-800"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
               >
                 <item.icon size={17} />
@@ -53,12 +53,12 @@ export function DealerDashboardLayout({ children }: { children: React.ReactNode 
           })}
         </nav>
 
-        <div className="p-3 border-t border-gray-100">
+        <div className="p-3 border-t border-border">
           <Link href="/dashboard/dealer/billing" className={cn(
             "flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm transition-colors",
             pathname.startsWith("/dashboard/dealer/billing")
-              ? "bg-gold-50 text-gold-800 font-medium"
-              : "text-gray-600 hover:bg-gray-50"
+              ? "bg-primary/10 text-primary font-medium"
+              : "text-muted-foreground hover:bg-muted"
           )}>
             <CreditCard size={16} />
             Billing & Plans

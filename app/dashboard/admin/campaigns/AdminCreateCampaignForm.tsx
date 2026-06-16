@@ -60,14 +60,14 @@ export function AdminCreateCampaignForm({ countries }: { countries: { id: string
 
   return (
     <div className="max-w-3xl space-y-6">
-      <Link href="/dashboard/admin/campaigns" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gold-700">
+      <Link href="/dashboard/admin/campaigns" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
         <ArrowLeft size={14} /> Back to campaigns
       </Link>
 
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-5">
-        <div className="flex items-center gap-2 text-gold-700">
+      <div className="bg-card rounded-xl border border-border shadow-sm p-6 space-y-5">
+        <div className="flex items-center gap-2 text-primary">
           <Mail size={18} />
-          <h2 className="font-semibold text-gray-900">New email campaign</h2>
+          <h2 className="font-semibold text-foreground">New email campaign</h2>
         </div>
 
         <div className="flex flex-wrap gap-2">
@@ -80,7 +80,7 @@ export function AdminCreateCampaignForm({ countries }: { countries: { id: string
                 setSubject(t.subject);
                 setBody(t.body);
               }}
-              className="text-xs px-3 py-1.5 rounded-full border border-gray-200 hover:border-gold-400 hover:text-gold-800 transition-colors"
+              className="text-xs px-3 py-1.5 rounded-full border border-border hover:border-primary/30 hover:text-primary transition-colors"
             >
               {t.name}
             </button>
@@ -88,21 +88,21 @@ export function AdminCreateCampaignForm({ countries }: { countries: { id: string
         </div>
 
         <div>
-          <label className="text-xs font-medium text-gray-600 mb-1 block">Campaign name</label>
+          <label className="text-xs font-medium text-muted-foreground mb-1 block">Campaign name</label>
           <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Chicago unclaimed dealers — March 2026" />
         </div>
         <div>
-          <label className="text-xs font-medium text-gray-600 mb-1 block">Subject line</label>
+          <label className="text-xs font-medium text-muted-foreground mb-1 block">Subject line</label>
           <Input value={subject} onChange={(e) => setSubject(e.target.value)} />
         </div>
         <div>
-          <label className="text-xs font-medium text-gray-600 mb-1 block">Email body (HTML)</label>
+          <label className="text-xs font-medium text-muted-foreground mb-1 block">Email body (HTML)</label>
           <Textarea rows={10} value={body} onChange={(e) => setBody(e.target.value)} className="font-mono text-sm" />
         </div>
 
         <div className="grid sm:grid-cols-3 gap-3">
           <div>
-            <label className="text-xs font-medium text-gray-600 mb-1 block">Audience</label>
+            <label className="text-xs font-medium text-muted-foreground mb-1 block">Audience</label>
             <select className="w-full border rounded-md px-3 h-10 text-sm" value={filter} onChange={(e) => setFilter(e.target.value as typeof filter)}>
               <option value="unclaimed">Unclaimed dealers</option>
               <option value="claimed">Claimed dealers</option>
@@ -110,7 +110,7 @@ export function AdminCreateCampaignForm({ countries }: { countries: { id: string
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-600 mb-1 block">Country</label>
+            <label className="text-xs font-medium text-muted-foreground mb-1 block">Country</label>
             <select className="w-full border rounded-md px-3 h-10 text-sm" value={countryId} onChange={(e) => setCountryId(e.target.value)}>
               <option value="">All countries</option>
               {countries.map((c) => (
@@ -119,15 +119,15 @@ export function AdminCreateCampaignForm({ countries }: { countries: { id: string
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-600 mb-1 block">Max recipients</label>
+            <label className="text-xs font-medium text-muted-foreground mb-1 block">Max recipients</label>
             <Input type="number" min={1} max={100} value={limit} onChange={(e) => setLimit(Number(e.target.value))} />
           </div>
         </div>
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-destructive">{error}</p>}
 
         <div className="flex flex-wrap gap-3 pt-2">
-          <Button onClick={() => submit(true)} disabled={loading} className="bg-gray-900 hover:bg-gray-800 text-white gap-2">
+          <Button onClick={() => submit(true)} disabled={loading} className="bg-foreground hover:bg-foreground text-foreground gap-2">
             <Send size={14} /> {loading ? "Sending…" : "Create & send"}
           </Button>
           <Button variant="outline" onClick={() => submit(false)} disabled={loading}>
@@ -135,9 +135,9 @@ export function AdminCreateCampaignForm({ countries }: { countries: { id: string
           </Button>
         </div>
 
-        <p className="text-xs text-gray-400 flex items-start gap-1.5">
+        <p className="text-xs text-muted-foreground flex items-start gap-1.5">
           <Sparkles size={12} className="mt-0.5 shrink-0" />
-          Opens and clicks update when Resend webhooks point to <code className="text-gray-500">/api/webhooks/resend</code>
+          Opens and clicks update when Resend webhooks point to <code className="text-muted-foreground">/api/webhooks/resend</code>
         </p>
       </div>
     </div>

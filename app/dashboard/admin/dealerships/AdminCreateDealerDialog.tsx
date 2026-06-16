@@ -63,7 +63,7 @@ export function AdminCreateDealerDialog({ countries }: { countries: Country[] })
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-gold-gradient text-night-900 font-semibold border-0">
+        <Button className="bg-ember text-night-900 font-semibold border-0">
           <Plus size={16} className="mr-1" /> Add dealership
         </Button>
       </DialogTrigger>
@@ -80,7 +80,7 @@ export function AdminCreateDealerDialog({ countries }: { countries: Country[] })
             <Label>Country *</Label>
             <select
               required
-              className="w-full h-10 rounded-md border border-gray-200 px-3 text-sm"
+              className="w-full h-10 rounded-md border border-border px-3 text-sm"
               value={form.countryId}
               onChange={(e) => setForm({ ...form, countryId: e.target.value })}
             >
@@ -109,7 +109,7 @@ export function AdminCreateDealerDialog({ countries }: { countries: Country[] })
             <Label>Website</Label>
             <Input type="url" placeholder="https://" value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} />
           </div>
-          <Button type="submit" disabled={busy} className="w-full bg-gold-gradient text-night-900 font-semibold">
+          <Button type="submit" disabled={busy} className="w-full bg-ember text-night-900 font-semibold">
             {busy ? <Loader2 className="animate-spin" size={16} /> : "Create listing"}
           </Button>
         </form>

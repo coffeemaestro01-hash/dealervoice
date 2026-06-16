@@ -9,24 +9,24 @@ interface Props {
 
 const COLOR_CLASSES: Record<TrustColor, { pill: string; dot: string }> = {
   gold: {
-    pill: "ring-gold-400 bg-gold-50 text-gold-700",
-    dot: "bg-gold-400",
+    pill: "ring-primary bg-primary/10 text-primary",
+    dot: "bg-primary",
   },
   green: {
-    pill: "ring-green-400 bg-green-50 text-green-700",
-    dot: "bg-green-400",
+    pill: "ring-primary bg-muted text-primary",
+    dot: "bg-muted",
   },
   yellow: {
-    pill: "ring-yellow-400 bg-yellow-50 text-yellow-700",
-    dot: "bg-yellow-400",
+    pill: "ring-primary bg-muted text-primary",
+    dot: "bg-muted",
   },
   red: {
-    pill: "ring-red-400 bg-red-50 text-red-700",
-    dot: "bg-red-400",
+    pill: "ring-destructive bg-destructive/10 text-destructive",
+    dot: "bg-destructive/10",
   },
   gray: {
-    pill: "ring-gray-300 bg-gray-50 text-gray-500",
-    dot: "bg-gray-400",
+    pill: "ring-border bg-muted text-muted-foreground",
+    dot: "bg-muted",
   },
 };
 

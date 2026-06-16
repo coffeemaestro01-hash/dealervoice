@@ -27,19 +27,19 @@ export default async function AdminSubscriptionsPage() {
 
   return (
     <div className="p-6 lg:p-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">Subscriptions</h1>
-      <p className="text-sm text-gray-500 mb-6">Manually upgrade, downgrade, or cancel dealer plans.</p>
+      <h1 className="text-2xl font-bold text-foreground mb-2">Subscriptions</h1>
+      <p className="text-sm text-muted-foreground mb-6">Manually upgrade, downgrade, or cancel dealer plans.</p>
       <div className="grid grid-cols-3 gap-4 mb-8">
         {(["FREE", "PRO", "ENTERPRISE"] as const).map((plan) => (
-          <div key={plan} className="bg-white rounded-xl border border-gray-100 p-4 text-center">
-            <p className="text-sm text-gray-500">{plan}</p>
-            <p className="text-2xl font-bold text-gray-900">{byPlan[plan]}</p>
+          <div key={plan} className="bg-card rounded-xl border border-border p-4 text-center">
+            <p className="text-sm text-muted-foreground">{plan}</p>
+            <p className="text-2xl font-bold text-foreground">{byPlan[plan]}</p>
           </div>
         ))}
       </div>
-      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden overflow-x-auto">
+      <div className="bg-card rounded-xl border border-border overflow-hidden overflow-x-auto">
         <table className="w-full text-sm min-w-[700px]">
-          <thead className="bg-gray-50 text-left text-gray-500">
+          <thead className="bg-muted text-left text-muted-foreground">
             <tr>
               <th className="px-4 py-3">Dealership</th>
               <th className="px-4 py-3">Plan</th>
@@ -48,14 +48,14 @@ export default async function AdminSubscriptionsPage() {
               <th className="px-4 py-3">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50">
+          <tbody className="divide-y divide-border">
             {subs.map((s) => (
-              <tr key={s.id} className="hover:bg-gray-50">
+              <tr key={s.id} className="hover:bg-muted">
                 <td className="px-4 py-3">
-                  <Link href={`/dealership/${s.dealership.slug}`} className="font-medium text-gold-800 hover:underline">
+                  <Link href={`/dealership/${s.dealership.slug}`} className="font-medium text-primary hover:underline">
                     {s.dealership.name}
                   </Link>
-                  <p className="text-xs text-gray-400">{s.dealership.cityName}</p>
+                  <p className="text-xs text-muted-foreground">{s.dealership.cityName}</p>
                 </td>
                 <td className="px-4 py-3">
                   <Badge>{s.plan}</Badge>
@@ -63,7 +63,7 @@ export default async function AdminSubscriptionsPage() {
                 <td className="px-4 py-3">
                   <Badge variant="outline">{s.status}</Badge>
                 </td>
-                <td className="px-4 py-3 text-gray-500">
+                <td className="px-4 py-3 text-muted-foreground">
                   {s.currentPeriodEnd ? new Date(s.currentPeriodEnd).toLocaleDateString() : "—"}
                 </td>
                 <td className="px-4 py-3">

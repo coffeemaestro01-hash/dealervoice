@@ -38,13 +38,13 @@ const STEPS = [
 
 export function BuyerJourneyStrip() {
   return (
-    <section className="py-12 bg-night-700 border-y border-white/5">
+    <section className="py-12 bg-muted border-y border-border">
       <div className="container">
         <div className="text-center mb-8">
-          <h2 className="text-xl md:text-2xl font-bold text-white">
-            Your <span className="text-gold-400">confident car-buying</span> journey
+          <h2 className="text-xl md:text-2xl font-bold text-foreground">
+            Your <span className="text-primary">confident car-buying</span> journey
           </h2>
-          <p className="text-gray-400 mt-1.5 text-sm max-w-lg mx-auto">
+          <p className="text-muted-foreground mt-1.5 text-sm max-w-lg mx-auto">
             From search to signing — here&apos;s how DealerVoice protects you every step of the way.
           </p>
         </div>
@@ -53,31 +53,31 @@ export function BuyerJourneyStrip() {
           {STEPS.map((s, i) => (
             <div
               key={s.step}
-              className="relative rounded-xl bg-night-600 border border-white/8 p-5 hover:border-gold-500/40 hover:bg-night-500 transition-all group"
+              className="relative rounded-xl bg-muted border border-border p-5 hover:border-primary/40 hover:bg-muted transition-all group"
             >
               {/* Connector arrow — hidden on last item and on mobile */}
               {i < STEPS.length - 1 && (
                 <ArrowRight
                   size={14}
-                  className="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 text-gray-600 z-10"
+                  className="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 text-muted-foreground z-10"
                 />
               )}
 
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-9 h-9 rounded-xl bg-gold-500/10 border border-gold-500/20 grid place-items-center shrink-0">
-                  <s.icon size={16} className="text-gold-400" />
+                <div className="w-9 h-9 rounded-xl bg-primary/10 border border-primary/20 grid place-items-center shrink-0">
+                  <s.icon size={16} className="text-primary" />
                 </div>
-                <span className="text-[10px] font-bold tracking-widest text-gray-500 uppercase">
+                <span className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
                   Step {s.step}
                 </span>
               </div>
 
-              <h3 className="font-semibold text-white text-sm mb-1.5">{s.title}</h3>
-              <p className="text-xs text-gray-400 leading-relaxed mb-3">{s.body}</p>
+              <h3 className="font-semibold text-foreground text-sm mb-1.5">{s.title}</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed mb-3">{s.body}</p>
 
               <Link
                 href={s.href}
-                className="inline-flex items-center gap-1 text-xs font-semibold text-gold-400 group-hover:text-gold-300 transition-colors"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-primary group-hover:text-primary transition-colors"
               >
                 {s.cta} <ArrowRight size={11} />
               </Link>

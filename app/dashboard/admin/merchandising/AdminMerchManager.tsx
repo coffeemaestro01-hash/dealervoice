@@ -36,14 +36,14 @@ export function AdminMerchManager({
 
   return (
     <div className="space-y-4">
-      <div className="bg-white rounded-xl border p-5 flex flex-wrap gap-2 items-end max-w-lg">
+      <div className="bg-card rounded-xl border p-5 flex flex-wrap gap-2 items-end max-w-lg">
         <select className="border rounded-md px-3 h-10 text-sm flex-1" value={selected} onChange={(e) => setSelected(e.target.value)}>
           {dealers.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
         </select>
         <Input type="number" min={1} max={20} className="w-20" value={pin} onChange={(e) => setPin(e.target.value)} />
         <Button onClick={save}>Pin to homepage</Button>
       </div>
-      <div className="bg-white rounded-xl border divide-y">
+      <div className="bg-card rounded-xl border divide-y">
         {pinned.map((p) => (
           <div key={p.id} className="px-4 py-3 flex justify-between">
             <span>#{p.homepagePinOrder} {p.name}</span>

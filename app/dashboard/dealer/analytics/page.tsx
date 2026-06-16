@@ -42,7 +42,7 @@ export default function AnalyticsPage() {
   if (error) {
     return (
       <div className="p-8 text-center">
-        <p className="text-gray-500">{(error as Error).message}</p>
+        <p className="text-muted-foreground">{(error as Error).message}</p>
       </div>
     );
   }
@@ -50,7 +50,7 @@ export default function AnalyticsPage() {
   return (
     <div className="p-6 md:p-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Analytics</h1>
+        <h1 className="text-2xl font-bold text-foreground">Analytics</h1>
         <Select value={period} onValueChange={setPeriod}>
           <SelectTrigger className="w-32">
             <SelectValue />
@@ -79,12 +79,12 @@ export default function AnalyticsPage() {
               { label: "Reputation Score", value: `${data.reputation?.total ?? 0}/100` },
               { label: "Verified Reviews", value: `${(data.verifiedPercent || 0).toFixed(0)}%` },
             ].map((kpi) => (
-              <div key={kpi.label} className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-                <p className="text-sm text-gray-500">{kpi.label}</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">{kpi.value}</p>
+              <div key={kpi.label} className="bg-card rounded-xl border border-border p-5 shadow-sm">
+                <p className="text-sm text-muted-foreground">{kpi.label}</p>
+                <p className="text-2xl font-bold text-foreground mt-1">{kpi.value}</p>
                 {kpi.change !== undefined && kpi.change !== null && (
                   <div className={cn("flex items-center gap-1 text-xs mt-1 font-medium",
-                    Number(kpi.change) > 0 ? "text-green-600" : Number(kpi.change) < 0 ? "text-red-600" : "text-gray-500")}>
+                    Number(kpi.change) > 0 ? "text-primary" : Number(kpi.change) < 0 ? "text-destructive" : "text-muted-foreground")}>
                     {Number(kpi.change) > 0 ? <TrendingUp size={12} /> : Number(kpi.change) < 0 ? <TrendingDown size={12} /> : <Minus size={12} />}
                     {kpi.change}
                   </div>
@@ -94,8 +94,8 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Reviews over time */}
-          <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm mb-6">
-            <h2 className="font-semibold text-gray-900 mb-4">Reviews Over Time</h2>
+          <div className="bg-card rounded-xl border border-border p-6 shadow-sm mb-6">
+            <h2 className="font-semibold text-foreground mb-4">Reviews Over Time</h2>
             <ResponsiveContainer width="100%" height={240}>
               <LineChart data={data.dailyReviews}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -110,8 +110,8 @@ export default function AnalyticsPage() {
 
           <div className="grid md:grid-cols-2 gap-6">
             {/* Rating distribution */}
-            <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-              <h2 className="font-semibold text-gray-900 mb-4">Rating Distribution</h2>
+            <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
+              <h2 className="font-semibold text-foreground mb-4">Rating Distribution</h2>
               <ResponsiveContainer width="100%" height={200}>
                 <BarChart data={data.ratingDistribution}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -124,8 +124,8 @@ export default function AnalyticsPage() {
             </div>
 
             {/* Sentiment */}
-            <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-              <h2 className="font-semibold text-gray-900 mb-4">Customer Sentiment</h2>
+            <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
+              <h2 className="font-semibold text-foreground mb-4">Customer Sentiment</h2>
               <div className="flex items-center gap-4">
                 <ResponsiveContainer width="50%" height={200}>
                   <PieChart>
@@ -143,13 +143,13 @@ export default function AnalyticsPage() {
                 </ResponsiveContainer>
                 <div className="space-y-2 text-sm">
                   {[
-                    { label: "Positive", value: data.sentiment.positive, color: "bg-green-500" },
-                    { label: "Neutral", value: data.sentiment.neutral, color: "bg-amber-500" },
-                    { label: "Negative", value: data.sentiment.negative, color: "bg-red-500" },
+                    { label: "Positive", value: data.sentiment.positive, color: "bg-muted" },
+                    { label: "Neutral", value: data.sentiment.neutral, color: "bg-primary/10" },
+                    { label: "Negative", value: data.sentiment.negative, color: "bg-destructive/10" },
                   ].map((s) => (
                     <div key={s.label} className="flex items-center gap-2">
                       <div className={`w-3 h-3 rounded-full ${s.color}`} />
-                      <span className="text-gray-600">{s.label}</span>
+                      <span className="text-muted-foreground">{s.label}</span>
                       <span className="font-semibold ml-auto">{s.value}</span>
                     </div>
                   ))}

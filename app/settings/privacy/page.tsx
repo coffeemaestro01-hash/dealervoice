@@ -31,12 +31,12 @@ export default function PrivacySettingsPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen bg-card">
       <Navbar />
-      <main className="flex-1 bg-gray-50">
+      <main className="flex-1 bg-muted">
         <div className="container max-w-4xl py-12">
-          <h1 className="text-3xl font-extrabold text-gray-900">Privacy &amp; Your Data</h1>
-          <p className="text-gray-600 mt-2 mb-8">
+          <h1 className="text-3xl font-extrabold text-foreground">Privacy &amp; Your Data</h1>
+          <p className="text-muted-foreground mt-2 mb-8">
             Exercise your rights under the Digital Personal Data Protection Act, 2023 (§11-14). Requests are completed within 30 days.
           </p>
 
@@ -45,9 +45,9 @@ export default function PrivacySettingsPage() {
             <Card icon={Download} title="Download my data" desc="Get a copy of the personal data we hold about you (DPDP §11).">
               <div className="flex flex-wrap gap-2">
                 <a href="/api/dsr/export">
-                  <Button size="sm" className="bg-gold-gradient text-night-900 font-semibold border-0 hover:opacity-90"><Download size={14} className="mr-1" /> Download now (JSON)</Button>
+                  <Button size="sm" className="bg-ember text-night-900 font-semibold border-0 hover:opacity-90"><Download size={14} className="mr-1" /> Download now (JSON)</Button>
                 </a>
-                <Button size="sm" variant="outline" disabled={busy === "access"} onClick={() => submit("access")} className="border-gold/50 text-gold-700 hover:bg-gold-50">
+                <Button size="sm" variant="outline" disabled={busy === "access"} onClick={() => submit("access")} className="border-primary/30 text-primary hover:bg-primary/10">
                   {busy === "access" ? <Loader2 size={14} className="animate-spin" /> : "Log a formal request"}
                 </Button>
               </div>
@@ -65,19 +65,19 @@ export default function PrivacySettingsPage() {
 
             {/* 5. Grievance */}
             <Card icon={ShieldAlert} title="Raise a grievance" desc="For privacy, content, payment, or account issues.">
-              <Link href="/grievance"><Button size="sm" variant="outline" className="border-gold/50 text-gold-700 hover:bg-gold-50">Open grievance channel</Button></Link>
+              <Link href="/grievance"><Button size="sm" variant="outline" className="border-primary/30 text-primary hover:bg-primary/10">Open grievance channel</Button></Link>
             </Card>
           </div>
 
           {requests.length > 0 && (
             <div className="mt-10">
-              <h2 className="font-semibold text-gray-900 mb-3">Your requests</h2>
-              <div className="rounded-xl border border-gray-100 bg-white divide-y divide-gray-50">
+              <h2 className="font-semibold text-foreground mb-3">Your requests</h2>
+              <div className="rounded-xl border border-border bg-card divide-y divide-border">
                 {requests.map((r) => (
                   <div key={r.id} className="flex items-center justify-between px-4 py-3 text-sm">
-                    <span className="capitalize text-gray-800">{r.kind}</span>
-                    <span className="text-gray-500">{new Date(r.createdAt).toLocaleDateString()}</span>
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${r.status === "completed" ? "bg-green-50 text-green-700" : "bg-gold-50 text-gold-700"}`}>{r.status}</span>
+                    <span className="capitalize text-foreground">{r.kind}</span>
+                    <span className="text-muted-foreground">{new Date(r.createdAt).toLocaleDateString()}</span>
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${r.status === "completed" ? "bg-muted text-primary" : "bg-primary/10 text-primary"}`}>{r.status}</span>
                   </div>
                 ))}
               </div>
@@ -92,10 +92,10 @@ export default function PrivacySettingsPage() {
 
 function Card({ icon: Icon, title, desc, children }: any) {
   return (
-    <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+    <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
       <div className="flex items-start gap-3 mb-3">
-        <span className="grid place-items-center w-10 h-10 rounded-xl bg-gold-50 text-gold-600 shrink-0"><Icon size={18} /></span>
-        <div><h3 className="font-semibold text-gray-900">{title}</h3><p className="text-sm text-gray-500">{desc}</p></div>
+        <span className="grid place-items-center w-10 h-10 rounded-xl bg-primary/10 text-primary shrink-0"><Icon size={18} /></span>
+        <div><h3 className="font-semibold text-foreground">{title}</h3><p className="text-sm text-muted-foreground">{desc}</p></div>
       </div>
       {children}
     </div>
@@ -103,8 +103,8 @@ function Card({ icon: Icon, title, desc, children }: any) {
 }
 
 function Status({ kind, msg, open }: any) {
-  if (msg?.kind === kind) return <p className="text-sm text-green-600 mt-3 flex items-center gap-1"><CheckCircle2 size={14} />{msg.text}</p>;
-  if (open) return <p className="text-xs text-gold-700 mt-3">Pending · due {new Date(open.slaDueAt).toLocaleDateString()}</p>;
+  if (msg?.kind === kind) return <p className="text-sm text-primary mt-3 flex items-center gap-1"><CheckCircle2 size={14} />{msg.text}</p>;
+  if (open) return <p className="text-xs text-primary mt-3">Pending · due {new Date(open.slaDueAt).toLocaleDateString()}</p>;
   return null;
 }
 
@@ -113,9 +113,9 @@ function CorrectionCard({ busy, submit, msg, open }: any) {
   return (
     <Card icon={PencilLine} title="Correct my data" desc="Tell us what to fix in your profile or a review (DPDP §12).">
       <div className="space-y-2">
-        <input value={field} onChange={(e) => setField(e.target.value)} placeholder="What's wrong? (e.g. my display name)" className="w-full h-9 rounded-md border border-gray-200 px-3 text-sm" />
-        <input value={value} onChange={(e) => setValue(e.target.value)} placeholder="Correct value" className="w-full h-9 rounded-md border border-gray-200 px-3 text-sm" />
-        <Button size="sm" disabled={busy === "correction" || !field} onClick={() => submit("correction", { field, value })} className="bg-gold-gradient text-night-900 font-semibold border-0 hover:opacity-90">
+        <input value={field} onChange={(e) => setField(e.target.value)} placeholder="What's wrong? (e.g. my display name)" className="w-full h-9 rounded-md border border-border px-3 text-sm" />
+        <input value={value} onChange={(e) => setValue(e.target.value)} placeholder="Correct value" className="w-full h-9 rounded-md border border-border px-3 text-sm" />
+        <Button size="sm" disabled={busy === "correction" || !field} onClick={() => submit("correction", { field, value })} className="bg-ember text-night-900 font-semibold border-0 hover:opacity-90">
           {busy === "correction" ? <Loader2 size={14} className="animate-spin" /> : "Request correction"}
         </Button>
       </div>
@@ -129,12 +129,12 @@ function DeleteCard({ busy, submit, msg, open }: any) {
   return (
     <Card icon={Trash2} title="Delete my account & data" desc="Erase your account (DPDP §13). 14-day cooling-off; review text is anonymised, not deleted.">
       {!confirm ? (
-        <Button size="sm" variant="outline" onClick={() => setConfirm(true)} className="border-red-200 text-red-600 hover:bg-red-50">Start deletion</Button>
+        <Button size="sm" variant="outline" onClick={() => setConfirm(true)} className="border-primary/20 text-destructive hover:bg-destructive/10">Start deletion</Button>
       ) : (
         <div className="space-y-2">
-          <p className="text-xs text-gray-500">This schedules deletion after a 14-day cooling-off window. You can cancel anytime before then.</p>
+          <p className="text-xs text-muted-foreground">This schedules deletion after a 14-day cooling-off window. You can cancel anytime before then.</p>
           <div className="flex gap-2">
-            <Button size="sm" disabled={busy === "erasure"} onClick={() => submit("erasure")} className="bg-red-600 text-white hover:bg-red-700 border-0">
+            <Button size="sm" disabled={busy === "erasure"} onClick={() => submit("erasure")} className="bg-destructive/10 text-foreground hover:bg-destructive/10 border-0">
               {busy === "erasure" ? <Loader2 size={14} className="animate-spin" /> : "Confirm deletion"}
             </Button>
             <Button size="sm" variant="outline" onClick={() => setConfirm(false)}>Cancel</Button>
@@ -151,9 +151,9 @@ function NominateCard({ busy, submit, msg, open }: any) {
   return (
     <Card icon={UserPlus} title="Nominate a representative" desc="Nominate someone to exercise your rights if you can't (DPDP §14).">
       <div className="space-y-2">
-        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nominee name" className="w-full h-9 rounded-md border border-gray-200 px-3 text-sm" />
-        <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Nominee email" className="w-full h-9 rounded-md border border-gray-200 px-3 text-sm" />
-        <Button size="sm" disabled={busy === "nominate" || !name || !email} onClick={() => submit("nominate", { name, email })} className="bg-gold-gradient text-night-900 font-semibold border-0 hover:opacity-90">
+        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nominee name" className="w-full h-9 rounded-md border border-border px-3 text-sm" />
+        <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Nominee email" className="w-full h-9 rounded-md border border-border px-3 text-sm" />
+        <Button size="sm" disabled={busy === "nominate" || !name || !email} onClick={() => submit("nominate", { name, email })} className="bg-ember text-night-900 font-semibold border-0 hover:opacity-90">
           {busy === "nominate" ? <Loader2 size={14} className="animate-spin" /> : "Add nominee"}
         </Button>
       </div>

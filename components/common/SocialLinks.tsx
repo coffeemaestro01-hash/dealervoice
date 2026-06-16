@@ -18,8 +18,8 @@ interface SocialLinksProps {
 export function SocialLinks({ className, iconClassName, variant = "footer" }: SocialLinksProps) {
   const base =
     variant === "footer"
-      ? "w-9 h-9 grid place-items-center rounded-full border border-gold/30 text-gold-400 hover:bg-gold-500 hover:text-night-900 transition-colors"
-      : "w-10 h-10 grid place-items-center rounded-xl border border-gray-200 text-gray-600 hover:border-gold/40 hover:text-gold-700 hover:bg-gold-50 transition-colors";
+      ? "w-9 h-9 grid place-items-center rounded-full border border-primary/30 text-primary hover:bg-primary/10 hover:text-night-900 transition-colors"
+      : "w-10 h-10 grid place-items-center rounded-xl border border-border text-muted-foreground hover:border-primary/30 hover:text-primary hover:bg-primary/10 transition-colors";
 
   return (
     <div className={cn("flex gap-2", className)}>

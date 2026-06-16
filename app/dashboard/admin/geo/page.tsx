@@ -13,27 +13,27 @@ export default async function AdminGeoPage() {
   return (
     <div className="p-6 lg:p-8 space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Geo coverage</h1>
-        <p className="text-sm text-gray-500 mt-1">Chicago / Illinois primary · U.S. expansion · global listings for browse-only.</p>
+        <h1 className="text-2xl font-bold text-foreground">Geo coverage</h1>
+        <p className="text-sm text-muted-foreground mt-1">Chicago / Illinois primary · U.S. expansion · global listings for browse-only.</p>
       </div>
 
       {us && (
-        <div className="bg-white rounded-xl border p-6">
+        <div className="bg-card rounded-xl border p-6">
           <div className="flex flex-wrap justify-between items-start gap-4 mb-4">
             <div>
               <h2 className="font-semibold text-lg">🇺🇸 United States</h2>
-              <p className="text-sm text-gray-500">Primary GTM market — Chicago metro and nationwide</p>
+              <p className="text-sm text-muted-foreground">Primary GTM market — Chicago metro and nationwide</p>
             </div>
             <div className="text-right">
-              <p className="text-3xl font-bold text-gold-700">{us.dealerCount.toLocaleString()}</p>
-              <Link href="/chicago" className="text-xs text-gold-600 hover:underline">Chicago hub →</Link>
+              <p className="text-3xl font-bold text-primary">{us.dealerCount.toLocaleString()}</p>
+              <Link href="/chicago" className="text-xs text-primary hover:underline">Chicago hub →</Link>
               {" · "}
-              <Link href="/dealers/us" className="text-xs text-gold-600 hover:underline">Public hub →</Link>
+              <Link href="/dealers/us" className="text-xs text-primary hover:underline">Public hub →</Link>
             </div>
           </div>
           <div className="flex flex-wrap gap-2">
             {us.cities.map((city) => (
-              <span key={city.id} className="text-xs bg-gray-50 rounded-full px-2 py-1 border border-gray-100">
+              <span key={city.id} className="text-xs bg-muted rounded-full px-2 py-1 border border-border">
                 {city.name} ({city.dealerCount})
               </span>
             ))}
@@ -42,16 +42,16 @@ export default async function AdminGeoPage() {
       )}
 
       <div className="space-y-4">
-        <h2 className="font-semibold text-gray-700">Other markets (browse-only)</h2>
+        <h2 className="font-semibold text-foreground">Other markets (browse-only)</h2>
         {others.map((c) => (
-          <div key={c.id} className="bg-white rounded-xl border p-5">
+          <div key={c.id} className="bg-card rounded-xl border p-5">
             <div className="flex justify-between items-center mb-2">
               <h3 className="font-medium">{c.name}</h3>
-              <span className="text-xl font-bold text-gray-700">{c.dealerCount}</span>
+              <span className="text-xl font-bold text-foreground">{c.dealerCount}</span>
             </div>
             <div className="flex flex-wrap gap-2">
               {c.cities.map((city) => (
-                <span key={city.id} className="text-xs bg-gray-100 rounded-full px-2 py-1">
+                <span key={city.id} className="text-xs bg-muted rounded-full px-2 py-1">
                   {city.name} ({city.dealerCount})
                 </span>
               ))}

@@ -138,28 +138,28 @@ export function AdminPromotionsManager() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Tag className="text-gold-600" size={24} />
+          <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+            <Tag className="text-primary" size={24} />
             Promotions & discounts
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Stripe promotion codes for subscription discounts. Per-dealer codes are auto-created in the outreach drip (step 3).
           </p>
         </div>
         <Button
           onClick={() => setShowForm((v) => !v)}
-          className="bg-gray-900 hover:bg-gray-800 text-white gap-2"
+          className="bg-foreground hover:bg-foreground text-foreground gap-2"
         >
           <Plus size={16} /> New promotion
         </Button>
       </div>
 
       {showForm && (
-        <form onSubmit={handleCreate} className="bg-white rounded-xl border border-gray-100 p-6 space-y-4">
-          <h2 className="font-semibold text-gray-900">Create promotion code</h2>
+        <form onSubmit={handleCreate} className="bg-card rounded-xl border border-border p-6 space-y-4">
+          <h2 className="font-semibold text-foreground">Create promotion code</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-xs font-medium text-gray-500">Code</label>
+              <label className="text-xs font-medium text-muted-foreground">Code</label>
               <Input
                 value={form.code}
                 onChange={(e) => setForm({ ...form, code: e.target.value.toUpperCase() })}
@@ -169,7 +169,7 @@ export function AdminPromotionsManager() {
               />
             </div>
             <div>
-              <label className="text-xs font-medium text-gray-500">Label (optional)</label>
+              <label className="text-xs font-medium text-muted-foreground">Label (optional)</label>
               <Input
                 value={form.label}
                 onChange={(e) => setForm({ ...form, label: e.target.value })}
@@ -178,37 +178,37 @@ export function AdminPromotionsManager() {
               />
             </div>
             <div>
-              <label className="text-xs font-medium text-gray-500">Plan</label>
+              <label className="text-xs font-medium text-muted-foreground">Plan</label>
               <select
                 value={form.plan}
                 onChange={(e) => setForm({ ...form, plan: e.target.value as "PRO" | "ENTERPRISE" })}
-                className="mt-1 w-full rounded-md border border-gray-200 px-3 py-2 text-sm"
+                className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm"
               >
                 <option value="PRO">Pro</option>
                 <option value="ENTERPRISE">Enterprise</option>
               </select>
             </div>
             <div>
-              <label className="text-xs font-medium text-gray-500">Billing interval</label>
+              <label className="text-xs font-medium text-muted-foreground">Billing interval</label>
               <select
                 value={form.interval}
                 onChange={(e) => setForm({ ...form, interval: e.target.value as "monthly" | "annual" })}
-                className="mt-1 w-full rounded-md border border-gray-200 px-3 py-2 text-sm"
+                className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm"
               >
                 <option value="monthly">Monthly</option>
                 <option value="annual">Annual</option>
               </select>
             </div>
             <div className="sm:col-span-2">
-              <label className="text-xs font-medium text-gray-500">Discount type</label>
+              <label className="text-xs font-medium text-muted-foreground">Discount type</label>
               <div className="mt-1 flex gap-2">
                 <button
                   type="button"
                   onClick={() => setForm({ ...form, discountType: "FIXED" })}
                   className={`px-3 py-2 rounded-md text-sm font-medium border transition-colors ${
                     form.discountType === "FIXED"
-                      ? "bg-gray-900 text-white border-gray-900"
-                      : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
+                      ? "bg-foreground text-foreground border-border"
+                      : "bg-card text-muted-foreground border-border hover:border-border"
                   }`}
                 >
                   Fixed price
@@ -218,8 +218,8 @@ export function AdminPromotionsManager() {
                   onClick={() => setForm({ ...form, discountType: "PERCENT" })}
                   className={`px-3 py-2 rounded-md text-sm font-medium border transition-colors ${
                     form.discountType === "PERCENT"
-                      ? "bg-gray-900 text-white border-gray-900"
-                      : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
+                      ? "bg-foreground text-foreground border-border"
+                      : "bg-card text-muted-foreground border-border hover:border-border"
                   }`}
                 >
                   Percentage off
@@ -228,7 +228,7 @@ export function AdminPromotionsManager() {
             </div>
             {form.discountType === "FIXED" ? (
               <div>
-                <label className="text-xs font-medium text-gray-500">Fixed price (USD)</label>
+                <label className="text-xs font-medium text-muted-foreground">Fixed price (USD)</label>
                 <Input
                   type="number"
                   step="0.01"
@@ -241,7 +241,7 @@ export function AdminPromotionsManager() {
               </div>
             ) : (
               <div className="sm:col-span-2">
-                <label className="text-xs font-medium text-gray-500">Percent off</label>
+                <label className="text-xs font-medium text-muted-foreground">Percent off</label>
                 <div className="mt-1 flex flex-wrap gap-2">
                   {PRESET_PERCENT_OFF.map((pct) => (
                     <button
@@ -250,8 +250,8 @@ export function AdminPromotionsManager() {
                       onClick={() => setForm({ ...form, percentOff: String(pct) })}
                       className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
                         form.percentOff === String(pct)
-                          ? "bg-gold-800 text-white border-gold-800"
-                          : "bg-white text-gray-600 border-gray-200 hover:border-gold-300"
+                          ? "bg-primary text-foreground border-primary/30"
+                          : "bg-card text-muted-foreground border-border hover:border-primary/30"
                       }`}
                     >
                       {pct}%
@@ -272,7 +272,7 @@ export function AdminPromotionsManager() {
               </div>
             )}
             <div>
-              <label className="text-xs font-medium text-gray-500">Max redemptions</label>
+              <label className="text-xs font-medium text-muted-foreground">Max redemptions</label>
               <Input
                 type="number"
                 min="1"
@@ -282,9 +282,9 @@ export function AdminPromotionsManager() {
               />
             </div>
           </div>
-          {error && <p className="text-red-600 text-sm">{error}</p>}
+          {error && <p className="text-destructive text-sm">{error}</p>}
           <div className="flex gap-2">
-            <Button type="submit" disabled={creating} className="bg-gold-800 hover:bg-gold-900 text-white">
+            <Button type="submit" disabled={creating} className="bg-primary hover:bg-primary/90 text-foreground">
               {creating ? <Loader2 size={16} className="animate-spin mr-2" /> : null}
               Create in Stripe
             </Button>
@@ -295,73 +295,73 @@ export function AdminPromotionsManager() {
         </form>
       )}
 
-      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900">
+      <div className="bg-primary/10 border border-primary/20 rounded-xl p-4 text-sm text-primary">
         <p className="font-semibold">Default launch code: {DEFAULT_PRO_ONE_DOLLAR_CODE}</p>
-        <p className="mt-1 text-amber-800">
+        <p className="mt-1 text-primary">
           Pro monthly at {formatPromoPrice(100)}/mo (normally {PLAN_PRICES_USD.PRO.monthlyDisplay}/mo). Auto-created on first visit if missing.
         </p>
       </div>
 
       {loading ? (
-        <div className="flex items-center gap-2 text-gray-500 py-8">
+        <div className="flex items-center gap-2 text-muted-foreground py-8">
           <Loader2 size={18} className="animate-spin" /> Loading promotions…
         </div>
       ) : promotions.length === 0 ? (
-        <p className="text-gray-500 py-8">No promotion codes yet.</p>
+        <p className="text-muted-foreground py-8">No promotion codes yet.</p>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+        <div className="bg-card rounded-xl border border-border overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b border-gray-100">
+            <thead className="bg-muted border-b border-border">
               <tr>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Dealer</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Code</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Plan</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Discount</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Redemptions</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Status</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Dealer</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Code</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Plan</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Discount</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Redemptions</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Status</th>
                 <th className="px-4 py-3" />
               </tr>
             </thead>
             <tbody>
               {promotions.map((p) => (
-                <tr key={p.id} className="border-b border-gray-50 last:border-0">
-                  <td className="px-4 py-3 text-gray-600 text-xs">
+                <tr key={p.id} className="border-b border-border last:border-0">
+                  <td className="px-4 py-3 text-muted-foreground text-xs">
                     {p.dealership ? (
                       <span title={p.dealership.slug}>{p.dealership.name}</span>
                     ) : (
-                      <span className="text-gray-400">Global</span>
+                      <span className="text-muted-foreground">Global</span>
                     )}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono font-semibold text-gray-900">{p.code}</span>
+                      <span className="font-mono font-semibold text-foreground">{p.code}</span>
                       <button
                         type="button"
                         onClick={() => copyCode(p.code)}
-                        className="text-gray-400 hover:text-gold-700"
+                        className="text-muted-foreground hover:text-primary"
                         title="Copy code"
                       >
                         <Copy size={14} />
                       </button>
-                      {copied === p.code && <span className="text-xs text-green-600">Copied</span>}
+                      {copied === p.code && <span className="text-xs text-primary">Copied</span>}
                     </div>
-                    {p.label && <p className="text-xs text-gray-400 mt-0.5">{p.label}</p>}
+                    {p.label && <p className="text-xs text-muted-foreground mt-0.5">{p.label}</p>}
                   </td>
-                  <td className="px-4 py-3 text-gray-600">
+                  <td className="px-4 py-3 text-muted-foreground">
                     {p.plan ?? "Any"} · {p.interval ?? "any"}
                   </td>
                   <td className="px-4 py-3">
-                    <span className="font-semibold text-green-700">{formatPromotionDiscount(p)}</span>
-                    <span className="text-gray-400 text-xs ml-1">from {listPrice(p.plan, p.interval)}</span>
+                    <span className="font-semibold text-primary">{formatPromotionDiscount(p)}</span>
+                    <span className="text-muted-foreground text-xs ml-1">from {listPrice(p.plan, p.interval)}</span>
                   </td>
-                  <td className="px-4 py-3 text-gray-600">
+                  <td className="px-4 py-3 text-muted-foreground">
                     {p.timesRedeemed}
                     {p.maxRedemptions != null ? ` / ${p.maxRedemptions}` : ""}
                   </td>
                   <td className="px-4 py-3">
                     <span
                       className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
-                        p.active ? "bg-green-50 text-green-700" : "bg-gray-100 text-gray-500"
+                        p.active ? "bg-muted text-primary" : "bg-muted text-muted-foreground"
                       }`}
                     >
                       {p.active ? "Active" : "Inactive"}
@@ -371,10 +371,10 @@ export function AdminPromotionsManager() {
                     <button
                       type="button"
                       onClick={() => toggleActive(p.id, !p.active)}
-                      className="text-gray-500 hover:text-gray-900"
+                      className="text-muted-foreground hover:text-foreground"
                       title={p.active ? "Deactivate" : "Activate"}
                     >
-                      {p.active ? <ToggleRight size={22} className="text-green-600" /> : <ToggleLeft size={22} />}
+                      {p.active ? <ToggleRight size={22} className="text-primary" /> : <ToggleLeft size={22} />}
                     </button>
                   </td>
                 </tr>

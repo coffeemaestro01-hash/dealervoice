@@ -57,16 +57,16 @@ export async function CompetitorAdPlacement(props: Props) {
   return (
     <section
       aria-label="Sponsored alternative dealers nearby"
-      className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-gold/30 rounded-2xl p-5 md:p-6 shadow-sm"
+      className="bg-primary/10 border-2 border-primary/30 rounded-2xl p-5 md:p-6 shadow-sm"
     >
       <header className="mb-4">
-        <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-gold-700 mb-1">
+        <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-primary mb-1">
           Sponsored Alternative
         </p>
-        <h2 className="text-lg md:text-xl font-bold text-gray-900">
+        <h2 className="text-lg md:text-xl font-bold text-foreground">
           Highly Rated Dealers Nearby
         </h2>
-        <p className="text-sm text-gray-600 mt-1">
+        <p className="text-sm text-muted-foreground mt-1">
           Car buyers in your area also trust these dealerships.
         </p>
       </header>
@@ -77,15 +77,15 @@ export async function CompetitorAdPlacement(props: Props) {
             <li key={dealer.id}>
               <Link
                 href={`/dealership/${dealer.slug}`}
-                className="block h-full bg-white rounded-xl border border-gold/20 p-4 hover:border-gold/50 hover:shadow-md transition-all"
+                className="block h-full bg-card rounded-xl border border-primary/30 p-4 hover:border-primary/30 hover:shadow-md transition-all"
               >
-                <p className="font-semibold text-gray-900 text-sm line-clamp-2">{dealer.name}</p>
-                <p className="text-xs text-gray-500 mt-0.5">
+                <p className="font-semibold text-foreground text-sm line-clamp-2">{dealer.name}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
                   {[dealer.cityName, dealer.stateName].filter(Boolean).join(", ")}
                 </p>
                 <div className="flex items-center gap-2 mt-2">
                   <StarRating rating={dealer.overallRating} size="sm" />
-                  <span className="text-xs font-medium text-gray-700">
+                  <span className="text-xs font-medium text-foreground">
                     {dealer.overallRating.toFixed(1)} ({dealer.totalReviews})
                   </span>
                 </div>
@@ -97,7 +97,7 @@ export async function CompetitorAdPlacement(props: Props) {
         <AutomotiveAdBanner type="Sponsored_Local_Dealer" slot="profile_competitor" countryCode={countryCode} />
       )}
 
-      <div className="mt-4 pt-4 border-t border-gold/20">
+      <div className="mt-4 pt-4 border-t border-primary/30">
         <AutomotiveAdBanner type="Tier2_OEM_Offer" compact slot="profile_financing" countryCode={countryCode} />
       </div>
     </section>

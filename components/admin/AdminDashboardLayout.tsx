@@ -27,20 +27,20 @@ export function AdminDashboardLayout({
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      <aside className="hidden lg:flex flex-col w-60 bg-gray-950 fixed h-full z-10 overflow-y-auto">
-        <div className="p-5 border-b border-gray-800">
-          <Link href="/" className="flex items-center gap-2 font-bold text-white">
-            <Star className="fill-current text-gold-500" size={18} />
+    <div className="min-h-screen bg-muted flex">
+      <aside className="hidden lg:flex flex-col w-60 bg-card border-r border-border fixed h-full z-10 overflow-y-auto">
+        <div className="p-5 border-b border-border">
+          <Link href="/" className="flex items-center gap-2 font-bold text-foreground">
+            <Star className="fill-current text-primary" size={18} />
             DealerVoice
           </Link>
-          <span className="text-xs text-gray-500 mt-0.5 block">Admin · {userRole.replace(/_/g, " ")}</span>
+          <span className="text-xs text-muted-foreground mt-0.5 block">Admin · {userRole.replace(/_/g, " ")}</span>
         </div>
 
         <nav className="p-3 flex-1 space-y-4">
           {(Object.keys(byTeam) as AdminTeam[]).map((team) => (
             <div key={team}>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-600 px-3 mb-1">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground px-3 mb-1">
                 {TEAM_LABELS[team]}
               </p>
               {byTeam[team].map((item) => {
@@ -51,7 +51,7 @@ export function AdminDashboardLayout({
                     href={item.href}
                     className={cn(
                       "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors mb-0.5",
-                      active ? "bg-gold-700 text-white" : "text-gray-400 hover:bg-gray-800 hover:text-white"
+                      active ? "bg-primary/90 text-foreground" : "text-muted-foreground hover:bg-foreground hover:text-foreground"
                     )}
                   >
                     <item.icon size={15} />

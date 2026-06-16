@@ -1,7 +1,6 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
@@ -16,69 +15,69 @@ const config: Config = {
     },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        border: "var(--border)",
+        input: "var(--input)",
+        ring: "var(--ring)",
+        background: "var(--background)",
+        foreground: "var(--foreground)",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "var(--primary)",
+          foreground: "var(--primary-foreground)",
+          glow: "var(--primary-glow)",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "var(--secondary)",
+          foreground: "var(--secondary-foreground)",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: "var(--destructive)",
+          foreground: "var(--destructive-foreground)",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: "var(--muted)",
+          foreground: "var(--muted-foreground)",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "var(--accent)",
+          foreground: "var(--accent-foreground)",
         },
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT: "var(--popover)",
+          foreground: "var(--popover-foreground)",
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: "var(--card)",
+          foreground: "var(--card-foreground)",
         },
-        // Brand colors
-        brand: {
-          50: "#eff6ff",
-          100: "#dbeafe",
-          500: "#3b82f6",
-          600: "#2563eb",
-          700: "#1d4ed8",
-          900: "#1e3a8a",
-        },
-        // Accent scale (luxury orange) — kept under the `gold` key so every
-        // existing gold-* class re-themes to orange with no per-file edits.
+        circuit: "var(--circuit)",
+        // Backward compat: gold scale maps to primary shades
         gold: {
-          50: "#fff5ed",
-          100: "#ffe6d5",
-          200: "#ffc8a8",
-          300: "#ffa470",
-          400: "#ff7f3f",
-          500: "#fb6514",
-          600: "#e2571e",
-          700: "#bd4514",
-          800: "#963718",
-          900: "#7c2f16",
+          50: "oklch(0.97 0.04 52)",
+          100: "oklch(0.94 0.08 52)",
+          200: "oklch(0.88 0.12 52)",
+          300: "oklch(0.82 0.15 52)",
+          400: "oklch(0.76 0.17 52)",
+          500: "var(--primary)",
+          600: "oklch(0.62 0.17 52)",
+          700: "oklch(0.55 0.15 52)",
+          800: "oklch(0.48 0.12 52)",
+          900: "oklch(0.42 0.10 52)",
         },
-        // Dark scale (rich black / charcoal)
+        // Backward compat: night maps to pearl/muted (light only)
         night: {
-          900: "#000000",
-          800: "#0a0a0a",
-          700: "#121212",
-          600: "#1a1a1a",
-          500: "#262626",
+          900: "var(--background)",
+          800: "var(--card)",
+          700: "var(--muted)",
+          600: "var(--muted)",
+          500: "var(--border)",
+        },
+        brand: {
+          50: "var(--muted)",
+          100: "var(--muted)",
+          500: "var(--primary)",
+          600: "var(--primary)",
+          700: "var(--primary)",
+          900: "var(--foreground)",
         },
       },
       borderRadius: {
@@ -87,8 +86,12 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-        display: ["var(--font-display)", "Georgia", "serif"],
+        sans: ["var(--font-inter)", "var(--font-body)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "Outfit", "ui-sans-serif", "system-ui", "sans-serif"],
+      },
+      boxShadow: {
+        soft: "var(--shadow-soft)",
+        ember: "var(--shadow-ember)",
       },
       keyframes: {
         "accordion-down": { from: { height: "0" }, to: { height: "var(--radix-accordion-content-height)" } },

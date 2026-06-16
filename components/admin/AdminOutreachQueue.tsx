@@ -143,7 +143,7 @@ export function AdminOutreachQueue() {
 
   const market: OutreachMarket = "US";
 
-  if (isLoading) return <p className="text-sm text-gray-500">Loading contact queue…</p>;
+  if (isLoading) return <p className="text-sm text-muted-foreground">Loading contact queue…</p>;
 
   return (
     <div className="space-y-6">
@@ -188,7 +188,7 @@ export function AdminOutreachQueue() {
             </option>
           ))}
         </select>
-        <label className="flex items-center gap-2 text-sm text-gray-600">
+        <label className="flex items-center gap-2 text-sm text-muted-foreground">
           <input
             type="checkbox"
             checked={hasWebsite}
@@ -199,12 +199,12 @@ export function AdminOutreachQueue() {
           />
           Has website only
         </label>
-        <span className="text-sm text-gray-500 ml-auto">
+        <span className="text-sm text-muted-foreground ml-auto">
           {data?.total?.toLocaleString() ?? 0} dealers · {mode === "drip" ? "has email" : "phone, no email"} · unclaimed
         </span>
       </div>
 
-      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900 space-y-1">
+      <div className="bg-primary/10 border border-primary/20 rounded-xl p-4 text-sm text-primary space-y-1">
         <p>
           <strong>Outreach from:</strong> {EMAILS.dealers} · <strong>WhatsApp Business:</strong>{" "}
           <a href={WHATSAPP_BUSINESS.href} target="_blank" rel="noopener noreferrer" className="underline">
@@ -245,28 +245,28 @@ export function AdminOutreachQueue() {
                   : null;
 
           return (
-            <div key={d.id} className="bg-white rounded-xl border p-4">
+            <div key={d.id} className="bg-card rounded-xl border p-4">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <Link
                     href={profileUrl(d.slug)}
-                    className="font-semibold text-gray-900 hover:text-gold-700"
+                    className="font-semibold text-foreground hover:text-primary"
                     target="_blank"
                   >
                     {d.name}
                   </Link>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-muted-foreground">
                     {[d.cityName, d.districtName, d.stateName].filter(Boolean).join(", ")}
                     {d.totalReviews > 0 && ` · ${d.totalReviews} reviews`}
                     {d.email && mode === "drip" && (
-                      <span className="block text-xs text-gray-400 mt-0.5">{d.email}</span>
+                      <span className="block text-xs text-muted-foreground mt-0.5">{d.email}</span>
                     )}
                   </p>
                   {dripLabel && (
-                    <span className="inline-flex mt-1 text-xs font-medium px-2 py-0.5 rounded-full bg-blue-50 text-blue-700">
+                    <span className="inline-flex mt-1 text-xs font-medium px-2 py-0.5 rounded-full bg-muted text-primary">
                       {dripLabel}
                       {d.nextOutreachAt && d.outreachDripActive && (
-                        <span className="text-blue-500 ml-1">
+                        <span className="text-primary ml-1">
                           · next {new Date(d.nextOutreachAt).toLocaleDateString()}
                         </span>
                       )}
@@ -274,7 +274,7 @@ export function AdminOutreachQueue() {
                   )}
                   <div className="flex flex-wrap gap-2 mt-2 text-sm">
                     {d.phone && (
-                      <a href={`tel:${d.phone}`} className="inline-flex items-center gap-1 text-gold-700 hover:underline">
+                      <a href={`tel:${d.phone}`} className="inline-flex items-center gap-1 text-primary hover:underline">
                         <Phone size={14} /> {d.phone}
                       </a>
                     )}
@@ -283,7 +283,7 @@ export function AdminOutreachQueue() {
                         href={d.website.startsWith("http") ? d.website : `https://${d.website}`}
                         target="_blank"
                         rel="noopener"
-                        className="inline-flex items-center gap-1 text-gray-600 hover:underline"
+                        className="inline-flex items-center gap-1 text-muted-foreground hover:underline"
                       >
                         <ExternalLink size={14} /> Website
                       </a>
@@ -306,7 +306,7 @@ export function AdminOutreachQueue() {
                   {mode === "drip" && d.email && d.outreachDripStep === 0 && (
                     <Button
                       size="sm"
-                      className="gap-1 bg-gold-800 hover:bg-gold-900 text-white"
+                      className="gap-1 bg-primary hover:bg-primary/90 text-foreground"
                       disabled={startingDrip === d.id}
                       onClick={() => startDrip(d.id)}
                     >
@@ -330,7 +330,7 @@ export function AdminOutreachQueue() {
                   </Button>
                   <Button
                     size="sm"
-                    className="gap-1 bg-green-600 hover:bg-green-700 text-white"
+                    className="gap-1 bg-muted hover:bg-muted text-foreground"
                     onClick={() => updateMutation.mutate({ id: d.id, outreachStatus: "contacted" })}
                   >
                     <Check size={14} /> Contacted
@@ -344,8 +344,8 @@ export function AdminOutreachQueue() {
               {open && (
                 <div className="mt-4 pt-4 border-t space-y-4 text-sm">
                   <div>
-                    <p className="font-semibold text-gray-800 mb-1">Claim email (copy → send from {EMAILS.dealers})</p>
-                    <pre className="bg-gray-50 p-3 rounded-lg text-xs whitespace-pre-wrap overflow-x-auto">{claim.body}</pre>
+                    <p className="font-semibold text-foreground mb-1">Claim email (copy → send from {EMAILS.dealers})</p>
+                    <pre className="bg-muted p-3 rounded-lg text-xs whitespace-pre-wrap overflow-x-auto">{claim.body}</pre>
                     <Button
                       size="sm"
                       variant="outline"
@@ -356,7 +356,7 @@ export function AdminOutreachQueue() {
                     </Button>
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-800 mb-1">Review invite email</p>
+                    <p className="font-semibold text-foreground mb-1">Review invite email</p>
                     <Button
                       size="sm"
                       variant="outline"
@@ -368,14 +368,14 @@ export function AdminOutreachQueue() {
                   </div>
                   {mode === "phone" && (
                     <div>
-                      <p className="font-semibold text-gray-800 mb-1">Phone script</p>
-                      <pre className="bg-gray-50 p-3 rounded-lg text-xs whitespace-pre-wrap">{buildPhoneScript(ctx)}</pre>
+                      <p className="font-semibold text-foreground mb-1">Phone script</p>
+                      <pre className="bg-muted p-3 rounded-lg text-xs whitespace-pre-wrap">{buildPhoneScript(ctx)}</pre>
                     </div>
                   )}
                   {mode === "phone" && (
                     <div className="flex flex-wrap gap-2 items-end">
                       <div className="flex-1 min-w-[200px]">
-                        <p className="text-xs text-gray-500 mb-1">Found email on website?</p>
+                        <p className="text-xs text-muted-foreground mb-1">Found email on website?</p>
                         <Input
                           placeholder="sales@dealer.com"
                           value={manualEmail[d.id] ?? ""}
@@ -419,7 +419,7 @@ export function AdminOutreachQueue() {
           <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
             Prev
           </Button>
-          <span className="text-sm text-gray-500 self-center">
+          <span className="text-sm text-muted-foreground self-center">
             Page {page} of {data.pages}
           </span>
           <Button variant="outline" size="sm" disabled={page >= data.pages} onClick={() => setPage((p) => p + 1)}>

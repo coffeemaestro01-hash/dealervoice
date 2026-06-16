@@ -59,8 +59,8 @@ export function SaveButton({ dealershipId, variant = "default" }: Props) {
         className={cn(
           "w-9 h-9 rounded-full border grid place-items-center transition-all",
           saved
-            ? "border-gold-300 bg-gold-50 text-gold-700"
-            : "border-gray-200 bg-white text-gray-500 hover:border-gold-300 hover:text-gold-600"
+            ? "border-primary/30 bg-primary/10 text-primary"
+            : "border-border bg-card text-muted-foreground hover:border-primary/30 hover:text-primary"
         )}
       >
         {saved ? <BookmarkCheck size={16} /> : <Bookmark size={16} />}
@@ -77,8 +77,8 @@ export function SaveButton({ dealershipId, variant = "default" }: Props) {
       className={cn(
         "gap-1.5 transition-all",
         saved
-          ? "border-gold-300 bg-gold-50 text-gold-800 hover:bg-gold-100"
-          : "border-gray-200 text-gray-700 hover:border-gold-300 hover:text-gold-700"
+          ? "border-primary/30 bg-primary/10 text-primary hover:bg-primary/10"
+          : "border-border text-foreground hover:border-primary/30 hover:text-primary"
       )}
     >
       {saved ? <BookmarkCheck size={15} /> : <Bookmark size={15} />}

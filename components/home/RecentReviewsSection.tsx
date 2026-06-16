@@ -26,25 +26,25 @@ export async function RecentReviewsSection() {
   }
 
   return (
-    <section className="py-16 bg-night-soft border-y border-white/5">
+    <section className="py-16 bg-pearl border-y border-border">
       <div className="container">
         <div className="text-center mb-10">
-          <h2 className="font-display text-2xl md:text-3xl font-bold text-white">
-            Recent customer <span className="text-gold">reviews</span>
+          <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">
+            Recent customer <span className="text-primary">reviews</span>
           </h2>
-          <p className="text-gray-400 mt-2">Real experiences from verified car buyers</p>
+          <p className="text-muted-foreground mt-2">Real experiences from verified car buyers</p>
         </div>
 
         {reviews.length === 0 ? (
-          <div className="max-w-lg mx-auto text-center rounded-2xl border border-white/10 bg-night/50 p-10">
-            <PenLine size={32} className="text-gold-400 mx-auto mb-4" />
-            <h3 className="font-display text-lg font-semibold text-white mb-2">Reviews are open</h3>
-            <p className="text-gray-400 text-sm mb-6">
+          <div className="max-w-lg mx-auto text-center rounded-2xl border border-border bg-background/50 p-10">
+            <PenLine size={32} className="text-primary mx-auto mb-4" />
+            <h3 className="font-display text-lg font-semibold text-foreground mb-2">Reviews are open</h3>
+            <p className="text-muted-foreground text-sm mb-6">
               We&apos;re building a community of verified buyer experiences. Be among the first to review a dealership
               in your city.
             </p>
             <Link href="/write-review">
-              <Button className="bg-gold-600 hover:bg-gold-700 text-white font-semibold">Write a review</Button>
+              <Button className="bg-primary hover:bg-primary/90 text-foreground font-semibold">Write a review</Button>
             </Link>
           </div>
         ) : (

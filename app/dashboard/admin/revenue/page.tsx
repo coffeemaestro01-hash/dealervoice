@@ -19,10 +19,10 @@ export default async function AdminRevenuePage() {
   return (
     <div className="p-6 lg:p-8 space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Revenue command center</h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Revenue command center</h1>
+        <p className="text-sm text-muted-foreground mt-1">
           MRR estimate, paid revenue, and claim → pay funnel.{" "}
-          <Link href="/dashboard/admin/income" className="text-gold-700 hover:underline">
+          <Link href="/dashboard/admin/income" className="text-primary hover:underline">
             Full income ledger (SUPER_ADMIN) →
           </Link>
         </p>
@@ -35,15 +35,15 @@ export default async function AdminRevenuePage() {
         <Stat label="Enterprise" value={stats.enterpriseCount} />
       </div>
 
-      <div className="bg-white rounded-xl border p-6">
-        <h2 className="font-semibold text-gray-900 mb-4">Claim → pay funnel</h2>
+      <div className="bg-card rounded-xl border p-6">
+        <h2 className="font-semibold text-foreground mb-4">Claim → pay funnel</h2>
         <div className="grid sm:grid-cols-4 gap-4">
           {funnel.map((step, i) => (
-            <Link key={step.label} href={step.href} className="text-center p-4 rounded-lg bg-gray-50 hover:bg-gold-50 transition-colors">
-              <p className="text-2xl font-bold text-gray-900">{step.value}</p>
-              <p className="text-xs text-gray-500 mt-1">{step.label}</p>
+            <Link key={step.label} href={step.href} className="text-center p-4 rounded-lg bg-muted hover:bg-primary/10 transition-colors">
+              <p className="text-2xl font-bold text-foreground">{step.value}</p>
+              <p className="text-xs text-muted-foreground mt-1">{step.label}</p>
               {i < funnel.length - 1 && (
-                <p className="text-[10px] text-gold-600 mt-2">
+                <p className="text-[10px] text-primary mt-2">
                   {i === 2 ? `${stats.claimToPayRate}% claim→pay` : ""}
                 </p>
               )}
@@ -57,10 +57,10 @@ export default async function AdminRevenuePage() {
         <Stat label="Lead conversion" value={`${stats.leadConversionRate}%`} />
       </div>
 
-      <div className="bg-white rounded-xl border p-6">
+      <div className="bg-card rounded-xl border p-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="font-semibold text-gray-900">Affiliate ad revenue (30d)</h2>
-          <Link href="/dashboard/admin/ads" className="text-sm text-gold-700 hover:underline">Full report →</Link>
+          <h2 className="font-semibold text-foreground">Affiliate ad revenue (30d)</h2>
+          <Link href="/dashboard/admin/ads" className="text-sm text-primary hover:underline">Full report →</Link>
         </div>
         <div className="grid sm:grid-cols-4 gap-4">
           <Stat label="Ad clicks" value={adStats.clicks30d} />
@@ -75,9 +75,9 @@ export default async function AdminRevenuePage() {
 
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-100 p-5">
-      <p className="text-sm text-gray-500">{label}</p>
-      <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
+    <div className="bg-card rounded-xl border border-border p-5">
+      <p className="text-sm text-muted-foreground">{label}</p>
+      <p className="text-2xl font-bold text-foreground mt-1">{value}</p>
     </div>
   );
 }

@@ -17,8 +17,8 @@ export function DealerCard({ dealer, featured, className }: DealerCardProps) {
     <Link
       href={buildDealerUrl(dealer as any)}
       className={cn(
-        "group block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-gold/40 transition-all duration-200",
-        featured && "ring-2 ring-gold-500 ring-offset-1",
+        "group block bg-card rounded-xl border border-border shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-200",
+        featured && "ring-2 ring-primary ring-offset-1",
         className
       )}
     >
@@ -26,11 +26,11 @@ export function DealerCard({ dealer, featured, className }: DealerCardProps) {
         <div className="flex gap-4">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <div className="w-16 h-16 rounded-xl bg-gray-50 border border-gray-100 overflow-hidden flex items-center justify-center">
+            <div className="w-16 h-16 rounded-xl bg-muted border border-border overflow-hidden flex items-center justify-center">
               {dealer.logoUrl ? (
                 <Image src={dealer.logoUrl} alt={dealer.name} width={64} height={64} className="object-contain p-1" />
               ) : (
-                <span className="text-2xl font-bold text-gray-300">{dealer.name[0]}</span>
+                <span className="text-2xl font-bold text-muted-foreground">{dealer.name[0]}</span>
               )}
             </div>
           </div>
@@ -39,16 +39,16 @@ export function DealerCard({ dealer, featured, className }: DealerCardProps) {
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
-                <h3 className="font-semibold text-gray-900 truncate group-hover:text-gold-600 transition-colors flex items-center gap-1.5 flex-wrap">
+                <h3 className="font-semibold text-foreground truncate group-hover:text-primary transition-colors flex items-center gap-1.5 flex-wrap">
                   <span className="truncate">{dealer.name}</span>
                   {(dealer as { isSponsored?: boolean }).isSponsored && (
-                    <span className="inline-flex items-center gap-0.5 text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded bg-gold-100 text-gold-800 border border-gold/30 shrink-0">
+                    <span className="inline-flex items-center gap-0.5 text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/30 shrink-0">
                       <Megaphone size={9} aria-hidden />
                       Sponsored
                     </span>
                   )}
                 </h3>
-                <div className="flex items-center gap-1 mt-0.5 text-gray-500 text-sm">
+                <div className="flex items-center gap-1 mt-0.5 text-muted-foreground text-sm">
                   <MapPin size={12} />
                   <span className="truncate">
                     {[dealer.cityName, dealer.stateName, dealer.country?.name].filter(Boolean).join(", ")}
@@ -58,7 +58,7 @@ export function DealerCard({ dealer, featured, className }: DealerCardProps) {
               {dealer.totalReviews > 0 ? (
                 <RatingBadge rating={dealer.overallRating} size="sm" />
               ) : (
-                <span className="text-xs font-medium text-gray-400 bg-gray-50 border border-gray-100 rounded-lg px-2 py-0.5 shrink-0">
+                <span className="text-xs font-medium text-muted-foreground bg-muted border border-border rounded-lg px-2 py-0.5 shrink-0">
                   Not yet rated
                 </span>
               )}
@@ -68,18 +68,18 @@ export function DealerCard({ dealer, featured, className }: DealerCardProps) {
               {dealer.totalReviews > 0 ? (
                 <>
                   <StarRating rating={dealer.overallRating} size="sm" />
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-muted-foreground">
                     {formatNumber(dealer.totalReviews)} review{dealer.totalReviews !== 1 ? "s" : ""}
                   </span>
                 </>
               ) : (
-                <span className="inline-flex items-center gap-1 text-xs font-medium text-gold-700 bg-gold-50 border border-gold/20 rounded-full px-2 py-0.5">
+                <span className="inline-flex items-center gap-1 text-xs font-medium text-primary bg-primary/10 border border-primary/30 rounded-full px-2 py-0.5">
                   <PenLine size={11} aria-hidden />
                   Be the first reviewer
                 </span>
               )}
               {dealer.isVerified && (
-                <span className="inline-flex items-center gap-1 text-xs text-gold-600">
+                <span className="inline-flex items-center gap-1 text-xs text-primary">
                   <BadgeCheck size={12} />
                   Verified
                 </span>
@@ -92,12 +92,12 @@ export function DealerCard({ dealer, featured, className }: DealerCardProps) {
         {dealer.brands && dealer.brands.length > 0 && (
           <div className="flex flex-wrap gap-1 mt-3">
             {dealer.brands.slice(0, 5).map(({ brand }) => (
-              <span key={brand.slug} className="text-xs px-2 py-0.5 bg-gray-50 border border-gray-100 rounded-full text-gray-600">
+              <span key={brand.slug} className="text-xs px-2 py-0.5 bg-muted border border-border rounded-full text-muted-foreground">
                 {brand.name}
               </span>
             ))}
             {dealer.brands.length > 5 && (
-              <span className="text-xs px-2 py-0.5 bg-gray-50 border border-gray-100 rounded-full text-gray-500">
+              <span className="text-xs px-2 py-0.5 bg-muted border border-border rounded-full text-muted-foreground">
                 +{dealer.brands.length - 5}
               </span>
             )}
@@ -106,7 +106,7 @@ export function DealerCard({ dealer, featured, className }: DealerCardProps) {
 
         {/* Response rate */}
         {dealer.responseRate > 0 && (
-          <div className="flex items-center gap-1 mt-3 text-xs text-gray-500">
+          <div className="flex items-center gap-1 mt-3 text-xs text-muted-foreground">
             <MessageSquare size={11} />
             <span>{Math.round(dealer.responseRate * 100)}% response rate</span>
           </div>
@@ -115,18 +115,18 @@ export function DealerCard({ dealer, featured, className }: DealerCardProps) {
 
       {dealer.totalReviews > 0 && (
         <div className="px-5 pb-4">
-          <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+          <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
             <span>Reputation Score</span>
-            <span className="font-semibold text-gray-700">{dealer.reputationScore}/100</span>
+            <span className="font-semibold text-foreground">{dealer.reputationScore}/100</span>
           </div>
-          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
             <div
               className={cn(
                 "h-full rounded-full transition-all",
-                dealer.reputationScore >= 80 ? "bg-green-500" :
-                dealer.reputationScore >= 60 ? "bg-lime-500" :
-                dealer.reputationScore >= 40 ? "bg-yellow-500" :
-                dealer.reputationScore >= 20 ? "bg-orange-500" : "bg-red-500"
+                dealer.reputationScore >= 80 ? "bg-muted" :
+                dealer.reputationScore >= 60 ? "bg-muted" :
+                dealer.reputationScore >= 40 ? "bg-muted" :
+                dealer.reputationScore >= 20 ? "bg-muted" : "bg-destructive/10"
               )}
               style={{ width: `${dealer.reputationScore}%` }}
             />

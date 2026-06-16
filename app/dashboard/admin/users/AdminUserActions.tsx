@@ -68,7 +68,7 @@ export function AdminUserActions({ id, email, status, role, actorRole }: Props) 
   }
 
   if (busy) {
-    return <Loader2 size={16} className="animate-spin text-gray-400" />;
+    return <Loader2 size={16} className="animate-spin text-muted-foreground" />;
   }
 
   return (
@@ -92,7 +92,7 @@ export function AdminUserActions({ id, email, status, role, actorRole }: Props) 
           </DropdownMenuItem>
         )}
         {status !== "BANNED" && (
-          <DropdownMenuItem onClick={() => patch({ status: "BANNED" })} className="text-red-600">
+          <DropdownMenuItem onClick={() => patch({ status: "BANNED" })} className="text-destructive">
             <Ban size={14} className="mr-2" />
             Ban
           </DropdownMenuItem>
@@ -100,7 +100,7 @@ export function AdminUserActions({ id, email, status, role, actorRole }: Props) 
         {isSuperAdmin && role !== "SUPER_ADMIN" && (
           <>
             <DropdownMenuSeparator />
-            <DropdownMenuItem disabled className="text-xs text-gray-400 font-semibold">
+            <DropdownMenuItem disabled className="text-xs text-muted-foreground font-semibold">
               Change role
             </DropdownMenuItem>
             {(["CUSTOMER", "DEALER_OWNER", "SUPPORT", "REVENUE", "MODERATOR"] as const).map((r) =>
@@ -115,7 +115,7 @@ export function AdminUserActions({ id, email, status, role, actorRole }: Props) 
         {isSuperAdmin && !protectedRole && (
           <>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={removeUser} className="text-red-600">
+            <DropdownMenuItem onClick={removeUser} className="text-destructive">
               <Trash2 size={14} className="mr-2" />
               Remove user
             </DropdownMenuItem>

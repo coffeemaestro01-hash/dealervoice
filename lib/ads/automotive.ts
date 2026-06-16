@@ -23,7 +23,7 @@ export const FALLBACK_AUTOMOTIVE_ADS: Record<AutomotiveAdType, AutomotiveAd> = {
     subheadline: "Check eligibility from national lenders — no dealership pressure.",
     ctaLabel: "Explore financing",
     ctaHref: `https://www.bankrate.com/loans/auto-loans/?${UTM}&utm_campaign=financing`,
-    accent: "from-gold-600 to-amber-500",
+    accent: "bg-ember",
   },
   Sponsored_Local_Dealer: {
     type: "Sponsored_Local_Dealer",
@@ -32,7 +32,7 @@ export const FALLBACK_AUTOMOTIVE_ADS: Record<AutomotiveAdType, AutomotiveAd> = {
     subheadline: "Reach in-market car buyers researching dealers in Chicago and nationwide.",
     ctaLabel: "Advertise with us",
     ctaHref: "/advertise",
-    accent: "from-slate-800 to-slate-900",
+    accent: "bg-ember",
   },
   Auto_Ecosystem_Partner: {
     type: "Auto_Ecosystem_Partner",
@@ -41,6 +41,6 @@ export const FALLBACK_AUTOMOTIVE_ADS: Record<AutomotiveAdType, AutomotiveAd> = {
     subheadline: "Compare policies from top U.S. insurers — takes under 2 minutes.",
     ctaLabel: "Get a quote",
     ctaHref: `https://www.progressive.com/auto/?${UTM}&utm_campaign=insurance`,
-    accent: "from-indigo-700 to-blue-800",
+    accent: "bg-ember",
   },
 };

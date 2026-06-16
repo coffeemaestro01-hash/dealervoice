@@ -105,31 +105,31 @@ export default async function CountryPage({ params }: Props) {
     });
 
     return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="bg-white border-b border-gray-100">
+      <div className="min-h-screen bg-muted">
+        <div className="bg-card border-b border-border">
           <div className="container py-8">
-            <nav className="text-sm text-gray-500 mb-2">
-              <Link href="/dealers" className="hover:text-gold-700">Dealers</Link>
+            <nav className="text-sm text-muted-foreground mb-2">
+              <Link href="/dealers" className="hover:text-primary">Dealers</Link>
               {" / "}
-              <span className="text-gray-900">{state.name}</span>
+              <span className="text-foreground">{state.name}</span>
             </nav>
-            <h1 className="text-3xl font-bold text-gray-900">Franchised dealers in {state.name}</h1>
-            <p className="text-gray-600 mt-2">{dealers.length}+ dealerships indexed</p>
+            <h1 className="text-3xl font-bold text-foreground">Franchised dealers in {state.name}</h1>
+            <p className="text-muted-foreground mt-2">{dealers.length}+ dealerships indexed</p>
           </div>
         </div>
         <div className="container py-8">
           {cityCounts.length > 0 && (
             <div className="mb-8">
-              <h2 className="text-lg font-semibold text-gray-900 mb-3">Browse by city</h2>
+              <h2 className="text-lg font-semibold text-foreground mb-3">Browse by city</h2>
               <div className="flex flex-wrap gap-2">
                 {cityCounts.map((c) => (
                   <Link
                     key={c.cityName!}
                     href={`/dealers/${countryCode}/${citySlug(c.cityName)}`}
-                    className="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm text-gray-700 hover:border-gold-300"
+                    className="px-3 py-1.5 bg-card border border-border rounded-full text-sm text-foreground hover:border-primary/30"
                   >
                     {c.cityName}
-                    <span className="ml-1.5 text-gray-400 text-xs">{c._count.id}</span>
+                    <span className="ml-1.5 text-muted-foreground text-xs">{c._count.id}</span>
                   </Link>
                 ))}
               </div>
@@ -154,18 +154,18 @@ export default async function CountryPage({ params }: Props) {
   ]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-white border-b border-gray-100">
+    <div className="min-h-screen bg-muted">
+      <div className="bg-card border-b border-border">
         <div className="container py-8">
-          <nav className="text-sm text-gray-500 mb-2">
-            <Link href="/dealers" className="hover:text-gold-700">Dealers</Link>
+          <nav className="text-sm text-muted-foreground mb-2">
+            <Link href="/dealers" className="hover:text-primary">Dealers</Link>
             {" / "}
-            <span className="text-gray-900">{country.name}</span>
+            <span className="text-foreground">{country.name}</span>
           </nav>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-foreground">
             {country.flagEmoji} Car Dealerships in {country.name}
           </h1>
-          <p className="text-gray-600 mt-2">{country.dealerCount.toLocaleString()} dealerships listed</p>
+          <p className="text-muted-foreground mt-2">{country.dealerCount.toLocaleString()} dealerships listed</p>
         </div>
       </div>
 
@@ -173,16 +173,16 @@ export default async function CountryPage({ params }: Props) {
         {/* States */}
         {states.length > 0 && (
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">Browse by state / region</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">Browse by state / region</h2>
             <div className="flex flex-wrap gap-2">
               {states.map((state) => (
                 <Link
                   key={state.slug}
                   href={stateHref(countryCode, state.slug, state.name)!}
-                  className="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm text-gray-700 hover:border-gold-300 hover:text-gold-800 transition-colors"
+                  className="px-3 py-1.5 bg-card border border-border rounded-full text-sm text-foreground hover:border-primary/30 hover:text-primary transition-colors"
                 >
                   {state.name}
-                  <span className="ml-1.5 text-gray-400 text-xs">{state.count}</span>
+                  <span className="ml-1.5 text-muted-foreground text-xs">{state.count}</span>
                 </Link>
               ))}
             </div>
@@ -192,16 +192,16 @@ export default async function CountryPage({ params }: Props) {
         {/* Cities */}
         {country.cities.length > 0 && (
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">Browse by city</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">Browse by city</h2>
             <div className="flex flex-wrap gap-2">
               {country.cities.map((city) => (
                 <Link
                   key={city.id}
                   href={`/dealers/${countryCode}/${city.slug}`}
-                  className="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm text-gray-700 hover:border-gold-300 hover:text-gold-800 transition-colors"
+                  className="px-3 py-1.5 bg-card border border-border rounded-full text-sm text-foreground hover:border-primary/30 hover:text-primary transition-colors"
                 >
                   {city.name}
-                  <span className="ml-1.5 text-gray-400 text-xs">{city.dealerCount}</span>
+                  <span className="ml-1.5 text-muted-foreground text-xs">{city.dealerCount}</span>
                 </Link>
               ))}
             </div>
@@ -209,7 +209,7 @@ export default async function CountryPage({ params }: Props) {
         )}
 
         {/* Dealers */}
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Top-rated dealerships</h2>
+        <h2 className="text-lg font-semibold text-foreground mb-4">Top-rated dealerships</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {dealers.map((dealer) => (
             <DealerCard key={dealer.id} dealer={dealer as any} />
@@ -217,7 +217,7 @@ export default async function CountryPage({ params }: Props) {
         </div>
 
         {dealers.length === 0 && (
-          <p className="text-center py-12 text-gray-500">No dealerships listed yet in {country.name}.</p>
+          <p className="text-center py-12 text-muted-foreground">No dealerships listed yet in {country.name}.</p>
         )}
       </div>
     </div>

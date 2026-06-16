@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Search, MapPin, ShieldCheck, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { BrandAmbient } from "@/components/common/BrandAmbient";
 
 const POPULAR = ["Toyota", "Honda", "Ford", "Hyundai", "BMW"];
 const POPULAR_LOCATIONS = [
@@ -60,8 +61,8 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
   };
 
   return (
-    <section className="relative bg-night overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_70%_60%_at_50%_-10%,rgba(251,101,20,0.06),transparent_60%)]" />
+    <section className="relative bg-background overflow-hidden">
+      <BrandAmbient />
 
       <div className="container relative py-16 md:py-24">
         <motion.div
@@ -70,17 +71,17 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
           transition={{ duration: 0.5 }}
           className="max-w-3xl mx-auto text-center"
         >
-          <div className="inline-flex items-center gap-2 bg-gold-500/10 border border-gold/40 rounded-full px-4 py-1.5 text-sm text-gold-400 font-medium mb-6">
+          <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-4 py-1.5 text-sm text-primary font-medium mb-6">
             <ShieldCheck size={14} />
             {trustLine}
           </div>
 
-          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-5">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-foreground mb-5">
             Find the dealership{" "}
-            <span className="text-gold">you can trust</span>
+            <span className="text-primary">you can trust</span>
           </h1>
 
-          <p className="text-base sm:text-lg md:text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Real reviews from verified car buyers across{" "}
             {stats.countries > 0 ? `${stats.countries} countries` : "the world"}.
             Compare dealership reputation, read transparent feedback, and make confident purchase decisions.
@@ -90,10 +91,10 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
             onSubmit={handleSearch}
             role="search"
             aria-label="Search car dealership reviews"
-            className="flex flex-col sm:flex-row gap-2 max-w-2xl mx-auto bg-white p-2 rounded-2xl border border-white/10 shadow-2xl shadow-black/40"
+            className="flex flex-col sm:flex-row gap-2 max-w-2xl mx-auto bg-card p-2 rounded-2xl border border-border shadow-soft"
           >
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} aria-hidden />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} aria-hidden />
               <Input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -103,18 +104,18 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
               />
             </div>
             <div className="relative sm:w-52">
-              <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
               <Input
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="City or state"
-                className="pl-11 h-14 border-0 sm:border-l border-white/10 bg-transparent text-base shadow-none focus-visible:ring-0 rounded-none"
+                className="pl-11 h-14 border-0 sm:border-l border-border bg-transparent text-base shadow-none focus-visible:ring-0 rounded-none"
               />
             </div>
             <Button
               type="submit"
               size="lg"
-              className="h-14 px-8 bg-gold-600 hover:bg-gold-700 text-white font-semibold shrink-0 border-0 rounded-xl"
+              className="h-14 px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shrink-0 border-0 rounded-xl"
             >
               Search Reviews
             </Button>
@@ -125,7 +126,7 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
               <Button
                 variant="outline"
                 size="lg"
-                className="border-gold/50 text-gold-300 bg-transparent hover:bg-gold-500/15 gap-2 h-11"
+                className="border-primary/50 text-primary bg-transparent hover:bg-primary/10 gap-2 h-11"
               >
                 <Building2 size={16} />
                 Claim Your Dealership
@@ -133,13 +134,13 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
             </Link>
           </div>
 
-          <p className="text-gray-500 text-sm mt-4">
+          <p className="text-muted-foreground text-sm mt-4">
             Popular brands:{" "}
             {POPULAR.map((b, i) => (
               <span key={b}>
                 <button
                   onClick={() => router.push(`/dealers?q=${encodeURIComponent(b)}`)}
-                  className="text-gold-400 hover:text-gold-300 hover:underline font-medium"
+                  className="text-primary hover:text-primary/80 hover:underline font-medium"
                 >
                   {b}
                 </button>
@@ -147,18 +148,18 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
               </span>
             ))}
           </p>
-          <p className="text-gray-500 text-sm mt-2">
+          <p className="text-muted-foreground text-sm mt-2">
             Top regions:{" "}
             {POPULAR_LOCATIONS.map((loc, i) => (
               <span key={loc.label}>
-                <Link href={loc.href} className="text-gold-400/80 hover:text-gold-300 hover:underline font-medium">
+                <Link href={loc.href} className="text-primary/80 hover:text-primary hover:underline font-medium">
                   {loc.label}
                 </Link>
                 {i < POPULAR_LOCATIONS.length - 1 ? ", " : ""}
               </span>
             ))}
             {" · "}
-            <Link href="/dealers" className="text-gold-400 hover:text-gold-300 hover:underline font-medium">
+            <Link href="/dealers" className="text-primary hover:text-primary/80 hover:underline font-medium">
               All regions
             </Link>
           </p>
@@ -171,11 +172,11 @@ export function HeroSection({ stats }: { stats: HeroStats }) {
           className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mt-14"
         >
           {TRUST_STATS.map((stat) => (
-            <div key={stat.label} className="text-center rounded-xl border border-white/10 card-dark py-4">
-              <div className="text-2xl md:text-3xl font-bold text-white flex items-center justify-center gap-1">
+            <div key={stat.label} className="text-center rounded-xl border border-border bg-card shadow-soft py-4">
+              <div className="text-2xl md:text-3xl font-bold text-foreground flex items-center justify-center gap-1">
                 {stat.value}
               </div>
-              <div className="text-sm text-gray-500 mt-1">{stat.label}</div>
+              <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
             </div>
           ))}
         </motion.div>

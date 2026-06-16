@@ -41,20 +41,20 @@ export default async function CountryInventoryPage({ params }: Props) {
   const label = MARKET_LABELS[code] ?? countryRow.name;
 
   return (
-    <div className="bg-white min-h-screen">
-      <section className="border-b border-gray-100 bg-gray-50">
+    <div className="bg-card min-h-screen">
+      <section className="border-b border-border bg-muted">
         <div className="container py-10 max-w-4xl">
           <Link
             href={`/dealers/${country}`}
-            className="inline-flex items-center gap-1 text-sm text-gold-700 hover:underline mb-4"
+            className="inline-flex items-center gap-1 text-sm text-primary hover:underline mb-4"
           >
             <ArrowLeft size={14} /> Back to {label} dealers
           </Link>
-          <h1 className="text-3xl font-extrabold text-gray-900 flex items-center gap-2">
-            <Car className="text-gold-600" size={28} />
+          <h1 className="text-3xl font-extrabold text-foreground flex items-center gap-2">
+            <Car className="text-primary" size={28} />
             Vehicles in {label}
           </h1>
-          <p className="text-gray-600 mt-2">
+          <p className="text-muted-foreground mt-2">
             Dealer-uploaded inventory on DealerVoice. Listings grow as dealers claim profiles and add stock.
           </p>
         </div>
@@ -62,11 +62,11 @@ export default async function CountryInventoryPage({ params }: Props) {
 
       <section className="py-10 container max-w-4xl">
         {listings.length === 0 ? (
-          <div className="text-center py-16 rounded-2xl border border-dashed border-gray-200">
-            <p className="text-gray-600">No vehicles listed in {label} yet.</p>
-            <p className="text-sm text-gray-500 mt-2">
+          <div className="text-center py-16 rounded-2xl border border-dashed border-border">
+            <p className="text-muted-foreground">No vehicles listed in {label} yet.</p>
+            <p className="text-sm text-muted-foreground mt-2">
               Dealers on Pro can add listings from their dashboard.{" "}
-              <Link href="/pricing" className="text-gold-700 hover:underline">
+              <Link href="/pricing" className="text-primary hover:underline">
                 View plans
               </Link>
             </p>
@@ -77,19 +77,19 @@ export default async function CountryInventoryPage({ params }: Props) {
               <Link
                 key={v.id}
                 href={`/vehicles/${v.id}`}
-                className="rounded-xl border border-gray-100 p-5 hover:border-gold/40 hover:shadow-sm transition-all"
+                className="rounded-xl border border-border p-5 hover:border-primary/30 hover:shadow-sm transition-all"
               >
-                <p className="text-xs font-semibold uppercase tracking-wider text-gold-600">
+                <p className="text-xs font-semibold uppercase tracking-wider text-primary">
                   {[v.dealership.cityName, v.dealership.stateName].filter(Boolean).join(", ")}
                 </p>
-                <h2 className="font-bold text-gray-900 mt-1">
+                <h2 className="font-bold text-foreground mt-1">
                   {[v.year, v.make, v.model].filter(Boolean).join(" ")}
                 </h2>
-                {v.trim && <p className="text-sm text-gray-600">{v.trim}</p>}
-                <p className="text-lg font-semibold text-gold-800 mt-2">
+                {v.trim && <p className="text-sm text-muted-foreground">{v.trim}</p>}
+                <p className="text-lg font-semibold text-primary mt-2">
                   {v.priceLabel ?? (v.priceMinor != null ? formatIncomeMinor(v.priceMinor, v.currency) : "POA")}
                 </p>
-                <p className="text-xs text-gray-500 mt-1">{v.dealership.name}</p>
+                <p className="text-xs text-muted-foreground mt-1">{v.dealership.name}</p>
               </Link>
             ))}
           </div>

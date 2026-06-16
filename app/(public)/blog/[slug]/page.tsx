@@ -30,22 +30,22 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
   if (isResearchPost(post.category)) redirect(`/research/${slug}`);
 
   return (
-    <article className="bg-white">
+    <article className="bg-card">
       <div className="container max-w-3xl py-12 md:py-16">
-        <Link href="/blog" className="inline-flex items-center gap-1 text-sm text-gold-700 hover:underline mb-6">
+        <Link href="/blog" className="inline-flex items-center gap-1 text-sm text-primary hover:underline mb-6">
           <ArrowLeft size={14} /> Back to blog
         </Link>
         {post.category && (
-          <span className="inline-block text-xs font-semibold text-gold-700 bg-gold-50 rounded-full px-3 py-1 mb-4">
+          <span className="inline-block text-xs font-semibold text-primary bg-primary/10 rounded-full px-3 py-1 mb-4">
             {post.category}
           </span>
         )}
-        <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">{post.title}</h1>
-        <p className="text-sm text-gray-500 mb-8 inline-flex items-center gap-2">
+        <h1 className="text-3xl md:text-4xl font-extrabold text-foreground mb-3">{post.title}</h1>
+        <p className="text-sm text-muted-foreground mb-8 inline-flex items-center gap-2">
           <Calendar size={14} />
           {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : ""} · {post.authorName}
         </p>
-        {post.excerpt && <p className="text-lg text-gray-600 mb-8 leading-relaxed">{post.excerpt}</p>}
+        {post.excerpt && <p className="text-lg text-muted-foreground mb-8 leading-relaxed">{post.excerpt}</p>}
         <AdSenseUnit slotKey="blogInArticle" format="fluid" layout="in-article" className="mb-8" />
         <div
           className="prose prose-gray max-w-none"

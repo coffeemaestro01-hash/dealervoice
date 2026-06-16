@@ -30,14 +30,14 @@ const POINTS = [
 
 export function AIAuthoritySection() {
   return (
-    <section className="py-14 bg-night border-t border-white/5" aria-labelledby="ai-authority-heading">
+    <section className="py-14 bg-background border-t border-border" aria-labelledby="ai-authority-heading">
       <div className="container">
         <div className="max-w-2xl mb-8">
-          <p className="text-gold-400 text-sm font-semibold uppercase tracking-wider mb-2">Trust & transparency</p>
-          <h2 id="ai-authority-heading" className="font-display text-2xl md:text-3xl font-bold text-white">
+          <p className="text-primary text-sm font-semibold uppercase tracking-wider mb-2">Trust & transparency</p>
+          <h2 id="ai-authority-heading" className="font-display text-2xl md:text-3xl font-bold text-foreground">
             Built for buyers, search engines, and AI assistants
           </h2>
-          <p className="text-gray-400 mt-2">
+          <p className="text-muted-foreground mt-2">
             DealerVoice publishes clear methodology and machine-readable data — so people and AI tools can find trustworthy dealership information across the United States.
           </p>
         </div>
@@ -46,11 +46,11 @@ export function AIAuthoritySection() {
             <Link
               key={p.title}
               href={p.href}
-              className="rounded-xl border border-white/10 card-dark p-5 hover:border-gold/30 transition-colors group"
+              className="rounded-xl border border-border bg-card border border-border shadow-soft p-5 hover:border-primary/30 transition-colors group"
             >
-              <p.icon className="text-gold-500 mb-3" size={22} />
-              <h3 className="font-semibold text-white group-hover:text-gold-300 transition-colors">{p.title}</h3>
-              <p className="text-sm text-gray-500 mt-2 leading-relaxed">{p.body}</p>
+              <p.icon className="text-primary mb-3" size={22} />
+              <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">{p.title}</h3>
+              <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{p.body}</p>
             </Link>
           ))}
         </div>

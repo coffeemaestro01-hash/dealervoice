@@ -33,7 +33,7 @@ export default async function ResearchArticlePage(props: { params: Promise<{ slu
   const meta = getResearchArticleMeta(slug);
 
   return (
-    <article className="bg-night-900 text-white min-h-screen">
+    <article className="bg-pearl text-foreground min-h-screen">
       <ResearchHero
         title={post.title}
         excerpt={post.excerpt}
@@ -46,7 +46,7 @@ export default async function ResearchArticlePage(props: { params: Promise<{ slu
       <div className="container max-w-3xl py-12 md:py-16">
         <Link
           href="/research"
-          className="inline-flex items-center gap-1.5 text-sm text-gold-400 hover:text-gold-300 mb-10"
+          className="inline-flex items-center gap-1.5 text-sm text-primary hover:text-primary mb-10"
         >
           <ArrowLeft size={14} /> All research
         </Link>

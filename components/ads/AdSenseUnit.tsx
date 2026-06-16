@@ -61,7 +61,7 @@ export function AdSenseUnit({
 
   return (
     <aside aria-label="Advertisement" className={cn("min-h-[90px]", className)}>
-      <p className="text-[10px] font-medium uppercase tracking-wider text-gray-400 mb-1">Ad</p>
+      <p className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground mb-1">Ad</p>
       <ins
         className="adsbygoogle block"
         style={{ display: "block" }}

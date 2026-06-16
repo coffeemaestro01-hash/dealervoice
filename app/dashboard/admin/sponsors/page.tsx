@@ -25,22 +25,22 @@ export default async function AdminSponsorsPage() {
 
   return (
     <div className="p-6 lg:p-8 space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Sponsored placements</h1>
+      <h1 className="text-2xl font-bold text-foreground">Sponsored placements</h1>
       <AdminSponsorManager dealers={dealers} />
-      <div className="bg-white rounded-xl border divide-y">
+      <div className="bg-card rounded-xl border divide-y">
         {sponsors.length === 0 ? (
-          <p className="p-6 text-gray-500 text-sm">No active sponsors.</p>
+          <p className="p-6 text-muted-foreground text-sm">No active sponsors.</p>
         ) : (
           sponsors.map((s) => (
             <div key={s.id} className="px-4 py-3 flex items-center justify-between">
               <div>
-                <Link href={`/dealership/${s.slug}`} className="font-medium text-gold-800 hover:underline">{s.name}</Link>
-                <p className="text-xs text-gray-400">{s.cityName}</p>
+                <Link href={`/dealership/${s.slug}`} className="font-medium text-primary hover:underline">{s.name}</Link>
+                <p className="text-xs text-muted-foreground">{s.cityName}</p>
               </div>
               <div className="text-right">
                 <Badge>{s.sponsorLabel ?? "Sponsored"}</Badge>
                 {s.sponsoredUntil && (
-                  <p className="text-xs text-gray-400 mt-1">Until {new Date(s.sponsoredUntil).toLocaleDateString()}</p>
+                  <p className="text-xs text-muted-foreground mt-1">Until {new Date(s.sponsoredUntil).toLocaleDateString()}</p>
                 )}
               </div>
             </div>

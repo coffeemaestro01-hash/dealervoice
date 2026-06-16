@@ -84,24 +84,24 @@ export async function TrendingLocalDealers() {
   if (dealers.length === 0) return null;
 
   return (
-    <section aria-labelledby="trending-dealers-heading" className="py-14 md:py-16 bg-night-soft border-y border-white/5">
+    <section aria-labelledby="trending-dealers-heading" className="py-14 md:py-16 bg-pearl border-y border-border">
       <div className="container">
         <header className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
           <div>
-            <div className="inline-flex items-center gap-2 text-gold-400 text-sm font-medium mb-2">
+            <div className="inline-flex items-center gap-2 text-primary text-sm font-medium mb-2">
               <TrendingUp size={16} aria-hidden />
               Live marketplace
             </div>
-            <h2 id="trending-dealers-heading" className="text-2xl md:text-3xl font-bold text-white">
-              Featured <span className="text-gold">Dealerships</span>
+            <h2 id="trending-dealers-heading" className="text-2xl md:text-3xl font-bold text-foreground">
+              Featured <span className="text-primary">Dealerships</span>
             </h2>
-            <p className="text-gray-400 mt-1 text-sm md:text-base">
+            <p className="text-muted-foreground mt-1 text-sm md:text-base">
               Browse dealerships worldwide — write the first review where none exist yet.
             </p>
           </div>
           <Link
             href="/dealers"
-            className="text-sm font-semibold text-gold-400 hover:text-gold-300 shrink-0"
+            className="text-sm font-semibold text-primary hover:text-primary shrink-0"
           >
             Search all dealers →
           </Link>

@@ -30,8 +30,8 @@ export async function RatingDistribution({ dealer }: Props) {
   ].filter((r) => r.value > 0);
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-      <h2 className="font-semibold text-gray-900 mb-5">Rating Breakdown</h2>
+    <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
+      <h2 className="font-semibold text-foreground mb-5">Rating Breakdown</h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {/* Star distribution */}
@@ -41,17 +41,17 @@ export async function RatingDistribution({ dealer }: Props) {
             const pct = total > 0 ? (count / total) * 100 : 0;
             return (
               <div key={star} className="flex items-center gap-2 text-sm">
-                <div className="flex items-center gap-0.5 w-8 text-gray-600">
+                <div className="flex items-center gap-0.5 w-8 text-muted-foreground">
                   <Star size={12} className="star-filled fill-current" />
                   <span>{star}</span>
                 </div>
-                <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-amber-400 rounded-full"
+                    className="h-full bg-primary/10 rounded-full"
                     style={{ width: `${pct}%` }}
                   />
                 </div>
-                <span className="text-gray-500 text-xs w-8 text-right">{count}</span>
+                <span className="text-muted-foreground text-xs w-8 text-right">{count}</span>
               </div>
             );
           })}
@@ -63,12 +63,12 @@ export async function RatingDistribution({ dealer }: Props) {
             {subRatings.map((r) => (
               <div key={r.label}>
                 <div className="flex items-center justify-between text-xs mb-1">
-                  <span className="text-gray-600">{r.label}</span>
-                  <span className="font-semibold text-gray-900">{r.value.toFixed(1)}</span>
+                  <span className="text-muted-foreground">{r.label}</span>
+                  <span className="font-semibold text-foreground">{r.value.toFixed(1)}</span>
                 </div>
-                <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gold-600 rounded-full"
+                    className="h-full bg-primary rounded-full"
                     style={{ width: `${(r.value / 5) * 100}%` }}
                   />
                 </div>

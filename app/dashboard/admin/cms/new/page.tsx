@@ -9,10 +9,10 @@ export default async function NewBlogPostPage() {
 
   return (
     <div className="p-6 lg:p-8">
-      <Link href="/dashboard/admin/cms" className="text-sm text-gold-700 hover:underline mb-4 inline-block">
+      <Link href="/dashboard/admin/cms" className="text-sm text-primary hover:underline mb-4 inline-block">
         ← Back to CMS
       </Link>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">New blog post</h1>
+      <h1 className="text-2xl font-bold text-foreground mb-6">New blog post</h1>
       <BlogPostEditor
         isNew
         initial={{

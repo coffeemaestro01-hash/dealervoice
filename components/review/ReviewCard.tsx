@@ -10,9 +10,9 @@ import { cn, timeAgo, truncate, getInitials } from "@/lib/utils";
 import type { ReviewWithRelations } from "@/types";
 
 const SENTIMENT_STYLES: Record<string, string> = {
-  Positive: "bg-green-50 text-green-700 border-green-200",
-  Neutral: "bg-gray-50 text-gray-600 border-gray-200",
-  Negative: "bg-red-50 text-red-600 border-red-200",
+  Positive: "bg-muted text-primary border-primary/20",
+  Neutral: "bg-muted text-muted-foreground border-border",
+  Negative: "bg-destructive/10 text-destructive border-primary/20",
 };
 
 const REVIEW_TYPE_LABELS: Record<string, string> = {
@@ -64,19 +64,19 @@ export function ReviewCard({ review, showDealerResponse = true, onHelpful, onFla
   }
 
   return (
-    <article className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
+    <article className="bg-card rounded-xl border border-border p-6 shadow-sm">
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
           <Avatar className="w-10 h-10">
             <AvatarImage src={review.author.avatarUrl ?? undefined} />
-            <AvatarFallback className="bg-gold-100 text-gold-700 font-semibold text-sm">
+            <AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">
               {getInitials(review.author.name)}
             </AvatarFallback>
           </Avatar>
           <div>
-            <p className="font-semibold text-sm text-gray-900">{review.author.name}</p>
-            <p className="text-xs text-gray-500">
+            <p className="font-semibold text-sm text-foreground">{review.author.name}</p>
+            <p className="text-xs text-muted-foreground">
               {review.author.totalReviews} review{review.author.totalReviews !== 1 ? "s" : ""}
             </p>
           </div>
@@ -88,12 +88,12 @@ export function ReviewCard({ review, showDealerResponse = true, onHelpful, onFla
       </div>
 
       {/* Type & Date */}
-      <div className="flex items-center gap-2 mt-3 text-xs text-gray-500 flex-wrap">
-        <span className="px-2 py-0.5 bg-gray-50 border border-gray-100 rounded-full">
+      <div className="flex items-center gap-2 mt-3 text-xs text-muted-foreground flex-wrap">
+        <span className="px-2 py-0.5 bg-muted border border-border rounded-full">
           {REVIEW_TYPE_LABELS[review.reviewType] ?? review.reviewType}
         </span>
         {review.vehicleMake && (
-          <span className="px-2 py-0.5 bg-gray-50 border border-gray-100 rounded-full">
+          <span className="px-2 py-0.5 bg-muted border border-border rounded-full">
             {[review.vehicleYear, review.vehicleMake, review.vehicleModel].filter(Boolean).join(" ")}
           </span>
         )}
@@ -101,7 +101,7 @@ export function ReviewCard({ review, showDealerResponse = true, onHelpful, onFla
           <span
             className={cn(
               "px-2 py-0.5 border rounded-full font-medium capitalize",
-              SENTIMENT_STYLES[review.sentimentLabel] ?? "bg-gray-50 text-gray-600 border-gray-200"
+              SENTIMENT_STYLES[review.sentimentLabel] ?? "bg-muted text-muted-foreground border-border"
             )}
           >
             {review.sentimentLabel}
@@ -111,16 +111,16 @@ export function ReviewCard({ review, showDealerResponse = true, onHelpful, onFla
       </div>
 
       {/* Title */}
-      <h3 className="font-semibold text-gray-900 mt-3">{review.title}</h3>
+      <h3 className="font-semibold text-foreground mt-3">{review.title}</h3>
 
       {/* Body */}
-      <p className="text-gray-700 text-sm leading-relaxed mt-2 whitespace-pre-line">
+      <p className="text-foreground text-sm leading-relaxed mt-2 whitespace-pre-line">
         {isLong && !expanded ? truncate(review.body, 400) : review.body}
       </p>
       {isLong && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className="flex items-center gap-1 text-gold-600 text-sm mt-1 hover:underline"
+          className="flex items-center gap-1 text-primary text-sm mt-1 hover:underline"
         >
           {expanded ? <><ChevronUp size={14} /> Show less</> : <><ChevronDown size={14} /> Read more</>}
         </button>
@@ -128,7 +128,7 @@ export function ReviewCard({ review, showDealerResponse = true, onHelpful, onFla
 
       {/* Sub-ratings */}
       {(review.ratingService || review.ratingPricing || review.ratingTransparency) && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-4 p-3 bg-gray-50 rounded-lg">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-4 p-3 bg-muted rounded-lg">
           {[
             { label: "Transparency", value: review.ratingTransparency },
             { label: "Pricing", value: review.ratingPricing },
@@ -139,7 +139,7 @@ export function ReviewCard({ review, showDealerResponse = true, onHelpful, onFla
             .filter((r) => r.value)
             .map((r) => (
               <div key={r.label} className="flex items-center justify-between text-xs">
-                <span className="text-gray-500">{r.label}</span>
+                <span className="text-muted-foreground">{r.label}</span>
                 <StarRating rating={r.value!} size="sm" />
               </div>
             ))}
@@ -148,18 +148,18 @@ export function ReviewCard({ review, showDealerResponse = true, onHelpful, onFla
 
       {/* Would recommend */}
       {review.wouldRecommend !== null && review.wouldRecommend !== undefined && (
-        <p className={cn("text-xs font-medium mt-3", review.wouldRecommend ? "text-green-600" : "text-red-600")}>
+        <p className={cn("text-xs font-medium mt-3", review.wouldRecommend ? "text-primary" : "text-destructive")}>
           {review.wouldRecommend ? "✓ Would recommend" : "✗ Would not recommend"}
         </p>
       )}
 
       {/* Actions */}
-      <div className="flex items-center gap-3 mt-4 pt-4 border-t border-gray-50">
-        <span className="text-xs text-gray-500">Helpful?</span>
+      <div className="flex items-center gap-3 mt-4 pt-4 border-t border-border">
+        <span className="text-xs text-muted-foreground">Helpful?</span>
         <Button
           variant="ghost"
           size="sm"
-          className={cn("h-7 px-2 text-xs", voted === true ? "text-green-600" : "text-gray-600 hover:text-green-600")}
+          className={cn("h-7 px-2 text-xs", voted === true ? "text-primary" : "text-muted-foreground hover:text-primary")}
           onClick={() => handleHelpful(true)}
         >
           <ThumbsUp size={12} className="mr-1" />
@@ -168,7 +168,7 @@ export function ReviewCard({ review, showDealerResponse = true, onHelpful, onFla
         <Button
           variant="ghost"
           size="sm"
-          className={cn("h-7 px-2 text-xs", voted === false ? "text-red-600" : "text-gray-600 hover:text-red-600")}
+          className={cn("h-7 px-2 text-xs", voted === false ? "text-destructive" : "text-muted-foreground hover:text-destructive")}
           onClick={() => handleHelpful(false)}
         >
           <ThumbsDown size={12} className="mr-1" />
@@ -177,7 +177,7 @@ export function ReviewCard({ review, showDealerResponse = true, onHelpful, onFla
         <Button
           variant="ghost"
           size="sm"
-          className="h-7 px-2 text-xs text-gray-500 hover:text-red-500 ml-auto"
+          className="h-7 px-2 text-xs text-muted-foreground hover:text-destructive ml-auto"
           onClick={() => onFlag?.(review.id)}
         >
           <Flag size={12} className="mr-1" />
@@ -187,15 +187,15 @@ export function ReviewCard({ review, showDealerResponse = true, onHelpful, onFla
 
       {/* Dealer response */}
       {showDealerResponse && review.response && (
-        <div className="mt-4 ml-4 pl-4 border-l-2 border-gold/30 bg-gold-50/50 rounded-r-lg p-3">
+        <div className="mt-4 ml-4 pl-4 border-l-2 border-primary/30 bg-primary/10 rounded-r-lg p-3">
           <div className="flex items-center gap-2 mb-2">
-            <MessageSquare size={14} className="text-gold-600" />
-            <span className="text-xs font-semibold text-gold-700">Dealer Response</span>
-            <span className="text-xs text-gray-500 ml-auto">{timeAgo(review.response.createdAt)}</span>
+            <MessageSquare size={14} className="text-primary" />
+            <span className="text-xs font-semibold text-primary">Dealer Response</span>
+            <span className="text-xs text-muted-foreground ml-auto">{timeAgo(review.response.createdAt)}</span>
           </div>
-          <p className="text-sm text-gray-700 leading-relaxed">{review.response.body}</p>
+          <p className="text-sm text-foreground leading-relaxed">{review.response.body}</p>
           {review.response.isResolved && (
-            <span className="inline-flex items-center gap-1 text-xs text-green-600 mt-2">
+            <span className="inline-flex items-center gap-1 text-xs text-primary mt-2">
               ✓ Issue resolved
             </span>
           )}

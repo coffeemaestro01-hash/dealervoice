@@ -93,29 +93,29 @@ export function WriteReviewForm({ dealer }: Props) {
 
   return (
     <div>
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 mb-6 flex items-center gap-4">
-        <div className="w-14 h-14 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center overflow-hidden shrink-0">
+      <div className="bg-card rounded-xl border border-border shadow-sm p-5 mb-6 flex items-center gap-4">
+        <div className="w-14 h-14 rounded-xl bg-muted border border-border flex items-center justify-center overflow-hidden shrink-0">
           {dealer.logoUrl ? (
             <Image src={dealer.logoUrl} alt={dealer.name} width={56} height={56} className="object-contain p-1" />
           ) : (
-            <span className="text-xl font-bold text-gray-300">{dealer.name[0]}</span>
+            <span className="text-xl font-bold text-muted-foreground">{dealer.name[0]}</span>
           )}
         </div>
         <div>
-          <h1 className="text-lg font-bold text-gray-900">{dealer.name}</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-lg font-bold text-foreground">{dealer.name}</h1>
+          <p className="text-sm text-muted-foreground">
             {[dealer.cityName, dealer.stateName, dealer.country.name].filter(Boolean).join(", ")}
           </p>
         </div>
       </div>
 
       <form onSubmit={onSubmit}>
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-6">
-          <h2 className="text-xl font-bold text-gray-900">Write Your Review</h2>
+        <div className="bg-card rounded-xl border border-border shadow-sm p-6 space-y-6">
+          <h2 className="text-xl font-bold text-foreground">Write Your Review</h2>
 
           {/* Category selection */}
           <fieldset>
-            <legend className="text-sm font-medium text-gray-900 mb-3">
+            <legend className="text-sm font-medium text-foreground mb-3">
               What are you reviewing? *
             </legend>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -130,32 +130,32 @@ export function WriteReviewForm({ dealer }: Props) {
                     className={cn(
                       "flex items-start gap-3 p-4 rounded-xl border-2 text-left transition-all",
                       selected
-                        ? "border-gold-500 bg-gold-50 shadow-sm"
-                        : "border-gray-200 hover:border-gray-300 bg-white"
+                        ? "border-primary/30 bg-primary/10 shadow-sm"
+                        : "border-border hover:border-border bg-card"
                     )}
                   >
                     <div className={cn(
                       "w-10 h-10 rounded-lg flex items-center justify-center shrink-0",
-                      selected ? "bg-gold-100 text-gold-800" : "bg-gray-100 text-gray-500"
+                      selected ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
                     )}>
                       <Icon size={20} aria-hidden />
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900">{cat.label}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">{cat.description}</p>
+                      <p className="font-semibold text-foreground">{cat.label}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{cat.description}</p>
                     </div>
                   </button>
                 );
               })}
             </div>
             {errors.reviewCategory && (
-              <p className="text-red-500 text-xs mt-2">{errors.reviewCategory.message}</p>
+              <p className="text-destructive text-xs mt-2">{errors.reviewCategory.message}</p>
             )}
           </fieldset>
 
           {/* Sales-specific fields */}
           {reviewCategory === "SALES_FINANCING" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-muted rounded-xl border border-border">
               <div>
                 <Label htmlFor="salesConsultantName">Sales Consultant Name *</Label>
                 <Input
@@ -165,7 +165,7 @@ export function WriteReviewForm({ dealer }: Props) {
                   {...register("salesConsultantName")}
                 />
                 {errors.salesConsultantName && (
-                  <p className="text-red-500 text-xs mt-1">{errors.salesConsultantName.message}</p>
+                  <p className="text-destructive text-xs mt-1">{errors.salesConsultantName.message}</p>
                 )}
               </div>
               <div>
@@ -177,7 +177,7 @@ export function WriteReviewForm({ dealer }: Props) {
                   {...register("vehicleModel")}
                 />
                 {errors.vehicleModel && (
-                  <p className="text-red-500 text-xs mt-1">{errors.vehicleModel.message}</p>
+                  <p className="text-destructive text-xs mt-1">{errors.vehicleModel.message}</p>
                 )}
               </div>
               <div>
@@ -199,7 +199,7 @@ export function WriteReviewForm({ dealer }: Props) {
 
           {/* Service-specific fields */}
           {reviewCategory === "SERVICE_PARTS" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-muted rounded-xl border border-border">
               <div>
                 <Label htmlFor="serviceAdvisorName">Service Advisor Name *</Label>
                 <Input
@@ -209,7 +209,7 @@ export function WriteReviewForm({ dealer }: Props) {
                   {...register("serviceAdvisorName")}
                 />
                 {errors.serviceAdvisorName && (
-                  <p className="text-red-500 text-xs mt-1">{errors.serviceAdvisorName.message}</p>
+                  <p className="text-destructive text-xs mt-1">{errors.serviceAdvisorName.message}</p>
                 )}
               </div>
               <div>
@@ -221,7 +221,7 @@ export function WriteReviewForm({ dealer }: Props) {
                   {...register("serviceRendered")}
                 />
                 {errors.serviceRendered && (
-                  <p className="text-red-500 text-xs mt-1">{errors.serviceRendered.message}</p>
+                  <p className="text-destructive text-xs mt-1">{errors.serviceRendered.message}</p>
                 )}
               </div>
             </div>
@@ -244,10 +244,10 @@ export function WriteReviewForm({ dealer }: Props) {
                 )}
               />
               {overallRating > 0 && (
-                <span className="text-sm font-semibold text-gray-700">{RATING_LABELS[overallRating]}</span>
+                <span className="text-sm font-semibold text-foreground">{RATING_LABELS[overallRating]}</span>
               )}
             </div>
-            {errors.overallRating && <p className="text-red-500 text-xs mt-1">Please select a rating</p>}
+            {errors.overallRating && <p className="text-destructive text-xs mt-1">Please select a rating</p>}
           </div>
 
           {/* Sub-ratings */}
@@ -283,8 +283,8 @@ export function WriteReviewForm({ dealer }: Props) {
                   onClick={() => setValue("wouldRecommend", val)}
                   className={`px-5 py-2 rounded-lg border text-sm font-medium transition-all ${
                     watch("wouldRecommend") === val
-                      ? val ? "bg-green-50 border-green-400 text-green-700" : "bg-red-50 border-red-400 text-red-700"
-                      : "border-gray-200 text-gray-600 hover:border-gray-300"
+                      ? val ? "bg-muted border-primary/20 text-primary" : "bg-destructive/10 border-primary/20 text-destructive"
+                      : "border-border text-muted-foreground hover:border-border"
                   }`}
                 >
                   {val ? "Yes" : "No"}
@@ -296,7 +296,7 @@ export function WriteReviewForm({ dealer }: Props) {
           <div>
             <Label htmlFor="title">Review Title *</Label>
             <Input id="title" className="mt-1" placeholder="Summarize your experience in a sentence" {...register("title")} />
-            {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title.message}</p>}
+            {errors.title && <p className="text-destructive text-xs mt-1">{errors.title.message}</p>}
           </div>
 
           <div>
@@ -309,8 +309,8 @@ export function WriteReviewForm({ dealer }: Props) {
               {...register("body")}
             />
             <div className="flex justify-between mt-1">
-              {errors.body && <p className="text-red-500 text-xs">{errors.body.message}</p>}
-              <span className="text-xs text-gray-400 ml-auto">{watch("body")?.length ?? 0} chars</span>
+              {errors.body && <p className="text-destructive text-xs">{errors.body.message}</p>}
+              <span className="text-xs text-muted-foreground ml-auto">{watch("body")?.length ?? 0} chars</span>
             </div>
           </div>
 
@@ -330,7 +330,7 @@ export function WriteReviewForm({ dealer }: Props) {
 
           <Button
             type="submit"
-            className="w-full bg-gold-800 hover:bg-gold-800 h-12 text-base font-semibold"
+            className="w-full bg-primary hover:bg-primary h-12 text-base font-semibold"
             disabled={submitMutation.isPending}
           >
             {submitMutation.isPending ? (
@@ -340,9 +340,9 @@ export function WriteReviewForm({ dealer }: Props) {
             )}
           </Button>
 
-          <p className="text-xs text-gray-500 text-center">
+          <p className="text-xs text-muted-foreground text-center">
             By submitting, you agree to our{" "}
-            <a href="/terms" className="text-gold-700 hover:underline">Terms of Service</a>. Reviews are subject to moderation.
+            <a href="/terms" className="text-primary hover:underline">Terms of Service</a>. Reviews are subject to moderation.
           </p>
         </div>
       </form>

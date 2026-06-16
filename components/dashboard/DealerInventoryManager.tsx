@@ -113,19 +113,19 @@ export function DealerInventoryManager({ dealershipId, dealershipName, currency,
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           List vehicles on your DealerVoice profile and <strong>{dealershipName}</strong>&apos;s country inventory page.
         </p>
-        <Button onClick={() => setOpen((o) => !o)} className="bg-gold-800 hover:bg-gold-900 gap-2">
+        <Button onClick={() => setOpen((o) => !o)} className="bg-primary hover:bg-primary/90 gap-2">
           <Plus size={16} />
           {open ? "Cancel" : "Add vehicle"}
         </Button>
       </div>
 
       {open && (
-        <form onSubmit={addVehicle} className="rounded-xl border border-gold/30 bg-gold-50/50 p-6 space-y-4">
-          <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-            <Car size={18} className="text-gold-700" /> New listing
+        <form onSubmit={addVehicle} className="rounded-xl border border-primary/30 bg-primary/10 p-6 space-y-4">
+          <h3 className="font-semibold text-foreground flex items-center gap-2">
+            <Car size={18} className="text-primary" /> New listing
           </h3>
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
@@ -181,7 +181,7 @@ export function DealerInventoryManager({ dealershipId, dealershipName, currency,
               <Input value={form.affiliateUrl} onChange={set("affiliateUrl")} placeholder="https://..." type="url" />
             </div>
           </div>
-          <Button type="submit" disabled={saving} className="bg-gold-800 hover:bg-gold-900">
+          <Button type="submit" disabled={saving} className="bg-primary hover:bg-primary/90">
             {saving ? <Loader2 className="animate-spin mr-2" size={16} /> : null}
             Publish listing
           </Button>
@@ -189,28 +189,28 @@ export function DealerInventoryManager({ dealershipId, dealershipName, currency,
       )}
 
       {listings.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-gray-200 p-10 text-center text-gray-500 text-sm">
+        <div className="rounded-xl border border-dashed border-border p-10 text-center text-muted-foreground text-sm">
           No vehicles listed yet. Add your first car to appear in search and on your profile.
         </div>
       ) : (
-        <ul className="divide-y divide-gray-100 rounded-xl border border-gray-100 bg-white overflow-hidden">
+        <ul className="divide-y divide-border rounded-xl border border-border bg-card overflow-hidden">
           {listings.map((v) => (
-            <li key={v.id} className="flex items-center justify-between gap-4 p-4 hover:bg-gray-50">
+            <li key={v.id} className="flex items-center justify-between gap-4 p-4 hover:bg-muted">
               <div>
-                <p className="font-medium text-gray-900">
+                <p className="font-medium text-foreground">
                   {[v.year, v.make, v.model, v.trim].filter(Boolean).join(" ")}
                 </p>
-                <p className="text-sm text-gold-800 font-semibold mt-0.5">
+                <p className="text-sm text-primary font-semibold mt-0.5">
                   {formatPrice(v.priceMinor, v.priceLabel, v.currency)}
                 </p>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   {v.condition}
                   {v.mileageKm != null ? ` · ${v.mileageKm.toLocaleString()} km` : ""}
                 </p>
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 {v.affiliateUrl && (
-                  <a href={v.affiliateUrl} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gold-700">
+                  <a href={v.affiliateUrl} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary">
                     <ExternalLink size={16} />
                   </a>
                 )}
@@ -218,7 +218,7 @@ export function DealerInventoryManager({ dealershipId, dealershipName, currency,
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                  className="text-destructive hover:text-destructive hover:bg-destructive/10"
                   disabled={removing === v.id}
                   onClick={() => removeListing(v.id)}
                 >

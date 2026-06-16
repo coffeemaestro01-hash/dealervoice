@@ -61,13 +61,13 @@ export function AdminSupportPage() {
   }
 
   if (loading && tickets.length === 0) {
-    return <div className="p-8 text-gray-500">Loading support queue…</div>;
+    return <div className="p-8 text-muted-foreground">Loading support queue…</div>;
   }
 
   return (
     <div className="p-6 lg:p-8 max-w-5xl">
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">Support tickets</h1>
-      <p className="text-sm text-gray-500 mb-6">Dealer support requests — reply and close from here.</p>
+      <h1 className="text-2xl font-bold text-foreground mb-2">Support tickets</h1>
+      <p className="text-sm text-muted-foreground mb-6">Dealer support requests — reply and close from here.</p>
 
       <div className="flex gap-2 mb-6">
         {(["all", "OPEN", "IN_PROGRESS", "RESOLVED", "CLOSED"] as const).map((s) => (
@@ -75,7 +75,7 @@ export function AdminSupportPage() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 rounded-lg text-sm font-medium ${
-              statusFilter === s ? "bg-gold-800 text-white" : "bg-white border border-gray-200 text-gray-600"
+              statusFilter === s ? "bg-primary text-foreground" : "bg-card border border-border text-muted-foreground"
             }`}
           >
             {s === "all" ? "All" : s.replace(/_/g, " ")}
@@ -84,7 +84,7 @@ export function AdminSupportPage() {
       </div>
 
       {tickets.length === 0 ? (
-        <p className="text-gray-500 text-sm">No tickets in this queue.</p>
+        <p className="text-muted-foreground text-sm">No tickets in this queue.</p>
       ) : (
         <div className="space-y-4">
           {tickets.map((ticket) => (
@@ -93,11 +93,11 @@ export function AdminSupportPage() {
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div>
                     <CardTitle className="text-base">{ticket.subject}</CardTitle>
-                    <p className="text-sm text-gray-600 mt-1">
+                    <p className="text-sm text-muted-foreground mt-1">
                       {ticket.user.name} · {ticket.user.email}
                       {ticket.dealership ? ` · ${ticket.dealership.name}` : ""}
                     </p>
-                    <p className="text-xs text-gray-400 mt-0.5">
+                    <p className="text-xs text-muted-foreground mt-0.5">
                       {ticket.category} · {new Date(ticket.createdAt).toLocaleString()}
                     </p>
                   </div>
@@ -105,16 +105,16 @@ export function AdminSupportPage() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-sm text-gray-700 whitespace-pre-wrap">{ticket.message}</p>
+                <p className="text-sm text-foreground whitespace-pre-wrap">{ticket.message}</p>
 
                 {ticket.replies.map((reply) => (
                   <div
                     key={reply.id}
                     className={`rounded-lg p-3 text-sm ${
-                      reply.isStaff ? "bg-gold-50" : "bg-gray-50"
+                      reply.isStaff ? "bg-primary/10" : "bg-muted"
                     }`}
                   >
-                    <p className="text-xs text-gray-500 mb-1">
+                    <p className="text-xs text-muted-foreground mb-1">
                       {reply.user.name} · {new Date(reply.createdAt).toLocaleString()}
                     </p>
                     <p className="whitespace-pre-wrap">{reply.body}</p>
@@ -122,14 +122,14 @@ export function AdminSupportPage() {
                 ))}
 
                 <div>
-                  <label className="text-xs font-medium text-gray-500">Internal notes</label>
+                  <label className="text-xs font-medium text-muted-foreground">Internal notes</label>
                   <textarea
                     rows={2}
                     value={notesDrafts[ticket.id] ?? ""}
                     onChange={(e) =>
                       setNotesDrafts((d) => ({ ...d, [ticket.id]: e.target.value }))
                     }
-                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                    className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
                   />
                   <Button
                     size="sm"
@@ -142,14 +142,14 @@ export function AdminSupportPage() {
                 </div>
 
                 <div>
-                  <label className="text-xs font-medium text-gray-500">Reply to dealer</label>
+                  <label className="text-xs font-medium text-muted-foreground">Reply to dealer</label>
                   <textarea
                     rows={3}
                     value={replyDrafts[ticket.id] ?? ""}
                     onChange={(e) =>
                       setReplyDrafts((d) => ({ ...d, [ticket.id]: e.target.value }))
                     }
-                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                    className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
                     placeholder="Your reply…"
                   />
                 </div>

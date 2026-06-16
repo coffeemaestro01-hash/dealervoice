@@ -44,20 +44,20 @@ export function QuoteRequestForm({ dealershipId, dealerName }: Props) {
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gold/30 shadow-sm overflow-hidden">
-      <div className="bg-night-gradient px-5 py-4">
-        <h3 className="font-semibold text-white">Request a quote</h3>
-        <p className="text-gray-300 text-xs mt-0.5">Get pricing &amp; availability from {dealerName}</p>
+    <div className="bg-card rounded-xl border border-primary/30 shadow-sm overflow-hidden">
+      <div className="bg-pearl px-5 py-4">
+        <h3 className="font-semibold text-foreground">Request a quote</h3>
+        <p className="text-muted-foreground text-xs mt-0.5">Get pricing &amp; availability from {dealerName}</p>
       </div>
 
       {done ? (
         <div className="p-6 text-center">
-          <CheckCircle2 className="mx-auto text-green-500 mb-3" size={40} />
-          <p className="font-medium text-gray-900">Request sent!</p>
-          <p className="text-sm text-gray-500 mt-1">{dealerName} will be in touch soon.</p>
+          <CheckCircle2 className="mx-auto text-primary mb-3" size={40} />
+          <p className="font-medium text-foreground">Request sent!</p>
+          <p className="text-sm text-muted-foreground mt-1">{dealerName} will be in touch soon.</p>
           <Link
             href={`/write-review/${dealershipId}`}
-            className="inline-flex items-center gap-1.5 mt-4 text-sm font-medium text-gold-700 hover:underline"
+            className="inline-flex items-center gap-1.5 mt-4 text-sm font-medium text-primary hover:underline"
           >
             <PenLine size={14} />
             Visited recently? Write a review
@@ -74,13 +74,13 @@ export function QuoteRequestForm({ dealershipId, dealerName }: Props) {
             value={form.message}
             onChange={set("message")}
             rows={3}
-            className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500/40"
+            className="w-full rounded-md border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
           />
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          <Button type="submit" disabled={loading} className="w-full bg-gold-gradient text-night-900 font-semibold border-0 hover:opacity-90">
+          {error && <p className="text-destructive text-sm">{error}</p>}
+          <Button type="submit" disabled={loading} className="w-full bg-ember text-night-900 font-semibold border-0 hover:opacity-90">
             {loading ? <><Loader2 size={16} className="animate-spin mr-2" />Sending…</> : <><Send size={15} className="mr-2" />Send request</>}
           </Button>
-          <p className="text-[11px] text-gray-400 text-center">Free &amp; no obligation. Your details are shared only with this dealership.</p>
+          <p className="text-[11px] text-muted-foreground text-center">Free &amp; no obligation. Your details are shared only with this dealership.</p>
         </form>
       )}
     </div>

@@ -43,13 +43,13 @@ const TESTIMONIALS = [
 
 export function PricingPageView({ plans, dealerBanner, stats }: Props) {
   return (
-    <div className="bg-white">
+    <div className="bg-card">
       {/* Hero — GoodFirms "Choose your visibility level" */}
-      <section className="bg-gradient-to-b from-night-900 via-night-800 to-night-900 text-white py-16 md:py-20">
+      <section className="bg-gradient-to-b from-background via-muted to-background text-foreground py-16 md:py-20">
         <div className="container max-w-4xl text-center">
-          <p className="text-gold-400 text-xs font-bold uppercase tracking-[0.2em] mb-4">Dealer plans</p>
+          <p className="text-primary text-xs font-bold uppercase tracking-[0.2em] mb-4">Dealer plans</p>
           <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">Choose your visibility level</h1>
-          <p className="text-white/65 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+          <p className="text-foreground text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
             Boost your free profile on DealerVoice with flexible plans that increase exposure, remove competitor
             distractions, and help buyers find you sooner.
           </p>
@@ -58,19 +58,19 @@ export function PricingPageView({ plans, dealerBanner, stats }: Props) {
 
       {dealerBanner && (
         <div className="container -mt-8 relative z-10 max-w-3xl">
-          <div className="rounded-2xl border border-gold-500/40 bg-gold-50 shadow-lg p-6 text-center">
-            <p className="text-xs font-bold text-gold-800 uppercase tracking-wide mb-1">Your dealership</p>
-            <h2 className="text-xl font-bold text-gray-900">
-              Upgrade <span className="text-gold-700">{dealerBanner.name}</span> for ad-free visibility
+          <div className="rounded-2xl border border-primary/40 bg-primary/10 shadow-lg p-6 text-center">
+            <p className="text-xs font-bold text-primary uppercase tracking-wide mb-1">Your dealership</p>
+            <h2 className="text-xl font-bold text-foreground">
+              Upgrade <span className="text-primary">{dealerBanner.name}</span> for ad-free visibility
             </h2>
             <div className="flex flex-col sm:flex-row gap-3 justify-center mt-4">
               <Link href={`/claim?dealer=${dealerBanner.dealerId}`}>
-                <Button variant="outline" className="border-gold-400 text-gold-800 w-full sm:w-auto">
+                <Button variant="outline" className="border-primary/30 text-primary w-full sm:w-auto">
                   Start free claim
                 </Button>
               </Link>
               <Link href={`/dashboard/dealer/billing?dealer=${dealerBanner.dealerId}`}>
-                <Button className="bg-gold-600 hover:bg-gold-700 text-white w-full sm:w-auto">Go to checkout</Button>
+                <Button className="bg-primary hover:bg-primary/90 text-foreground w-full sm:w-auto">Go to checkout</Button>
               </Link>
             </div>
           </div>
@@ -78,9 +78,9 @@ export function PricingPageView({ plans, dealerBanner, stats }: Props) {
       )}
 
       {/* Plan cards */}
-      <section className="py-14 md:py-20 bg-gray-50">
+      <section className="py-14 md:py-20 bg-muted">
         <div className="container">
-          <p className="text-center text-gray-500 text-sm max-w-xl mx-auto mb-10">
+          <p className="text-center text-muted-foreground text-sm max-w-xl mx-auto mb-10">
             Start free. Upgrade when you are ready to own the buyer journey on your profile.
           </p>
 
@@ -88,47 +88,47 @@ export function PricingPageView({ plans, dealerBanner, stats }: Props) {
             {plans.map((plan) => (
               <article
                 key={plan.name}
-                className={`flex flex-col rounded-2xl bg-white p-8 md:p-9 shadow-sm border transition-shadow hover:shadow-md ${
+                className={`flex flex-col rounded-2xl bg-card p-8 md:p-9 shadow-sm border transition-shadow hover:shadow-md ${
                   plan.highlighted
-                    ? "border-gold-500 ring-2 ring-gold-500/30 lg:scale-[1.02] shadow-lg relative z-10"
-                    : "border-gray-200"
+                    ? "border-primary/30 ring-2 ring-primary/30 lg:scale-[1.02] shadow-lg relative z-10"
+                    : "border-border"
                 }`}
               >
                 {plan.badge && (
-                  <span className="inline-flex self-start items-center gap-1 bg-gold-600 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-4">
+                  <span className="inline-flex self-start items-center gap-1 bg-primary text-foreground text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-4">
                     <Sparkles size={12} /> {plan.badge}
                   </span>
                 )}
 
-                <h2 className="text-2xl font-bold text-gray-900">{plan.name}</h2>
-                <p className="text-gold-700 font-medium text-sm mt-1">{plan.tagline}</p>
+                <h2 className="text-2xl font-bold text-foreground">{plan.name}</h2>
+                <p className="text-primary font-medium text-sm mt-1">{plan.tagline}</p>
 
                 <div className="mt-6 mb-2">
                   {plan.customPrice ? (
-                    <p className="text-2xl font-bold text-gray-900">Pricing on request</p>
+                    <p className="text-2xl font-bold text-foreground">Pricing on request</p>
                   ) : (
                     <>
-                      <p className="text-4xl font-bold text-gray-900 tracking-tight">
+                      <p className="text-4xl font-bold text-foreground tracking-tight">
                         {plan.priceUsd}
-                        {plan.period && <span className="text-lg font-medium text-gray-500">{plan.period}</span>}
+                        {plan.period && <span className="text-lg font-medium text-muted-foreground">{plan.period}</span>}
                       </p>
                     </>
                   )}
                   {plan.annualNote && (
-                    <p className="text-xs text-green-700 font-medium mt-2">{plan.annualNote}</p>
+                    <p className="text-xs text-primary font-medium mt-2">{plan.annualNote}</p>
                   )}
                 </div>
 
-                <p className="text-gray-600 text-sm leading-relaxed mb-6">{plan.intro}</p>
+                <p className="text-muted-foreground text-sm leading-relaxed mb-6">{plan.intro}</p>
 
                 {plan.includesLabel && (
-                  <p className="text-xs font-semibold text-gold-800 uppercase tracking-wide mb-3">{plan.includesLabel}</p>
+                  <p className="text-xs font-semibold text-primary uppercase tracking-wide mb-3">{plan.includesLabel}</p>
                 )}
 
                 <ul className="space-y-3 flex-1 mb-8">
                   {plan.benefits.map((b) => (
-                    <li key={b} className="flex gap-2.5 text-sm text-gray-700 leading-snug">
-                      <CheckCircle2 size={16} className="text-gold-600 shrink-0 mt-0.5" />
+                    <li key={b} className="flex gap-2.5 text-sm text-foreground leading-snug">
+                      <CheckCircle2 size={16} className="text-primary shrink-0 mt-0.5" />
                       <span>{b}</span>
                     </li>
                   ))}
@@ -138,10 +138,10 @@ export function PricingPageView({ plans, dealerBanner, stats }: Props) {
                   <Button
                     className={`w-full h-12 text-base font-semibold ${
                       plan.highlighted
-                        ? "bg-gold-600 hover:bg-gold-700 text-white"
+                        ? "bg-primary hover:bg-primary/90 text-foreground"
                         : plan.customPrice
-                          ? "bg-night-800 hover:bg-night-700 text-white"
-                          : "bg-white border-2 border-gray-900 text-gray-900 hover:bg-gray-50"
+                          ? "bg-pearl hover:bg-muted text-foreground"
+                          : "bg-card border-2 border-border text-foreground hover:bg-muted"
                     }`}
                   >
                     {plan.cta}
@@ -155,12 +155,12 @@ export function PricingPageView({ plans, dealerBanner, stats }: Props) {
       </section>
 
       {/* Why upgrade — GoodFirms-style value props */}
-      <section className="py-16 border-t border-gray-100">
+      <section className="py-16 border-t border-border">
         <div className="container max-w-5xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-3">
+          <h2 className="text-2xl md:text-3xl font-bold text-center text-foreground mb-3">
             Why dealerships upgrade on DealerVoice
           </h2>
-          <p className="text-center text-gray-500 text-sm mb-12 max-w-lg mx-auto">
+          <p className="text-center text-muted-foreground text-sm mb-12 max-w-lg mx-auto">
             Outlet-level trust beats brand advertising when buyers are choosing where to buy.
           </p>
           <div className="grid md:grid-cols-3 gap-8">
@@ -179,8 +179,8 @@ export function PricingPageView({ plans, dealerBanner, stats }: Props) {
               },
             ].map((item) => (
               <div key={item.title} className="text-center md:text-left">
-                <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{item.body}</p>
+                <h3 className="font-bold text-foreground mb-2">{item.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{item.body}</p>
               </div>
             ))}
           </div>
@@ -188,42 +188,42 @@ export function PricingPageView({ plans, dealerBanner, stats }: Props) {
       </section>
 
       {/* Stats */}
-      <section className="py-14 bg-night-900 text-white">
+      <section className="py-14 bg-pearl text-foreground">
         <div className="container">
-          <h2 className="text-center text-lg font-semibold text-white/80 mb-10">Dealerships already on DealerVoice</h2>
+          <h2 className="text-center text-lg font-semibold text-foreground mb-10">Dealerships already on DealerVoice</h2>
           <div className="grid grid-cols-3 gap-6 max-w-3xl mx-auto text-center">
             <div>
-              <p className="text-3xl md:text-4xl font-bold text-gold-400">
+              <p className="text-3xl md:text-4xl font-bold text-primary">
                 {stats.dealerships >= 1000 ? `${Math.floor(stats.dealerships / 100) / 10}K+` : stats.dealerships.toLocaleString()}
               </p>
-              <p className="text-xs text-white/50 mt-1 uppercase tracking-wide">Dealerships listed</p>
+              <p className="text-xs text-foreground mt-1 uppercase tracking-wide">Dealerships listed</p>
             </div>
             <div>
-              <p className="text-3xl md:text-4xl font-bold text-gold-400">{stats.countries}+</p>
-              <p className="text-xs text-white/50 mt-1 uppercase tracking-wide">Countries</p>
+              <p className="text-3xl md:text-4xl font-bold text-primary">{stats.countries}+</p>
+              <p className="text-xs text-foreground mt-1 uppercase tracking-wide">Countries</p>
             </div>
             <div>
-              <p className="text-3xl md:text-4xl font-bold text-gold-400">Free</p>
-              <p className="text-xs text-white/50 mt-1 uppercase tracking-wide">To claim &amp; start</p>
+              <p className="text-3xl md:text-4xl font-bold text-primary">Free</p>
+              <p className="text-xs text-foreground mt-1 uppercase tracking-wide">To claim &amp; start</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Testimonials */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-muted">
         <div className="container max-w-5xl">
-          <h2 className="text-2xl font-bold text-center text-gray-900 mb-10">What dealers say</h2>
+          <h2 className="text-2xl font-bold text-center text-foreground mb-10">What dealers say</h2>
           <div className="grid md:grid-cols-2 gap-6">
             {TESTIMONIALS.map((t) => (
               <blockquote
                 key={t.name}
-                className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm"
+                className="bg-card rounded-2xl border border-border p-8 shadow-sm"
               >
-                <p className="text-gray-700 text-sm leading-relaxed italic">&ldquo;{t.quote}&rdquo;</p>
-                <footer className="mt-6 pt-4 border-t border-gray-100">
-                  <p className="font-semibold text-gray-900 text-sm">{t.name}</p>
-                  <p className="text-xs text-gray-500">{t.role}</p>
+                <p className="text-foreground text-sm leading-relaxed italic">&ldquo;{t.quote}&rdquo;</p>
+                <footer className="mt-6 pt-4 border-t border-border">
+                  <p className="font-semibold text-foreground text-sm">{t.name}</p>
+                  <p className="text-xs text-muted-foreground">{t.role}</p>
                 </footer>
               </blockquote>
             ))}
@@ -234,30 +234,30 @@ export function PricingPageView({ plans, dealerBanner, stats }: Props) {
       {/* FAQ */}
       <section className="py-16 md:py-20">
         <div className="container max-w-3xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-2">Frequently asked questions</h2>
-          <p className="text-center text-gray-500 text-sm mb-10">Everything you need to know before upgrading.</p>
+          <h2 className="text-2xl md:text-3xl font-bold text-center text-foreground mb-2">Frequently asked questions</h2>
+          <p className="text-center text-muted-foreground text-sm mb-10">Everything you need to know before upgrading.</p>
           <PricingFaq />
         </div>
       </section>
 
       {/* Bottom CTA */}
-      <section className="py-14 bg-gold-50 border-t border-gold-100">
+      <section className="py-14 bg-primary/10 border-t border-primary/30">
         <div className="container max-w-2xl text-center">
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Need a custom package?</h2>
-          <p className="text-sm text-gray-600 mb-6">
+          <h2 className="text-xl font-bold text-foreground mb-2">Need a custom package?</h2>
+          <p className="text-sm text-muted-foreground mb-6">
             Enterprise groups and sponsorship slots can be tailored to your cities, brands, and inventory goals.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/contact">
-              <Button className="bg-gold-600 hover:bg-gold-700 text-white w-full sm:w-auto">Get a quote</Button>
+              <Button className="bg-primary hover:bg-primary/90 text-foreground w-full sm:w-auto">Get a quote</Button>
             </Link>
             <a href={`mailto:${EMAILS.dealers}`}>
-              <Button variant="outline" className="border-gold-400 text-gold-800 w-full sm:w-auto">
+              <Button variant="outline" className="border-primary/30 text-primary w-full sm:w-auto">
                 {EMAILS.dealers}
               </Button>
             </a>
           </div>
-          <p className="text-xs text-gray-400 mt-6">Payments via Stripe</p>
+          <p className="text-xs text-muted-foreground mt-6">Payments via Stripe</p>
         </div>
       </section>
     </div>

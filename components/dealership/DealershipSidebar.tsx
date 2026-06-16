@@ -11,7 +11,7 @@ import { getPremiumInventoryUrl } from "@/lib/dealer/premium";
 
 const DealerMap = dynamic(
   () => import("@/components/map/DealerMap").then((m) => m.DealerMap),
-  { ssr: false, loading: () => <div className="h-48 bg-gray-100 rounded-xl animate-pulse" /> }
+  { ssr: false, loading: () => <div className="h-48 bg-muted rounded-xl animate-pulse" /> }
 );
 
 interface Props {
@@ -49,46 +49,46 @@ export function DealershipSidebar({ dealer, isPremium = false }: Props) {
       )}
 
       {inventoryUrl && (
-        <div className="bg-gold-50 border border-gold-200 rounded-xl p-5 text-center">
-          <h3 className="font-semibold text-gold-900 mb-1">Browse Live Inventory</h3>
-          <p className="text-gold-800 text-sm mb-4">Premium verified dealer — shop vehicles directly.</p>
+        <div className="bg-primary/10 border border-primary/30 rounded-xl p-5 text-center">
+          <h3 className="font-semibold text-foreground mb-1">Browse Live Inventory</h3>
+          <p className="text-primary text-sm mb-4">Premium verified dealer — shop vehicles directly.</p>
           <a href={inventoryUrl} target="_blank" rel="noopener noreferrer">
-            <Button className="w-full bg-gold-800 hover:bg-gold-900">View Inventory</Button>
+            <Button className="w-full bg-primary hover:bg-primary/90">View Inventory</Button>
           </a>
         </div>
       )}
 
-      <div className="bg-gold-50 border border-gold-100 rounded-xl p-5 text-center">
-        <h3 className="font-semibold text-gold-900 mb-1">Been to this dealer?</h3>
-        <p className="text-gold-800 text-sm mb-4">Share your experience to help other car buyers.</p>
+      <div className="bg-primary/10 border border-primary/30 rounded-xl p-5 text-center">
+        <h3 className="font-semibold text-foreground mb-1">Been to this dealer?</h3>
+        <p className="text-primary text-sm mb-4">Share your experience to help other car buyers.</p>
         <Link href={`/write-review/${dealer.id}`}>
-          <Button className="w-full bg-gold-800 hover:bg-gold-800">Write a Review</Button>
+          <Button className="w-full bg-primary hover:bg-primary">Write a Review</Button>
         </Link>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-        <h3 className="font-semibold text-gray-900 mb-4">Contact & Location</h3>
+      <div className="bg-card rounded-xl border border-border p-5 shadow-sm">
+        <h3 className="font-semibold text-foreground mb-4">Contact & Location</h3>
         <div className="space-y-3 text-sm">
           {location && (
-            <div className="flex gap-2 text-gray-600">
-              <MapPin size={15} className="mt-0.5 shrink-0 text-gray-400" aria-hidden />
+            <div className="flex gap-2 text-muted-foreground">
+              <MapPin size={15} className="mt-0.5 shrink-0 text-muted-foreground" aria-hidden />
               <span>{location}</span>
             </div>
           )}
           {dealer.phone && (
-            <a href={`tel:${dealer.phone}`} className="flex gap-2 text-gray-600 hover:text-gold-700">
-              <Phone size={15} className="mt-0.5 shrink-0 text-gray-400" aria-hidden />
+            <a href={`tel:${dealer.phone}`} className="flex gap-2 text-muted-foreground hover:text-primary">
+              <Phone size={15} className="mt-0.5 shrink-0 text-muted-foreground" aria-hidden />
               <span>{dealer.phone}</span>
             </a>
           )}
           {dealer.website && (
-            <a href={dealer.website} target="_blank" rel="noopener noreferrer" className="flex gap-2 text-gold-700 hover:underline">
+            <a href={dealer.website} target="_blank" rel="noopener noreferrer" className="flex gap-2 text-primary hover:underline">
               <Globe size={15} className="mt-0.5 shrink-0" aria-hidden />
               <span className="truncate">{dealer.website.replace(/^https?:\/\//, "")}</span>
             </a>
           )}
           {dealer.email && (
-            <a href={`mailto:${dealer.email}`} className="flex gap-2 text-gold-700 hover:underline">
+            <a href={`mailto:${dealer.email}`} className="flex gap-2 text-primary hover:underline">
               <Mail size={15} className="mt-0.5 shrink-0" aria-hidden />
               <span className="truncate">{dealer.email}</span>
             </a>
@@ -96,19 +96,19 @@ export function DealershipSidebar({ dealer, isPremium = false }: Props) {
         </div>
 
         {(dealer.facebookUrl || dealer.instagramUrl || dealer.twitterUrl) && (
-          <div className="flex gap-2 mt-4 pt-4 border-t border-gray-50">
+          <div className="flex gap-2 mt-4 pt-4 border-t border-border">
             {dealer.facebookUrl && (
-              <a href={dealer.facebookUrl} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gold-700" aria-label="Facebook">
+              <a href={dealer.facebookUrl} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary" aria-label="Facebook">
                 <Facebook size={18} />
               </a>
             )}
             {dealer.instagramUrl && (
-              <a href={dealer.instagramUrl} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-pink-600" aria-label="Instagram">
+              <a href={dealer.instagramUrl} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary" aria-label="Instagram">
                 <Instagram size={18} />
               </a>
             )}
             {dealer.twitterUrl && (
-              <a href={dealer.twitterUrl} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-sky-500" aria-label="Twitter">
+              <a href={dealer.twitterUrl} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary" aria-label="Twitter">
                 <Twitter size={18} />
               </a>
             )}
@@ -116,7 +116,7 @@ export function DealershipSidebar({ dealer, isPremium = false }: Props) {
         )}
 
         {dealer.yearEstablished && (
-          <p className="text-xs text-gray-400 mt-3 pt-3 border-t border-gray-50">
+          <p className="text-xs text-muted-foreground mt-3 pt-3 border-t border-border">
             Established {dealer.yearEstablished}
           </p>
         )}
@@ -132,19 +132,19 @@ export function DealershipSidebar({ dealer, isPremium = false }: Props) {
         />
       )}
 
-      <AdSenseUnit slotKey="dealerSidebar" format="rectangle" className="rounded-xl border border-gray-100 bg-gray-50 p-3" />
+      <AdSenseUnit slotKey="dealerSidebar" format="rectangle" className="rounded-xl border border-border bg-muted p-3" />
 
       {!isPremium && (
-        <div className="bg-night rounded-xl border-2 border-gold/30 p-5 shadow-sm text-center">
-          <p className="text-sm text-gray-300 mb-1 font-medium">Is this your dealership?</p>
-          <p className="text-xs text-gray-500 mb-4">Claim to remove competitor ads and unlock premium features.</p>
+        <div className="bg-background rounded-xl border-2 border-primary/30 p-5 shadow-sm text-center">
+          <p className="text-sm text-muted-foreground mb-1 font-medium">Is this your dealership?</p>
+          <p className="text-xs text-muted-foreground mb-4">Claim to remove competitor ads and unlock premium features.</p>
           <Link href={`/dealership/${dealer.slug}?claim=1`}>
-            <Button size="lg" className="w-full bg-gold-gradient text-night-900 font-bold hover:opacity-90 border-0">
+            <Button size="lg" className="w-full bg-ember text-night-900 font-bold hover:opacity-90 border-0">
               Claim This Profile
             </Button>
           </Link>
           <p className="mt-3">
-            <Link href={`/pricing?dealer=${dealer.id}`} className="text-xs text-gold-400 hover:text-gold-300">
+            <Link href={`/pricing?dealer=${dealer.id}`} className="text-xs text-primary hover:text-primary">
               View premium plans →
             </Link>
           </p>

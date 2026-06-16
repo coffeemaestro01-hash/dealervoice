@@ -8,8 +8,8 @@ export default async function AdminImportPage() {
 
   return (
     <div className="p-6 lg:p-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">Import dealerships</h1>
-      <p className="text-sm text-gray-500 mb-6">
+      <h1 className="text-2xl font-bold text-foreground mb-2">Import dealerships</h1>
+      <p className="text-sm text-muted-foreground mb-6">
         Bulk CSV import for U.S. dealership listings. Required columns: name, state, city. Optional: phone, website, email, address.
       </p>
       <AdminDealerImport />

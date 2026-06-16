@@ -10,7 +10,7 @@ export default async function NewCampaignPage() {
 
   return (
     <div className="p-6 lg:p-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Create campaign</h1>
+      <h1 className="text-2xl font-bold text-foreground mb-6">Create campaign</h1>
       <AdminCreateCampaignForm countries={countries} />
     </div>
   );

@@ -41,20 +41,20 @@ export function PricingFaq() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <div className="divide-y divide-gray-200 rounded-2xl border border-gray-200 bg-white overflow-hidden">
+    <div className="divide-y divide-border rounded-2xl border border-border bg-card overflow-hidden">
       {FAQS.map((item, i) => (
         <div key={item.q}>
           <button
             type="button"
-            className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left hover:bg-gray-50 transition-colors"
+            className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left hover:bg-muted transition-colors"
             onClick={() => setOpen(open === i ? null : i)}
             aria-expanded={open === i}
           >
-            <span className="font-semibold text-gray-900 text-sm md:text-base">{item.q}</span>
-            <ChevronDown size={18} className={cn("shrink-0 text-gray-400 transition-transform", open === i && "rotate-180")} />
+            <span className="font-semibold text-foreground text-sm md:text-base">{item.q}</span>
+            <ChevronDown size={18} className={cn("shrink-0 text-muted-foreground transition-transform", open === i && "rotate-180")} />
           </button>
           {open === i && (
-            <div className="px-6 pb-5 -mt-1 text-sm text-gray-600 leading-relaxed">{item.answer}</div>
+            <div className="px-6 pb-5 -mt-1 text-sm text-muted-foreground leading-relaxed">{item.answer}</div>
           )}
         </div>
       ))}

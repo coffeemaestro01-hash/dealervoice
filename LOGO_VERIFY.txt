@@ -1,0 +1,4 @@
+7a95d70602f5614cc0992a7bba157c7386e7655ebe10120a7a351c66143d84f5  public/logo/dealervoice-icon-1024.png
+87f70381a52a88faff25d61dbbe4ffb800a923b7c8495e3cd6e95f099daa9a9e  public/logo/dealervoice-horizontal.png
+aadfbac99183f7a821305a0fb4649a799cfe9d9b458879e806230cfd83194e94  public/logo/dealervoice-stacked.png
+d5f1bfaa6456887c132b324d1bf3abc4ee15339064a3e7024b2a47eebd74e564  public/logo/dealervoice-icon.png

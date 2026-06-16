@@ -30,7 +30,7 @@ export default async function WriteReviewPage({ params }: Props) {
   if (!dealer) notFound();
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10">
+    <div className="min-h-screen bg-muted py-10">
       <div className="container max-w-2xl">
         <WriteReviewForm dealer={dealer} />
       </div>

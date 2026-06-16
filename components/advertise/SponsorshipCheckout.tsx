@@ -32,11 +32,11 @@ export function SponsorshipCheckoutButtons({ dealershipId }: { dealershipId?: st
     <div className="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto mb-8">
       {(Object.entries(SPONSORSHIP_TIERS) as [keyof typeof SPONSORSHIP_TIERS, typeof SPONSORSHIP_TIERS.city_30][]).map(
         ([key, tier]) => (
-          <div key={key} className="rounded-2xl border border-gray-100 p-6 text-left shadow-sm">
-            <h3 className="font-semibold text-gray-900">{tier.label}</h3>
-            <p className="text-2xl font-bold text-gold-700 mt-1">${(tier.amountCents / 100).toLocaleString()}</p>
+          <div key={key} className="rounded-2xl border border-border p-6 text-left shadow-sm">
+            <h3 className="font-semibold text-foreground">{tier.label}</h3>
+            <p className="text-2xl font-bold text-primary mt-1">${(tier.amountCents / 100).toLocaleString()}</p>
             <Button
-              className="mt-4 w-full bg-gray-900 hover:bg-gray-800 text-white gap-2"
+              className="mt-4 w-full bg-foreground hover:bg-foreground text-foreground gap-2"
               disabled={!!loading}
               onClick={() => checkout(key)}
             >
@@ -52,10 +52,10 @@ export function SponsorshipCheckoutButtons({ dealershipId }: { dealershipId?: st
 
 export function AdvertiseCta() {
   return (
-    <p className="text-sm text-gray-500 mt-4">
-      Need a custom package? <Link href="/contact" className="text-gold-700 hover:underline">Contact sales</Link>
+    <p className="text-sm text-muted-foreground mt-4">
+      Need a custom package? <Link href="/contact" className="text-primary hover:underline">Contact sales</Link>
       {" · "}
-      <Link href="/pricing" className="text-gold-700 hover:underline">See subscription plans</Link>
+      <Link href="/pricing" className="text-primary hover:underline">See subscription plans</Link>
     </p>
   );
 }

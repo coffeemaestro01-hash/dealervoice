@@ -63,7 +63,7 @@ export function AdminAdPlacementEditor({ placements }: { placements: PlacementRo
 
   return (
     <div className="space-y-6">
-      <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-900 space-y-2">
+      <div className="bg-muted border border-primary/20 rounded-xl p-4 text-sm text-primary space-y-2">
         <p>
           <strong>Affiliate IDs:</strong> Paste your partner ref in <em>Affiliate ref</em> or edit the full{" "}
           <em>Destination URL</em>. Use <em>Param name</em> for the query key (default <code>utm_content</code>).
@@ -95,11 +95,11 @@ export function AdminAdPlacementEditor({ placements }: { placements: PlacementRo
         }
 
         return (
-          <div key={p.id} className="bg-white rounded-xl border p-5 space-y-3">
+          <div key={p.id} className="bg-card rounded-xl border p-5 space-y-3">
             <div className="flex flex-wrap justify-between gap-2">
               <div>
-                <p className="font-mono text-xs text-gray-500">{p.slot} · {p.adType}</p>
-                <p className="font-semibold text-gray-900">{val(p, "headline") as string}</p>
+                <p className="font-mono text-xs text-muted-foreground">{p.slot} · {p.adType}</p>
+                <p className="font-semibold text-foreground">{val(p, "headline") as string}</p>
               </div>
               <label className="flex items-center gap-2 text-sm">
                 <input
@@ -113,7 +113,7 @@ export function AdminAdPlacementEditor({ placements }: { placements: PlacementRo
 
             <div className="grid md:grid-cols-2 gap-3">
               <div>
-                <label className="text-xs text-gray-500">Destination URL (base)</label>
+                <label className="text-xs text-muted-foreground">Destination URL (base)</label>
                 <Input
                   value={val(p, "ctaHref") as string}
                   onChange={(e) => field(p.id, "ctaHref", e.target.value)}
@@ -121,7 +121,7 @@ export function AdminAdPlacementEditor({ placements }: { placements: PlacementRo
                 />
               </div>
               <div>
-                <label className="text-xs text-gray-500">Affiliate ref (partner ID)</label>
+                <label className="text-xs text-muted-foreground">Affiliate ref (partner ID)</label>
                 <Input
                   value={ref}
                   placeholder="e.g. dealervoice_001"
@@ -129,7 +129,7 @@ export function AdminAdPlacementEditor({ placements }: { placements: PlacementRo
                 />
               </div>
               <div>
-                <label className="text-xs text-gray-500">Param name</label>
+                <label className="text-xs text-muted-foreground">Param name</label>
                 <Input
                   value={param}
                   placeholder="utm_content"
@@ -137,7 +137,7 @@ export function AdminAdPlacementEditor({ placements }: { placements: PlacementRo
                 />
               </div>
               <div>
-                <label className="text-xs text-gray-500">Est. CPC (USD)</label>
+                <label className="text-xs text-muted-foreground">Est. CPC (USD)</label>
                 <Input
                   type="number"
                   value={((val(p, "cpcEstimatePaise") as number) ?? 0) / 100}
@@ -147,13 +147,13 @@ export function AdminAdPlacementEditor({ placements }: { placements: PlacementRo
             </div>
 
             {preview.startsWith("http") && (
-              <a href={preview} target="_blank" rel="noopener" className="text-xs text-gold-700 hover:underline inline-flex items-center gap-1">
+              <a href={preview} target="_blank" rel="noopener" className="text-xs text-primary hover:underline inline-flex items-center gap-1">
                 Preview live URL <ExternalLink size={12} />
               </a>
             )}
 
             {edits[p.id] && (
-              <Button size="sm" className="gap-1 bg-gold-600 hover:bg-gold-700 text-white" onClick={() => saveMutation.mutate(p.id)} disabled={saveMutation.isPending}>
+              <Button size="sm" className="gap-1 bg-primary hover:bg-primary/90 text-foreground" onClick={() => saveMutation.mutate(p.id)} disabled={saveMutation.isPending}>
                 <Save size={14} /> Save placement
               </Button>
             )}

@@ -29,39 +29,39 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-night-gradient px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-pearl px-4 py-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4"><FooterBrand height={34} /></div>
         </div>
-        <div className="bg-white rounded-2xl border border-gold/20 shadow-gold p-8">
+        <div className="bg-card rounded-2xl border border-primary/30 shadow-ember p-8">
           {sent ? (
             <div className="text-center">
-              <CheckCircle2 className="mx-auto text-green-500 mb-4" size={48} />
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">Check your email</h1>
-              <p className="text-gray-600 mb-6">
+              <CheckCircle2 className="mx-auto text-primary mb-4" size={48} />
+              <h1 className="text-2xl font-bold text-foreground mb-2">Check your email</h1>
+              <p className="text-muted-foreground mb-6">
                 If an account exists for <span className="font-medium">{email}</span>, we&apos;ve sent a password reset link. It expires in 1 hour.
               </p>
-              <Link href="/login"><Button variant="outline" className="border-gold/50 text-gold-700 hover:bg-gold-50"><ArrowLeft size={16} className="mr-1" /> Back to sign in</Button></Link>
+              <Link href="/login"><Button variant="outline" className="border-primary/30 text-primary hover:bg-primary/10"><ArrowLeft size={16} className="mr-1" /> Back to sign in</Button></Link>
             </div>
           ) : (
             <>
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">Forgot your password?</h1>
-              <p className="text-gray-600 mb-6">Enter your email and we&apos;ll send you a link to reset it.</p>
+              <h1 className="text-2xl font-bold text-foreground mb-2">Forgot your password?</h1>
+              <p className="text-muted-foreground mb-6">Enter your email and we&apos;ll send you a link to reset it.</p>
               <form onSubmit={onSubmit} className="space-y-4">
                 <div>
                   <Label htmlFor="email">Email address</Label>
                   <div className="relative mt-1">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
                     <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="pl-10" placeholder="you@email.com" />
                   </div>
                 </div>
-                <Button type="submit" disabled={loading} className="w-full bg-gold-gradient text-night-900 font-semibold border-0 hover:opacity-90">
+                <Button type="submit" disabled={loading} className="w-full bg-ember text-night-900 font-semibold border-0 hover:opacity-90">
                   {loading ? <><Loader2 size={16} className="animate-spin mr-2" />Sending…</> : "Send reset link"}
                 </Button>
               </form>
               <p className="text-center mt-6">
-                <Link href="/login" className="text-sm text-gold-700 hover:underline inline-flex items-center gap-1"><ArrowLeft size={14} /> Back to sign in</Link>
+                <Link href="/login" className="text-sm text-primary hover:underline inline-flex items-center gap-1"><ArrowLeft size={14} /> Back to sign in</Link>
               </p>
             </>
           )}

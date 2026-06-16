@@ -35,7 +35,7 @@ export function DealerLeadActions({ leadId, status }: { leadId: string; status: 
       )}
       <Button
         size="sm"
-        className="bg-green-600 hover:bg-green-700 text-white"
+        className="bg-muted hover:bg-muted text-foreground"
         disabled={loading}
         onClick={() => setStatus("CONVERTED")}
       >

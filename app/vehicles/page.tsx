@@ -105,34 +105,34 @@ export default async function VehiclesBrowsePage({ searchParams }: Props) {
   const regionLabel = sp.country ? (MARKET_LABELS[sp.country.toUpperCase()] ?? sp.country) : null;
 
   return (
-    <div className="bg-white min-h-screen">
-      <section className="border-b border-gray-100 bg-gradient-to-b from-gray-50 to-white">
+    <div className="bg-card min-h-screen">
+      <section className="border-b border-border bg-gradient-to-b from-muted to-background">
         <div className="container py-10 max-w-5xl">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 flex items-center gap-2">
-            <Car className="text-gold-600" size={32} />
+          <h1 className="text-3xl md:text-4xl font-extrabold text-foreground flex items-center gap-2">
+            <Car className="text-primary" size={32} />
             Browse vehicles
           </h1>
-          <p className="text-gray-600 mt-2 max-w-2xl">
+          <p className="text-muted-foreground mt-2 max-w-2xl">
             Cars listed by dealerships on DealerVoice{regionLabel ? ` in ${regionLabel}` : " worldwide"}.
             Open a listing to see dealer trust scores and request a quote or test drive.
           </p>
-          <p className="text-sm text-gray-500 mt-3">
+          <p className="text-sm text-muted-foreground mt-3">
             {total.toLocaleString()} vehicle{total === 1 ? "" : "s"} listed
           </p>
         </div>
       </section>
 
       <section className="py-8 container max-w-5xl">
-        <Suspense fallback={<div className="h-16 rounded-xl bg-gray-50 animate-pulse" />}>
+        <Suspense fallback={<div className="h-16 rounded-xl bg-muted animate-pulse" />}>
           <VehiclesFilterBar makes={makes.map((m) => m.make)} />
         </Suspense>
 
         {listings.length === 0 ? (
-          <div className="text-center py-20 rounded-2xl border border-dashed border-gray-200 mt-8">
-            <p className="text-gray-700 font-medium">No vehicles match your filters.</p>
-            <p className="text-sm text-gray-500 mt-2">
+          <div className="text-center py-20 rounded-2xl border border-dashed border-border mt-8">
+            <p className="text-foreground font-medium">No vehicles match your filters.</p>
+            <p className="text-sm text-muted-foreground mt-2">
               Try a broader search or{" "}
-              <Link href="/vehicles" className="text-gold-700 hover:underline">
+              <Link href="/vehicles" className="text-primary hover:underline">
                 view all listings
               </Link>
               .
@@ -151,25 +151,25 @@ export default async function VehiclesBrowsePage({ searchParams }: Props) {
                 {page > 1 ? (
                   <Link
                     href={pageHref(sp, page - 1)}
-                    className="inline-flex items-center gap-1 text-sm font-medium text-gold-700 hover:underline"
+                    className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
                   >
                     <ChevronLeft size={16} /> Previous
                   </Link>
                 ) : (
-                  <span className="text-sm text-gray-300">Previous</span>
+                  <span className="text-sm text-muted-foreground">Previous</span>
                 )}
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-muted-foreground">
                   Page {page} of {totalPages}
                 </span>
                 {page < totalPages ? (
                   <Link
                     href={pageHref(sp, page + 1)}
-                    className="inline-flex items-center gap-1 text-sm font-medium text-gold-700 hover:underline"
+                    className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
                   >
                     Next <ChevronRight size={16} />
                   </Link>
                 ) : (
-                  <span className="text-sm text-gray-300">Next</span>
+                  <span className="text-sm text-muted-foreground">Next</span>
                 )}
               </nav>
             )}

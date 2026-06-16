@@ -52,9 +52,9 @@ export function AdminClaimActions({ claimId }: { claimId: string }) {
               : "Reason for rejection (shown to the applicant)"
           }
           rows={3}
-          className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500/40"
+          className="w-full rounded-md border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
         />
-        {error && <p className="text-red-600 text-sm">{error}</p>}
+        {error && <p className="text-destructive text-sm">{error}</p>}
         <div className="flex gap-2">
           <Button
             size="sm"
@@ -62,8 +62,8 @@ export function AdminClaimActions({ claimId }: { claimId: string }) {
             onClick={() => act(mode === "docs" ? "DOCUMENTS_REQUIRED" : "REJECTED")}
             className={
               mode === "docs"
-                ? "bg-amber-600 text-white hover:bg-amber-700 border-0"
-                : "bg-red-600 text-white hover:bg-red-700 border-0"
+                ? "bg-primary/10 text-foreground hover:bg-primary/10 border-0"
+                : "bg-destructive/10 text-foreground hover:bg-destructive/10 border-0"
             }
           >
             {busy ? <Loader2 size={14} className="animate-spin" /> : mode === "docs" ? "Send request" : "Confirm rejection"}
@@ -82,7 +82,7 @@ export function AdminClaimActions({ claimId }: { claimId: string }) {
         size="sm"
         disabled={busy !== null}
         onClick={() => act("APPROVED")}
-        className="bg-gold-gradient text-night-900 font-semibold border-0 hover:opacity-90"
+        className="bg-ember text-night-900 font-semibold border-0 hover:opacity-90"
       >
         {busy === "approve" ? <Loader2 size={14} className="animate-spin mr-1" /> : <Check size={15} className="mr-1" />}
         Approve
@@ -92,7 +92,7 @@ export function AdminClaimActions({ claimId }: { claimId: string }) {
         variant="outline"
         disabled={busy !== null}
         onClick={() => setMode("docs")}
-        className="border-amber-300 text-amber-800 hover:bg-amber-50"
+        className="border-primary/20 text-primary hover:bg-primary/10"
       >
         <FileQuestion size={15} className="mr-1" /> Request docs
       </Button>
@@ -101,11 +101,11 @@ export function AdminClaimActions({ claimId }: { claimId: string }) {
         variant="outline"
         disabled={busy !== null}
         onClick={() => setMode("reject")}
-        className="border-red-200 text-red-600 hover:bg-red-50"
+        className="border-primary/20 text-destructive hover:bg-destructive/10"
       >
         <X size={15} className="mr-1" /> Reject
       </Button>
-      {error && <span className="text-red-600 text-sm">{error}</span>}
+      {error && <span className="text-destructive text-sm">{error}</span>}
     </div>
   );
 }

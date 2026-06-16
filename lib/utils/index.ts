@@ -32,27 +32,27 @@ export function ratingToStars(rating: number): number[] {
 }
 
 export function ratingColor(rating: number): string {
-  if (rating >= 4.5) return "text-green-600";
-  if (rating >= 3.5) return "text-lime-600";
-  if (rating >= 2.5) return "text-yellow-600";
-  if (rating >= 1.5) return "text-orange-600";
-  return "text-red-600";
+  if (rating >= 4.5) return "text-primary";
+  if (rating >= 3.5) return "text-primary";
+  if (rating >= 2.5) return "text-primary";
+  if (rating >= 1.5) return "text-primary";
+  return "text-destructive";
 }
 
 export function ratingBadgeColor(rating: number): string {
-  if (rating >= 4.5) return "bg-green-500";
-  if (rating >= 3.5) return "bg-lime-500";
-  if (rating >= 2.5) return "bg-yellow-500";
-  if (rating >= 1.5) return "bg-orange-500";
-  return "bg-red-500";
+  if (rating >= 4.5) return "bg-muted";
+  if (rating >= 3.5) return "bg-muted";
+  if (rating >= 2.5) return "bg-muted";
+  if (rating >= 1.5) return "bg-muted";
+  return "bg-destructive/10";
 }
 
 export function reputationColor(score: number): string {
-  if (score >= 80) return "text-green-600";
-  if (score >= 60) return "text-lime-600";
-  if (score >= 40) return "text-yellow-600";
-  if (score >= 20) return "text-orange-600";
-  return "text-red-600";
+  if (score >= 80) return "text-primary";
+  if (score >= 60) return "text-primary";
+  if (score >= 40) return "text-primary";
+  if (score >= 20) return "text-primary";
+  return "text-destructive";
 }
 
 export function timeAgo(date: Date | string): string {

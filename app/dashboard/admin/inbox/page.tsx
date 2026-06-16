@@ -52,8 +52,8 @@ export default async function AdminInboxPage() {
 
   return (
     <div className="p-6 lg:p-8 space-y-8">
-      <h1 className="text-2xl font-bold text-gray-900">Unified inbox</h1>
-      <p className="text-sm text-gray-500">Claims, leads, reports, flagged reviews, and privacy requests in one queue.</p>
+      <h1 className="text-2xl font-bold text-foreground">Unified inbox</h1>
+      <p className="text-sm text-muted-foreground">Claims, leads, reports, flagged reviews, and privacy requests in one queue.</p>
 
       <InboxSection title="Pending claims" count={claims.length} href="/dashboard/admin/claims">
         {claims.map((c) => (
@@ -96,10 +96,10 @@ export default async function AdminInboxPage() {
 
 function InboxSection({ title, count, href, children }: { title: string; count: number; href: string; children: React.ReactNode }) {
   return (
-    <section className="bg-white rounded-xl border">
+    <section className="bg-card rounded-xl border">
       <div className="px-4 py-3 border-b flex justify-between items-center">
         <h2 className="font-semibold">{title} <Badge className="ml-2">{count}</Badge></h2>
-        <Link href={href} className="text-sm text-gold-700 hover:underline">View all →</Link>
+        <Link href={href} className="text-sm text-primary hover:underline">View all →</Link>
       </div>
       <div className="divide-y">{children}</div>
     </section>
@@ -109,8 +109,8 @@ function InboxSection({ title, count, href, children }: { title: string; count: 
 function Item({ title, sub }: { title: string; sub: string }) {
   return (
     <div className="px-4 py-3">
-      <p className="font-medium text-gray-900">{title}</p>
-      <p className="text-xs text-gray-500">{sub}</p>
+      <p className="font-medium text-foreground">{title}</p>
+      <p className="text-xs text-muted-foreground">{sub}</p>
     </div>
   );
 }

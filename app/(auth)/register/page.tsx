@@ -61,7 +61,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-night-gradient px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-pearl px-4 py-12">
       <Suspense>
         <OAuthErrorHandler />
       </Suspense>
@@ -70,14 +70,14 @@ export default function RegisterPage() {
           <div className="flex justify-center mb-4">
             <FooterBrand height={34} />
           </div>
-          <h1 className="text-2xl font-bold text-white">Create your account</h1>
-          <p className="text-gray-400 mt-1">
+          <h1 className="text-2xl font-bold text-foreground">Create your account</h1>
+          <p className="text-muted-foreground mt-1">
             Already have an account?{" "}
-            <Link href="/login" className="text-gold-400 hover:underline font-medium">Sign in</Link>
+            <Link href="/login" className="text-primary hover:underline font-medium">Sign in</Link>
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gold/20 shadow-gold p-8">
+        <div className="bg-card rounded-2xl border border-primary/30 shadow-ember p-8">
           <SocialAuthButtons callbackUrl="/" />
           <AuthDivider />
 
@@ -85,20 +85,20 @@ export default function RegisterPage() {
             <div>
               <Label htmlFor="name">Full Name</Label>
               <Input id="name" autoComplete="name" className="mt-1" {...register("name")} />
-              {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
+              {errors.name && <p className="text-destructive text-xs mt-1">{errors.name.message}</p>}
             </div>
 
             <div>
               <Label htmlFor="email">Email Address</Label>
               <Input id="email" type="email" autoComplete="email" className="mt-1" {...register("email")} />
-              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+              {errors.email && <p className="text-destructive text-xs mt-1">{errors.email.message}</p>}
             </div>
 
             <div>
               <Label htmlFor="password">Password</Label>
               <div className="relative mt-1">
                 <Input id="password" type={showPassword ? "text" : "password"} autoComplete="new-password" {...register("password")} />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground">
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
@@ -106,24 +106,24 @@ export default function RegisterPage() {
               {password && (
                 <div className="mt-2 space-y-1">
                   {PASSWORD_RULES.map((rule) => (
-                    <div key={rule.label} className={`flex items-center gap-1.5 text-xs ${rule.test(password) ? "text-green-600" : "text-gray-400"}`}>
+                    <div key={rule.label} className={`flex items-center gap-1.5 text-xs ${rule.test(password) ? "text-primary" : "text-muted-foreground"}`}>
                       <Check size={11} />
                       {rule.label}
                     </div>
                   ))}
                 </div>
               )}
-              {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
+              {errors.password && <p className="text-destructive text-xs mt-1">{errors.password.message}</p>}
             </div>
 
-            <Button type="submit" className="w-full bg-gold-gradient text-night-900 font-semibold hover:opacity-90 border-0 h-11" disabled={isLoading}>
+            <Button type="submit" className="w-full bg-ember text-night-900 font-semibold hover:opacity-90 border-0 h-11" disabled={isLoading}>
               {isLoading ? <><Loader2 size={16} className="animate-spin mr-2" />Creating account…</> : "Create Account"}
             </Button>
 
-            <p className="text-xs text-gray-500 text-center">
+            <p className="text-xs text-muted-foreground text-center">
               By creating an account, you agree to our{" "}
-              <Link href="/terms" className="text-gold-600 hover:underline">Terms</Link>{" "}and{" "}
-              <Link href="/privacy" className="text-gold-600 hover:underline">Privacy Policy</Link>.
+              <Link href="/terms" className="text-primary hover:underline">Terms</Link>{" "}and{" "}
+              <Link href="/privacy" className="text-primary hover:underline">Privacy Policy</Link>.
             </p>
           </form>
         </div>

@@ -61,11 +61,11 @@ export function SubscriptionCheckoutButton({
       <Button
         onClick={handleClick}
         disabled={loading}
-        className={className ?? "bg-gold-gradient text-night-900 font-semibold border-0 hover:opacity-90 w-full"}
+        className={className ?? "bg-ember text-night-900 font-semibold border-0 hover:opacity-90 w-full"}
       >
         {loading ? <><Loader2 size={16} className="animate-spin mr-2" />Processing…</> : label}
       </Button>
-      {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
+      {error && <p className="text-destructive text-sm mt-2">{error}</p>}
     </div>
   );
 }

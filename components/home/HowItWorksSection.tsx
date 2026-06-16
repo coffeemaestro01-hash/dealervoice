@@ -33,26 +33,26 @@ export function HowItWorksSection({ dealerCount = 0 }: { dealerCount?: number })
   ];
 
   return (
-    <section className="py-16 bg-night">
+    <section className="py-16 bg-background">
       <div className="container">
         <div className="text-center mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-white">How <span className="text-gold">DealerVoice</span> works</h2>
-          <p className="text-gray-400 mt-2">Search → Review → Decide. Three steps to a better dealership choice.</p>
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground">How <span className="text-primary">DealerVoice</span> works</h2>
+          <p className="text-muted-foreground mt-2">Search → Review → Decide. Three steps to a better dealership choice.</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
           {STEPS.map((step, i) => (
             <div key={step.step} className="relative text-center">
               {i < STEPS.length - 1 && (
-                <div className="hidden md:block absolute top-8 left-1/2 w-full h-px bg-white/10" />
+                <div className="hidden md:block absolute top-8 left-1/2 w-full h-px bg-card" />
               )}
               <div className="relative inline-flex flex-col items-center">
-                <div className="w-16 h-16 rounded-full bg-gold-500/10 border-2 border-gold/40 flex items-center justify-center mb-4 relative z-10">
-                  <step.icon size={24} className="text-gold-400" />
+                <div className="w-16 h-16 rounded-full bg-primary/10 border-2 border-primary/30 flex items-center justify-center mb-4 relative z-10">
+                  <step.icon size={24} className="text-primary" />
                 </div>
-                <span className="text-xs font-bold text-gold-400 mb-2">{step.step}</span>
-                <h3 className="font-semibold text-white mb-2">{step.title}</h3>
-                <p className="text-sm text-gray-400 leading-relaxed">{step.description}</p>
+                <span className="text-xs font-bold text-primary mb-2">{step.step}</span>
+                <h3 className="font-semibold text-foreground mb-2">{step.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{step.description}</p>
               </div>
             </div>
           ))}
@@ -60,7 +60,7 @@ export function HowItWorksSection({ dealerCount = 0 }: { dealerCount?: number })
 
         <div className="text-center mt-10">
           <Link href="/dealers">
-            <Button size="lg" className="bg-gold-gradient text-night-900 font-semibold hover:opacity-90 border-0">
+            <Button size="lg" className="bg-ember text-night-900 font-semibold hover:opacity-90 border-0">
               Search Reviews
             </Button>
           </Link>

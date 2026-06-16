@@ -59,39 +59,39 @@ export function DealerReviewRow({ review, dealershipId, onResponded }: Props) {
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+    <div className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
       <div className="p-5">
         {/* Review header */}
         <div className="flex items-start justify-between gap-3 mb-3">
           <div>
-            <h3 className="font-semibold text-gray-900">{review.title}</h3>
+            <h3 className="font-semibold text-foreground">{review.title}</h3>
             <div className="flex items-center gap-2 mt-1">
               <StarRating rating={review.overallRating} size="sm" showValue />
               <VerificationBadge status={review.verificationStatus} />
-              <span className="text-xs text-gray-400">{timeAgo(review.createdAt)}</span>
+              <span className="text-xs text-muted-foreground">{timeAgo(review.createdAt)}</span>
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             {review.response ? (
-              <span className="inline-flex items-center gap-1 text-xs text-green-600 font-medium">
+              <span className="inline-flex items-center gap-1 text-xs text-primary font-medium">
                 <CheckCircle size={13} />
                 Responded
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1 text-xs text-amber-600 font-medium">
+              <span className="inline-flex items-center gap-1 text-xs text-primary font-medium">
                 Awaiting response
               </span>
             )}
           </div>
         </div>
 
-        <p className="text-sm text-gray-700 leading-relaxed line-clamp-3">{review.body}</p>
-        <p className="text-xs text-gray-400 mt-1">- {review.author.name}</p>
+        <p className="text-sm text-foreground leading-relaxed line-clamp-3">{review.body}</p>
+        <p className="text-xs text-muted-foreground mt-1">- {review.author.name}</p>
 
         {/* Existing response */}
         {review.response && !responding && (
-          <div className="mt-4 pl-4 border-l-2 border-gold-100 bg-gold-50/50 rounded-r p-3 text-sm text-gray-700">
-            <p className="text-xs font-semibold text-gold-800 mb-1">Your response</p>
+          <div className="mt-4 pl-4 border-l-2 border-primary/30 bg-primary/10 rounded-r p-3 text-sm text-foreground">
+            <p className="text-xs font-semibold text-primary mb-1">Your response</p>
             {review.response.body}
           </div>
         )}
@@ -99,14 +99,14 @@ export function DealerReviewRow({ review, dealershipId, onResponded }: Props) {
 
       {/* Response area */}
       {responding ? (
-        <div className="border-t border-gray-50 p-5 bg-gray-50/50">
+        <div className="border-t border-border p-5 bg-muted/50">
           <div className="flex items-center justify-between mb-2">
-            <label className="text-sm font-medium text-gray-700">Write your response</label>
+            <label className="text-sm font-medium text-foreground">Write your response</label>
             {process.env.NEXT_PUBLIC_AI_ENABLED === "true" && (
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-xs gap-1.5 text-purple-600 hover:text-purple-700"
+                className="text-xs gap-1.5 text-muted-foreground hover:text-muted-foreground"
                 onClick={fetchSuggestion}
                 disabled={loadingSuggestion}
               >
@@ -123,7 +123,7 @@ export function DealerReviewRow({ review, dealershipId, onResponded }: Props) {
             className="text-sm"
           />
           <div className="flex items-center justify-between mt-3">
-            <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+            <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer">
               <input type="checkbox" checked={isResolved} onChange={(e) => setIsResolved(e.target.checked)} className="rounded" />
               Mark issue as resolved
             </label>
@@ -131,7 +131,7 @@ export function DealerReviewRow({ review, dealershipId, onResponded }: Props) {
               <Button variant="outline" size="sm" onClick={() => setResponding(false)}>Cancel</Button>
               <Button
                 size="sm"
-                className="bg-gold-800 hover:bg-gold-800"
+                className="bg-primary hover:bg-primary"
                 onClick={() => respondMutation.mutate()}
                 disabled={!responseText.trim() || respondMutation.isPending}
               >
@@ -142,7 +142,7 @@ export function DealerReviewRow({ review, dealershipId, onResponded }: Props) {
           </div>
         </div>
       ) : (
-        <div className="border-t border-gray-50 px-5 py-3 flex justify-end">
+        <div className="border-t border-border px-5 py-3 flex justify-end">
           <Button variant="outline" size="sm" className="gap-2" onClick={() => setResponding(true)}>
             <MessageSquare size={14} />
             {review.response ? "Edit Response" : "Respond"}

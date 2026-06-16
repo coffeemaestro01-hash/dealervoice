@@ -18,27 +18,27 @@ export default async function AdminHealthPage() {
 
   return (
     <div className="p-6 lg:p-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">System health</h1>
-      <div className="bg-white rounded-xl border p-6 max-w-lg">
+      <h1 className="text-2xl font-bold text-foreground mb-6">System health</h1>
+      <div className="bg-card rounded-xl border p-6 max-w-lg">
         <p className="text-lg font-semibold mb-4">
           Status:{" "}
-          <span className={health.status === "healthy" ? "text-green-600" : "text-amber-600"}>
+          <span className={health.status === "healthy" ? "text-primary" : "text-primary"}>
             {health.status}
           </span>
         </p>
         <ul className="space-y-2 text-sm">
           {Object.entries(health.checks || {}).map(([k, v]) => (
             <li key={k} className="flex justify-between border-b py-2">
-              <span className="text-gray-600">{k}</span>
+              <span className="text-muted-foreground">{k}</span>
               <span className="font-mono">{String(v)}</span>
             </li>
           ))}
         </ul>
         {health.timestamp && (
-          <p className="text-xs text-gray-400 mt-4">Checked {new Date(health.timestamp).toLocaleString()}</p>
+          <p className="text-xs text-muted-foreground mt-4">Checked {new Date(health.timestamp).toLocaleString()}</p>
         )}
       </div>
-      <ul className="mt-6 text-sm text-gray-500 space-y-1">
+      <ul className="mt-6 text-sm text-muted-foreground space-y-1">
         <li>Resend: verify domain at resend.com/domains</li>
         <li>Supabase: storage bucket dealer-assets</li>
         <li>Stripe: webhooks logged in Payments</li>

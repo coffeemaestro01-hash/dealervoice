@@ -16,17 +16,17 @@ export default async function AdminDsrPage() {
 
   return (
     <div className="p-6 lg:p-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Privacy requests (DSR)</h1>
-      <div className="bg-white rounded-xl border divide-y">
+      <h1 className="text-2xl font-bold text-foreground mb-6">Privacy requests (DSR)</h1>
+      <div className="bg-card rounded-xl border divide-y">
         {requests.length === 0 ? (
-          <p className="p-6 text-gray-500">No privacy requests.</p>
+          <p className="p-6 text-muted-foreground">No privacy requests.</p>
         ) : (
           requests.map((r) => (
             <div key={r.id} className="px-4 py-4 flex justify-between items-center gap-4">
               <div>
                 <p className="font-medium">{r.user.name} · {r.kind}</p>
-                <p className="text-sm text-gray-500">{r.user.email}</p>
-                <p className="text-xs text-gray-400">SLA {new Date(r.slaDueAt).toLocaleDateString()}</p>
+                <p className="text-sm text-muted-foreground">{r.user.email}</p>
+                <p className="text-xs text-muted-foreground">SLA {new Date(r.slaDueAt).toLocaleDateString()}</p>
               </div>
               <div className="flex items-center gap-2">
                 <Badge>{r.status}</Badge>

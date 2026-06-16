@@ -62,19 +62,19 @@ export default function LoginPage() {
         <OAuthErrorHandler />
       </Suspense>
       {/* Left panel */}
-      <div className="hidden lg:flex lg:w-1/2 bg-night-gradient text-white flex-col justify-center p-12 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gold-500/10 rounded-full blur-[120px]" />
+      <div className="hidden lg:flex lg:w-1/2 bg-pearl text-foreground flex-col justify-center p-12 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[120px]" />
         <div className="mb-12 relative"><FooterBrand height={34} /></div>
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="relative">
-          <h2 className="text-3xl font-bold mb-4">Welcome <span className="text-gold">back</span></h2>
-          <p className="text-gray-300 text-lg">Access your reviews, track your favourite dealerships, and manage your reputation.</p>
-          <div className="mt-10 space-y-4 text-gray-300 text-sm">
+          <h2 className="text-3xl font-bold mb-4">Welcome <span className="text-primary">back</span></h2>
+          <p className="text-muted-foreground text-lg">Access your reviews, track your favourite dealerships, and manage your reputation.</p>
+          <div className="mt-10 space-y-4 text-muted-foreground text-sm">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-gold-500/15 text-gold-400 flex items-center justify-center text-xs font-bold">5.8K</div>
+              <div className="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">5.8K</div>
               <span>Dealerships listed</span>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-gold-500/15 text-gold-400 flex items-center justify-center text-xs font-bold">26</div>
+              <div className="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">26</div>
               <span>Countries covered</span>
             </div>
           </div>
@@ -88,10 +88,10 @@ export default function LoginPage() {
             <Logo variant="full" height={30} href={null} />
           </Link>
 
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Sign in</h1>
-          <p className="text-gray-600 mb-8">
+          <h1 className="text-2xl font-bold text-foreground mb-2">Sign in</h1>
+          <p className="text-muted-foreground mb-8">
             New to DealerVoice?{" "}
-            <Link href="/register" className="text-gold-600 hover:underline font-medium">Create an account</Link>
+            <Link href="/register" className="text-primary hover:underline font-medium">Create an account</Link>
           </p>
 
           <SocialAuthButtons callbackUrl={callbackUrl} />
@@ -107,13 +107,13 @@ export default function LoginPage() {
                 className="mt-1"
                 {...register("email")}
               />
-              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+              {errors.email && <p className="text-destructive text-xs mt-1">{errors.email.message}</p>}
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-1">
                 <Label htmlFor="password">Password</Label>
-                <Link href="/forgot-password" className="text-xs text-gold-600 hover:underline">Forgot password?</Link>
+                <Link href="/forgot-password" className="text-xs text-primary hover:underline">Forgot password?</Link>
               </div>
               <div className="relative">
                 <Input
@@ -125,15 +125,15 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground"
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
-              {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
+              {errors.password && <p className="text-destructive text-xs mt-1">{errors.password.message}</p>}
             </div>
 
-            <Button type="submit" className="w-full bg-gold-gradient text-night-900 font-semibold hover:opacity-90 border-0" disabled={isLoading}>
+            <Button type="submit" className="w-full bg-ember text-night-900 font-semibold hover:opacity-90 border-0" disabled={isLoading}>
               {isLoading ? <><Loader2 size={16} className="animate-spin mr-2" />Signing in...</> : "Sign in"}
             </Button>
           </form>

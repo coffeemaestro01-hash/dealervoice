@@ -47,7 +47,7 @@ async function getHeroStats() {
 export default async function HomePage() {
   const stats = await getHeroStats();
   return (
-    <div className="flex flex-col min-h-screen bg-night">
+    <div className="flex flex-col min-h-screen bg-background">
       <Navbar />
       <main className="flex-1">
         {/* Primary buyer funnel — above the fold */}

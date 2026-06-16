@@ -68,10 +68,10 @@ export function LeadForm({ dealerId, dealerName }: Props) {
   };
 
   return (
-    <Card id="request-quote" className="rounded-2xl border-gold-100 shadow-lg shadow-gold-500/5 overflow-hidden border-2">
-      <CardHeader className="bg-gold-50/50 border-b border-gold-100">
-        <CardTitle className="text-xl font-bold text-gray-900">Request a Quote</CardTitle>
-        <CardDescription className="text-gray-600">
+    <Card id="request-quote" className="rounded-2xl border-primary/30 shadow-lg shadow-ember overflow-hidden border-2">
+      <CardHeader className="bg-primary/10 border-b border-primary/30">
+        <CardTitle className="text-xl font-bold text-foreground">Request a Quote</CardTitle>
+        <CardDescription className="text-muted-foreground">
           Get the best price directly from {dealerName}.
         </CardDescription>
       </CardHeader>
@@ -80,19 +80,19 @@ export function LeadForm({ dealerId, dealerName }: Props) {
           <div className="space-y-2">
             <Label htmlFor="name">Full Name</Label>
             <Input id="name" placeholder="John Doe" {...register("name")} />
-            {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
+            {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" placeholder="john@example.com" {...register("email")} />
-              {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
+              {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor="phone">Phone</Label>
               <Input id="phone" placeholder="+1 (312) 555-0100" {...register("phone")} />
-              {errors.phone && <p className="text-xs text-red-500">{errors.phone.message}</p>}
+              {errors.phone && <p className="text-xs text-destructive">{errors.phone.message}</p>}
             </div>
           </div>
 
@@ -109,13 +109,13 @@ export function LeadForm({ dealerId, dealerName }: Props) {
               rows={3}
               {...register("message")}
             />
-            {errors.message && <p className="text-xs text-red-500">{errors.message.message}</p>}
+            {errors.message && <p className="text-xs text-destructive">{errors.message.message}</p>}
           </div>
 
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-gold-600 hover:bg-gold-700 text-white font-bold h-12 shadow-lg shadow-gold-600/20"
+            className="w-full bg-primary hover:bg-primary/90 text-foreground font-bold h-12 shadow-lg shadow-ember"
           >
             {isSubmitting ? (
               <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending...</>
@@ -123,7 +123,7 @@ export function LeadForm({ dealerId, dealerName }: Props) {
               <><Send className="mr-2 h-4 w-4" /> Send Request</>
             )}
           </Button>
-          <p className="text-[10px] text-gray-400 text-center">
+          <p className="text-[10px] text-muted-foreground text-center">
             By submitting, you agree to be contacted by this dealer.
           </p>
         </form>

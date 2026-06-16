@@ -8,16 +8,16 @@ export async function ResearchStripSection() {
   if (articles.length === 0) return null;
 
   return (
-    <section className="py-14 bg-night-900 border-t border-white/10" aria-labelledby="research-strip-heading">
+    <section className="py-14 bg-pearl border-t border-border" aria-labelledby="research-strip-heading">
       <div className="container">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <Microscope className="text-gold-500" size={22} />
-            <h2 id="research-strip-heading" className="font-display text-2xl font-bold text-white">
+            <Microscope className="text-primary" size={22} />
+            <h2 id="research-strip-heading" className="font-display text-2xl font-bold text-foreground">
               DealerVoice research
             </h2>
           </div>
-          <Link href="/research" className="text-sm font-semibold text-gold-400 hover:text-gold-300 flex items-center gap-1">
+          <Link href="/research" className="text-sm font-semibold text-primary hover:text-primary flex items-center gap-1">
             All research <ArrowRight size={14} />
           </Link>
         </div>
@@ -26,9 +26,9 @@ export async function ResearchStripSection() {
             <Link
               key={a.slug}
               href={`/research/${a.slug}`}
-              className="group rounded-2xl border border-white/10 overflow-hidden bg-night-800/50 hover:border-gold-500/40 transition-all"
+              className="group rounded-2xl border border-border overflow-hidden bg-pearl hover:border-primary/40 transition-all"
             >
-              <div className="relative h-36 bg-night-700">
+              <div className="relative h-36 bg-muted">
                 {a.coverImage ? (
                   <Image
                     src={a.coverImage}
@@ -38,14 +38,14 @@ export async function ResearchStripSection() {
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
                 ) : (
-                  <div className="absolute inset-0 bg-gradient-to-br from-gold-900/30 to-night-800" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-muted" />
                 )}
               </div>
               <div className="p-5">
-                <h3 className="font-semibold text-white group-hover:text-gold-300 transition-colors line-clamp-2">
+                <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
                   {a.title}
                 </h3>
-                {a.excerpt && <p className="text-sm text-gray-400 mt-2 line-clamp-2">{a.excerpt}</p>}
+                {a.excerpt && <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{a.excerpt}</p>}
               </div>
             </Link>
           ))}

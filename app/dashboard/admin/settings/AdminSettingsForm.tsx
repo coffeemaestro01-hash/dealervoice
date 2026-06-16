@@ -32,15 +32,15 @@ export function AdminSettingsForm() {
     setFlags((f) => ({ ...f, [key]: next }));
   }
 
-  if (loading) return <p className="text-gray-500">Loading…</p>;
+  if (loading) return <p className="text-muted-foreground">Loading…</p>;
 
   return (
-    <div className="bg-white rounded-xl border divide-y max-w-xl">
+    <div className="bg-card rounded-xl border divide-y max-w-xl">
       {Object.entries(FLAG_LABELS).map(([key, label]) => (
         <div key={key} className="px-4 py-4 flex justify-between items-center gap-4">
           <div>
-            <p className="font-medium text-gray-900">{label}</p>
-            <p className="text-xs text-gray-400 font-mono">{key}</p>
+            <p className="font-medium text-foreground">{label}</p>
+            <p className="text-xs text-muted-foreground font-mono">{key}</p>
           </div>
           <Button
             size="sm"

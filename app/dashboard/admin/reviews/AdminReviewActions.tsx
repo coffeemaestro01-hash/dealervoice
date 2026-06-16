@@ -58,7 +58,7 @@ export function AdminReviewActions({ id, status }: Props) {
           variant="outline"
           disabled={busy !== null}
           onClick={() => patch("remove", { status: "REMOVED" })}
-          className="border-red-200 text-red-600 hover:bg-red-50"
+          className="border-primary/20 text-destructive hover:bg-destructive/10"
           title="Remove"
         >
           {busy === "remove" ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
@@ -70,7 +70,7 @@ export function AdminReviewActions({ id, status }: Props) {
         disabled={busy !== null}
         onClick={() => patch("verify", { verificationStatus: "VERIFIED_PURCHASE" })}
         title="Mark verified purchase"
-        className="text-green-700 border-green-200"
+        className="text-primary border-primary/20"
       >
         {busy === "verify" ? <Loader2 size={13} className="animate-spin" /> : "✓"}
       </Button>

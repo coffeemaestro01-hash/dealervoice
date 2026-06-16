@@ -22,16 +22,16 @@ export async function BlogStripSection() {
   if (posts.length === 0) return null;
 
   return (
-    <section className="py-14 bg-white border-t border-gray-100" aria-labelledby="blog-strip-heading">
+    <section className="py-14 bg-card border-t border-border" aria-labelledby="blog-strip-heading">
       <div className="container">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <BookOpen className="text-gold-600" size={22} />
-            <h2 id="blog-strip-heading" className="font-display text-2xl font-bold text-gray-900">
+            <BookOpen className="text-primary" size={22} />
+            <h2 id="blog-strip-heading" className="font-display text-2xl font-bold text-foreground">
               Latest from the blog
             </h2>
           </div>
-          <Link href="/blog" className="text-sm font-semibold text-gold-700 hover:underline flex items-center gap-1">
+          <Link href="/blog" className="text-sm font-semibold text-primary hover:underline flex items-center gap-1">
             All articles <ArrowRight size={14} />
           </Link>
         </div>
@@ -40,17 +40,17 @@ export async function BlogStripSection() {
             <Link
               key={p.slug}
               href={`/blog/${p.slug}`}
-              className="group rounded-2xl border border-gray-100 p-6 hover:border-gold-200 hover:shadow-md transition-all"
+              className="group rounded-2xl border border-border p-6 hover:border-primary/30 hover:shadow-md transition-all"
             >
               {p.category && (
-                <span className="text-[10px] font-bold uppercase tracking-wider text-gold-600">{p.category}</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-primary">{p.category}</span>
               )}
-              <h3 className="font-semibold text-gray-900 mt-2 group-hover:text-gold-800 transition-colors line-clamp-2">
+              <h3 className="font-semibold text-foreground mt-2 group-hover:text-primary transition-colors line-clamp-2">
                 {p.title}
               </h3>
-              {p.excerpt && <p className="text-sm text-gray-600 mt-2 line-clamp-3">{p.excerpt}</p>}
+              {p.excerpt && <p className="text-sm text-muted-foreground mt-2 line-clamp-3">{p.excerpt}</p>}
               {p.publishedAt && (
-                <time className="text-xs text-gray-400 mt-3 block" dateTime={p.publishedAt.toISOString()}>
+                <time className="text-xs text-muted-foreground mt-3 block" dateTime={p.publishedAt.toISOString()}>
                   {p.publishedAt.toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })}
                 </time>
               )}

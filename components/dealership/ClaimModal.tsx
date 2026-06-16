@@ -127,13 +127,13 @@ export function ClaimModal({ dealershipId, dealershipName, dealershipSlug }: Pro
 
         {isSuccess ? (
           <div className="py-6 text-center space-y-4">
-            <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-muted text-primary rounded-full flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
             <h3 className="text-xl font-bold">{autoApproved ? "You're in!" : "Claim Submitted"}</h3>
-            <p className="text-gray-500">
+            <p className="text-muted-foreground">
               {autoApproved
                 ? "Your profile is live in your dashboard. Upgrade to Pro to strip competitor ads and unlock inventory + analytics."
                 : "Our team will review your application and documents. You'll receive an email once approved."}
@@ -141,7 +141,7 @@ export function ClaimModal({ dealershipId, dealershipName, dealershipSlug }: Pro
             <div className="flex flex-col gap-2 mt-4">
               {autoApproved && redirectUrl && (
                 <Button
-                  className="w-full bg-gold-gradient text-night-900 font-bold"
+                  className="w-full bg-ember text-night-900 font-bold"
                   onClick={() => {
                     handleOpenChange(false);
                     router.push(redirectUrl);
@@ -167,13 +167,13 @@ export function ClaimModal({ dealershipId, dealershipName, dealershipSlug }: Pro
             <div className="space-y-2">
               <Label htmlFor="businessEmail">Business Email</Label>
               <Input id="businessEmail" type="email" placeholder="owner@dealership.com" {...register("businessEmail")} />
-              {errors.businessEmail && <p className="text-xs text-red-500">{errors.businessEmail.message}</p>}
+              {errors.businessEmail && <p className="text-xs text-destructive">{errors.businessEmail.message}</p>}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="businessPhone">Business Phone</Label>
               <Input id="businessPhone" placeholder="(555) 123-4567" {...register("businessPhone")} />
-              {errors.businessPhone && <p className="text-xs text-red-500">{errors.businessPhone.message}</p>}
+              {errors.businessPhone && <p className="text-xs text-destructive">{errors.businessPhone.message}</p>}
             </div>
 
             <div className="space-y-2">
@@ -195,8 +195,8 @@ export function ClaimModal({ dealershipId, dealershipName, dealershipSlug }: Pro
                   />
                 )}
               />
-              {errors.documentUrl && <p className="text-xs text-red-500">{errors.documentUrl.message}</p>}
-              <p className="text-[10px] text-gray-500">
+              {errors.documentUrl && <p className="text-xs text-destructive">{errors.documentUrl.message}</p>}
+              <p className="text-[10px] text-muted-foreground">
                 Upload a photo, screenshot, or PDF of a utility bill, business license, or tax document showing the dealership name and address.
               </p>
             </div>
@@ -209,14 +209,14 @@ export function ClaimModal({ dealershipId, dealershipName, dealershipSlug }: Pro
                 rows={3}
                 {...register("notes")}
               />
-              {errors.notes && <p className="text-xs text-red-500">{errors.notes.message}</p>}
+              {errors.notes && <p className="text-xs text-destructive">{errors.notes.message}</p>}
             </div>
 
             <div className="flex justify-end gap-3 pt-4 border-t">
               <Button type="button" variant="outline" onClick={() => handleOpenChange(false)} disabled={isSubmitting}>
                 Cancel
               </Button>
-              <Button type="submit" className="bg-gold-600 hover:bg-gold-700 text-white min-w-[120px]" disabled={isSubmitting}>
+              <Button type="submit" className="bg-primary hover:bg-primary/90 text-foreground min-w-[120px]" disabled={isSubmitting}>
                 {isSubmitting ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Submitting...</> : "Submit Claim"}
               </Button>
             </div>

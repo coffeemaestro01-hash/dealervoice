@@ -35,18 +35,18 @@ export default async function DealerLeadsPage() {
   return (
     <div className="p-6 md:p-8 max-w-6xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Inbound Leads</h1>
-        <p className="text-gray-500 mt-1">Manage quote requests and inquiries from your public profile.</p>
+        <h1 className="text-2xl font-bold text-foreground">Inbound Leads</h1>
+        <p className="text-muted-foreground mt-1">Manage quote requests and inquiries from your public profile.</p>
       </div>
 
       {leads.length === 0 ? (
         <Card className="border-dashed py-12">
           <CardContent className="flex flex-col items-center justify-center text-center">
-            <div className="p-4 bg-gray-50 rounded-full mb-4">
-              <Mail className="w-8 h-8 text-gray-300" />
+            <div className="p-4 bg-muted rounded-full mb-4">
+              <Mail className="w-8 h-8 text-muted-foreground" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900">No leads yet</h3>
-            <p className="text-gray-500 max-w-xs mt-1">
+            <h3 className="text-lg font-semibold text-foreground">No leads yet</h3>
+            <p className="text-muted-foreground max-w-xs mt-1">
               When customers request a quote on your public profile, they will appear here.
             </p>
           </CardContent>
@@ -67,12 +67,12 @@ export default async function DealerLeadsPage() {
                 <TableRow key={lead.id}>
                   <TableCell>
                     <div className="flex flex-col">
-                      <span className="font-bold text-gray-900">{lead.name}</span>
-                      <span className="text-xs text-gray-500 flex items-center gap-1">
+                      <span className="font-bold text-foreground">{lead.name}</span>
+                      <span className="text-xs text-muted-foreground flex items-center gap-1">
                         <Mail size={10} /> {lead.email}
                       </span>
                       {lead.phone && (
-                        <span className="text-xs text-gray-500 flex items-center gap-1">
+                        <span className="text-xs text-muted-foreground flex items-center gap-1">
                           <Phone size={10} /> {lead.phone}
                         </span>
                       )}
@@ -86,15 +86,15 @@ export default async function DealerLeadsPage() {
                   </TableCell>
                   <TableCell>
                     <Badge className={
-                      lead.status === "NEW" ? "bg-gold-100 text-gold-800 hover:bg-gold-100 border-none" :
-                      lead.status === "CONTACTED" ? "bg-blue-100 text-blue-800 border-none" :
-                      lead.status === "CONVERTED" ? "bg-green-100 text-green-800 border-none" :
-                      "bg-gray-100 text-gray-800 border-none"
+                      lead.status === "NEW" ? "bg-primary/10 text-primary hover:bg-primary/10 border-none" :
+                      lead.status === "CONTACTED" ? "bg-muted text-primary border-none" :
+                      lead.status === "CONVERTED" ? "bg-muted text-primary border-none" :
+                      "bg-muted text-foreground border-none"
                     }>
                       {lead.status}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-sm text-gray-500">
+                  <TableCell className="text-sm text-muted-foreground">
                     {format(lead.createdAt, "MMM d, yyyy")}
                   </TableCell>
                 </TableRow>

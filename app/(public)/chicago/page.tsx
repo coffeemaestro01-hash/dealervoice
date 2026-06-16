@@ -42,29 +42,29 @@ export default async function ChicagoPage() {
   const dealers = await getChicagoDealers();
 
   return (
-    <div className="bg-white">
-      <section className="border-b border-gray-100 bg-gradient-to-br from-night-900 via-night-800 to-night-900 text-white">
+    <div className="bg-card">
+      <section className="border-b border-border bg-gradient-to-br from-background via-muted to-background text-foreground">
         <div className="container py-16 max-w-3xl">
-          <p className="text-gold-400 text-sm font-semibold tracking-wide uppercase mb-3">Chicago · Illinois</p>
+          <p className="text-primary text-sm font-semibold tracking-wide uppercase mb-3">Chicago · Illinois</p>
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
-            Find a dealer you can <span className="text-gold-400">trust</span>
+            Find a dealer you can <span className="text-primary">trust</span>
           </h1>
-          <p className="text-lg text-gray-300 mb-8">
+          <p className="text-lg text-muted-foreground mb-8">
             DealerVoice is built in Chicago. Compare local dealerships, read buyer reviews, and request quotes before you visit the lot.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link href="/dealers/us">
-              <Button size="lg" className="bg-gold-gradient text-night-900 font-semibold border-0">
+              <Button size="lg" className="bg-ember text-night-900 font-semibold border-0">
                 Browse Illinois dealers
               </Button>
             </Link>
             <Link href="/claim">
-              <Button size="lg" variant="outline" className="border-gold/40 text-white hover:bg-white/10">
+              <Button size="lg" variant="outline" className="border-primary/30 text-foreground hover:bg-card">
                 Claim your dealership
               </Button>
             </Link>
             <a href={WHATSAPP_BUSINESS.href} target="_blank" rel="noopener noreferrer">
-              <Button size="lg" variant="outline" className="border-green-500/50 text-green-300 hover:bg-green-950/30 gap-2">
+              <Button size="lg" variant="outline" className="border-primary/50 text-primary hover:bg-muted/30 gap-2">
                 <MessageCircle size={18} /> WhatsApp us
               </Button>
             </a>
@@ -74,46 +74,46 @@ export default async function ChicagoPage() {
 
       <section className="py-14">
         <div className="container">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-            <MapPin className="text-gold-600" size={24} /> Top Chicago-area dealers on DealerVoice
+          <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
+            <MapPin className="text-primary" size={24} /> Top Chicago-area dealers on DealerVoice
           </h2>
           {dealers.length === 0 ? (
-            <p className="text-gray-500">Listings loading — browse all US dealers meanwhile.</p>
+            <p className="text-muted-foreground">Listings loading — browse all US dealers meanwhile.</p>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {dealers.map((d) => (
                 <Link
                   key={d.slug}
                   href={`/dealership/${d.slug}`}
-                  className="rounded-xl border border-gray-100 p-5 hover:border-gold/40 hover:shadow-md transition"
+                  className="rounded-xl border border-border p-5 hover:border-primary/30 hover:shadow-md transition"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <h3 className="font-semibold text-gray-900">{d.name}</h3>
-                      <p className="text-sm text-gray-500">{d.cityName ?? "Illinois"}</p>
+                      <h3 className="font-semibold text-foreground">{d.name}</h3>
+                      <p className="text-sm text-muted-foreground">{d.cityName ?? "Illinois"}</p>
                     </div>
                     {d.totalReviews > 0 && (
-                      <span className="text-sm font-bold text-gold-700 flex items-center gap-1">
+                      <span className="text-sm font-bold text-primary flex items-center gap-1">
                         <Star size={14} fill="currentColor" /> {d.overallRating.toFixed(1)}
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-gray-400 mt-2">{d.totalReviews} reviews</p>
+                  <p className="text-xs text-muted-foreground mt-2">{d.totalReviews} reviews</p>
                 </Link>
               ))}
             </div>
           )}
-          <div className="mt-10 rounded-2xl border border-gold/30 bg-gold-50/50 p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="mt-10 rounded-2xl border border-primary/30 bg-primary/10 p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-              <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                <Building2 className="text-gold-600" /> Are you a Chicago dealer?
+              <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
+                <Building2 className="text-primary" /> Are you a Chicago dealer?
               </h3>
-              <p className="text-gray-600 mt-1 max-w-lg">
+              <p className="text-muted-foreground mt-1 max-w-lg">
                 Claim your free profile, respond to reviews, and join our pilot Pro program. We&apos;re onboarding Illinois dealers first.
               </p>
             </div>
             <Link href="/register-dealership">
-              <Button className="bg-gray-900 hover:bg-gray-800 text-white shrink-0">List your store</Button>
+              <Button className="bg-foreground hover:bg-foreground text-foreground shrink-0">List your store</Button>
             </Link>
           </div>
         </div>

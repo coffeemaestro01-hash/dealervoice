@@ -36,8 +36,8 @@ export function AdminDealerImport() {
   }
 
   return (
-    <div className="bg-white rounded-xl border p-6 max-w-xl">
-      <div className="rounded-lg bg-gray-50 border border-gray-100 p-4 text-xs text-gray-600 font-mono mb-4">
+    <div className="bg-card rounded-xl border p-6 max-w-xl">
+      <div className="rounded-lg bg-muted border border-border p-4 text-xs text-muted-foreground font-mono mb-4">
         name,state,city,district,phone,website,email,address
         <br />
         Joe&apos;s Auto Sales,Illinois,Chicago,Cook County,+1 (312) 555-0100,https://example.com,sales@example.com,Downtown
@@ -52,7 +52,7 @@ export function AdminDealerImport() {
         </Button>
       </label>
       {result && (
-        <div className="mt-4 flex items-center gap-2 text-sm text-green-700">
+        <div className="mt-4 flex items-center gap-2 text-sm text-primary">
           <CheckCircle2 size={16} />
           {result.imported} imported · {result.skipped} skipped (duplicates)
         </div>

@@ -18,22 +18,22 @@ export default async function AdminDataQualityPage() {
 
   return (
     <div className="p-6 lg:p-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">Data quality</h1>
-      <p className="text-sm text-gray-500 mb-6">{stats.total.toLocaleString()} public dealers · gaps to fix before SEO scale.</p>
+      <h1 className="text-2xl font-bold text-foreground mb-2">Data quality</h1>
+      <p className="text-sm text-muted-foreground mb-6">{stats.total.toLocaleString()} public dealers · gaps to fix before SEO scale.</p>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         {issues.map((i) => (
-          <div key={i.label} className="bg-white rounded-xl border p-5">
-            <p className="text-sm text-gray-500">{i.label}</p>
+          <div key={i.label} className="bg-card rounded-xl border p-5">
+            <p className="text-sm text-muted-foreground">{i.label}</p>
             <p className="text-2xl font-bold">{i.value.toLocaleString()}</p>
-            <p className="text-xs text-amber-600">{i.pct}% of listings</p>
+            <p className="text-xs text-primary">{i.pct}% of listings</p>
           </div>
         ))}
       </div>
       <div className="flex flex-wrap gap-4 text-sm">
-        <Link href="/dashboard/admin/outreach" className="text-gold-700 hover:underline">
+        <Link href="/dashboard/admin/outreach" className="text-primary hover:underline">
           Outreach queue (phone, no email) →
         </Link>
-        <Link href="/dashboard/admin/campaigns" className="text-gold-700 hover:underline">
+        <Link href="/dashboard/admin/campaigns" className="text-primary hover:underline">
           Email campaigns (has email) →
         </Link>
       </div>

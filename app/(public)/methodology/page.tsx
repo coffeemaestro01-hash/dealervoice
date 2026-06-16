@@ -17,11 +17,11 @@ const FACTORS = [
 
 export default function MethodologyPage() {
   return (
-    <div className="bg-white">
-      <section className="border-b border-gray-100 bg-gray-50">
+    <div className="bg-card">
+      <section className="border-b border-border bg-muted">
         <div className="container py-14 max-w-3xl">
-          <h1 className="text-4xl font-extrabold text-gray-900 mb-3">How the <span className="text-gold">reputation score</span> works</h1>
-          <p className="text-lg text-gray-600">
+          <h1 className="text-4xl font-extrabold text-foreground mb-3">How the <span className="text-primary">reputation score</span> works</h1>
+          <p className="text-lg text-muted-foreground">
             Every dealership gets a 0-100 DealerVoice score. We publish exactly how it&apos;s calculated - no black boxes, no pay-to-win.
           </p>
         </div>
@@ -31,21 +31,21 @@ export default function MethodologyPage() {
         <div className="container max-w-3xl">
           <div className="grid sm:grid-cols-2 gap-5 mb-12">
             {FACTORS.map((f) => (
-              <div key={f.title} className="rounded-2xl border border-gray-100 p-6 shadow-sm">
-                <span className="grid place-items-center w-11 h-11 rounded-xl bg-gold-50 text-gold-600 mb-3"><f.icon size={20} /></span>
-                <h3 className="font-semibold text-gray-900">{f.title} {f.weight && <span className="text-xs text-gold-700 font-medium">· {f.weight}</span>}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed mt-1">{f.body}</p>
+              <div key={f.title} className="rounded-2xl border border-border p-6 shadow-sm">
+                <span className="grid place-items-center w-11 h-11 rounded-xl bg-primary/10 text-primary mb-3"><f.icon size={20} /></span>
+                <h3 className="font-semibold text-foreground">{f.title} {f.weight && <span className="text-xs text-primary font-medium">· {f.weight}</span>}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mt-1">{f.body}</p>
               </div>
             ))}
           </div>
 
-          <div className="rounded-2xl bg-gray-50 border border-gray-100 p-7 space-y-4 text-gray-700 leading-relaxed">
-            <h2 className="text-xl font-bold text-gray-900">Our principles</h2>
+          <div className="rounded-2xl bg-muted border border-border p-7 space-y-4 text-foreground leading-relaxed">
+            <h2 className="text-xl font-bold text-foreground">Our principles</h2>
             <p>✅ We <strong>never</strong> edit, hide, or down-rank a review because it&apos;s negative.</p>
             <p>✅ We <strong>never</strong> let a dealer change a reviewer&apos;s words - only reply to them.</p>
             <p>✅ We <strong>never</strong> sell a better score. Paid plans unlock tools, not ratings.</p>
             <p>✅ Suspected fake reviews are sent to human/AI moderation, never silently deleted.</p>
-            <p className="text-sm text-gray-500 pt-2">
+            <p className="text-sm text-muted-foreground pt-2">
               This methodology evolves as the platform grows. Material changes will be versioned and dated here.
             </p>
           </div>

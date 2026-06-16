@@ -57,15 +57,15 @@ export function DealerMap({ latitude, longitude, name, address, zoom = 15, class
   }, [latitude, longitude, name, address, zoom]);
 
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-100">
+    <div className="overflow-hidden rounded-xl border border-border">
       <div ref={mapRef} className={className} />
-      <div className="px-3 py-1.5 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
-        <span className="text-xs text-gray-400">© OpenStreetMap contributors</span>
+      <div className="px-3 py-1.5 bg-muted border-t border-border flex items-center justify-between">
+        <span className="text-xs text-muted-foreground">© OpenStreetMap contributors</span>
         <a
           href={`https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=${zoom}/${latitude}/${longitude}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-xs text-gold-700 hover:underline"
+          className="text-xs text-primary hover:underline"
         >
           Open in Maps →
         </a>

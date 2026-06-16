@@ -87,32 +87,32 @@ const SCORE_FACTORS = [
 
 export default function TrustPage() {
   return (
-    <div className="bg-white">
+    <div className="bg-card">
       {/* Hero */}
-      <section className="border-b border-gray-100 bg-gray-50">
+      <section className="border-b border-border bg-muted">
         <div className="container py-14 max-w-3xl">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold text-gold-600 bg-gold-50 border border-gold-200 rounded-full px-3 py-1 mb-4">
+          <div className="inline-flex items-center gap-2 text-xs font-semibold text-primary bg-primary/10 border border-primary/30 rounded-full px-3 py-1 mb-4">
             <ShieldCheck size={12} />
             Trust OS — Sprint 1
           </div>
-          <h1 className="text-4xl font-extrabold text-gray-900 mb-3">
+          <h1 className="text-4xl font-extrabold text-foreground mb-3">
             How DealerVoice earns{" "}
-            <span className="text-gold-600">your trust</span>
+            <span className="text-primary">your trust</span>
           </h1>
-          <p className="text-lg text-gray-600 mb-6">
+          <p className="text-lg text-muted-foreground mb-6">
             Reviews are verified. Scores are transparent. AI assists buyers — it never replaces their
             voices. This page explains every layer of our trust system.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link
               href="/methodology"
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-gold-700 hover:text-gold-800 underline underline-offset-2"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary underline underline-offset-2"
             >
               Read the full methodology <ArrowRight size={14} />
             </Link>
             <Link
               href="/dealers"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-700"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
             >
               Search verified dealers
             </Link>
@@ -123,8 +123,8 @@ export default function TrustPage() {
       {/* How Reviews Work */}
       <section className="py-14">
         <div className="container max-w-4xl">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">How reviews work</h2>
-          <p className="text-gray-500 mb-8">
+          <h2 className="text-2xl font-bold text-foreground mb-2">How reviews work</h2>
+          <p className="text-muted-foreground mb-8">
             Every review on DealerVoice goes through a four-step process before it reaches a dealer&apos;s
             profile.
           </p>
@@ -132,18 +132,18 @@ export default function TrustPage() {
             {HOW_REVIEWS_WORK.map((item) => (
               <div
                 key={item.step}
-                className="rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md hover:border-gold-200 transition-all"
+                className="rounded-2xl border border-border p-6 shadow-sm hover:shadow-md hover:border-primary/30 transition-all"
               >
                 <div className="flex items-start gap-4">
                   <div className="shrink-0 flex flex-col items-center gap-1">
-                    <span className="grid place-items-center w-10 h-10 rounded-xl bg-gold-50 text-gold-600">
+                    <span className="grid place-items-center w-10 h-10 rounded-xl bg-primary/10 text-primary">
                       <item.icon size={18} />
                     </span>
-                    <span className="text-[10px] font-bold text-gray-300">{item.step}</span>
+                    <span className="text-[10px] font-bold text-muted-foreground">{item.step}</span>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">{item.title}</h3>
-                    <p className="text-sm text-gray-600 leading-relaxed">{item.body}</p>
+                    <h3 className="font-semibold text-foreground mb-1">{item.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{item.body}</p>
                   </div>
                 </div>
               </div>
@@ -153,32 +153,32 @@ export default function TrustPage() {
       </section>
 
       {/* Disputes */}
-      <section className="py-14 bg-gray-50 border-y border-gray-100">
+      <section className="py-14 bg-muted border-y border-border">
         <div className="container max-w-3xl">
           <div className="flex items-center gap-2 mb-2">
-            <AlertCircle size={18} className="text-gold-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Dispute process</h2>
+            <AlertCircle size={18} className="text-primary" />
+            <h2 className="text-2xl font-bold text-foreground">Dispute process</h2>
           </div>
-          <p className="text-gray-500 mb-8">
+          <p className="text-muted-foreground mb-8">
             If a dealer believes a review violates our policies, or if a reviewer believes their
             review was incorrectly removed, either party may open a dispute.
           </p>
           <ol className="space-y-4">
             {DISPUTE_STEPS.map((s, i) => (
               <li key={s.label} className="flex gap-4">
-                <div className="shrink-0 w-8 h-8 rounded-full bg-gold-100 text-gold-700 font-bold text-sm grid place-items-center">
+                <div className="shrink-0 w-8 h-8 rounded-full bg-primary/10 text-primary font-bold text-sm grid place-items-center">
                   {i + 1}
                 </div>
                 <div className="pt-1">
-                  <p className="font-semibold text-gray-900">{s.label}</p>
-                  <p className="text-sm text-gray-600 mt-0.5">{s.detail}</p>
+                  <p className="font-semibold text-foreground">{s.label}</p>
+                  <p className="text-sm text-muted-foreground mt-0.5">{s.detail}</p>
                 </div>
               </li>
             ))}
           </ol>
-          <p className="text-sm text-gray-500 mt-6">
+          <p className="text-sm text-muted-foreground mt-6">
             To open a dispute, email{" "}
-            <a href="mailto:trust@dealervoice.io" className="text-gold-600 hover:underline">
+            <a href="mailto:trust@dealervoice.io" className="text-primary hover:underline">
               trust@dealervoice.io
             </a>{" "}
             with the review URL and your evidence.
@@ -189,8 +189,8 @@ export default function TrustPage() {
       {/* Trust Score */}
       <section className="py-14">
         <div className="container max-w-4xl">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">The Trust Score</h2>
-          <p className="text-gray-500 mb-8">
+          <h2 className="text-2xl font-bold text-foreground mb-2">The Trust Score</h2>
+          <p className="text-muted-foreground mb-8">
             Every dealership earns a 0-100 Trust Score. Here&apos;s exactly what feeds into it — no black
             boxes, no pay-to-win.
           </p>
@@ -198,30 +198,30 @@ export default function TrustPage() {
             {SCORE_FACTORS.map((f) => (
               <div
                 key={f.title}
-                className="rounded-2xl border border-gray-100 p-5 shadow-sm"
+                className="rounded-2xl border border-border p-5 shadow-sm"
               >
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="grid place-items-center w-9 h-9 rounded-xl bg-gold-50 text-gold-600">
+                  <span className="grid place-items-center w-9 h-9 rounded-xl bg-primary/10 text-primary">
                     <f.icon size={16} />
                   </span>
                   <div>
-                    <p className="text-sm font-semibold text-gray-900">{f.title}</p>
-                    <p className="text-xs font-bold text-gold-600">{f.weight}</p>
+                    <p className="text-sm font-semibold text-foreground">{f.title}</p>
+                    <p className="text-xs font-bold text-primary">{f.weight}</p>
                   </div>
                 </div>
-                <p className="text-xs text-gray-600 leading-relaxed">{f.body}</p>
+                <p className="text-xs text-muted-foreground leading-relaxed">{f.body}</p>
               </div>
             ))}
           </div>
-          <div className="rounded-2xl bg-gray-50 border border-gray-100 p-6">
-            <p className="text-sm text-gray-700">
+          <div className="rounded-2xl bg-muted border border-border p-6">
+            <p className="text-sm text-foreground">
               ✅ Claimed profiles can earn up to{" "}
               <strong>+10 bonus points</strong> for demonstrating ownership and accountability.
               <br />
               ✅ Scores update in <strong>near real time</strong> as new reviews arrive.
               <br />
               ✅ We publish our full methodology at{" "}
-              <Link href="/methodology" className="text-gold-600 hover:underline">
+              <Link href="/methodology" className="text-primary hover:underline">
                 /methodology
               </Link>
               .
@@ -231,13 +231,13 @@ export default function TrustPage() {
       </section>
 
       {/* AI Role */}
-      <section className="py-14 bg-gray-50 border-y border-gray-100">
+      <section className="py-14 bg-muted border-y border-border">
         <div className="container max-w-4xl">
           <div className="flex items-center gap-2 mb-2">
-            <Sparkles size={18} className="text-gold-600" />
-            <h2 className="text-2xl font-bold text-gray-900">AI&apos;s role at DealerVoice</h2>
+            <Sparkles size={18} className="text-primary" />
+            <h2 className="text-2xl font-bold text-foreground">AI&apos;s role at DealerVoice</h2>
           </div>
-          <p className="text-gray-500 mb-8">
+          <p className="text-muted-foreground mb-8">
             We use AI to protect buyers and save them time — never to manufacture trust or suppress
             genuine feedback.
           </p>
@@ -245,15 +245,15 @@ export default function TrustPage() {
             {AI_ROLE.map((item) => (
               <div
                 key={item.title}
-                className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
+                className="rounded-2xl border border-border bg-card p-6 shadow-sm"
               >
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="grid place-items-center w-9 h-9 rounded-xl bg-gold-50 text-gold-600">
+                  <span className="grid place-items-center w-9 h-9 rounded-xl bg-primary/10 text-primary">
                     <item.icon size={16} />
                   </span>
-                  <h3 className="font-semibold text-gray-900">{item.title}</h3>
+                  <h3 className="font-semibold text-foreground">{item.title}</h3>
                 </div>
-                <p className="text-sm text-gray-600 leading-relaxed">{item.body}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{item.body}</p>
               </div>
             ))}
           </div>
@@ -263,23 +263,23 @@ export default function TrustPage() {
       {/* CTA strip */}
       <section className="py-12">
         <div className="container max-w-3xl text-center">
-          <h2 className="text-xl font-bold text-gray-900 mb-2">
+          <h2 className="text-xl font-bold text-foreground mb-2">
             Ready to find a dealer you can trust?
           </h2>
-          <p className="text-gray-500 mb-6">
+          <p className="text-muted-foreground mb-6">
             Search verified dealerships, read AI-digested buyer reviews, and get quotes — all in one
             place.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/dealers"
-              className="inline-flex items-center gap-2 bg-gold-600 hover:bg-gold-700 text-white font-semibold rounded-xl px-6 py-2.5 text-sm transition-colors"
+              className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-foreground font-semibold rounded-xl px-6 py-2.5 text-sm transition-colors"
             >
               Search Dealers <ArrowRight size={15} />
             </Link>
             <Link
               href="/methodology"
-              className="inline-flex items-center gap-2 border border-gray-200 hover:border-gold-300 text-gray-700 hover:text-gold-700 font-medium rounded-xl px-6 py-2.5 text-sm transition-colors"
+              className="inline-flex items-center gap-2 border border-border hover:border-primary/30 text-foreground hover:text-primary font-medium rounded-xl px-6 py-2.5 text-sm transition-colors"
             >
               Read the Methodology
             </Link>

@@ -11,7 +11,7 @@ export function RatingBadge({ rating, size = "md", className }: RatingBadgeProps
   return (
     <span
       className={cn(
-        "inline-flex items-center justify-center rounded-lg font-bold text-white tabular-nums",
+        "inline-flex items-center justify-center rounded-lg font-bold text-foreground tabular-nums",
         ratingBadgeColor(rating),
         sizeClasses[size],
         className

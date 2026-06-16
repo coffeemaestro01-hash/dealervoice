@@ -23,26 +23,26 @@ export function DealerReviewInvite({ slug, dealerName }: { slug: string; dealerN
   };
 
   return (
-    <div className="rounded-xl border border-gold/30 bg-gold-50/50 p-5 mb-6">
+    <div className="rounded-xl border border-primary/30 bg-primary/10 p-5 mb-6">
       <div className="flex items-start gap-3">
-        <span className="grid place-items-center w-10 h-10 rounded-lg bg-gold-100 text-gold-700 shrink-0">
+        <span className="grid place-items-center w-10 h-10 rounded-lg bg-primary/10 text-primary shrink-0">
           <PenLine size={18} />
         </span>
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-gray-900">Invite customers to review {dealerName}</h3>
-          <p className="text-sm text-gray-600 mt-1">
+          <h3 className="font-semibold text-foreground">Invite customers to review {dealerName}</h3>
+          <p className="text-sm text-muted-foreground mt-1">
             Share this link after a sale or service visit. Customers land on your profile with Write Review highlighted.
           </p>
           <div className="mt-3 flex flex-col sm:flex-row gap-2">
-            <code className="flex-1 text-xs bg-white border border-gray-200 rounded-lg px-3 py-2 truncate text-gray-700">
+            <code className="flex-1 text-xs bg-card border border-border rounded-lg px-3 py-2 truncate text-foreground">
               {reviewLink}
             </code>
-            <Button type="button" size="sm" variant="outline" onClick={copy} className="shrink-0 gap-1.5 border-gold/40">
+            <Button type="button" size="sm" variant="outline" onClick={copy} className="shrink-0 gap-1.5 border-primary/30">
               {copied ? <Check size={14} /> : <Copy size={14} />}
               {copied ? "Copied" : "Copy link"}
             </Button>
           </div>
-          <p className="text-xs text-gray-500 mt-2 flex items-center gap-1">
+          <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
             <Link2 size={12} /> Send via SMS, email, or print on a receipt
           </p>
         </div>

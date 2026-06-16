@@ -9,7 +9,7 @@ interface VerificationBadgeProps {
 const config = {
   VERIFIED_PURCHASE: { icon: ShieldCheck, label: "Verified Purchase", className: "badge-verified-purchase" },
   VERIFIED_SERVICE: { icon: ShieldCheck, label: "Verified Service", className: "badge-verified-service" },
-  PENDING: { icon: ShieldAlert, label: "Pending Verification", className: "verified-badge bg-yellow-100 text-yellow-700" },
+  PENDING: { icon: ShieldAlert, label: "Pending Verification", className: "verified-badge bg-muted text-primary" },
   UNVERIFIED: { icon: Shield, label: "Unverified", className: "badge-unverified" },
 };
 

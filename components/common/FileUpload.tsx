@@ -58,10 +58,10 @@ export function FileUpload({
 
   return (
     <div className={cn("space-y-2 w-full", className)}>
-      {label && <label className="text-sm font-medium text-gray-700">{label}</label>}
+      {label && <label className="text-sm font-medium text-foreground">{label}</label>}
 
       {value ? (
-        <div className="relative group rounded-xl overflow-hidden border border-gray-100 bg-gray-50 aspect-video md:aspect-auto md:h-40">
+        <div className="relative group rounded-xl overflow-hidden border border-border bg-muted aspect-video md:aspect-auto md:h-40">
           {value.match(/\.(jpeg|jpg|gif|png|webp)/i) ? (
             <Image
               src={value}
@@ -70,12 +70,12 @@ export function FileUpload({
               className="object-cover"
             />
           ) : (
-            <div className="flex items-center justify-center h-full gap-2 text-gray-500">
+            <div className="flex items-center justify-center h-full gap-2 text-muted-foreground">
               <FileIcon size={24} />
               <span className="text-xs truncate max-w-[200px]">{value.split("/").pop()}</span>
             </div>
           )}
-          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+          <div className="absolute inset-0 bg-foreground/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
             <Button
               type="button"
               variant="destructive"
@@ -95,26 +95,26 @@ export function FileUpload({
           {...getRootProps()}
           className={cn(
             "border-2 border-dashed rounded-xl p-8 transition-all cursor-pointer flex flex-col items-center justify-center text-center",
-            isDragActive ? "border-gold-500 bg-gold-50" : "border-gray-200 hover:border-gold-400 hover:bg-gray-50",
+            isDragActive ? "border-primary/30 bg-primary/10" : "border-border hover:border-primary/30 hover:bg-muted",
             isUploading && "opacity-50 cursor-not-allowed",
-            error && "border-red-300 bg-red-50"
+            error && "border-primary/20 bg-destructive/10"
           )}
         >
           <input {...getInputProps()} />
           {isUploading ? (
             <>
-              <Loader2 className="h-8 w-8 text-gold-600 animate-spin mb-2" />
-              <p className="text-sm text-gray-600 font-medium">Uploading...</p>
+              <Loader2 className="h-8 w-8 text-primary animate-spin mb-2" />
+              <p className="text-sm text-muted-foreground font-medium">Uploading...</p>
             </>
           ) : (
             <>
-              <div className="p-3 bg-gray-100 rounded-full mb-3 text-gray-500">
+              <div className="p-3 bg-muted rounded-full mb-3 text-muted-foreground">
                 <Upload size={24} />
               </div>
-              <p className="text-sm font-semibold text-gray-900">
+              <p className="text-sm font-semibold text-foreground">
                 Click to upload or drag and drop
               </p>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 {Object.keys(accept).includes("application/pdf")
                   ? `PNG, JPG, WebP or PDF (max. ${Math.round(maxSize / 1024 / 1024)}MB)`
                   : `PNG, JPG or WebP (max. ${Math.round(maxSize / 1024 / 1024)}MB)`}
@@ -124,7 +124,7 @@ export function FileUpload({
         </div>
       )}
 
-      {error && <p className="text-xs text-red-500 font-medium">{error}</p>}
+      {error && <p className="text-xs text-destructive font-medium">{error}</p>}
     </div>
   );
 }

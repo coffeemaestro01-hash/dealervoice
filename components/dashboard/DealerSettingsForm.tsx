@@ -172,7 +172,7 @@ export function DealerSettingsForm({ dealership }: Props) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <ImageIcon className="w-5 h-5 text-gold-600" /> Branding
+            <ImageIcon className="w-5 h-5 text-primary" /> Branding
           </CardTitle>
           <CardDescription>
             Update your dealership&apos;s logo and cover image.
@@ -195,7 +195,7 @@ export function DealerSettingsForm({ dealership }: Props) {
                   />
                 )}
               />
-              <p className="text-[10px] text-gray-400">Recommended: Square PNG with transparent background.</p>
+              <p className="text-[10px] text-muted-foreground">Recommended: Square PNG with transparent background.</p>
             </div>
             <div className="space-y-3">
               <Label>Cover Image</Label>
@@ -212,7 +212,7 @@ export function DealerSettingsForm({ dealership }: Props) {
                   />
                 )}
               />
-              <p className="text-[10px] text-gray-400">Recommended: 1200x400 high-quality landscape image.</p>
+              <p className="text-[10px] text-muted-foreground">Recommended: 1200x400 high-quality landscape image.</p>
             </div>
           </div>
         </CardContent>
@@ -223,7 +223,7 @@ export function DealerSettingsForm({ dealership }: Props) {
         <CardHeader className="flex flex-row items-center justify-between space-y-0">
           <div>
             <CardTitle className="flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-gold-600" /> Basic Information
+              <Building2 className="w-5 h-5 text-primary" /> Basic Information
             </CardTitle>
             <CardDescription>
               General details about your dealership.
@@ -235,7 +235,7 @@ export function DealerSettingsForm({ dealership }: Props) {
             size="sm"
             onClick={handleGenerateAI}
             disabled={isGenerating}
-            className="border-gold-600 text-gold-700 hover:bg-gold-50"
+            className="border-primary/30 text-primary hover:bg-primary/10"
           >
             {isGenerating ? (
               <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Generating...</>
@@ -248,7 +248,7 @@ export function DealerSettingsForm({ dealership }: Props) {
           <div className="space-y-2">
             <Label htmlFor="name">Dealership Name</Label>
             <Input id="name" {...register("name")} />
-            {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
+            {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -272,20 +272,20 @@ export function DealerSettingsForm({ dealership }: Props) {
                   </Select>
                 )}
               />
-              {errors.category && <p className="text-xs text-red-500">{errors.category.message}</p>}
+              {errors.category && <p className="text-xs text-destructive">{errors.category.message}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor="cityName">City</Label>
               <Input id="cityName" placeholder="Rocklin" {...register("cityName")} />
-              {errors.cityName && <p className="text-xs text-red-500">{errors.cityName.message}</p>}
+              {errors.cityName && <p className="text-xs text-destructive">{errors.cityName.message}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor="stateName">State / Region</Label>
               <Input id="stateName" placeholder="California" {...register("stateName")} />
-              {errors.stateName && <p className="text-xs text-red-500">{errors.stateName.message}</p>}
+              {errors.stateName && <p className="text-xs text-destructive">{errors.stateName.message}</p>}
             </div>
           </div>
-          <p className="text-xs text-gray-500 flex items-center gap-1">
+          <p className="text-xs text-muted-foreground flex items-center gap-1">
             <MapPin className="w-3 h-3" />
             Category and city are required for Generate with AI.
           </p>
@@ -298,7 +298,7 @@ export function DealerSettingsForm({ dealership }: Props) {
               rows={5}
               {...register("description")}
             />
-            {errors.description && <p className="text-xs text-red-500">{errors.description.message}</p>}
+            {errors.description && <p className="text-xs text-destructive">{errors.description.message}</p>}
           </div>
         </CardContent>
       </Card>
@@ -307,7 +307,7 @@ export function DealerSettingsForm({ dealership }: Props) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Phone className="w-5 h-5 text-gold-600" /> Contact Details
+            <Phone className="w-5 h-5 text-primary" /> Contact Details
           </CardTitle>
           <CardDescription>
             How customers can reach you.
@@ -318,28 +318,28 @@ export function DealerSettingsForm({ dealership }: Props) {
             <div className="space-y-2">
               <Label htmlFor="phone">Phone Number</Label>
               <Input id="phone" placeholder="+1 (555) 000-0000" {...register("phone")} />
-              {errors.phone && <p className="text-xs text-red-500">{errors.phone.message}</p>}
+              {errors.phone && <p className="text-xs text-destructive">{errors.phone.message}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Business Email</Label>
               <Input id="email" type="email" placeholder="contact@dealer.com" {...register("email")} />
-              {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
+              {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
             </div>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="website">Website URL</Label>
             <div className="relative">
-              <Globe className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+              <Globe className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
               <Input id="website" className="pl-10" placeholder="https://www.yourdealer.com" {...register("website")} />
             </div>
-            {errors.website && <p className="text-xs text-red-500">{errors.website.message}</p>}
+            {errors.website && <p className="text-xs text-destructive">{errors.website.message}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="inventoryUrl">Live Inventory URL (Premium)</Label>
             <div className="relative">
-              <Globe className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+              <Globe className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
               <Input
                 id="inventoryUrl"
                 className="pl-10"
@@ -347,8 +347,8 @@ export function DealerSettingsForm({ dealership }: Props) {
                 {...register("inventoryUrl")}
               />
             </div>
-            <p className="text-xs text-gray-500">Shown on your profile when you have a premium plan. Falls back to website if empty.</p>
-            {errors.inventoryUrl && <p className="text-xs text-red-500">{errors.inventoryUrl.message}</p>}
+            <p className="text-xs text-muted-foreground">Shown on your profile when you have a premium plan. Falls back to website if empty.</p>
+            {errors.inventoryUrl && <p className="text-xs text-destructive">{errors.inventoryUrl.message}</p>}
           </div>
         </CardContent>
       </Card>
@@ -357,7 +357,7 @@ export function DealerSettingsForm({ dealership }: Props) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Clock className="w-5 h-5 text-gold-600" /> Business Hours
+            <Clock className="w-5 h-5 text-primary" /> Business Hours
           </CardTitle>
           <CardDescription>
             Enter your opening hours (e.g., Monday: 9:00 AM - 6:00 PM).
@@ -372,7 +372,7 @@ export function DealerSettingsForm({ dealership }: Props) {
               rows={7}
               {...register("businessHours")}
             />
-            {errors.businessHours && <p className="text-xs text-red-500">{errors.businessHours.message}</p>}
+            {errors.businessHours && <p className="text-xs text-destructive">{errors.businessHours.message}</p>}
           </div>
         </CardContent>
       </Card>
@@ -389,7 +389,7 @@ export function DealerSettingsForm({ dealership }: Props) {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="bg-gold-600 hover:bg-gold-700 text-white min-w-[120px]"
+          className="bg-primary hover:bg-primary/90 text-foreground min-w-[120px]"
         >
           {isSubmitting ? (
             <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Saving...</>

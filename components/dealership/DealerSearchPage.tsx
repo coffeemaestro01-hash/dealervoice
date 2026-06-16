@@ -77,26 +77,26 @@ export function DealerSearchPage({ searchParams: initialParams }: DealerSearchPa
   ].filter(Boolean) as Array<{ key: string; label: string }>;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted">
       {/* Search header */}
-      <div className="sticky top-16 z-30 bg-white border-b border-gray-100 shadow-sm">
+      <div className="sticky top-16 z-30 bg-card border-b border-border shadow-sm">
         <div className="container py-6">
-          <h1 className="font-display text-2xl font-bold text-gray-900 mb-4">
+          <h1 className="font-display text-2xl font-bold text-foreground mb-4">
             {writeIntent ? "Find a dealership to review" : "Find Car Dealerships"}
           </h1>
           {writeIntent && (
-            <p className="text-sm text-gray-600 mb-4 max-w-2xl">
+            <p className="text-sm text-muted-foreground mb-4 max-w-2xl">
               Search for the dealership you visited, open its profile, then click{" "}
-              <span className="font-medium text-gray-900">Write Review</span>. You can verify your review with a
+              <span className="font-medium text-foreground">Write Review</span>. You can verify your review with a
               purchase invoice or service receipt.{" "}
-              <Link href="/methodology" className="text-gold-700 hover:underline">
+              <Link href="/methodology" className="text-primary hover:underline">
                 How verification works
               </Link>
             </p>
           )}
           <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
               <Input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -105,7 +105,7 @@ export function DealerSearchPage({ searchParams: initialParams }: DealerSearchPa
               />
             </div>
             <div className="relative sm:w-56">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
               <Input
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
@@ -119,12 +119,12 @@ export function DealerSearchPage({ searchParams: initialParams }: DealerSearchPa
           {/* Active filters */}
           {activeFilters.length > 0 && (
             <div className="flex items-center gap-2 mt-3 flex-wrap">
-              <span className="text-xs text-gray-500">Active filters:</span>
+              <span className="text-xs text-muted-foreground">Active filters:</span>
               {activeFilters.map((f) => (
                 <button
                   key={f.key}
                   onClick={() => clearFilter(f.key)}
-                  className="inline-flex items-center gap-1 text-xs px-2.5 py-1 bg-gold-50 text-gold-800 border border-gold-100 rounded-full hover:bg-gold-100"
+                  className="inline-flex items-center gap-1 text-xs px-2.5 py-1 bg-primary/10 text-primary border border-primary/30 rounded-full hover:bg-primary/10"
                 >
                   {f.label}
                   <X size={10} />
@@ -137,17 +137,17 @@ export function DealerSearchPage({ searchParams: initialParams }: DealerSearchPa
 
       <div className="container py-6">
         {writeIntent && !isLoading && (data?.data.length ?? 0) > 0 && (
-          <div className="mb-5 flex items-start gap-3 rounded-xl border border-gold/30 bg-gold-50 px-4 py-3 text-sm text-gold-900">
+          <div className="mb-5 flex items-start gap-3 rounded-xl border border-primary/30 bg-primary/10 px-4 py-3 text-sm text-foreground">
             <PenLine size={18} className="shrink-0 mt-0.5" />
             <p>Select a dealership below, then use <strong>Write Review</strong> on its profile.</p>
           </div>
         )}
         <div className="flex items-center justify-between mb-5">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-muted-foreground">
             {isLoading ? "Searching..." : `${data?.total?.toLocaleString() ?? 0} dealerships found`}
           </p>
           <div className="flex items-center gap-2">
-            <SlidersHorizontal size={16} className="text-gray-400" />
+            <SlidersHorizontal size={16} className="text-muted-foreground" />
             <Select
               value={sort}
               onValueChange={(v) => {
@@ -190,18 +190,18 @@ export function DealerSearchPage({ searchParams: initialParams }: DealerSearchPa
         {/* Empty state */}
         {!isLoading && !isFetching && data?.data.length === 0 && (
           <div className="text-center py-20 max-w-md mx-auto">
-            <p className="text-gray-500 text-lg">No dealerships found</p>
-            <p className="text-gray-400 text-sm mt-1">Try adjusting your search terms</p>
+            <p className="text-muted-foreground text-lg">No dealerships found</p>
+            <p className="text-muted-foreground text-sm mt-1">Try adjusting your search terms</p>
             <div className="mt-6 space-y-3">
               <Link
                 href={`/register-dealership${query ? `?name=${encodeURIComponent(query)}${location ? `&city=${encodeURIComponent(location)}` : ""}` : ""}`}
               >
-                <Button className="bg-gold-gradient text-night-900 font-semibold border-0">
+                <Button className="bg-ember text-night-900 font-semibold border-0">
                   List your dealership
                 </Button>
               </Link>
-              <p className="text-xs text-gray-400">
-                Already listed? <Link href="/claim" className="text-gold-700 hover:underline">Claim your profile</Link>
+              <p className="text-xs text-muted-foreground">
+                Already listed? <Link href="/claim" className="text-primary hover:underline">Claim your profile</Link>
               </p>
             </div>
           </div>
@@ -211,7 +211,7 @@ export function DealerSearchPage({ searchParams: initialParams }: DealerSearchPa
         {data && data.totalPages > 1 && (
           <div className="flex justify-center gap-2 mt-10">
             <Button variant="outline" disabled={page <= 1} onClick={() => setPage(page - 1)}>Previous</Button>
-            <span className="flex items-center px-4 text-sm text-gray-600">
+            <span className="flex items-center px-4 text-sm text-muted-foreground">
               Page {page} of {data.totalPages}
             </span>
             <Button variant="outline" disabled={page >= data.totalPages} onClick={() => setPage(page + 1)}>Next</Button>

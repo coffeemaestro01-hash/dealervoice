@@ -70,18 +70,18 @@ interface Props {
 type Tab = "reviews" | "quotes" | "saved";
 
 const REVIEW_STATUS_CONFIG: Record<ReviewStatus, { label: string; icon: React.ElementType; className: string }> = {
-  PUBLISHED: { label: "Published", icon: CheckCircle2, className: "text-green-600 bg-green-50 border-green-100" },
-  PENDING: { label: "Pending", icon: Clock, className: "text-amber-600 bg-amber-50 border-amber-100" },
-  UNDER_REVIEW: { label: "Under Review", icon: Clock, className: "text-blue-600 bg-blue-50 border-blue-100" },
-  FLAGGED: { label: "Flagged", icon: XCircle, className: "text-orange-600 bg-orange-50 border-orange-100" },
-  REMOVED: { label: "Removed", icon: XCircle, className: "text-red-600 bg-red-50 border-red-100" },
+  PUBLISHED: { label: "Published", icon: CheckCircle2, className: "text-primary bg-muted border-primary/20" },
+  PENDING: { label: "Pending", icon: Clock, className: "text-primary bg-primary/10 border-primary/20" },
+  UNDER_REVIEW: { label: "Under Review", icon: Clock, className: "text-primary bg-muted border-primary/20" },
+  FLAGGED: { label: "Flagged", icon: XCircle, className: "text-primary bg-muted border-primary/20" },
+  REMOVED: { label: "Removed", icon: XCircle, className: "text-destructive bg-destructive/10 border-primary/20" },
 };
 
 const LEAD_STATUS_CONFIG: Record<LeadStatus, { label: string; className: string }> = {
-  NEW: { label: "Awaiting response", className: "text-blue-700 bg-blue-50 border-blue-100" },
-  CONTACTED: { label: "Dealer contacted you", className: "text-amber-700 bg-amber-50 border-amber-100" },
-  CONVERTED: { label: "Completed", className: "text-green-700 bg-green-50 border-green-100" },
-  CLOSED: { label: "Closed", className: "text-gray-600 bg-gray-50 border-gray-100" },
+  NEW: { label: "Awaiting response", className: "text-primary bg-muted border-primary/20" },
+  CONTACTED: { label: "Dealer contacted you", className: "text-primary bg-primary/10 border-primary/20" },
+  CONVERTED: { label: "Completed", className: "text-primary bg-muted border-primary/20" },
+  CLOSED: { label: "Closed", className: "text-muted-foreground bg-muted border-border" },
 };
 
 const LEAD_TYPE_LABEL: Record<LeadType, string> = {
@@ -93,11 +93,11 @@ const LEAD_TYPE_LABEL: Record<LeadType, string> = {
 
 function DealerLogo({ dealer }: { dealer: DealerMini }) {
   return (
-    <div className="w-10 h-10 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center overflow-hidden shrink-0">
+    <div className="w-10 h-10 rounded-xl bg-muted border border-border flex items-center justify-center overflow-hidden shrink-0">
       {dealer.logoUrl ? (
         <Image src={dealer.logoUrl} alt={dealer.name} width={40} height={40} className="object-contain p-0.5" />
       ) : (
-        <span className="text-base font-bold text-gray-300">{dealer.name[0]}</span>
+        <span className="text-base font-bold text-muted-foreground">{dealer.name[0]}</span>
       )}
     </div>
   );
@@ -129,17 +129,17 @@ export function CustomerDashboard({ user, reviews, leads, savedDealers }: Props)
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted">
       {/* Header */}
-      <div className="bg-night-800 text-white">
+      <div className="bg-pearl text-foreground">
         <div className="container py-8">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gold-500/20 border border-gold-400/30 grid place-items-center">
-              <Star size={20} className="text-gold-400" />
+            <div className="w-12 h-12 rounded-full bg-primary/10 border border-primary/30 grid place-items-center">
+              <Star size={20} className="text-primary" />
             </div>
             <div>
               <h1 className="text-xl font-bold">Welcome back, {user.name.split(" ")[0]}</h1>
-              <p className="text-sm text-white/60 mt-0.5">{user.email}</p>
+              <p className="text-sm text-foreground mt-0.5">{user.email}</p>
             </div>
           </div>
 
@@ -150,10 +150,10 @@ export function CustomerDashboard({ user, reviews, leads, savedDealers }: Props)
               { label: "Quotes", value: leads.length, icon: Mail },
               { label: "Saved", value: localSaved.length, icon: Bookmark },
             ].map(({ label, value, icon: Icon }) => (
-              <div key={label} className="bg-white/5 rounded-xl p-3 border border-white/10 text-center">
-                <Icon size={16} className="text-gold-400 mx-auto mb-1" />
+              <div key={label} className="bg-card rounded-xl p-3 border border-border text-center">
+                <Icon size={16} className="text-primary mx-auto mb-1" />
                 <p className="text-xl font-bold">{value}</p>
-                <p className="text-xs text-white/50">{label}</p>
+                <p className="text-xs text-foreground">{label}</p>
               </div>
             ))}
           </div>
@@ -162,7 +162,7 @@ export function CustomerDashboard({ user, reviews, leads, savedDealers }: Props)
 
       <div className="container py-6">
         {/* Tabs */}
-        <div className="flex gap-1 bg-white rounded-xl border border-gray-100 shadow-sm p-1 mb-6">
+        <div className="flex gap-1 bg-card rounded-xl border border-border shadow-sm p-1 mb-6">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             return (
@@ -172,8 +172,8 @@ export function CustomerDashboard({ user, reviews, leads, savedDealers }: Props)
                 className={cn(
                   "flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-sm font-medium transition-all",
                   activeTab === tab.id
-                    ? "bg-gold-50 text-gold-800 shadow-sm"
-                    : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                    ? "bg-primary/10 text-primary shadow-sm"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
                 )}
               >
                 <Icon size={15} />
@@ -181,7 +181,7 @@ export function CustomerDashboard({ user, reviews, leads, savedDealers }: Props)
                 {tab.count > 0 && (
                   <span className={cn(
                     "text-xs px-1.5 py-0.5 rounded-full font-medium min-w-[20px] text-center",
-                    activeTab === tab.id ? "bg-gold-100 text-gold-800" : "bg-gray-100 text-gray-600"
+                    activeTab === tab.id ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
                   )}>
                     {tab.count}
                   </span>
@@ -206,20 +206,20 @@ export function CustomerDashboard({ user, reviews, leads, savedDealers }: Props)
                 const statusCfg = REVIEW_STATUS_CONFIG[review.status];
                 const StatusIcon = statusCfg.icon;
                 return (
-                  <div key={review.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex items-start gap-3">
+                  <div key={review.id} className="bg-card rounded-xl border border-border shadow-sm p-4 flex items-start gap-3">
                     <DealerLogo dealer={review.dealership} />
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-start justify-between gap-2">
                         <div className="min-w-0">
-                          <Link href={`/dealership/${review.dealership.slug}`} className="font-semibold text-gray-900 hover:text-gold-700 transition-colors text-sm block truncate">
+                          <Link href={`/dealership/${review.dealership.slug}`} className="font-semibold text-foreground hover:text-primary transition-colors text-sm block truncate">
                             {review.dealership.name}
                           </Link>
-                          <p className="text-xs text-gray-500 truncate">{review.title}</p>
+                          <p className="text-xs text-muted-foreground truncate">{review.title}</p>
                         </div>
                         <div className="flex items-center gap-1.5 shrink-0">
                           <div className="flex">
                             {Array.from({ length: 5 }).map((_, i) => (
-                              <Star key={i} size={12} className={i < review.overallRating ? "fill-amber-400 text-amber-400" : "text-gray-200"} />
+                              <Star key={i} size={12} className={i < review.overallRating ? "fill-primary text-primary" : "text-muted-foreground"} />
                             ))}
                           </div>
                         </div>
@@ -230,21 +230,21 @@ export function CustomerDashboard({ user, reviews, leads, savedDealers }: Props)
                           {statusCfg.label}
                         </span>
                         {review.verificationStatus === "PENDING" && (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border text-blue-600 bg-blue-50 border-blue-100">
+                          <span className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border text-primary bg-muted border-primary/20">
                             <Clock size={10} />
                             Verification pending
                           </span>
                         )}
                         {(review.verificationStatus === "VERIFIED_PURCHASE" || review.verificationStatus === "VERIFIED_SERVICE") && (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border text-green-700 bg-green-50 border-green-100">
+                          <span className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border text-primary bg-muted border-primary/20">
                             <ShieldCheck size={10} />
                             Verified Buyer
                           </span>
                         )}
-                        <span className="text-[10px] text-gray-400">{formatDate(review.createdAt)}</span>
+                        <span className="text-[10px] text-muted-foreground">{formatDate(review.createdAt)}</span>
                       </div>
                     </div>
-                    <Link href={`/dealership/${review.dealership.slug}`} className="text-gray-400 hover:text-gold-700 shrink-0">
+                    <Link href={`/dealership/${review.dealership.slug}`} className="text-muted-foreground hover:text-primary shrink-0">
                       <ChevronRight size={16} />
                     </Link>
                   </div>
@@ -268,15 +268,15 @@ export function CustomerDashboard({ user, reviews, leads, savedDealers }: Props)
               leads.map((lead) => {
                 const statusCfg = LEAD_STATUS_CONFIG[lead.status];
                 return (
-                  <div key={lead.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex items-start gap-3">
+                  <div key={lead.id} className="bg-card rounded-xl border border-border shadow-sm p-4 flex items-start gap-3">
                     <DealerLogo dealer={lead.dealership} />
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-start justify-between gap-2">
                         <div className="min-w-0">
-                          <Link href={`/dealership/${lead.dealership.slug}`} className="font-semibold text-gray-900 hover:text-gold-700 transition-colors text-sm block truncate">
+                          <Link href={`/dealership/${lead.dealership.slug}`} className="font-semibold text-foreground hover:text-primary transition-colors text-sm block truncate">
                             {lead.dealership.name}
                           </Link>
-                          <p className="text-xs text-gray-500 mt-0.5">
+                          <p className="text-xs text-muted-foreground mt-0.5">
                             {LEAD_TYPE_LABEL[lead.type]}
                             {lead.vehicle && ` · ${lead.vehicle}`}
                           </p>
@@ -285,9 +285,9 @@ export function CustomerDashboard({ user, reviews, leads, savedDealers }: Props)
                           {statusCfg.label}
                         </Badge>
                       </div>
-                      <p className="text-[10px] text-gray-400 mt-2">{formatDate(lead.createdAt)}</p>
+                      <p className="text-[10px] text-muted-foreground mt-2">{formatDate(lead.createdAt)}</p>
                     </div>
-                    <Link href={`/dealership/${lead.dealership.slug}`} className="text-gray-400 hover:text-gold-700 shrink-0">
+                    <Link href={`/dealership/${lead.dealership.slug}`} className="text-muted-foreground hover:text-primary shrink-0">
                       <ChevronRight size={16} />
                     </Link>
                   </div>
@@ -309,37 +309,37 @@ export function CustomerDashboard({ user, reviews, leads, savedDealers }: Props)
               />
             ) : (
               localSaved.map((entry) => (
-                <div key={entry.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
+                <div key={entry.id} className="bg-card rounded-xl border border-border shadow-sm p-4 flex items-center gap-3">
                   <DealerLogo dealer={entry.dealership} />
                   <div className="flex-1 min-w-0">
-                    <Link href={`/dealership/${entry.dealership.slug}`} className="font-semibold text-gray-900 hover:text-gold-700 transition-colors text-sm block truncate">
+                    <Link href={`/dealership/${entry.dealership.slug}`} className="font-semibold text-foreground hover:text-primary transition-colors text-sm block truncate">
                       {entry.dealership.name}
                     </Link>
                     <div className="flex items-center gap-2 mt-0.5">
                       {entry.dealership.totalReviews > 0 && (
                         <div className="flex items-center gap-1">
-                          <Star size={11} className="fill-amber-400 text-amber-400" />
-                          <span className="text-xs font-semibold text-gray-700">
+                          <Star size={11} className="fill-primary text-primary" />
+                          <span className="text-xs font-semibold text-foreground">
                             {entry.dealership.overallRating.toFixed(1)}
                           </span>
-                          <span className="text-xs text-gray-400">({entry.dealership.totalReviews})</span>
+                          <span className="text-xs text-muted-foreground">({entry.dealership.totalReviews})</span>
                         </div>
                       )}
                       {entry.dealership.cityName && (
-                        <span className="text-xs text-gray-400">{entry.dealership.cityName}</span>
+                        <span className="text-xs text-muted-foreground">{entry.dealership.cityName}</span>
                       )}
                     </div>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     <Link href={`/dealership/${entry.dealership.slug}`}>
-                      <Button size="sm" variant="outline" className="text-xs border-gold-200 text-gold-800 hover:bg-gold-50">
+                      <Button size="sm" variant="outline" className="text-xs border-primary/30 text-primary hover:bg-primary/10">
                         View
                       </Button>
                     </Link>
                     <button
                       onClick={() => unsaveDealer(entry.dealership.id, entry.id)}
                       disabled={removingId === entry.id}
-                      className="text-gray-400 hover:text-red-500 transition-colors text-xs px-2 py-1 rounded"
+                      className="text-muted-foreground hover:text-destructive transition-colors text-xs px-2 py-1 rounded"
                       aria-label="Remove from saved"
                     >
                       {removingId === entry.id ? "…" : "✕"}
@@ -352,13 +352,13 @@ export function CustomerDashboard({ user, reviews, leads, savedDealers }: Props)
         )}
 
         {/* CTA Banner */}
-        <div className="mt-8 bg-night-800 rounded-xl p-5 text-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="mt-8 bg-pearl rounded-xl p-5 text-foreground flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <p className="font-semibold">Looking for your next car?</p>
-            <p className="text-sm text-white/60 mt-0.5">Search verified dealers and read honest reviews.</p>
+            <p className="text-sm text-foreground mt-0.5">Search verified dealers and read honest reviews.</p>
           </div>
           <Link href="/dealers">
-            <Button className="bg-gold-600 hover:bg-gold-700 text-white border-0 shrink-0">
+            <Button className="bg-primary hover:bg-primary/90 text-foreground border-0 shrink-0">
               <Car size={15} className="mr-1.5" />
               Browse Dealers
             </Button>
@@ -381,14 +381,14 @@ function EmptyState({
   cta: { label: string; href: string };
 }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-10 text-center">
-      <div className="w-12 h-12 rounded-full bg-gray-100 grid place-items-center mx-auto mb-3">
-        <Icon size={22} className="text-gray-400" />
+    <div className="bg-card rounded-xl border border-border shadow-sm p-10 text-center">
+      <div className="w-12 h-12 rounded-full bg-muted grid place-items-center mx-auto mb-3">
+        <Icon size={22} className="text-muted-foreground" />
       </div>
-      <p className="font-semibold text-gray-900">{title}</p>
-      <p className="text-sm text-gray-500 mt-1 max-w-xs mx-auto">{description}</p>
+      <p className="font-semibold text-foreground">{title}</p>
+      <p className="text-sm text-muted-foreground mt-1 max-w-xs mx-auto">{description}</p>
       <Link href={cta.href}>
-        <Button size="sm" className="mt-4 bg-gold-800 hover:bg-gold-900">
+        <Button size="sm" className="mt-4 bg-primary hover:bg-primary/90">
           {cta.label}
         </Button>
       </Link>

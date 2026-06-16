@@ -27,8 +27,8 @@ export default async function DealerInventoryPage() {
     return (
       <div className="p-8 text-center">
         <h1 className="text-2xl font-bold mb-4">No dealership linked</h1>
-        <p className="text-gray-600 mb-4">Claim a profile first to manage inventory.</p>
-        <Link href="/claim" className="text-gold-700 font-medium hover:underline">
+        <p className="text-muted-foreground mb-4">Claim a profile first to manage inventory.</p>
+        <Link href="/claim" className="text-primary font-medium hover:underline">
           Claim your profile →
         </Link>
       </div>
@@ -41,10 +41,10 @@ export default async function DealerInventoryPage() {
   return (
     <div className="p-6 md:p-8 max-w-3xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Inventory</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Inventory</h1>
+        <p className="text-muted-foreground mt-1">
           Add vehicles buyers can browse on your profile and{" "}
-          <Link href={`/dealers/${dealer.country.code.toLowerCase()}/inventory`} className="text-gold-700 hover:underline">
+          <Link href={`/dealers/${dealer.country.code.toLowerCase()}/inventory`} className="text-primary hover:underline">
             {dealer.country.name} inventory
           </Link>
           .
@@ -52,7 +52,7 @@ export default async function DealerInventoryPage() {
       </div>
 
       {!isPremium && (
-        <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+        <div className="mb-6 rounded-xl border border-primary/20 bg-primary/10 p-4 text-sm text-primary">
           <strong>Pro tip:</strong> Pro dealers also get a prominent inventory link and no competitor ads.{" "}
           <Link href="/dashboard/dealer/billing" className="font-medium underline">
             Upgrade plans

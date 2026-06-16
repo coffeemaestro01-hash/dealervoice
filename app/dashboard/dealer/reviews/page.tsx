@@ -35,9 +35,9 @@ export default function DealerReviewsPage() {
   return (
     <div className="p-6 md:p-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Reviews</h1>
+        <h1 className="text-2xl font-bold text-foreground">Reviews</h1>
         <div className="flex items-center gap-2">
-          <Filter size={16} className="text-gray-400" />
+          <Filter size={16} className="text-muted-foreground" />
           <Select value={filter} onValueChange={(v) => { setFilter(v); setPage(1); }}>
             <SelectTrigger className="w-40">
               <SelectValue />
@@ -56,9 +56,9 @@ export default function DealerReviewsPage() {
         <>
           <div className="space-y-4">
             {(data?.data ?? []).length === 0 ? (
-              <div className="bg-white rounded-xl border border-gray-100 p-12 text-center shadow-sm">
-                <MessageSquare size={40} className="text-gray-200 mx-auto mb-3" />
-                <p className="text-gray-500">No reviews found</p>
+              <div className="bg-card rounded-xl border border-border p-12 text-center shadow-sm">
+                <MessageSquare size={40} className="text-muted-foreground mx-auto mb-3" />
+                <p className="text-muted-foreground">No reviews found</p>
               </div>
             ) : (
               (data?.data ?? []).map((review: any) => (
@@ -70,7 +70,7 @@ export default function DealerReviewsPage() {
           {data?.pagination && data.pagination.totalPages > 1 && (
             <div className="flex justify-center gap-2 mt-6">
               <Button variant="outline" disabled={page <= 1} onClick={() => setPage(p => p - 1)}>Previous</Button>
-              <span className="flex items-center text-sm text-gray-600 px-3">Page {page} of {data.pagination.totalPages}</span>
+              <span className="flex items-center text-sm text-muted-foreground px-3">Page {page} of {data.pagination.totalPages}</span>
               <Button variant="outline" disabled={page >= data.pagination.totalPages} onClick={() => setPage(p => p + 1)}>Next</Button>
             </div>
           )}

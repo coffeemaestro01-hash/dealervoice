@@ -38,37 +38,37 @@ export default async function AdminClaimsPage() {
   return (
     <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dealer Claims</h1>
-        <p className="text-gray-500 mt-2">Review and process ownership claims for dealerships.</p>
+        <h1 className="text-3xl font-bold text-foreground">Dealer Claims</h1>
+        <p className="text-muted-foreground mt-2">Review and process ownership claims for dealerships.</p>
       </div>
 
       {claims.length === 0 ? (
         <Card className="border-dashed py-12">
           <CardContent className="flex flex-col items-center justify-center text-center">
-            <h3 className="text-lg font-semibold text-gray-900">No claims yet</h3>
-            <p className="text-gray-500 mt-1">There are no dealership claims to review at this time.</p>
+            <h3 className="text-lg font-semibold text-foreground">No claims yet</h3>
+            <p className="text-muted-foreground mt-1">There are no dealership claims to review at this time.</p>
           </CardContent>
         </Card>
       ) : (
         <div className="grid gap-6">
           {claims.map((claim) => (
-            <Card key={claim.id} className={claim.status === "PENDING" ? "border-gold-300 shadow-md" : ""}>
+            <Card key={claim.id} className={claim.status === "PENDING" ? "border-primary/30 shadow-md" : ""}>
               <CardHeader className="flex flex-row items-start justify-between pb-4">
                 <div>
                   <CardTitle className="text-xl flex items-center gap-2">
-                    <Link href={`/dealership/${claim.dealership.slug}`} className="hover:underline text-blue-600" target="_blank">
+                    <Link href={`/dealership/${claim.dealership.slug}`} className="hover:underline text-primary" target="_blank">
                       {claim.dealership.name}
                     </Link>
                     <Badge variant="outline" className={
-                      claim.status === "PENDING" ? "bg-amber-100 text-amber-800 border-amber-200" :
-                      claim.status === "APPROVED" ? "bg-green-100 text-green-800 border-green-200" :
-                      "bg-red-100 text-red-800 border-red-200"
+                      claim.status === "PENDING" ? "bg-primary/10 text-primary border-primary/20" :
+                      claim.status === "APPROVED" ? "bg-muted text-primary border-primary/20" :
+                      "bg-destructive/10 text-destructive border-primary/20"
                     }>
                       {claim.status}
                     </Badge>
                   </CardTitle>
                   <CardDescription className="mt-1">
-                    Submitted {format(claim.createdAt, "MMM d, yyyy 'at' h:mm a")} by <span className="font-medium text-gray-900">{claim.submittedBy.name}</span> ({claim.submittedBy.email})
+                    Submitted {format(claim.createdAt, "MMM d, yyyy 'at' h:mm a")} by <span className="font-medium text-foreground">{claim.submittedBy.name}</span> ({claim.submittedBy.email})
                   </CardDescription>
                 </div>
 
@@ -86,25 +86,25 @@ export default async function AdminClaimsPage() {
               <CardContent className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4 text-sm">
                   <div className="space-y-1">
-                    <p className="font-semibold text-gray-900">Business Email</p>
-                    <p className="text-gray-600">{claim.businessEmail}</p>
+                    <p className="font-semibold text-foreground">Business Email</p>
+                    <p className="text-muted-foreground">{claim.businessEmail}</p>
                   </div>
                   <div className="space-y-1">
-                    <p className="font-semibold text-gray-900">Business Phone</p>
-                    <p className="text-gray-600">{claim.businessPhone || "N/A"}</p>
+                    <p className="font-semibold text-foreground">Business Phone</p>
+                    <p className="text-muted-foreground">{claim.businessPhone || "N/A"}</p>
                   </div>
                 </div>
 
                 {claim.notes && (
-                  <div className="space-y-1 text-sm bg-gray-50 p-3 rounded-lg border border-gray-100">
-                    <p className="font-semibold text-gray-900">Notes from applicant</p>
-                    <p className="text-gray-600 italic">&ldquo;{claim.notes}&rdquo;</p>
+                  <div className="space-y-1 text-sm bg-muted p-3 rounded-lg border border-border">
+                    <p className="font-semibold text-foreground">Notes from applicant</p>
+                    <p className="text-muted-foreground italic">&ldquo;{claim.notes}&rdquo;</p>
                   </div>
                 )}
 
                 {claim.documents && claim.documents.length > 0 && (
                   <div className="space-y-2 text-sm pt-2">
-                    <p className="font-semibold text-gray-900 flex items-center gap-2">
+                    <p className="font-semibold text-foreground flex items-center gap-2">
                       <FileText size={16} /> Attached Documents
                     </p>
                     <div className="flex flex-col gap-2">
@@ -114,7 +114,7 @@ export default async function AdminClaimsPage() {
                           href={doc.url} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline flex items-center gap-1"
+                          className="text-primary hover:underline flex items-center gap-1"
                         >
                           <ExternalLink size={14} /> {doc.filename || "Proof of Ownership Document"}
                         </a>
@@ -134,7 +134,7 @@ export default async function AdminClaimsPage() {
                 )}
                 
                 {claim.status === "REJECTED" && claim.rejectionReason && (
-                  <div className="bg-red-50 text-red-800 p-3 rounded-lg border border-red-100 text-sm mt-4">
+                  <div className="bg-destructive/10 text-destructive p-3 rounded-lg border border-primary/20 text-sm mt-4">
                     <p className="font-semibold">Rejection Reason:</p>
                     <p>{claim.rejectionReason}</p>
                   </div>

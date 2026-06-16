@@ -126,13 +126,13 @@ export function BlogPostEditor({ initial, isNew }: Props) {
         </div>
       </div>
 
-      {error && <p className="text-red-600 text-sm">{error}</p>}
+      {error && <p className="text-destructive text-sm">{error}</p>}
 
       <div className="flex flex-wrap gap-2 pt-2">
         <Button disabled={busy} onClick={() => save(false)} variant="outline">
           {busy ? <Loader2 className="animate-spin" size={16} /> : "Save draft"}
         </Button>
-        <Button disabled={busy} onClick={() => save(true)} className="bg-gold-gradient text-night-900 font-semibold border-0">
+        <Button disabled={busy} onClick={() => save(true)} className="bg-ember text-night-900 font-semibold border-0">
           {busy ? <Loader2 className="animate-spin" size={16} /> : "Publish"}
         </Button>
         {!isNew && (

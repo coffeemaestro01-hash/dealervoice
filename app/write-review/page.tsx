@@ -24,25 +24,25 @@ export default async function WriteReviewLandingPage({
   const showWelcome = welcome === "1";
 
   return (
-    <div className="bg-gray-50">
-      <section className="bg-white border-b border-gray-100">
+    <div className="bg-muted">
+      <section className="bg-card border-b border-border">
         <div className="container py-12 md:py-16 max-w-3xl">
           {showWelcome && (
-            <div className="mb-6 rounded-xl border border-gold/30 bg-gold-50 px-4 py-3 text-sm text-gold-900">
+            <div className="mb-6 rounded-xl border border-primary/30 bg-primary/10 px-4 py-3 text-sm text-foreground">
               Welcome to DealerVoice! Find the dealership you visited and be among the first to leave a trusted review.
             </div>
           )}
-          <h1 className="font-display text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+          <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-3">
             Write a dealership review
           </h1>
-          <p className="text-gray-600 text-lg mb-8">
+          <p className="text-muted-foreground text-lg mb-8">
             Help other car buyers make better decisions. Search for the dealership you visited, open its profile, and
             click <strong>Write Review</strong>.
           </p>
           <WriteReviewSearch />
-          <p className="text-sm text-gray-500 mt-4">
+          <p className="text-sm text-muted-foreground mt-4">
             You&apos;ll sign in before submitting.{" "}
-            <Link href="/methodology" className="text-gold-700 hover:underline">
+            <Link href="/methodology" className="text-primary hover:underline">
               How verification works
             </Link>
           </p>
@@ -50,20 +50,20 @@ export default async function WriteReviewLandingPage({
       </section>
 
       <section className="container py-12 max-w-4xl">
-        <h2 className="font-display text-xl font-bold text-gray-900 mb-6 text-center">Three steps</h2>
+        <h2 className="font-display text-xl font-bold text-foreground mb-6 text-center">Three steps</h2>
         <div className="grid md:grid-cols-3 gap-6">
           {STEPS.map((s, i) => (
-            <div key={s.title} className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-              <span className="text-xs font-bold text-gold-600 mb-2 block">0{i + 1}</span>
-              <s.icon size={22} className="text-gold-600 mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-1">{s.title}</h3>
-              <p className="text-sm text-gray-600">{s.body}</p>
+            <div key={s.title} className="bg-card rounded-xl border border-border p-6 shadow-sm">
+              <span className="text-xs font-bold text-primary mb-2 block">0{i + 1}</span>
+              <s.icon size={22} className="text-primary mb-3" />
+              <h3 className="font-semibold text-foreground mb-1">{s.title}</h3>
+              <p className="text-sm text-muted-foreground">{s.body}</p>
             </div>
           ))}
         </div>
         <div className="text-center mt-8">
           <Link href="/dealers?sort=needs_review">
-            <Button variant="outline" className="gap-2 border-gold/40 text-gold-800 hover:bg-gold-50">
+            <Button variant="outline" className="gap-2 border-primary/30 text-primary hover:bg-primary/10">
               Browse dealers needing first review
               <ArrowRight size={16} />
             </Button>

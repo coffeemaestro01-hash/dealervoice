@@ -7,10 +7,10 @@ interface Props {
 }
 
 const SENTIMENT_CONFIG = {
-  positive: { label: "Mostly Positive", classes: "bg-green-50 text-green-700 border-green-200" },
-  mixed: { label: "Mixed Reviews", classes: "bg-yellow-50 text-yellow-700 border-yellow-200" },
-  negative: { label: "Mostly Negative", classes: "bg-red-50 text-red-700 border-red-200" },
-  neutral: { label: "Neutral", classes: "bg-gray-50 text-gray-600 border-gray-200" },
+  positive: { label: "Mostly Positive", classes: "bg-muted text-primary border-primary/20" },
+  mixed: { label: "Mixed Reviews", classes: "bg-muted text-primary border-primary/20" },
+  negative: { label: "Mostly Negative", classes: "bg-destructive/10 text-destructive border-primary/20" },
+  neutral: { label: "Neutral", classes: "bg-muted text-muted-foreground border-border" },
 };
 
 export function AIReviewDigest({ digest, className }: Props) {
@@ -19,7 +19,7 @@ export function AIReviewDigest({ digest, className }: Props) {
   return (
     <div className={className}>
       <div className="flex items-center gap-2 mb-3">
-        <div className="flex items-center gap-1.5 text-gold-600">
+        <div className="flex items-center gap-1.5 text-primary">
           <Sparkles size={14} />
           <span className="text-xs font-semibold uppercase tracking-wide">
             {digest.aiGenerated ? "AI Review Digest" : "Review Digest"}
@@ -32,18 +32,18 @@ export function AIReviewDigest({ digest, className }: Props) {
         </span>
       </div>
 
-      <p className="text-sm text-gray-700 leading-relaxed mb-4">{digest.summary}</p>
+      <p className="text-sm text-foreground leading-relaxed mb-4">{digest.summary}</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {digest.pros.length > 0 && (
-          <div className="rounded-xl bg-green-50 border border-green-100 p-3">
-            <div className="flex items-center gap-1.5 text-green-700 mb-2">
+          <div className="rounded-xl bg-muted border border-primary/20 p-3">
+            <div className="flex items-center gap-1.5 text-primary mb-2">
               <ThumbsUp size={13} />
               <span className="text-xs font-semibold">Buyers praise</span>
             </div>
             <ul className="space-y-1">
               {digest.pros.map((p) => (
-                <li key={p} className="text-xs text-green-800">
+                <li key={p} className="text-xs text-primary">
                   · {p}
                 </li>
               ))}
@@ -52,14 +52,14 @@ export function AIReviewDigest({ digest, className }: Props) {
         )}
 
         {digest.cons.length > 0 && (
-          <div className="rounded-xl bg-red-50 border border-red-100 p-3">
-            <div className="flex items-center gap-1.5 text-red-600 mb-2">
+          <div className="rounded-xl bg-destructive/10 border border-primary/20 p-3">
+            <div className="flex items-center gap-1.5 text-destructive mb-2">
               <ThumbsDown size={13} />
               <span className="text-xs font-semibold">Common concerns</span>
             </div>
             <ul className="space-y-1">
               {digest.cons.map((c) => (
-                <li key={c} className="text-xs text-red-800">
+                <li key={c} className="text-xs text-destructive">
                   · {c}
                 </li>
               ))}
@@ -73,7 +73,7 @@ export function AIReviewDigest({ digest, className }: Props) {
           {digest.themes.map((t) => (
             <span
               key={t}
-              className="inline-flex items-center gap-1 text-xs bg-gray-100 text-gray-600 rounded-full px-2.5 py-0.5"
+              className="inline-flex items-center gap-1 text-xs bg-muted text-muted-foreground rounded-full px-2.5 py-0.5"
             >
               <Hash size={10} />
               {t}

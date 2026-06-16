@@ -85,11 +85,11 @@ export function VerificationUpload({ reviewId, onUploaded, value, onChange }: Pr
 
   if (submitted) {
     return (
-      <div className="flex items-center gap-2.5 rounded-xl border border-green-200 bg-green-50 p-3.5">
-        <ShieldCheck size={18} className="text-green-600 shrink-0" />
+      <div className="flex items-center gap-2.5 rounded-xl border border-primary/20 bg-muted p-3.5">
+        <ShieldCheck size={18} className="text-primary shrink-0" />
         <div>
-          <p className="text-sm font-semibold text-green-800">Verification document submitted</p>
-          <p className="text-xs text-green-600 mt-0.5">Our team will review it for the Verified Buyer badge.</p>
+          <p className="text-sm font-semibold text-primary">Verification document submitted</p>
+          <p className="text-xs text-primary mt-0.5">Our team will review it for the Verified Buyer badge.</p>
         </div>
       </div>
     );
@@ -98,27 +98,27 @@ export function VerificationUpload({ reviewId, onUploaded, value, onChange }: Pr
   return (
     <div className="space-y-2">
       {/* Guidance banner */}
-      <div className="flex items-start gap-2 rounded-xl bg-gold-50 border border-gold-100 p-3">
-        <Info size={15} className="text-gold-600 mt-0.5 shrink-0" />
+      <div className="flex items-start gap-2 rounded-xl bg-primary/10 border border-primary/30 p-3">
+        <Info size={15} className="text-primary mt-0.5 shrink-0" />
         <div>
-          <p className="text-xs font-semibold text-gold-800">Attach proof for Verified Buyer badge</p>
-          <p className="text-xs text-gold-700 mt-0.5">
+          <p className="text-xs font-semibold text-primary">Attach proof for Verified Buyer badge</p>
+          <p className="text-xs text-primary mt-0.5">
             Upload your invoice, purchase receipt, or service job card (optional). Accepted: JPG, PNG, PDF up to 8MB.
           </p>
         </div>
       </div>
 
       {fileUrl ? (
-        <div className="flex items-center justify-between gap-3 rounded-xl border border-gray-100 bg-gray-50 p-3">
+        <div className="flex items-center justify-between gap-3 rounded-xl border border-border bg-muted p-3">
           <div className="flex items-center gap-2 min-w-0">
-            <FileIcon size={16} className="text-gray-500 shrink-0" />
-            <span className="text-xs text-gray-700 truncate">{fileUrl.split("/").pop()}</span>
+            <FileIcon size={16} className="text-muted-foreground shrink-0" />
+            <span className="text-xs text-foreground truncate">{fileUrl.split("/").pop()}</span>
           </div>
           {onChange && (
             <button
               type="button"
               onClick={() => onChange(null)}
-              className="shrink-0 text-gray-400 hover:text-red-500 transition-colors"
+              className="shrink-0 text-muted-foreground hover:text-destructive transition-colors"
               aria-label="Remove file"
             >
               <X size={15} />
@@ -131,30 +131,30 @@ export function VerificationUpload({ reviewId, onUploaded, value, onChange }: Pr
           className={cn(
             "border-2 border-dashed rounded-xl p-5 transition-all cursor-pointer flex flex-col items-center text-center",
             isDragActive
-              ? "border-gold-500 bg-gold-50"
-              : "border-gray-200 hover:border-gold-400 hover:bg-gray-50",
+              ? "border-primary/30 bg-primary/10"
+              : "border-border hover:border-primary/30 hover:bg-muted",
             uploading && "opacity-60 cursor-not-allowed"
           )}
         >
           <input {...getInputProps()} />
           {uploading ? (
             <>
-              <Loader2 size={22} className="text-gold-600 animate-spin mb-2" />
-              <p className="text-xs text-gray-600 font-medium">Uploading…</p>
+              <Loader2 size={22} className="text-primary animate-spin mb-2" />
+              <p className="text-xs text-muted-foreground font-medium">Uploading…</p>
             </>
           ) : (
             <>
-              <div className="p-2.5 bg-gray-100 rounded-full mb-2">
-                <Upload size={18} className="text-gray-500" />
+              <div className="p-2.5 bg-muted rounded-full mb-2">
+                <Upload size={18} className="text-muted-foreground" />
               </div>
-              <p className="text-xs font-semibold text-gray-800">Click or drag to attach document</p>
-              <p className="text-[10px] text-gray-400 mt-0.5">Invoice, receipt or PDF · max 8 MB</p>
+              <p className="text-xs font-semibold text-foreground">Click or drag to attach document</p>
+              <p className="text-[10px] text-muted-foreground mt-0.5">Invoice, receipt or PDF · max 8 MB</p>
             </>
           )}
         </div>
       )}
 
-      {error && <p className="text-xs text-red-500 font-medium">{error}</p>}
+      {error && <p className="text-xs text-destructive font-medium">{error}</p>}
     </div>
   );
 }

@@ -101,30 +101,30 @@ export function CookieBanner() {
   if (!expanded) {
     return (
       <div className="fixed bottom-0 inset-x-0 z-[100] p-3 sm:p-4 pointer-events-none">
-        <div className="container max-w-4xl mx-auto pointer-events-auto bg-white rounded-xl shadow-xl border border-gray-200 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4">
+        <div className="container max-w-4xl mx-auto pointer-events-auto bg-card rounded-xl shadow-xl border border-border flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4">
           <div className="flex items-start gap-2 flex-1 min-w-0">
-            <Cookie size={18} className="text-gold-600 shrink-0 mt-0.5" />
-            <p className="text-sm text-gray-600">
+            <Cookie size={18} className="text-primary shrink-0 mt-0.5" />
+            <p className="text-sm text-muted-foreground">
               We use cookies to run the site and, with your consent, to improve it.{" "}
-              <Link href="/cookies" className="text-gold-700 hover:underline">Cookie Policy</Link>
+              <Link href="/cookies" className="text-primary hover:underline">Cookie Policy</Link>
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => setExpanded(true)}
-              className="h-9 px-3 rounded-lg border border-gray-300 text-gray-700 font-medium text-sm hover:bg-gray-50"
+              className="h-9 px-3 rounded-lg border border-border text-foreground font-medium text-sm hover:bg-muted"
             >
               Manage
             </button>
             <button
               onClick={() => persist({ functional: false, analytics: false, marketing: false })}
-              className="h-9 px-3 rounded-lg border border-gray-300 text-gray-700 font-medium text-sm hover:bg-gray-50"
+              className="h-9 px-3 rounded-lg border border-border text-foreground font-medium text-sm hover:bg-muted"
             >
               Reject
             </button>
             <button
               onClick={() => persist({ functional: true, analytics: true, marketing: true })}
-              className="h-9 px-4 rounded-lg bg-gold-gradient text-night-900 font-semibold text-sm hover:opacity-90"
+              className="h-9 px-4 rounded-lg bg-ember text-night-900 font-semibold text-sm hover:opacity-90"
             >
               Accept
             </button>
@@ -135,42 +135,42 @@ export function CookieBanner() {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-sm p-3 sm:p-4">
-      <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-gold/30 overflow-hidden">
-        <div className="bg-night-gradient px-5 py-4 flex items-center justify-between gap-2">
+    <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-foreground/30 backdrop-blur-sm p-3 sm:p-4">
+      <div className="w-full max-w-lg bg-card rounded-2xl shadow-2xl border border-primary/30 overflow-hidden">
+        <div className="bg-pearl px-5 py-4 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <Cookie size={18} className="text-gold-400" />
-            <h2 className="font-semibold text-white">We use cookies</h2>
+            <Cookie size={18} className="text-primary" />
+            <h2 className="font-semibold text-foreground">We use cookies</h2>
           </div>
           <button
             type="button"
             onClick={() => setExpanded(false)}
-            className="text-gray-400 hover:text-white p-1"
+            className="text-muted-foreground hover:text-foreground p-1"
             aria-label="Close cookie settings"
           >
             <X size={18} />
           </button>
         </div>
         <div className="p-5">
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-sm text-muted-foreground mb-4">
             We use cookies to run the site and, with your consent, to improve it. Choose what to allow.
-            Read our <Link href="/cookies" className="text-gold-700 hover:underline">Cookie Policy</Link> and{" "}
-            <Link href="/privacy" className="text-gold-700 hover:underline">Privacy Policy</Link>.
+            Read our <Link href="/cookies" className="text-primary hover:underline">Cookie Policy</Link> and{" "}
+            <Link href="/privacy" className="text-primary hover:underline">Privacy Policy</Link>.
           </p>
 
           <div className="space-y-2.5 mb-5">
-            <label className="flex items-start justify-between gap-3 rounded-lg border border-gray-100 bg-gray-50 p-3">
+            <label className="flex items-start justify-between gap-3 rounded-lg border border-border bg-muted p-3">
               <span>
-                <span className="text-sm font-medium text-gray-900 block">Strictly necessary</span>
-                <span className="text-xs text-gray-500">Required for sign-in and security. Always on.</span>
+                <span className="text-sm font-medium text-foreground block">Strictly necessary</span>
+                <span className="text-xs text-muted-foreground">Required for sign-in and security. Always on.</span>
               </span>
               <input type="checkbox" checked disabled className="mt-1 accent-gold-600" />
             </label>
             {CATS.map((c) => (
-              <label key={c.key} className="flex items-start justify-between gap-3 rounded-lg border border-gray-100 p-3 cursor-pointer">
+              <label key={c.key} className="flex items-start justify-between gap-3 rounded-lg border border-border p-3 cursor-pointer">
                 <span>
-                  <span className="text-sm font-medium text-gray-900 block">{c.label}</span>
-                  <span className="text-xs text-gray-500">{c.desc}</span>
+                  <span className="text-sm font-medium text-foreground block">{c.label}</span>
+                  <span className="text-xs text-muted-foreground">{c.desc}</span>
                 </span>
                 <input
                   type="checkbox"
@@ -185,19 +185,19 @@ export function CookieBanner() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             <button
               onClick={() => persist({ functional: false, analytics: false, marketing: false })}
-              className="h-11 rounded-lg border border-gray-300 text-gray-700 font-medium text-sm hover:bg-gray-50"
+              className="h-11 rounded-lg border border-border text-foreground font-medium text-sm hover:bg-muted"
             >
               Reject all
             </button>
             <button
               onClick={() => persist(choices)}
-              className="h-11 rounded-lg border border-gold/50 text-gold-700 font-medium text-sm hover:bg-gold-50"
+              className="h-11 rounded-lg border border-primary/30 text-primary font-medium text-sm hover:bg-primary/10"
             >
               Save preferences
             </button>
             <button
               onClick={() => persist({ functional: true, analytics: true, marketing: true })}
-              className="h-11 rounded-lg bg-gold-gradient text-night-900 font-semibold text-sm hover:opacity-90"
+              className="h-11 rounded-lg bg-ember text-night-900 font-semibold text-sm hover:opacity-90"
             >
               Accept all
             </button>

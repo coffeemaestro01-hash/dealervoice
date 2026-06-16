@@ -72,13 +72,13 @@ export default async function BestDealersInCityPage({ params }: Props) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div className="bg-night-900 text-white border-b border-white/10">
+      <div className="bg-pearl text-foreground border-b border-border">
         <div className="container py-10">
-          <p className="text-gold-400 text-xs font-bold uppercase tracking-widest mb-2">DealerVoice Rankings</p>
+          <p className="text-primary text-xs font-bold uppercase tracking-widest mb-2">DealerVoice Rankings</p>
           <h1 className="text-3xl md:text-4xl font-bold">Best car dealerships in {cityLabel}</h1>
-          <p className="text-white/70 mt-3 max-w-2xl">
+          <p className="text-foreground mt-3 max-w-2xl">
             Franchised dealerships ranked by trust score and verified reviews. Updated continuously.
           </p>
         </div>
@@ -88,7 +88,7 @@ export default async function BestDealersInCityPage({ params }: Props) {
           {dealers.map((dealer, i) => (
             <div key={dealer.id} className="relative">
               {i < 3 && (
-                <span className="absolute -top-2 -left-2 z-10 bg-gold-500 text-night-900 text-xs font-bold px-2 py-0.5 rounded-full">
+                <span className="absolute -top-2 -left-2 z-10 bg-primary/10 text-night-900 text-xs font-bold px-2 py-0.5 rounded-full">
                   #{i + 1}
                 </span>
               )}
@@ -96,8 +96,8 @@ export default async function BestDealersInCityPage({ params }: Props) {
             </div>
           ))}
         </div>
-        <p className="text-center mt-10 text-sm text-gray-500">
-          <Link href={`/dealers/us`} className="text-gold-700 hover:underline">
+        <p className="text-center mt-10 text-sm text-muted-foreground">
+          <Link href={`/dealers/us`} className="text-primary hover:underline">
             Browse all US dealerships →
           </Link>
         </p>

@@ -42,13 +42,13 @@ export async function TestimonialsSection() {
   const testimonials = await getTestimonials();
 
   return (
-    <section className="py-14 bg-gray-50 border-t border-gray-100" aria-labelledby="testimonials-heading">
+    <section className="py-14 bg-muted border-t border-border" aria-labelledby="testimonials-heading">
       <div className="container">
         <div className="text-center max-w-2xl mx-auto mb-10">
-          <h2 id="testimonials-heading" className="font-display text-2xl md:text-3xl font-bold text-gray-900">
+          <h2 id="testimonials-heading" className="font-display text-2xl md:text-3xl font-bold text-foreground">
             What car buyers are saying
           </h2>
-          <p className="text-gray-600 mt-2">
+          <p className="text-muted-foreground mt-2">
             Real experiences from people researching and buying from dealerships nationwide.
           </p>
         </div>
@@ -58,19 +58,19 @@ export async function TestimonialsSection() {
             {testimonials.map((t) => (
               <blockquote
                 key={t.id}
-                className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm flex flex-col"
+                className="bg-card rounded-2xl border border-border p-6 shadow-sm flex flex-col"
               >
-                <Quote className="text-gold-500 mb-3" size={24} aria-hidden />
-                <p className="text-gray-700 text-sm leading-relaxed flex-1">&ldquo;{t.quote}&rdquo;</p>
-                <footer className="mt-4 pt-4 border-t border-gray-100">
-                  <cite className="not-italic font-semibold text-gray-900 text-sm">{t.authorName}</cite>
+                <Quote className="text-primary mb-3" size={24} aria-hidden />
+                <p className="text-foreground text-sm leading-relaxed flex-1">&ldquo;{t.quote}&rdquo;</p>
+                <footer className="mt-4 pt-4 border-t border-border">
+                  <cite className="not-italic font-semibold text-foreground text-sm">{t.authorName}</cite>
                   {(t.authorCity || t.authorState) && (
-                    <p className="text-xs text-gray-500 mt-0.5">
+                    <p className="text-xs text-muted-foreground mt-0.5">
                       {[t.authorCity, t.authorState].filter(Boolean).join(", ")}
                     </p>
                   )}
                   {t.isVerified && (
-                    <span className="inline-block mt-2 text-[10px] font-semibold uppercase tracking-wider text-green-700 bg-green-50 px-2 py-0.5 rounded">
+                    <span className="inline-block mt-2 text-[10px] font-semibold uppercase tracking-wider text-primary bg-muted px-2 py-0.5 rounded">
                       Verified experience
                     </span>
                   )}
@@ -79,13 +79,13 @@ export async function TestimonialsSection() {
             ))}
           </div>
         ) : (
-          <div className="text-center max-w-md mx-auto rounded-2xl border border-dashed border-gray-200 bg-white p-8">
-            <p className="text-gray-600 text-sm">
+          <div className="text-center max-w-md mx-auto rounded-2xl border border-dashed border-border bg-card p-8">
+            <p className="text-muted-foreground text-sm">
               Be among the first to share your dealership experience. Your review helps other buyers make confident decisions.
             </p>
             <Link
               href="/write-review"
-              className="inline-block mt-4 text-gold-700 font-semibold text-sm hover:underline"
+              className="inline-block mt-4 text-primary font-semibold text-sm hover:underline"
             >
               Write the first review →
             </Link>

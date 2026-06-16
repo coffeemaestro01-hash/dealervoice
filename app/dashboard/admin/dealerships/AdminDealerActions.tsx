@@ -55,16 +55,16 @@ export function AdminDealerActions({ id, name, status, isFeatured, isVerified, c
         size="sm" variant="outline"
         disabled={busy !== null}
         onClick={() => patch("feature", { isFeatured: !isFeatured })}
-        className={isFeatured ? "border-gold/50 text-gold-700 bg-gold-50" : ""}
+        className={isFeatured ? "border-primary/30 text-primary bg-primary/10" : ""}
         title={isFeatured ? "Un-feature" : "Feature"}
       >
-        {busy === "feature" ? <Loader2 size={13} className="animate-spin" /> : <Star size={13} className={isFeatured ? "fill-gold-500 text-gold-500" : ""} />}
+        {busy === "feature" ? <Loader2 size={13} className="animate-spin" /> : <Star size={13} className={isFeatured ? "fill-gold-500 text-primary" : ""} />}
       </Button>
       <Button
         size="sm" variant="outline"
         disabled={busy !== null}
         onClick={() => patch("verify", { isVerified: !isVerified })}
-        className={isVerified ? "border-green-300 text-green-700 bg-green-50" : ""}
+        className={isVerified ? "border-primary/20 text-primary bg-muted" : ""}
         title={isVerified ? "Un-verify" : "Verify"}
       >
         {busy === "verify" ? <Loader2 size={13} className="animate-spin" /> : <ShieldCheck size={13} />}
@@ -73,7 +73,7 @@ export function AdminDealerActions({ id, name, status, isFeatured, isVerified, c
         size="sm" variant="outline"
         disabled={busy !== null}
         onClick={() => patch("status", { status: suspended ? "ACTIVE" : "SUSPENDED" })}
-        className={suspended ? "border-green-300 text-green-700" : "border-red-200 text-red-600 hover:bg-red-50"}
+        className={suspended ? "border-primary/20 text-primary" : "border-primary/20 text-destructive hover:bg-destructive/10"}
         title={suspended ? "Reactivate" : "Suspend"}
       >
         {busy === "status" ? <Loader2 size={13} className="animate-spin" /> : suspended ? <RotateCcw size={13} /> : <Ban size={13} />}
@@ -84,7 +84,7 @@ export function AdminDealerActions({ id, name, status, isFeatured, isVerified, c
           variant="outline"
           disabled={busy !== null}
           onClick={remove}
-          className="border-red-200 text-red-600 hover:bg-red-50"
+          className="border-primary/20 text-destructive hover:bg-destructive/10"
           title="Remove listing"
         >
           {busy === "delete" ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}

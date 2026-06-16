@@ -17,13 +17,13 @@ export default async function ReviewThankYouPage({ searchParams }: Props) {
   const isModeration = flagged === "1";
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-16 px-4">
-      <div className="max-w-lg w-full bg-white rounded-2xl border border-gray-100 shadow-lg p-8 text-center">
-        <CheckCircle2 className={`mx-auto mb-4 ${isModeration ? "text-amber-500" : "text-green-600"}`} size={48} />
-        <h1 className="text-2xl font-bold text-gray-900">
+    <div className="min-h-screen bg-muted flex items-center justify-center py-16 px-4">
+      <div className="max-w-lg w-full bg-card rounded-2xl border border-border shadow-lg p-8 text-center">
+        <CheckCircle2 className={`mx-auto mb-4 ${isModeration ? "text-primary" : "text-primary"}`} size={48} />
+        <h1 className="text-2xl font-bold text-foreground">
           {isModeration ? "Review submitted for review" : "Thank you for your review!"}
         </h1>
-        <p className="text-gray-600 mt-3 leading-relaxed">
+        <p className="text-muted-foreground mt-3 leading-relaxed">
           {isModeration
             ? "Our team will review your submission shortly. Once approved, it will appear on the dealership profile."
             : dealer
@@ -34,7 +34,7 @@ export default async function ReviewThankYouPage({ searchParams }: Props) {
         <div className="mt-8 space-y-3">
           {slug && (
             <Link href={`/dealership/${slug}`} className="block">
-              <Button className="w-full bg-gold-600 hover:bg-gold-700 text-white">
+              <Button className="w-full bg-primary hover:bg-primary/90 text-foreground">
                 View dealership profile
               </Button>
             </Link>
@@ -46,7 +46,7 @@ export default async function ReviewThankYouPage({ searchParams }: Props) {
             </Button>
           </Link>
           <Link href="/chicago" className="block">
-            <Button variant="ghost" className="w-full gap-2 text-gray-600">
+            <Button variant="ghost" className="w-full gap-2 text-muted-foreground">
               <Building2 size={16} />
               Browse Chicago dealerships
             </Button>

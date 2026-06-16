@@ -33,16 +33,16 @@ export async function ReviewsList({ dealershipId, page }: Props) {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="font-semibold text-gray-900">Reviews ({total})</h2>
+        <h2 className="font-semibold text-foreground">Reviews ({total})</h2>
       </div>
 
       {reviews.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-100 p-10 text-center shadow-sm">
-          <p className="text-gray-700 font-medium mb-1">No reviews yet</p>
-          <p className="text-gray-500 mb-5">Be the first to share your experience with this dealership.</p>
+        <div className="bg-card rounded-xl border border-border p-10 text-center shadow-sm">
+          <p className="text-foreground font-medium mb-1">No reviews yet</p>
+          <p className="text-muted-foreground mb-5">Be the first to share your experience with this dealership.</p>
           <Link
             href={`/write-review/${dealershipId}`}
-            className="inline-flex items-center justify-center h-10 px-5 rounded-lg bg-gold-gradient text-night-900 font-semibold hover:opacity-90 transition"
+            className="inline-flex items-center justify-center h-10 px-5 rounded-lg bg-ember text-night-900 font-semibold hover:opacity-90 transition"
           >
             Write the first review
           </Link>
@@ -58,13 +58,13 @@ export async function ReviewsList({ dealershipId, page }: Props) {
       {totalPages > 1 && (
         <div className="flex justify-center gap-2 mt-6">
           {page > 1 && (
-            <Link href={`?page=${page - 1}`} className="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50">
+            <Link href={`?page=${page - 1}`} className="px-4 py-2 text-sm border border-border rounded-lg hover:bg-muted">
               Previous
             </Link>
           )}
-          <span className="px-4 py-2 text-sm text-gray-600">Page {page} of {totalPages}</span>
+          <span className="px-4 py-2 text-sm text-muted-foreground">Page {page} of {totalPages}</span>
           {page < totalPages && (
-            <Link href={`?page=${page + 1}`} className="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50">
+            <Link href={`?page=${page + 1}`} className="px-4 py-2 text-sm border border-border rounded-lg hover:bg-muted">
               Next
             </Link>
           )}

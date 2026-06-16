@@ -86,9 +86,9 @@ export async function DealershipRoute({ slug, page = 1, highlightWrite = false }
         <ClaimModal dealershipId={dealer.id} dealershipName={dealer.name} dealershipSlug={dealer.slug} />
       </Suspense>
 
-      <div className="min-h-screen bg-gray-50 pb-20 md:pb-0">
+      <div className="min-h-screen bg-muted pb-20 md:pb-0">
         {highlightWrite && (
-          <div className="bg-gold-50 border-b border-gold/30 px-4 py-2.5 text-center text-sm text-gold-900">
+          <div className="bg-primary/10 border-b border-primary/30 px-4 py-2.5 text-center text-sm text-foreground">
             You&apos;re here to review <strong>{dealer.name}</strong> — tap Write Review below.
           </div>
         )}

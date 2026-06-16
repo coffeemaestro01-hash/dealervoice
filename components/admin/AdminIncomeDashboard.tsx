@@ -75,17 +75,17 @@ export function AdminIncomeDashboard({ initial }: { initial: IncomeDashboardStat
         <Stat label="Line items" value={stats.recent.length} />
       </div>
 
-      <div className="bg-white rounded-xl border p-6">
-        <h2 className="font-semibold text-gray-900 mb-4">By source (30d)</h2>
+      <div className="bg-card rounded-xl border p-6">
+        <h2 className="font-semibold text-foreground mb-4">By source (30d)</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {stats.totalsBySource.length === 0 ? (
-            <p className="text-sm text-gray-500 col-span-full">No income recorded yet — subscriptions and ad clicks will appear here.</p>
+            <p className="text-sm text-muted-foreground col-span-full">No income recorded yet — subscriptions and ad clicks will appear here.</p>
           ) : (
             stats.totalsBySource.map((r) => (
-              <div key={r.source} className="rounded-lg bg-gray-50 p-4">
-                <p className="text-xs text-gray-500">{SOURCE_LABELS[r.source]}</p>
-                <p className="text-lg font-bold text-gray-900">{formatIncomeMinor(r.amountMinor)}</p>
-                <p className="text-[10px] text-gray-400">{r.count} events</p>
+              <div key={r.source} className="rounded-lg bg-muted p-4">
+                <p className="text-xs text-muted-foreground">{SOURCE_LABELS[r.source]}</p>
+                <p className="text-lg font-bold text-foreground">{formatIncomeMinor(r.amountMinor)}</p>
+                <p className="text-[10px] text-muted-foreground">{r.count} events</p>
               </div>
             ))
           )}
@@ -93,11 +93,11 @@ export function AdminIncomeDashboard({ initial }: { initial: IncomeDashboardStat
       </div>
 
       {stats.totalsByCountry.length > 0 && (
-        <div className="bg-white rounded-xl border p-6">
-          <h2 className="font-semibold text-gray-900 mb-4">By country (30d)</h2>
+        <div className="bg-card rounded-xl border p-6">
+          <h2 className="font-semibold text-foreground mb-4">By country (30d)</h2>
           <div className="flex flex-wrap gap-2">
             {stats.totalsByCountry.map((r) => (
-              <span key={r.countryCode} className="text-sm rounded-full bg-gold-50 text-gold-900 px-3 py-1">
+              <span key={r.countryCode} className="text-sm rounded-full bg-primary/10 text-foreground px-3 py-1">
                 {r.countryCode}: {formatIncomeMinor(r.amountMinor)} ({r.count})
               </span>
             ))}
@@ -105,12 +105,12 @@ export function AdminIncomeDashboard({ initial }: { initial: IncomeDashboardStat
         </div>
       )}
 
-      <div className="bg-white rounded-xl border p-6">
-        <h2 className="font-semibold text-gray-900 mb-2">Record income manually</h2>
-        <p className="text-xs text-gray-500 mb-4">AdSense monthly payout, affiliate settlements, sponsorship cheques.</p>
+      <div className="bg-card rounded-xl border p-6">
+        <h2 className="font-semibold text-foreground mb-2">Record income manually</h2>
+        <p className="text-xs text-muted-foreground mb-4">AdSense monthly payout, affiliate settlements, sponsorship cheques.</p>
         <form onSubmit={submitManual} className="grid sm:grid-cols-2 gap-3 max-w-2xl">
           <label className="text-sm">
-            <span className="text-gray-600">Source</span>
+            <span className="text-muted-foreground">Source</span>
             <select
               className="mt-1 w-full border rounded-lg h-10 px-2"
               value={form.source}
@@ -122,7 +122,7 @@ export function AdminIncomeDashboard({ initial }: { initial: IncomeDashboardStat
             </select>
           </label>
           <label className="text-sm">
-            <span className="text-gray-600">Amount (USD)</span>
+            <span className="text-muted-foreground">Amount (USD)</span>
             <input
               type="number"
               step="0.01"
@@ -133,7 +133,7 @@ export function AdminIncomeDashboard({ initial }: { initial: IncomeDashboardStat
             />
           </label>
           <label className="text-sm sm:col-span-2">
-            <span className="text-gray-600">Description</span>
+            <span className="text-muted-foreground">Description</span>
             <input
               className="mt-1 w-full border rounded-lg h-10 px-3"
               value={form.description}
@@ -143,7 +143,7 @@ export function AdminIncomeDashboard({ initial }: { initial: IncomeDashboardStat
             />
           </label>
           <label className="text-sm">
-            <span className="text-gray-600">External ref (optional)</span>
+            <span className="text-muted-foreground">External ref (optional)</span>
             <input
               className="mt-1 w-full border rounded-lg h-10 px-3"
               value={form.externalRef}
@@ -152,7 +152,7 @@ export function AdminIncomeDashboard({ initial }: { initial: IncomeDashboardStat
             />
           </label>
           <label className="text-sm">
-            <span className="text-gray-600">Country (optional)</span>
+            <span className="text-muted-foreground">Country (optional)</span>
             <input
               className="mt-1 w-full border rounded-lg h-10 px-3"
               value={form.countryCode}
@@ -164,19 +164,19 @@ export function AdminIncomeDashboard({ initial }: { initial: IncomeDashboardStat
           <button
             type="submit"
             disabled={loading}
-            className="sm:col-span-2 h-10 rounded-lg bg-gold-700 text-white font-medium hover:bg-gold-800 disabled:opacity-50"
+            className="sm:col-span-2 h-10 rounded-lg bg-primary/90 text-foreground font-medium hover:bg-primary disabled:opacity-50"
           >
             {loading ? "Saving…" : "Record income"}
           </button>
-          {msg && <p className="text-sm text-gold-700 sm:col-span-2">{msg}</p>}
+          {msg && <p className="text-sm text-primary sm:col-span-2">{msg}</p>}
         </form>
       </div>
 
-      <div className="bg-white rounded-xl border overflow-hidden">
-        <h2 className="font-semibold text-gray-900 p-6 border-b">Recent ledger (30d)</h2>
+      <div className="bg-card rounded-xl border overflow-hidden">
+        <h2 className="font-semibold text-foreground p-6 border-b">Recent ledger (30d)</h2>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-left text-xs text-gray-500">
+            <thead className="bg-muted text-left text-xs text-muted-foreground">
               <tr>
                 <th className="p-3">Date</th>
                 <th className="p-3">Source</th>
@@ -187,12 +187,12 @@ export function AdminIncomeDashboard({ initial }: { initial: IncomeDashboardStat
             </thead>
             <tbody>
               {stats.recent.map((r) => (
-                <tr key={r.id} className="border-t border-gray-50">
+                <tr key={r.id} className="border-t border-border">
                   <td className="p-3 whitespace-nowrap">{new Date(r.createdAt).toLocaleDateString()}</td>
                   <td className="p-3">{SOURCE_LABELS[r.source]}</td>
                   <td className="p-3 font-medium">{formatIncomeMinor(r.amountMinor, r.currency)}</td>
                   <td className="p-3 text-xs">{r.status}</td>
-                  <td className="p-3 text-gray-600 max-w-xs truncate">{r.description ?? "—"}</td>
+                  <td className="p-3 text-muted-foreground max-w-xs truncate">{r.description ?? "—"}</td>
                 </tr>
               ))}
             </tbody>
@@ -205,9 +205,9 @@ export function AdminIncomeDashboard({ initial }: { initial: IncomeDashboardStat
 
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="bg-white rounded-xl border p-5">
-      <p className="text-sm text-gray-500">{label}</p>
-      <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
+    <div className="bg-card rounded-xl border p-5">
+      <p className="text-sm text-muted-foreground">{label}</p>
+      <p className="text-2xl font-bold text-foreground mt-1">{value}</p>
     </div>
   );
 }

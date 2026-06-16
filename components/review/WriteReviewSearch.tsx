@@ -20,7 +20,7 @@ export function WriteReviewSearch() {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 max-w-xl">
       <div className="relative flex-1">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
         <Input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -29,7 +29,7 @@ export function WriteReviewSearch() {
           aria-label="Search dealership to review"
         />
       </div>
-      <Button type="submit" className="h-12 px-6 bg-gold-600 hover:bg-gold-700 text-white font-semibold">
+      <Button type="submit" className="h-12 px-6 bg-primary hover:bg-primary/90 text-foreground font-semibold">
         Find dealership
       </Button>
     </form>

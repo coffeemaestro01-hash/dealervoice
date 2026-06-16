@@ -41,30 +41,30 @@ export function AdminReportsPanel() {
     }
   }
 
-  if (loading) return <p className="text-sm text-gray-500">Loading reports…</p>;
-  if (reports.length === 0) return <p className="text-sm text-gray-500 p-6">No open reports.</p>;
+  if (loading) return <p className="text-sm text-muted-foreground">Loading reports…</p>;
+  if (reports.length === 0) return <p className="text-sm text-muted-foreground p-6">No open reports.</p>;
 
   return (
-    <div className="divide-y divide-gray-50">
+    <div className="divide-y divide-border">
       {reports.map((r) => (
         <div key={r.id} className="px-4 py-4 space-y-2">
           <div className="flex items-start justify-between gap-4">
             <div>
               <div className="flex items-center gap-2">
                 <Badge variant="outline">{r.reason.replace(/_/g, " ")}</Badge>
-                <span className="text-xs text-gray-400">{new Date(r.createdAt).toLocaleString()}</span>
+                <span className="text-xs text-muted-foreground">{new Date(r.createdAt).toLocaleString()}</span>
               </div>
-              {r.review && <p className="font-medium text-gray-900 mt-1">Review: {r.review.title}</p>}
+              {r.review && <p className="font-medium text-foreground mt-1">Review: {r.review.title}</p>}
               {r.dealership && (
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-muted-foreground">
                   Dealer:{" "}
-                  <Link href={`/dealership/${r.dealership.slug}`} className="text-gold-700 hover:underline">
+                  <Link href={`/dealership/${r.dealership.slug}`} className="text-primary hover:underline">
                     {r.dealership.name}
                   </Link>
                 </p>
               )}
-              {r.description && <p className="text-sm text-gray-500">{r.description}</p>}
-              <p className="text-xs text-gray-400">Reported by {r.reportedBy.name}</p>
+              {r.description && <p className="text-sm text-muted-foreground">{r.description}</p>}
+              <p className="text-xs text-muted-foreground">Reported by {r.reportedBy.name}</p>
             </div>
             <div className="flex gap-2 shrink-0">
               {r.review && (

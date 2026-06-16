@@ -18,8 +18,8 @@ export default async function AdminAdsPage() {
   return (
     <div className="p-6 lg:p-8 space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Ad revenue</h1>
-        <p className="text-sm text-gray-500 mt-1">Live affiliate & sponsored placements — clicks, impressions, estimated CPC revenue.</p>
+        <h1 className="text-2xl font-bold text-foreground">Ad revenue</h1>
+        <p className="text-sm text-muted-foreground mt-1">Live affiliate & sponsored placements — clicks, impressions, estimated CPC revenue.</p>
       </div>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -32,7 +32,7 @@ export default async function AdminAdsPage() {
       <AdmitadConnectionPanel />
 
       <div>
-        <h2 className="font-semibold text-gray-900 mb-4">Edit placements & affiliate IDs</h2>
+        <h2 className="font-semibold text-foreground mb-4">Edit placements & affiliate IDs</h2>
         <AdminAdPlacementEditor
           placements={placements.map((p) => ({
             ...p,
@@ -41,10 +41,10 @@ export default async function AdminAdsPage() {
             resolvedHref: resolveAdHref(p.ctaHref, p.affiliateRef, p.affiliateParam),
           }))}
         />
-        <p className="text-xs text-gray-500 mt-4">
-          Sponsored dealers: <Link href="/dashboard/admin/sponsors" className="text-gold-700 hover:underline">Sponsors</Link>
+        <p className="text-xs text-muted-foreground mt-4">
+          Sponsored dealers: <Link href="/dashboard/admin/sponsors" className="text-primary hover:underline">Sponsors</Link>
           {" · "}
-          <a href="mailto:advertise@dealervoice.io" className="text-gold-700 hover:underline">advertise@dealervoice.io</a>
+          <a href="mailto:advertise@dealervoice.io" className="text-primary hover:underline">advertise@dealervoice.io</a>
         </p>
       </div>
     </div>
@@ -53,9 +53,9 @@ export default async function AdminAdsPage() {
 
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-100 p-5">
-      <p className="text-sm text-gray-500">{label}</p>
-      <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
+    <div className="bg-card rounded-xl border border-border p-5">
+      <p className="text-sm text-muted-foreground">{label}</p>
+      <p className="text-2xl font-bold text-foreground mt-1">{value}</p>
     </div>
   );
 }

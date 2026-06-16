@@ -84,17 +84,17 @@ export function AdminAnalyticsDashboard() {
     );
   }
 
-  if (!data) return <p className="text-gray-500">No analytics data yet. Traffic will appear as users visit the site.</p>;
+  if (!data) return <p className="text-muted-foreground">No analytics data yet. Traffic will appear as users visit the site.</p>;
 
   const kpis = [
-    { label: "Page views", value: data.pageViews.toLocaleString(), icon: Eye, color: "text-gold-700 bg-gold-50" },
-    { label: "Unique sessions", value: data.uniqueSessions.toLocaleString(), icon: Users, color: "text-blue-600 bg-blue-50" },
-    { label: "Unique visitors", value: data.uniqueVisitors.toLocaleString(), icon: Globe, color: "text-emerald-600 bg-emerald-50" },
-    { label: "Logged-in users", value: data.loggedInUsers.toLocaleString(), icon: Users, color: "text-purple-600 bg-purple-50" },
-    { label: "Pages / session", value: String(data.avgPagesPerSession), icon: TrendingUp, color: "text-amber-600 bg-amber-50" },
-    { label: "Active sessions (24h)", value: data.activeSessions24h.toLocaleString(), icon: Activity, color: "text-green-600 bg-green-50" },
-    { label: "Ad clicks", value: data.adClicks.toLocaleString(), icon: MousePointerClick, color: "text-indigo-600 bg-indigo-50" },
-    { label: "Ad CTR", value: `${data.adCtr}%`, icon: MousePointerClick, color: "text-violet-600 bg-violet-50" },
+    { label: "Page views", value: data.pageViews.toLocaleString(), icon: Eye, color: "text-primary bg-primary/10" },
+    { label: "Unique sessions", value: data.uniqueSessions.toLocaleString(), icon: Users, color: "text-primary bg-muted" },
+    { label: "Unique visitors", value: data.uniqueVisitors.toLocaleString(), icon: Globe, color: "text-primary bg-primary/10" },
+    { label: "Logged-in users", value: data.loggedInUsers.toLocaleString(), icon: Users, color: "text-muted-foreground bg-muted" },
+    { label: "Pages / session", value: String(data.avgPagesPerSession), icon: TrendingUp, color: "text-primary bg-primary/10" },
+    { label: "Active sessions (24h)", value: data.activeSessions24h.toLocaleString(), icon: Activity, color: "text-primary bg-muted" },
+    { label: "Ad clicks", value: data.adClicks.toLocaleString(), icon: MousePointerClick, color: "text-primary bg-primary/10" },
+    { label: "Ad CTR", value: `${data.adCtr}%`, icon: MousePointerClick, color: "text-primary bg-primary/10" },
   ];
 
   const productKpis = [
@@ -107,7 +107,7 @@ export function AdminAnalyticsDashboard() {
   return (
     <div className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <p className="text-sm text-gray-500">Full-site tracking — every page view, session, referrer, and device.</p>
+        <p className="text-sm text-muted-foreground">Full-site tracking — every page view, session, referrer, and device.</p>
         <Select value={period} onValueChange={(v) => { setPeriod(v as Period); setEventPage(1); }}>
           <SelectTrigger className="w-36">
             <SelectValue />
@@ -124,11 +124,11 @@ export function AdminAnalyticsDashboard() {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {kpis.map((k) => (
-          <div key={k.label} className="bg-white rounded-xl border p-4">
+          <div key={k.label} className="bg-card rounded-xl border p-4">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-xs text-gray-500">{k.label}</p>
-                <p className="text-xl font-bold text-gray-900 mt-1">{k.value}</p>
+                <p className="text-xs text-muted-foreground">{k.label}</p>
+                <p className="text-xl font-bold text-foreground mt-1">{k.value}</p>
               </div>
               <div className={cn("p-2 rounded-lg", k.color)}>
                 <k.icon size={16} />
@@ -140,16 +140,16 @@ export function AdminAnalyticsDashboard() {
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {productKpis.map((k) => (
-          <div key={k.label} className="bg-gray-950 text-white rounded-xl p-4 text-center">
-            <p className="text-2xl font-bold text-gold-400">{k.value}</p>
-            <p className="text-xs text-gray-400 mt-1">{k.label}</p>
+          <div key={k.label} className="bg-muted text-foreground rounded-xl p-4 text-center">
+            <p className="text-2xl font-bold text-primary">{k.value}</p>
+            <p className="text-xs text-muted-foreground mt-1">{k.label}</p>
           </div>
         ))}
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl border p-5">
-          <h2 className="font-semibold text-gray-900 mb-4">Traffic over time</h2>
+        <div className="bg-card rounded-xl border p-5">
+          <h2 className="font-semibold text-foreground mb-4">Traffic over time</h2>
           <ResponsiveContainer width="100%" height={260}>
             <LineChart data={data.dailyPageViews}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -161,8 +161,8 @@ export function AdminAnalyticsDashboard() {
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white rounded-xl border p-5">
-          <h2 className="font-semibold text-gray-900 mb-4">Conversion funnel</h2>
+        <div className="bg-card rounded-xl border p-5">
+          <h2 className="font-semibold text-foreground mb-4">Conversion funnel</h2>
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={funnel ?? []} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -176,11 +176,11 @@ export function AdminAnalyticsDashboard() {
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
-        <div className="bg-white rounded-xl border p-5 lg:col-span-2">
-          <h2 className="font-semibold text-gray-900 mb-4">Top pages (up to 100)</h2>
+        <div className="bg-card rounded-xl border p-5 lg:col-span-2">
+          <h2 className="font-semibold text-foreground mb-4">Top pages (up to 100)</h2>
           <div className="max-h-80 overflow-y-auto">
             <table className="w-full text-sm">
-              <thead className="text-left text-gray-500 border-b sticky top-0 bg-white">
+              <thead className="text-left text-muted-foreground border-b sticky top-0 bg-card">
                 <tr>
                   <th className="pb-2">Path</th>
                   <th className="pb-2 text-right">Views</th>
@@ -188,8 +188,8 @@ export function AdminAnalyticsDashboard() {
               </thead>
               <tbody>
                 {data.topPages.map((p: { path: string; views: number }) => (
-                  <tr key={p.path} className="border-b border-gray-50">
-                    <td className="py-2 font-mono text-xs text-gray-800 max-w-md truncate">{p.path}</td>
+                  <tr key={p.path} className="border-b border-border">
+                    <td className="py-2 font-mono text-xs text-foreground max-w-md truncate">{p.path}</td>
                     <td className="py-2 text-right font-medium">{p.views}</td>
                   </tr>
                 ))}
@@ -198,8 +198,8 @@ export function AdminAnalyticsDashboard() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border p-5">
-          <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <div className="bg-card rounded-xl border p-5">
+          <h2 className="font-semibold text-foreground mb-4 flex items-center gap-2">
             <Globe size={16} /> Countries
           </h2>
           <ResponsiveContainer width="100%" height={220}>
@@ -216,15 +216,15 @@ export function AdminAnalyticsDashboard() {
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl border p-5">
-          <h2 className="font-semibold text-gray-900 mb-4">Top referrers</h2>
+        <div className="bg-card rounded-xl border p-5">
+          <h2 className="font-semibold text-foreground mb-4">Top referrers</h2>
           <div className="space-y-2 max-h-64 overflow-y-auto">
             {data.topReferrers.length === 0 ? (
-              <p className="text-sm text-gray-500">No referrer data yet</p>
+              <p className="text-sm text-muted-foreground">No referrer data yet</p>
             ) : (
               data.topReferrers.map((r: { referrer: string; views: number }) => (
-                <div key={r.referrer} className="flex justify-between text-sm py-1 border-b border-gray-50">
-                  <span className="truncate text-gray-700 max-w-[80%]">{r.referrer}</span>
+                <div key={r.referrer} className="flex justify-between text-sm py-1 border-b border-border">
+                  <span className="truncate text-foreground max-w-[80%]">{r.referrer}</span>
                   <span className="font-medium">{r.views}</span>
                 </div>
               ))
@@ -232,13 +232,13 @@ export function AdminAnalyticsDashboard() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border p-5">
-          <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <div className="bg-card rounded-xl border p-5">
+          <h2 className="font-semibold text-foreground mb-4 flex items-center gap-2">
             <Smartphone size={16} /> Devices & browsers
           </h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-xs font-semibold text-gray-500 mb-2">Devices</p>
+              <p className="text-xs font-semibold text-muted-foreground mb-2">Devices</p>
               {data.devices.map((d: { device: string; views: number }) => (
                 <div key={d.device} className="flex justify-between text-sm py-1">
                   <span>{d.device}</span>
@@ -247,7 +247,7 @@ export function AdminAnalyticsDashboard() {
               ))}
             </div>
             <div>
-              <p className="text-xs font-semibold text-gray-500 mb-2">Browsers</p>
+              <p className="text-xs font-semibold text-muted-foreground mb-2">Browsers</p>
               {data.browsers.slice(0, 8).map((b: { browser: string; views: number }) => (
                 <div key={b.browser} className="flex justify-between text-sm py-1">
                   <span className="truncate max-w-[120px]">{b.browser}</span>
@@ -259,12 +259,12 @@ export function AdminAnalyticsDashboard() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border p-5">
+      <div className="bg-card rounded-xl border p-5">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+          <h2 className="font-semibold text-foreground flex items-center gap-2">
             <FileText size={16} /> Event log
             {eventLog && (
-              <span className="text-xs font-normal text-gray-500">
+              <span className="text-xs font-normal text-muted-foreground">
                 {eventLog.total.toLocaleString()} events · page {eventLog.page} of {eventLog.pages}
               </span>
             )}
@@ -290,7 +290,7 @@ export function AdminAnalyticsDashboard() {
         </div>
         <div className="overflow-x-auto max-h-96 overflow-y-auto">
           <table className="w-full text-xs">
-            <thead className="text-left text-gray-500 border-b sticky top-0 bg-white">
+            <thead className="text-left text-muted-foreground border-b sticky top-0 bg-card">
               <tr>
                 <th className="pb-2 pr-3">Time</th>
                 <th className="pb-2 pr-3">Type</th>
@@ -310,12 +310,12 @@ export function AdminAnalyticsDashboard() {
                 device?: string;
                 userRole?: string;
               }) => (
-                <tr key={e.id} className="border-b border-gray-50 hover:bg-gray-50">
-                  <td className="py-2 pr-3 whitespace-nowrap text-gray-500">
+                <tr key={e.id} className="border-b border-border hover:bg-muted">
+                  <td className="py-2 pr-3 whitespace-nowrap text-muted-foreground">
                     {new Date(e.createdAt).toLocaleString()}
                   </td>
                   <td className="py-2 pr-3">
-                    <span className="px-1.5 py-0.5 rounded bg-gray-100 font-mono">{e.eventType}</span>
+                    <span className="px-1.5 py-0.5 rounded bg-muted font-mono">{e.eventType}</span>
                   </td>
                   <td className="py-2 pr-3 font-mono max-w-xs truncate">{e.path}</td>
                   <td className="py-2 pr-3">{e.country ?? "—"}</td>

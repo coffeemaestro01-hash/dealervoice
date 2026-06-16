@@ -8,10 +8,10 @@ export function StatCalloutGrid({ stats }: { stats: ResearchStat[] }) {
       {stats.map((s) => (
         <div
           key={s.label}
-          className="rounded-xl border border-gold-500/25 bg-gold-500/5 px-4 py-5 text-center"
+          className="rounded-xl border border-primary/25 bg-primary/10 px-4 py-5 text-center"
         >
-          <p className="text-2xl md:text-3xl font-extrabold text-gold-400">{s.value}</p>
-          <p className="text-xs text-gray-400 mt-1 leading-snug">{s.label}</p>
+          <p className="text-2xl md:text-3xl font-extrabold text-primary">{s.value}</p>
+          <p className="text-xs text-muted-foreground mt-1 leading-snug">{s.label}</p>
         </div>
       ))}
     </div>

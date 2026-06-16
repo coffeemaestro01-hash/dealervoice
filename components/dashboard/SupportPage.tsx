@@ -65,19 +65,19 @@ export function SupportPage() {
   }
 
   if (loading) {
-    return <div className="p-8 text-gray-500">Loading support tickets…</div>;
+    return <div className="p-8 text-muted-foreground">Loading support tickets…</div>;
   }
 
   return (
     <div className="p-6 lg:p-8 max-w-4xl">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-gold-50 text-gold-700">
+          <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
             <LifeBuoy size={22} />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Support</h1>
-            <p className="text-gray-500 text-sm">Get help with billing, claims, reviews, and more.</p>
+            <h1 className="text-2xl font-bold text-foreground">Support</h1>
+            <p className="text-muted-foreground text-sm">Get help with billing, claims, reviews, and more.</p>
           </div>
         </div>
         <Button onClick={() => setShowForm(!showForm)}>
@@ -94,11 +94,11 @@ export function SupportPage() {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-gray-700">Category</label>
+                <label className="text-sm font-medium text-foreground">Category</label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value as (typeof CATEGORIES)[number])}
-                  className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                  className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
                 >
                   {CATEGORIES.map((c) => (
                     <option key={c} value={c}>
@@ -108,23 +108,23 @@ export function SupportPage() {
                 </select>
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700">Subject</label>
+                <label className="text-sm font-medium text-foreground">Subject</label>
                 <input
                   required
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                  className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
                   placeholder="Brief summary of your issue"
                 />
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700">Message</label>
+                <label className="text-sm font-medium text-foreground">Message</label>
                 <textarea
                   required
                   rows={4}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                  className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
                   placeholder="Describe your issue in detail"
                 />
               </div>
@@ -138,8 +138,8 @@ export function SupportPage() {
 
       {tickets.length === 0 ? (
         <Card className="border-dashed py-12">
-          <CardContent className="text-center text-gray-500">
-            <MessageSquare className="w-8 h-8 mx-auto mb-3 text-gray-300" />
+          <CardContent className="text-center text-muted-foreground">
+            <MessageSquare className="w-8 h-8 mx-auto mb-3 text-muted-foreground" />
             <p>No support tickets yet. Create one if you need help.</p>
           </CardContent>
         </Card>
@@ -152,27 +152,27 @@ export function SupportPage() {
                   <CardTitle className="text-base font-semibold">{ticket.subject}</CardTitle>
                   <Badge variant="outline">{ticket.status.replace(/_/g, " ")}</Badge>
                 </div>
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-muted-foreground">
                   {ticket.category.replace(/_/g, " ")} · {new Date(ticket.createdAt).toLocaleString()}
                 </p>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-gray-700 whitespace-pre-wrap">{ticket.message}</p>
+                <p className="text-sm text-foreground whitespace-pre-wrap">{ticket.message}</p>
                 {ticket.replies.length > 0 && (
                   <div className="mt-4 pt-4 border-t space-y-3">
                     {ticket.replies.map((reply) => (
                       <div
                         key={reply.id}
                         className={`rounded-lg p-3 text-sm ${
-                          reply.isStaff ? "bg-gold-50 border border-gold-100" : "bg-gray-50"
+                          reply.isStaff ? "bg-primary/10 border border-primary/30" : "bg-muted"
                         }`}
                       >
-                        <p className="text-xs font-medium text-gray-500 mb-1">
+                        <p className="text-xs font-medium text-muted-foreground mb-1">
                           {reply.user.name}
                           {reply.isStaff ? " · DealerVoice Support" : ""} ·{" "}
                           {new Date(reply.createdAt).toLocaleString()}
                         </p>
-                        <p className="text-gray-700 whitespace-pre-wrap">{reply.body}</p>
+                        <p className="text-foreground whitespace-pre-wrap">{reply.body}</p>
                       </div>
                     ))}
                   </div>

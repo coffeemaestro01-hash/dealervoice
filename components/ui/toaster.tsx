@@ -18,8 +18,8 @@ export function Toaster() {
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             className={`pointer-events-auto rounded-xl shadow-lg border p-4 flex items-start gap-3 ${
               t.variant === "destructive"
-                ? "bg-red-50 border-red-200 text-red-900"
-                : "bg-white border-gray-200 text-gray-900"
+                ? "bg-destructive/10 border-primary/20 text-destructive"
+                : "bg-card border-border text-foreground"
             }`}
           >
             <div className="flex-1 min-w-0">

@@ -102,13 +102,13 @@ export function TeamMemberForm({ dealershipId, initialData, onSuccess, onCancel 
           <div className="space-y-2">
             <Label htmlFor="name">Full Name</Label>
             <Input id="name" placeholder="e.g. Rahul Sharma" {...register("name")} />
-            {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
+            {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="title">Job Title</Label>
             <Input id="title" placeholder="e.g. Sales Manager" {...register("title")} />
-            {errors.title && <p className="text-xs text-red-500">{errors.title.message}</p>}
+            {errors.title && <p className="text-xs text-destructive">{errors.title.message}</p>}
           </div>
         </div>
 
@@ -120,7 +120,7 @@ export function TeamMemberForm({ dealershipId, initialData, onSuccess, onCancel 
             rows={3}
             {...register("bio")}
           />
-          {errors.bio && <p className="text-xs text-red-500">{errors.bio.message}</p>}
+          {errors.bio && <p className="text-xs text-destructive">{errors.bio.message}</p>}
         </div>
       </div>
 
@@ -131,7 +131,7 @@ export function TeamMemberForm({ dealershipId, initialData, onSuccess, onCancel 
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="bg-gold-600 hover:bg-gold-700 text-white min-w-[100px]"
+          className="bg-primary hover:bg-primary/90 text-foreground min-w-[100px]"
         >
           {isSubmitting ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Saving...</> : "Save Member"}
         </Button>

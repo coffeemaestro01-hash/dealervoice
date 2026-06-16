@@ -23,8 +23,8 @@ export default async function AdminMerchandisingPage() {
 
   return (
     <div className="p-6 lg:p-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">Homepage merchandising</h1>
-      <p className="text-sm text-gray-500 mb-6">Pin dealers to the Trending section (lower number = higher position).</p>
+      <h1 className="text-2xl font-bold text-foreground mb-2">Homepage merchandising</h1>
+      <p className="text-sm text-muted-foreground mb-6">Pin dealers to the Trending section (lower number = higher position).</p>
       <AdminMerchManager dealers={dealers} pinned={pinned} />
     </div>
   );

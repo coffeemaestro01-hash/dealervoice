@@ -57,15 +57,15 @@ export function RegisterDealershipForm({
   if (!isAuthenticated) {
     const returnTo = `/register-dealership${prefilledName ? `?name=${encodeURIComponent(prefilledName)}` : ""}`;
     return (
-      <div className="rounded-2xl border border-gray-100 bg-white p-8 shadow-sm text-center max-w-lg mx-auto">
-        <Store className="mx-auto text-gold-600 mb-4" size={36} />
-        <h2 className="text-xl font-bold text-gray-900 mb-2">Create a free account first</h2>
-        <p className="text-gray-600 text-sm mb-6">
+      <div className="rounded-2xl border border-border bg-card p-8 shadow-sm text-center max-w-lg mx-auto">
+        <Store className="mx-auto text-primary mb-4" size={36} />
+        <h2 className="text-xl font-bold text-foreground mb-2">Create a free account first</h2>
+        <p className="text-muted-foreground text-sm mb-6">
           Sign up or sign in, then list your dealership on DealerVoice in under two minutes.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link href={`/register?callbackUrl=${encodeURIComponent(returnTo)}`}>
-            <Button className="bg-gold-gradient text-night-900 font-semibold border-0 w-full sm:w-auto">
+            <Button className="bg-ember text-night-900 font-semibold border-0 w-full sm:w-auto">
               Create account
             </Button>
           </Link>
@@ -109,7 +109,7 @@ export function RegisterDealershipForm({
   }
 
   return (
-    <form onSubmit={submit} className="rounded-2xl border border-gray-100 bg-white p-6 md:p-8 shadow-sm space-y-5 max-w-xl mx-auto">
+    <form onSubmit={submit} className="rounded-2xl border border-border bg-card p-6 md:p-8 shadow-sm space-y-5 max-w-xl mx-auto">
       <div>
         <Label htmlFor="dealer-name">Dealership name *</Label>
         <Input
@@ -129,7 +129,7 @@ export function RegisterDealershipForm({
             required
             value={form.category}
             onChange={(e) => setForm({ ...form, category: e.target.value as typeof form.category })}
-            className="mt-1 w-full rounded-md border border-gray-200 px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm"
           >
             {CATEGORIES.map((c) => (
               <option key={c.value} value={c.value}>{c.label}</option>
@@ -143,7 +143,7 @@ export function RegisterDealershipForm({
             required
             value={form.countryId}
             onChange={(e) => setForm({ ...form, countryId: e.target.value })}
-            className="mt-1 w-full rounded-md border border-gray-200 px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm"
           >
             {countries.map((c) => (
               <option key={c.id} value={c.id}>{c.name}</option>
@@ -179,11 +179,11 @@ export function RegisterDealershipForm({
         <Label htmlFor="website">Website</Label>
         <Input id="website" type="url" placeholder="https://" value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} className="mt-1" />
       </div>
-      {error && <p className="text-red-600 text-sm">{error}</p>}
-      <Button type="submit" disabled={busy} className="w-full bg-gold-gradient text-night-900 font-semibold border-0">
+      {error && <p className="text-destructive text-sm">{error}</p>}
+      <Button type="submit" disabled={busy} className="w-full bg-ember text-night-900 font-semibold border-0">
         {busy ? <><Loader2 size={16} className="animate-spin mr-2" />Creating listing…</> : "List my dealership"}
       </Button>
-      <p className="text-xs text-gray-500 text-center">
+      <p className="text-xs text-muted-foreground text-center">
         Free to list. You&apos;ll manage your profile from the dealer dashboard.
       </p>
     </form>

@@ -120,13 +120,13 @@ export function BillingPage() {
   }
 
   if (loading) {
-    return <div className="p-8 text-gray-500">Loading billing…</div>;
+    return <div className="p-8 text-muted-foreground">Loading billing…</div>;
   }
 
   if (!dealership) {
     return (
       <div className="p-8 text-center">
-        <p className="text-gray-500">No dealership linked to your account.</p>
+        <p className="text-muted-foreground">No dealership linked to your account.</p>
       </div>
     );
   }
@@ -134,12 +134,12 @@ export function BillingPage() {
   return (
     <div className="p-6 lg:p-8 max-w-4xl">
       <div className="flex items-center gap-3 mb-6">
-        <div className="p-2.5 rounded-xl bg-gold-50 text-gold-700">
+        <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
           <CreditCard size={22} />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Billing & Plans</h1>
-          <p className="text-gray-500 text-sm">{dealership.name}</p>
+          <h1 className="text-2xl font-bold text-foreground">Billing & Plans</h1>
+          <p className="text-muted-foreground text-sm">{dealership.name}</p>
         </div>
       </div>
 
@@ -151,14 +151,14 @@ export function BillingPage() {
         showUpgradeQuery={showUpgrade}
       />
 
-      <div className="bg-white rounded-xl border border-gray-100 p-5 mb-8 shadow-sm">
-        <p className="text-sm text-gray-500 mb-1">Current plan</p>
+      <div className="bg-card rounded-xl border border-border p-5 mb-8 shadow-sm">
+        <p className="text-sm text-muted-foreground mb-1">Current plan</p>
         <div className="flex items-center gap-3">
-          <span className="text-xl font-bold text-gray-900">{currentPlan}</span>
+          <span className="text-xl font-bold text-foreground">{currentPlan}</span>
           <Badge variant="outline">{dealership.subscription?.status ?? "ACTIVE"}</Badge>
         </div>
         {dealership.subscription?.currentPeriodEnd && (
-          <p className="text-xs text-gray-400 mt-2">
+          <p className="text-xs text-muted-foreground mt-2">
             Renews {new Date(dealership.subscription.currentPeriodEnd).toLocaleDateString()}
           </p>
         )}
@@ -176,15 +176,15 @@ export function BillingPage() {
       </div>
 
       {invoices.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-100 p-5 mb-8 shadow-sm">
+        <div className="bg-card rounded-xl border border-border p-5 mb-8 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
-            <FileText size={18} className="text-gold-700" />
-            <h2 className="font-semibold text-gray-900">Invoice history</h2>
+            <FileText size={18} className="text-primary" />
+            <h2 className="font-semibold text-foreground">Invoice history</h2>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left text-gray-500 border-b">
+                <tr className="text-left text-muted-foreground border-b">
                   <th className="pb-2 pr-4 font-medium">Invoice</th>
                   <th className="pb-2 pr-4 font-medium">Type</th>
                   <th className="pb-2 pr-4 font-medium">Amount</th>
@@ -198,7 +198,7 @@ export function BillingPage() {
                     <td className="py-3 pr-4 font-mono text-xs">{inv.invoiceNumber ?? inv.id.slice(0, 8)}</td>
                     <td className="py-3 pr-4 capitalize">{inv.type.toLowerCase().replace(/_/g, " ")}</td>
                     <td className="py-3 pr-4">{formatMoney(inv.amount, inv.currency)}</td>
-                    <td className="py-3 pr-4 text-gray-500">
+                    <td className="py-3 pr-4 text-muted-foreground">
                       {new Date(inv.paidAt ?? inv.invoiceDate).toLocaleDateString()}
                     </td>
                     <td className="py-3">
@@ -207,12 +207,12 @@ export function BillingPage() {
                           href={inv.pdfUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-gold-700 hover:underline"
+                          className="inline-flex items-center gap-1 text-primary hover:underline"
                         >
                           PDF <ExternalLink size={12} />
                         </a>
                       ) : (
-                        <span className="text-gray-300">—</span>
+                        <span className="text-muted-foreground">—</span>
                       )}
                     </td>
                   </tr>
@@ -229,7 +229,7 @@ export function BillingPage() {
             key={i}
             onClick={() => setInterval(i)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              interval === i ? "bg-gold-800 text-white" : "bg-white border border-gray-200 text-gray-600 hover:border-gold-300"
+              interval === i ? "bg-primary text-foreground" : "bg-card border border-border text-muted-foreground hover:border-primary/30"
             }`}
           >
             {i === "monthly" ? "Monthly" : "Annual (save ~17%)"}
@@ -237,11 +237,11 @@ export function BillingPage() {
         ))}
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-100 p-5 mb-6 shadow-sm">
-        <label htmlFor="promo-code" className="text-sm font-medium text-gray-700">
+      <div className="bg-card rounded-xl border border-border p-5 mb-6 shadow-sm">
+        <label htmlFor="promo-code" className="text-sm font-medium text-foreground">
           Promotion code
         </label>
-        <p className="text-xs text-gray-500 mt-0.5 mb-2">Optional — applied at checkout if you have one.</p>
+        <p className="text-xs text-muted-foreground mt-0.5 mb-2">Optional — applied at checkout if you have one.</p>
         <input
           id="promo-code"
           type="text"
@@ -249,7 +249,7 @@ export function BillingPage() {
           onChange={(e) => setPromotionCode(e.target.value.toUpperCase())}
           placeholder="Enter code"
           autoComplete="off"
-          className="w-full max-w-xs rounded-lg border border-gray-200 px-3 py-2 text-sm font-mono uppercase"
+          className="w-full max-w-xs rounded-lg border border-border px-3 py-2 text-sm font-mono uppercase"
         />
       </div>
 
@@ -260,24 +260,24 @@ export function BillingPage() {
           return (
             <div
               key={plan.key}
-              className={`bg-white rounded-xl border p-6 shadow-sm ${plan.key === "PRO" ? "border-gold-300 ring-1 ring-gold-100" : "border-gray-100"}`}
+              className={`bg-card rounded-xl border p-6 shadow-sm ${plan.key === "PRO" ? "border-primary/30 ring-1 ring-primary" : "border-border"}`}
             >
-              <h3 className="text-lg font-bold text-gray-900">{plan.name}</h3>
-              <p className="text-2xl font-bold text-gray-900 mt-2">
+              <h3 className="text-lg font-bold text-foreground">{plan.name}</h3>
+              <p className="text-2xl font-bold text-foreground mt-2">
                 {price}
-                <span className="text-sm font-normal text-gray-500">/{interval === "monthly" ? "mo" : "yr"}</span>
+                <span className="text-sm font-normal text-muted-foreground">/{interval === "monthly" ? "mo" : "yr"}</span>
               </p>
-              <ul className="mt-4 space-y-2 text-sm text-gray-600">
+              <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                 {plan.features.map((f) => (
                   <li key={f} className="flex items-center gap-2">
-                    <Check size={14} className="text-green-600 shrink-0" />
+                    <Check size={14} className="text-primary shrink-0" />
                     {f}
                   </li>
                 ))}
               </ul>
               <div className="mt-6">
                 {isCurrent ? (
-                  <p className="text-center text-sm text-gold-700 font-medium py-2">Current plan</p>
+                  <p className="text-center text-sm text-primary font-medium py-2">Current plan</p>
                 ) : (
                   <SubscriptionCheckoutButton
                     dealershipId={dealership.id}

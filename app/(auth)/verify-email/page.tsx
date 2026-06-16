@@ -34,25 +34,25 @@ function VerifyInner() {
     <div className="text-center">
       {state === "loading" && (
         <>
-          <Loader2 className="mx-auto text-gold-500 animate-spin mb-4" size={48} />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Verifying your email…</h1>
-          <p className="text-gray-600">One moment.</p>
+          <Loader2 className="mx-auto text-primary animate-spin mb-4" size={48} />
+          <h1 className="text-2xl font-bold text-foreground mb-2">Verifying your email…</h1>
+          <p className="text-muted-foreground">One moment.</p>
         </>
       )}
       {state === "ok" && (
         <>
-          <CheckCircle2 className="mx-auto text-green-500 mb-4" size={48} />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Email verified! 🎉</h1>
-          <p className="text-gray-600 mb-6">Your account is now active. You can sign in and start exploring.</p>
-          <Link href="/login"><Button className="bg-gold-gradient text-night-900 font-semibold border-0 hover:opacity-90">Sign in</Button></Link>
+          <CheckCircle2 className="mx-auto text-primary mb-4" size={48} />
+          <h1 className="text-2xl font-bold text-foreground mb-2">Email verified! 🎉</h1>
+          <p className="text-muted-foreground mb-6">Your account is now active. You can sign in and start exploring.</p>
+          <Link href="/login"><Button className="bg-ember text-night-900 font-semibold border-0 hover:opacity-90">Sign in</Button></Link>
         </>
       )}
       {state === "error" && (
         <>
-          <XCircle className="mx-auto text-red-500 mb-4" size={48} />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Verification failed</h1>
-          <p className="text-gray-600 mb-6">{message}</p>
-          <Link href="/register"><Button variant="outline" className="border-gold/50 text-gold-700 hover:bg-gold-50">Back to register</Button></Link>
+          <XCircle className="mx-auto text-destructive mb-4" size={48} />
+          <h1 className="text-2xl font-bold text-foreground mb-2">Verification failed</h1>
+          <p className="text-muted-foreground mb-6">{message}</p>
+          <Link href="/register"><Button variant="outline" className="border-primary/30 text-primary hover:bg-primary/10">Back to register</Button></Link>
         </>
       )}
     </div>
@@ -61,11 +61,11 @@ function VerifyInner() {
 
 export default function VerifyEmailPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-night-gradient px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-pearl px-4 py-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-8"><div className="flex justify-center mb-4"><FooterBrand height={34} /></div></div>
-        <div className="bg-white rounded-2xl border border-gold/20 shadow-gold p-8">
-          <Suspense fallback={<div className="text-center text-gray-500">Loading…</div>}>
+        <div className="bg-card rounded-2xl border border-primary/30 shadow-ember p-8">
+          <Suspense fallback={<div className="text-center text-muted-foreground">Loading…</div>}>
             <VerifyInner />
           </Suspense>
         </div>

@@ -28,16 +28,16 @@ export default async function RegisterDealershipPage({
   const us = countries.find((c) => c.code === "US");
 
   return (
-    <div className="bg-gray-50 min-h-[70vh]">
-      <section className="border-b border-gray-100 bg-white">
+    <div className="bg-muted min-h-[70vh]">
+      <section className="border-b border-border bg-card">
         <div className="container py-12 max-w-2xl text-center">
-          <div className="inline-flex items-center gap-2 bg-gold-50 border border-gold/40 rounded-full px-4 py-1.5 text-sm text-gold-700 font-medium mb-5">
+          <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-4 py-1.5 text-sm text-primary font-medium mb-5">
             <Store size={14} /> Free listing · {COMPANY.hqCity}-based platform
           </div>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
-            List your <span className="text-gold">dealership</span>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-foreground mb-3">
+            List your <span className="text-primary">dealership</span>
           </h1>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             Not in our directory yet? Add your dealership in minutes, claim your profile, and start building trust with car buyers worldwide.
           </p>
         </div>

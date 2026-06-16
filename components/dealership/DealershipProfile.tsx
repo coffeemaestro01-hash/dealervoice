@@ -33,9 +33,9 @@ export function DealershipProfile({ dealer, isPremium = false, highlightWrite = 
   const location = [dealer.cityName, dealer.stateName, dealer.country?.name].filter(Boolean).join(", ");
 
   return (
-    <div className="bg-white border-b border-gray-100">
+    <div className="bg-card border-b border-border">
       {/* Cover */}
-      <div className="h-40 md:h-56 bg-gradient-to-br from-gold-900 to-gold-800 relative overflow-hidden">
+      <div className="h-40 md:h-56 bg-gradient-to-br from-primary/20 to-primary/10 relative overflow-hidden">
         {dealer.coverImageUrl && (
           <Image src={dealer.coverImageUrl} alt={dealer.name} fill className="object-cover opacity-60" />
         )}
@@ -44,11 +44,11 @@ export function DealershipProfile({ dealer, isPremium = false, highlightWrite = 
       <div className="container">
         <div className="flex flex-col sm:flex-row sm:items-end gap-4 -mt-10 pb-6 relative">
           {/* Logo */}
-          <div className="w-20 h-20 rounded-2xl bg-white border-4 border-white shadow-lg overflow-hidden flex items-center justify-center flex-shrink-0">
+          <div className="w-20 h-20 rounded-2xl bg-card border-4 border-background shadow-lg overflow-hidden flex items-center justify-center flex-shrink-0">
             {dealer.logoUrl ? (
               <Image src={dealer.logoUrl} alt={dealer.name} width={80} height={80} className="object-contain p-1" />
             ) : (
-              <span className="text-3xl font-bold text-gray-300">{dealer.name[0]}</span>
+              <span className="text-3xl font-bold text-muted-foreground">{dealer.name[0]}</span>
             )}
           </div>
 
@@ -57,17 +57,17 @@ export function DealershipProfile({ dealer, isPremium = false, highlightWrite = 
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h1 className="font-display text-2xl md:text-3xl font-bold text-gray-900">{dealer.name}</h1>
+                  <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground">{dealer.name}</h1>
                   {dealer.isVerified && (
-                    <span className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 bg-gold-50 text-gold-800 border border-gold-100 rounded-full">
+                    <span className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 bg-primary/10 text-primary border border-primary/30 rounded-full">
                       <BadgeCheck size={12} />
                       Verified
                     </span>
                   )}
                 </div>
-                <div className="flex items-center gap-1.5 mt-1 text-gray-500 text-sm">
+                <div className="flex items-center gap-1.5 mt-1 text-muted-foreground text-sm">
                   <MapPin size={14} />
-                  <Link href={buildCountryUrl(dealer.country.code)} className="hover:text-gold-700 hover:underline">
+                  <Link href={buildCountryUrl(dealer.country.code)} className="hover:text-primary hover:underline">
                     {location}
                   </Link>
                 </div>
@@ -75,7 +75,7 @@ export function DealershipProfile({ dealer, isPremium = false, highlightWrite = 
                 {dealer.brands.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mt-2">
                     {dealer.brands.slice(0, 6).map(({ brand }) => (
-                      <span key={brand.slug} className="text-xs px-2 py-0.5 bg-gray-50 border border-gray-100 rounded-full text-gray-600">
+                      <span key={brand.slug} className="text-xs px-2 py-0.5 bg-muted border border-border rounded-full text-muted-foreground">
                         {brand.name}
                       </span>
                     ))}
@@ -91,15 +91,15 @@ export function DealershipProfile({ dealer, isPremium = false, highlightWrite = 
                       <RatingBadge rating={dealer.overallRating} size="lg" />
                       <div>
                         <StarRating rating={dealer.overallRating} size="md" />
-                        <p className="text-xs text-gray-500 mt-0.5">
+                        <p className="text-xs text-muted-foreground mt-0.5">
                           {formatNumber(dealer.totalReviews)} reviews
                         </p>
                       </div>
                     </>
                   ) : (
                     <div className="text-right">
-                      <p className="text-sm font-medium text-gray-500">Not yet rated</p>
-                      <p className="text-xs text-gray-400 mt-0.5">No reviews yet</p>
+                      <p className="text-sm font-medium text-muted-foreground">Not yet rated</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">No reviews yet</p>
                     </div>
                   )}
                 </div>
@@ -111,8 +111,8 @@ export function DealershipProfile({ dealer, isPremium = false, highlightWrite = 
                       className={cn(
                         "gap-1.5 font-semibold",
                         highlightWrite
-                          ? "bg-gold-600 hover:bg-gold-700 text-white ring-2 ring-gold-400 ring-offset-1"
-                          : "bg-gold-600 hover:bg-gold-700 text-white"
+                          ? "bg-primary hover:bg-primary/90 text-foreground ring-2 ring-primary ring-offset-1"
+                          : "bg-primary hover:bg-primary/90 text-foreground"
                       )}
                     >
                       <PenLine size={14} aria-hidden />
@@ -121,7 +121,7 @@ export function DealershipProfile({ dealer, isPremium = false, highlightWrite = 
                   </Link>
                   {inventoryUrl && (
                     <a href={inventoryUrl} target="_blank" rel="noopener noreferrer">
-                      <Button size="sm" variant="outline" className="gap-1.5 border-gold-300 text-gold-800 hover:bg-gold-50">
+                      <Button size="sm" variant="outline" className="gap-1.5 border-primary/30 text-primary hover:bg-primary/10">
                         <ExternalLink size={14} aria-hidden />
                         Live Inventory
                       </Button>
@@ -139,35 +139,35 @@ export function DealershipProfile({ dealer, isPremium = false, highlightWrite = 
         </div>
 
         {/* Metrics bar */}
-        <div className="flex flex-wrap gap-4 pb-5 text-sm border-t border-gray-50 pt-4">
+        <div className="flex flex-wrap gap-4 pb-5 text-sm border-t border-border pt-4">
           <div>
-            <span className="text-gray-500">Reputation</span>
+            <span className="text-muted-foreground">Reputation</span>
             {dealer.totalReviews > 0 ? (
               <span className={cn("ml-1.5 font-semibold", reputationColor(dealer.reputationScore))}>
                 {dealer.reputationScore}/100
               </span>
             ) : (
-              <span className="ml-1.5 font-semibold text-gray-400">Not yet rated</span>
+              <span className="ml-1.5 font-semibold text-muted-foreground">Not yet rated</span>
             )}
           </div>
           {dealer.responseRate > 0 && (
             <div>
-              <span className="text-gray-500">Response rate</span>
-              <span className="ml-1.5 font-semibold text-gray-900">{Math.round(dealer.responseRate * 100)}%</span>
+              <span className="text-muted-foreground">Response rate</span>
+              <span className="ml-1.5 font-semibold text-foreground">{Math.round(dealer.responseRate * 100)}%</span>
             </div>
           )}
           <div>
-            <span className="text-gray-500">Verified</span>
-            <span className="ml-1.5 font-semibold text-gray-900">{dealer.verifiedReviews} reviews</span>
+            <span className="text-muted-foreground">Verified</span>
+            <span className="ml-1.5 font-semibold text-foreground">{dealer.verifiedReviews} reviews</span>
           </div>
           {dealer.phone && (
-            <a href={`tel:${dealer.phone}`} className="flex items-center gap-1 text-gray-600 hover:text-gold-700">
+            <a href={`tel:${dealer.phone}`} className="flex items-center gap-1 text-muted-foreground hover:text-primary">
               <Phone size={13} />
               {dealer.phone}
             </a>
           )}
           {dealer.website && (
-            <a href={dealer.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-gold-700 hover:underline">
+            <a href={dealer.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-primary hover:underline">
               <Globe size={13} />
               Website
             </a>
@@ -178,7 +178,7 @@ export function DealershipProfile({ dealer, isPremium = false, highlightWrite = 
         {dealer.awards && dealer.awards.length > 0 && (
           <div className="flex flex-wrap gap-2 pb-5">
             {dealer.awards.map((award, i) => (
-              <span key={i} className="inline-flex items-center gap-1.5 text-xs px-3 py-1 bg-amber-50 border border-amber-100 rounded-full text-amber-700 font-medium">
+              <span key={i} className="inline-flex items-center gap-1.5 text-xs px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-primary font-medium">
                 <Award size={12} />
                 {award.title} {award.year}
               </span>

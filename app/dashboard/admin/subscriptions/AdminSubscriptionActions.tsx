@@ -41,7 +41,7 @@ export function AdminSubscriptionActions({ id, plan, status }: Props) {
     }
   }
 
-  if (busy) return <Loader2 size={16} className="animate-spin text-gray-400" />;
+  if (busy) return <Loader2 size={16} className="animate-spin text-muted-foreground" />;
 
   return (
     <DropdownMenu>
@@ -68,7 +68,7 @@ export function AdminSubscriptionActions({ id, plan, status }: Props) {
         )}
         <DropdownMenuSeparator />
         {status !== "CANCELED" && (
-          <DropdownMenuItem onClick={() => patch({ status: "CANCELED" })} className="text-red-600">
+          <DropdownMenuItem onClick={() => patch({ status: "CANCELED" })} className="text-destructive">
             Cancel subscription
           </DropdownMenuItem>
         )}

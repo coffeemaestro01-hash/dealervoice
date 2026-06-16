@@ -98,26 +98,26 @@ export function DreamCarAssistant({ dealerContext }: Props = {}) {
         <button
           aria-label="Open Dream Car Assistant"
           onClick={() => setOpen(true)}
-          className="fixed bottom-24 right-5 z-40 flex items-center gap-2 px-4 py-2.5 rounded-full bg-night-700 text-white border border-gold-500/30 shadow-lg hover:border-gold-400/60 hover:bg-night-600 transition-all text-sm font-medium"
+          className="fixed bottom-24 right-5 z-40 flex items-center gap-2 px-4 py-2.5 rounded-full bg-muted text-foreground border border-primary/30 shadow-lg hover:border-primary/60 hover:bg-muted transition-all text-sm font-medium"
         >
-          <Car size={16} className="text-gold-400" />
+          <Car size={16} className="text-primary" />
           <span>Dream Car Assistant</span>
-          <Sparkles size={12} className="text-gold-400" />
+          <Sparkles size={12} className="text-primary" />
         </button>
       )}
 
       {/* Panel */}
       {open && (
-        <div className="fixed bottom-5 right-5 z-40 w-[92vw] max-w-sm h-[72vh] max-h-[580px] flex flex-col rounded-2xl bg-white border border-gold-200/60 shadow-xl overflow-hidden">
+        <div className="fixed bottom-5 right-5 z-40 w-[92vw] max-w-sm h-[72vh] max-h-[580px] flex flex-col rounded-2xl bg-card border border-primary/60 shadow-xl overflow-hidden">
           {/* Header */}
-          <header className="flex items-center justify-between px-4 py-3 bg-night-800 text-white">
+          <header className="flex items-center justify-between px-4 py-3 bg-pearl text-foreground">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-gold-500/20 border border-gold-400/30 grid place-items-center">
-                <Car size={15} className="text-gold-400" />
+              <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 grid place-items-center">
+                <Car size={15} className="text-primary" />
               </div>
               <div>
                 <p className="font-semibold leading-tight text-sm">Dream Car Assistant</p>
-                <p className="text-[11px] text-white/50 leading-tight">
+                <p className="text-[11px] text-foreground leading-tight">
                   AI-powered · no paid placements
                 </p>
               </div>
@@ -125,25 +125,25 @@ export function DreamCarAssistant({ dealerContext }: Props = {}) {
             <button
               aria-label="Close assistant"
               onClick={() => setOpen(false)}
-              className="text-white/60 hover:text-white transition-colors"
+              className="text-foreground hover:text-foreground transition-colors"
             >
               <X size={18} />
             </button>
           </header>
 
           {/* Messages */}
-          <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 py-3 space-y-3 bg-gray-50">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 py-3 space-y-3 bg-muted">
             {messages.map((m, i) => (
               <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div
                   className={`max-w-[84%] rounded-2xl px-3.5 py-2 text-sm whitespace-pre-wrap leading-relaxed ${
                     m.role === "user"
-                      ? "bg-gold-500 text-white font-medium rounded-br-sm"
-                      : "bg-white text-gray-800 border border-gray-100 rounded-bl-sm shadow-sm"
+                      ? "bg-primary/10 text-foreground font-medium rounded-br-sm"
+                      : "bg-card text-foreground border border-border rounded-bl-sm shadow-sm"
                   }`}
                 >
                   {m.role === "assistant" && i === 0 && (
-                    <Sparkles size={12} className="inline text-gold-500 mr-1 mb-0.5" />
+                    <Sparkles size={12} className="inline text-primary mr-1 mb-0.5" />
                   )}
                   {m.content}
                 </div>
@@ -151,7 +151,7 @@ export function DreamCarAssistant({ dealerContext }: Props = {}) {
             ))}
             {loading && (
               <div className="flex justify-start">
-                <div className="bg-white border border-gray-100 rounded-2xl rounded-bl-sm px-3.5 py-2 text-gray-400 text-xs flex items-center gap-2 shadow-sm">
+                <div className="bg-card border border-border rounded-2xl rounded-bl-sm px-3.5 py-2 text-muted-foreground text-xs flex items-center gap-2 shadow-sm">
                   <Loader2 size={13} className="animate-spin" />
                   Thinking...
                 </div>
@@ -161,12 +161,12 @@ export function DreamCarAssistant({ dealerContext }: Props = {}) {
 
           {/* Quick prompts */}
           {messages.length === 1 && !loading && (
-            <div className="px-3 py-2 border-t border-gray-100 bg-white flex gap-1.5 overflow-x-auto scrollbar-none">
+            <div className="px-3 py-2 border-t border-border bg-card flex gap-1.5 overflow-x-auto scrollbar-none">
               {QUICK_PROMPTS.map((p) => (
                 <button
                   key={p}
                   onClick={() => sendMessage(p)}
-                  className="shrink-0 text-xs bg-gray-100 hover:bg-gold-50 hover:text-gold-700 text-gray-600 rounded-full px-3 py-1.5 transition-colors"
+                  className="shrink-0 text-xs bg-muted hover:bg-primary/10 hover:text-primary text-muted-foreground rounded-full px-3 py-1.5 transition-colors"
                 >
                   {p}
                 </button>
@@ -180,21 +180,21 @@ export function DreamCarAssistant({ dealerContext }: Props = {}) {
               e.preventDefault();
               sendMessage(input);
             }}
-            className="flex items-center gap-2 p-3 border-t border-gray-100 bg-white"
+            className="flex items-center gap-2 p-3 border-t border-border bg-card"
           >
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="e.g. Hyundai dealer in Chicago with good service..."
               maxLength={500}
-              className="flex-1 h-10 rounded-full border border-gray-200 px-4 text-sm focus:outline-none focus:border-gold-400/60 bg-gray-50"
+              className="flex-1 h-10 rounded-full border border-border px-4 text-sm focus:outline-none focus:border-primary/60 bg-muted"
               disabled={loading}
             />
             <button
               type="submit"
               disabled={loading || !input.trim()}
               aria-label="Send"
-              className="grid place-items-center w-10 h-10 rounded-full bg-gold-500 hover:bg-gold-600 text-white disabled:opacity-40 transition-colors shrink-0"
+              className="grid place-items-center w-10 h-10 rounded-full bg-primary/10 hover:bg-primary text-foreground disabled:opacity-40 transition-colors shrink-0"
             >
               <Send size={16} />
             </button>

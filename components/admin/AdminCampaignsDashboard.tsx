@@ -26,18 +26,18 @@ type Campaign = {
 };
 
 const STATUS_STYLE: Record<string, string> = {
-  SENT: "bg-green-50 text-green-700 border-green-200",
-  DRAFT: "bg-gray-50 text-gray-600 border-gray-200",
-  SENDING: "bg-amber-50 text-amber-700 border-amber-200",
-  FAILED: "bg-red-50 text-red-600 border-red-200",
+  SENT: "bg-muted text-primary border-primary/20",
+  DRAFT: "bg-muted text-muted-foreground border-border",
+  SENDING: "bg-primary/10 text-primary border-primary/20",
+  FAILED: "bg-destructive/10 text-destructive border-primary/20",
 };
 
 function MetricCell({ label, value, rate }: { label: string; value: number; rate?: string }) {
   return (
     <div className="text-center min-w-[72px]">
-      <p className="text-[10px] uppercase tracking-wider text-gray-400 mb-0.5">{label}</p>
-      <p className="text-sm font-semibold text-gray-900">{value.toLocaleString()}</p>
-      {rate && <p className="text-[10px] text-gray-400">{rate}</p>}
+      <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-0.5">{label}</p>
+      <p className="text-sm font-semibold text-foreground">{value.toLocaleString()}</p>
+      {rate && <p className="text-[10px] text-muted-foreground">{rate}</p>}
     </div>
   );
 }
@@ -74,30 +74,30 @@ export function AdminCampaignsDashboard() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Mail className="text-gold-600" size={24} />
+          <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+            <Mail className="text-primary" size={24} />
             Campaigns
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Email outreach to dealers — claim invites, review prompts, and growth campaigns.
           </p>
         </div>
         <Link href="/dashboard/admin/campaigns/new">
-          <Button className="bg-gray-900 hover:bg-gray-800 text-white gap-2">
+          <Button className="bg-foreground hover:bg-foreground text-foreground gap-2">
             <Plus size={16} /> Create campaign
           </Button>
         </Link>
       </div>
 
-      <div className="border-b border-gray-200">
-        <span className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-900 border-b-2 border-gold-600">
+      <div className="border-b border-border">
+        <span className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-foreground border-b-2 border-primary/30">
           <Mail size={14} /> Email
         </span>
       </div>
 
       <div className="flex flex-wrap gap-3 items-center">
         <div className="relative flex-1 min-w-[220px] max-w-md">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Search for a campaign"
             className="pl-9"
@@ -109,7 +109,7 @@ export function AdminCampaignsDashboard() {
           />
         </div>
         <select
-          className="h-10 border rounded-md px-3 text-sm text-gray-700"
+          className="h-10 border rounded-md px-3 text-sm text-foreground"
           value={status}
           onChange={(e) => {
             setPage(1);
@@ -122,7 +122,7 @@ export function AdminCampaignsDashboard() {
           <option value="sending">Sending</option>
           <option value="failed">Failed</option>
         </select>
-        <span className="text-xs text-gray-400 ml-auto">
+        <span className="text-xs text-muted-foreground ml-auto">
           {total === 0 ? "0" : `${(page - 1) * 20 + 1}–${Math.min(page * 20, total)}`} of {total}
         </span>
       </div>
@@ -130,16 +130,16 @@ export function AdminCampaignsDashboard() {
       {loading ? (
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-28 rounded-xl bg-gray-50 animate-pulse" />
+            <div key={i} className="h-28 rounded-xl bg-muted animate-pulse" />
           ))}
         </div>
       ) : campaigns.length === 0 ? (
-        <div className="text-center py-16 rounded-xl border border-dashed border-gray-200 bg-white">
-          <Mail className="mx-auto text-gray-300 mb-3" size={40} />
-          <p className="text-gray-600 font-medium">No campaigns yet</p>
-          <p className="text-sm text-gray-400 mt-1 mb-4">Create your first dealer outreach email.</p>
+        <div className="text-center py-16 rounded-xl border border-dashed border-border bg-card">
+          <Mail className="mx-auto text-muted-foreground mb-3" size={40} />
+          <p className="text-muted-foreground font-medium">No campaigns yet</p>
+          <p className="text-sm text-muted-foreground mt-1 mb-4">Create your first dealer outreach email.</p>
           <Link href="/dashboard/admin/campaigns/new">
-            <Button className="bg-gray-900 hover:bg-gray-800 text-white">Create campaign</Button>
+            <Button className="bg-foreground hover:bg-foreground text-foreground">Create campaign</Button>
           </Link>
         </div>
       ) : (
@@ -149,26 +149,26 @@ export function AdminCampaignsDashboard() {
             return (
               <article
                 key={c.id}
-                className="bg-white rounded-xl border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all p-4 md:p-5"
+                className="bg-card rounded-xl border border-border hover:border-border hover:shadow-sm transition-all p-4 md:p-5"
               >
                 <div className="flex flex-col lg:flex-row lg:items-center gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start gap-3">
-                      <input type="checkbox" className="mt-1.5 rounded border-gray-300" aria-label="Select campaign" />
+                      <input type="checkbox" className="mt-1.5 rounded border-border" aria-label="Select campaign" />
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2 mb-1">
-                          <h3 className="font-semibold text-gray-900 truncate">{c.name}</h3>
+                          <h3 className="font-semibold text-foreground truncate">{c.name}</h3>
                           <span className={cn("text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border", STATUS_STYLE[c.status] ?? STATUS_STYLE.DRAFT)}>
                             {c.status.charAt(0) + c.status.slice(1).toLowerCase()}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-500 truncate">{c.subject}</p>
-                        <p className="text-xs text-gray-400 mt-1">
+                        <p className="text-sm text-muted-foreground truncate">{c.subject}</p>
+                        <p className="text-xs text-muted-foreground mt-1">
                           {c.sentAt
                             ? new Date(c.sentAt).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })
                             : `Created ${new Date(c.createdAt).toLocaleDateString("en-US")}`}
                           {c.country ? ` · ${c.country.name}` : ""}
-                          <span className="text-gray-300"> · #{c.id.slice(-6)}</span>
+                          <span className="text-muted-foreground"> · #{c.id.slice(-6)}</span>
                         </p>
                       </div>
                     </div>
@@ -184,10 +184,10 @@ export function AdminCampaignsDashboard() {
                       value={c.conversionCount}
                       rate={c.conversionCount > 0 ? pct(c.conversionCount, recipients) : undefined}
                     />
-                    <button type="button" className="p-2 text-gray-400 hover:text-gold-600" title="AI insights (coming soon)">
+                    <button type="button" className="p-2 text-muted-foreground hover:text-primary" title="AI insights (coming soon)">
                       <Sparkles size={16} />
                     </button>
-                    <button type="button" className="p-2 text-gray-400 hover:text-gray-600">
+                    <button type="button" className="p-2 text-muted-foreground hover:text-muted-foreground">
                       <MoreVertical size={16} />
                     </button>
                   </div>
@@ -203,7 +203,7 @@ export function AdminCampaignsDashboard() {
           <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
             Previous
           </Button>
-          <span className="text-sm text-gray-500 self-center">Page {page} of {pages}</span>
+          <span className="text-sm text-muted-foreground self-center">Page {page} of {pages}</span>
           <Button variant="outline" size="sm" disabled={page >= pages} onClick={() => setPage((p) => p + 1)}>
             Next
           </Button>

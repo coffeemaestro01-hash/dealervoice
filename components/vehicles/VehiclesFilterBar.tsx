@@ -43,21 +43,21 @@ export function VehiclesFilterBar({ makes }: { makes: string[] }) {
   return (
     <form
       onSubmit={onSubmit}
-      className="flex flex-col sm:flex-row flex-wrap gap-3 p-4 rounded-xl border border-gray-100 bg-gray-50"
+      className="flex flex-col sm:flex-row flex-wrap gap-3 p-4 rounded-xl border border-border bg-muted"
     >
       <div className="relative flex-1 min-w-[200px]">
-        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
         <Input
           name="q"
           defaultValue={params.get("q") ?? ""}
           placeholder="Search make or model…"
-          className="pl-9 bg-white"
+          className="pl-9 bg-card"
         />
       </div>
       <select
         name="country"
         defaultValue={params.get("country") ?? ""}
-        className="h-10 rounded-md border border-gray-200 bg-white px-3 text-sm text-gray-700"
+        className="h-10 rounded-md border border-border bg-card px-3 text-sm text-foreground"
       >
         {COUNTRIES.map((c) => (
           <option key={c.code || "all"} value={c.code}>
@@ -68,7 +68,7 @@ export function VehiclesFilterBar({ makes }: { makes: string[] }) {
       <select
         name="make"
         defaultValue={params.get("make") ?? ""}
-        className="h-10 rounded-md border border-gray-200 bg-white px-3 text-sm text-gray-700 min-w-[140px]"
+        className="h-10 rounded-md border border-border bg-card px-3 text-sm text-foreground min-w-[140px]"
       >
         <option value="">Any make</option>
         {makes.map((m) => (
@@ -80,7 +80,7 @@ export function VehiclesFilterBar({ makes }: { makes: string[] }) {
       <select
         name="condition"
         defaultValue={params.get("condition") ?? ""}
-        className="h-10 rounded-md border border-gray-200 bg-white px-3 text-sm text-gray-700"
+        className="h-10 rounded-md border border-border bg-card px-3 text-sm text-foreground"
       >
         {CONDITIONS.map((c) => (
           <option key={c.value || "any"} value={c.value}>
@@ -88,7 +88,7 @@ export function VehiclesFilterBar({ makes }: { makes: string[] }) {
           </option>
         ))}
       </select>
-      <Button type="submit" className="bg-gold-800 hover:bg-gold-900">
+      <Button type="submit" className="bg-primary hover:bg-primary/90">
         Filter
       </Button>
     </form>

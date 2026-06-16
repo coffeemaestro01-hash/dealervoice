@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Source_Serif_4 } from "next/font/google";
+import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/layouts/Providers";
 import { Toaster } from "@/components/ui/toaster";
@@ -14,11 +14,11 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const sourceSerif = Source_Serif_4({
+const outfit = Outfit({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-display",
-  weight: ["600", "700"],
+  weight: ["200", "300", "400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a0a",
+  themeColor: "oklch(0.972 0.012 85)",
   width: "device-width",
   initialScale: 1,
 };
@@ -69,7 +69,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const adsenseClient = getAdSenseClientId();
 
   return (
-    <html lang="en" className={`${inter.variable} ${sourceSerif.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
       <head>
         <GoogleTagSnippet />
         {adsenseClient ? (

@@ -54,8 +54,8 @@ export function FooterBrand({ height = 34 }: { height?: number }) {
   return (
     <Link href="/" className="inline-flex items-center gap-2.5" aria-label="DealerVoice home">
       <Image src="/logo/dealervoice-icon.png" alt="DealerVoice" width={height} height={height} className="object-contain" />
-      <span className="text-xl font-extrabold tracking-tight text-white">
-        DealerVoice<span className="text-gold-400">.io</span>
+      <span className="text-xl font-extrabold tracking-tight text-foreground">
+        DealerVoice<span className="text-primary">.io</span>
       </span>
     </Link>
   );

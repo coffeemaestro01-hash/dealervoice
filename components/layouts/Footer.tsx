@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FooterBrand } from "@/components/common/Logo";
+import { Logo } from "@/components/common/Logo";
 import { SocialLinks } from "@/components/common/SocialLinks";
 import { ManageCookiesLink } from "@/components/consent/ManageCookiesLink";
 import { COMPANY } from "@/lib/constants/company";
@@ -40,12 +40,11 @@ const FOOTER_LINKS = {
 
 export function Footer() {
   return (
-    <footer className="bg-night-900 text-gray-400 mt-auto border-t border-gold/20">
+    <footer className="bg-pearl text-muted-foreground mt-auto border-t border-border">
       <div className="container py-12">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-10">
-          {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <FooterBrand height={32} />
+            <Logo variant="full" height={32} />
             <p className="text-sm leading-relaxed mt-3">
               A global platform for car dealership reviews and reputation insights — {COMPANY.tagline.toLowerCase()}
             </p>
@@ -54,11 +53,11 @@ export function Footer() {
 
           {Object.entries(FOOTER_LINKS).map(([section, links]) => (
             <div key={section}>
-              <h4 className="text-gold-400 font-semibold text-sm mb-3">{section}</h4>
+              <h4 className="text-primary font-semibold text-sm mb-3">{section}</h4>
               <ul className="space-y-2">
                 {links.map((link) => (
                   <li key={link.label}>
-                    <Link href={link.href} className="text-sm hover:text-gold-300 transition-colors">
+                    <Link href={link.href} className="text-sm hover:text-primary transition-colors">
                       {link.label}
                     </Link>
                   </li>
@@ -68,10 +67,10 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="border-t border-gold/15 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
+        <div className="border-t border-border pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
           <div>
             <p>© {new Date().getFullYear()} {COMPANY.name}. All rights reserved.</p>
-            <p className="text-gray-500 mt-1">{COMPANY.tagline}</p>
+            <p className="text-muted-foreground mt-1">{COMPANY.tagline}</p>
           </div>
           <div className="flex items-center gap-4">
             <ManageCookiesLink />

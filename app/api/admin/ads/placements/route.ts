@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
   const created = await prisma.adPlacement.create({
     data: {
       ...parsed.data,
-      accent: parsed.data.accent ?? "from-gold-600 to-amber-500",
+      accent: parsed.data.accent ?? "bg-ember",
       isActive: parsed.data.isActive ?? true,
       priority: parsed.data.priority ?? 0,
     },

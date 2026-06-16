@@ -58,9 +58,9 @@ export function FinanceCalculator({ defaultPrice = 0, currency = "USD" }: Props)
   const totalInterest = emi ? totalPayable - Number(principal) : 0;
 
   return (
-    <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
-      <h3 className="font-semibold text-gray-900 flex items-center gap-2 mb-4">
-        <Calculator size={17} className="text-gold-600" />
+    <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+      <h3 className="font-semibold text-foreground flex items-center gap-2 mb-4">
+        <Calculator size={17} className="text-primary" />
         EMI Calculator
       </h3>
 
@@ -125,8 +125,8 @@ export function FinanceCalculator({ defaultPrice = 0, currency = "USD" }: Props)
                 className={cn(
                   "flex-1 py-1.5 rounded-lg border text-xs font-medium transition-all",
                   rateType === t
-                    ? "border-gold-500 bg-gold-50 text-gold-800"
-                    : "border-gray-200 text-gray-600 hover:border-gray-300"
+                    ? "border-primary/30 bg-primary/10 text-primary"
+                    : "border-border text-muted-foreground hover:border-border"
                 )}
               >
                 {t === "reducing" ? "Reducing Balance" : "Flat Rate"}
@@ -138,26 +138,26 @@ export function FinanceCalculator({ defaultPrice = 0, currency = "USD" }: Props)
         <Button
           type="button"
           onClick={calculate}
-          className="w-full bg-gold-800 hover:bg-gold-900 h-9 text-sm"
+          className="w-full bg-primary hover:bg-primary/90 h-9 text-sm"
         >
           Calculate EMI
         </Button>
 
         {emi !== null && (
-          <div className="bg-gold-50 rounded-xl p-4 border border-gold-100 space-y-2">
+          <div className="bg-primary/10 rounded-xl p-4 border border-primary/30 space-y-2">
             <div className="flex justify-between items-baseline">
-              <span className="text-xs text-gray-600">Monthly EMI</span>
-              <span className="text-xl font-bold text-gold-800">{formatCurrency(emi, currency)}</span>
+              <span className="text-xs text-muted-foreground">Monthly EMI</span>
+              <span className="text-xl font-bold text-primary">{formatCurrency(emi, currency)}</span>
             </div>
-            <div className="flex justify-between text-xs text-gray-500">
+            <div className="flex justify-between text-xs text-muted-foreground">
               <span>Total Payable</span>
               <span>{formatCurrency(totalPayable, currency)}</span>
             </div>
-            <div className="flex justify-between text-xs text-gray-500">
+            <div className="flex justify-between text-xs text-muted-foreground">
               <span>Total Interest</span>
               <span>{formatCurrency(totalInterest, currency)}</span>
             </div>
-            <p className="text-[10px] text-gray-400 pt-1">
+            <p className="text-[10px] text-muted-foreground pt-1">
               Indicative only. Final terms subject to lender approval.
             </p>
           </div>
