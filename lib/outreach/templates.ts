@@ -1,5 +1,6 @@
 import { APP_URL, EMAILS } from "@/lib/constants/emails";
 import { WHATSAPP_BUSINESS } from "@/lib/constants/social";
+import { dealerReviewInviteUrl } from "@/lib/reviews/invite";
 
 export type OutreachMarket = "US";
 
@@ -30,7 +31,7 @@ export function profileUrl(slug: string) {
 }
 
 export function reviewInviteUrl(slug: string) {
-  return `${APP_URL}/dealership/${slug}?write=1`;
+  return dealerReviewInviteUrl(slug);
 }
 
 export function billingUrl() {
