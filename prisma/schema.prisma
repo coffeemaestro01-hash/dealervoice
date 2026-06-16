@@ -99,6 +99,7 @@ enum ClaimStatus {
 enum SubscriptionPlan {
   FREE
   PRO
+  PRO_PLUS
   ENTERPRISE
 }
 
@@ -412,6 +413,7 @@ model Dealership {
   homepagePinOrder    Int?
   isVerified          Boolean        @default(false)
   isPremiumClaimed    Boolean        @default(false) @map("is_premium_claimed")
+  featuredBadgeEnabled Boolean       @default(true) @map("featured_badge_enabled")
   inventoryUrl        String?
   claimedAt           DateTime?
 

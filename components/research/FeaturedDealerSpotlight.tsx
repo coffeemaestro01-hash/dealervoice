@@ -6,6 +6,7 @@ import type { FeaturedDealerSpotlight as Spotlight } from "@/lib/research/types"
 
 const TIER_STYLES: Record<Spotlight["planTier"], { label: string; className: string }> = {
   PRO: { label: "Pro Dealer", className: "bg-primary/10 text-primary border-primary/30" },
+  PRO_PLUS: { label: "Pro+ Dealer", className: "bg-gradient-to-r from-[#FFF8EB] to-[#F5E6C8] text-[#3D2E0A] border-[#B8860B]/40" },
   ENTERPRISE: { label: "Enterprise", className: "bg-primary/25 text-primary/80 border-primary/40" },
   SPONSORED: { label: "Sponsored", className: "bg-card text-muted-foreground border-border" },
 };
@@ -73,7 +74,7 @@ export function FeaturedDealerSpotlightGrid({ dealers }: { dealers: Spotlight[] 
         Voices from premium dealerships
       </h2>
       <p className="text-sm text-muted-foreground mb-6">
-        Pro, Enterprise, and sponsored partners share why outlet-level trust infrastructure matters.
+        Pro, Pro+, Enterprise, and sponsored partners share why outlet-level trust infrastructure matters.
       </p>
       <div className="grid sm:grid-cols-2 gap-5">
         {dealers.map((d) => (

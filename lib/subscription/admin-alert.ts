@@ -32,7 +32,8 @@ export async function maybeSendAdminSubscriptionAlert(
   const location = [dealer.cityName, dealer.stateName, dealer.country?.code]
     .filter(Boolean)
     .join(", ");
-  const planLabel = plan === "ENTERPRISE" ? "Enterprise" : "Pro";
+  const planLabel =
+    plan === "ENTERPRISE" ? "Enterprise" : plan === "PRO_PLUS" ? "Pro+" : "Pro";
   const promoLine = promotionCode ? `<p>Promo code: <strong>${promotionCode}</strong></p>` : "";
 
   await sendAdminNotification(
@@ -55,5 +56,6 @@ ${promoLine}
 
 export function formatSubscriptionAmount(plan: SubscriptionPlan, interval: string, amountCents: number) {
   if (amountCents > 0) return formatPromoPrice(amountCents);
+  if (plan === "PRO_PLUS") return interval === "annual" ? "$3,490/yr" : "$349/mo";
   return plan === "PRO" ? (interval === "annual" ? "$1,990/yr" : "$199/mo") : "Enterprise";
 }

@@ -22,6 +22,7 @@ export default async function AdminSubscriptionsPage() {
   const byPlan = {
     FREE: subs.filter((s) => s.plan === "FREE").length,
     PRO: subs.filter((s) => s.plan === "PRO").length,
+    PRO_PLUS: subs.filter((s) => s.plan === "PRO_PLUS").length,
     ENTERPRISE: subs.filter((s) => s.plan === "ENTERPRISE").length,
   };
 
@@ -29,8 +30,8 @@ export default async function AdminSubscriptionsPage() {
     <div className="p-6 lg:p-8">
       <h1 className="text-2xl font-bold text-foreground mb-2">Subscriptions</h1>
       <p className="text-sm text-muted-foreground mb-6">Manually upgrade, downgrade, or cancel dealer plans.</p>
-      <div className="grid grid-cols-3 gap-4 mb-8">
-        {(["FREE", "PRO", "ENTERPRISE"] as const).map((plan) => (
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        {(["FREE", "PRO", "PRO_PLUS", "ENTERPRISE"] as const).map((plan) => (
           <div key={plan} className="bg-card rounded-xl border border-border p-4 text-center">
             <p className="text-sm text-muted-foreground">{plan}</p>
             <p className="text-2xl font-bold text-foreground">{byPlan[plan]}</p>

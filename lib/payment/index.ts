@@ -7,16 +7,19 @@ export const STRIPE_ENABLED = !!process.env.STRIPE_SECRET_KEY;
 export const STRIPE_PRICES = {
   PRO_MONTHLY: process.env.STRIPE_PRO_MONTHLY_PRICE_ID || "",
   PRO_ANNUAL: process.env.STRIPE_PRO_ANNUAL_PRICE_ID || "",
+  PRO_PLUS_MONTHLY: process.env.STRIPE_PRO_PLUS_MONTHLY_PRICE_ID || "",
+  PRO_PLUS_ANNUAL: process.env.STRIPE_PRO_PLUS_ANNUAL_PRICE_ID || "",
   ENTERPRISE_MONTHLY: process.env.STRIPE_ENTERPRISE_MONTHLY_PRICE_ID || "",
   ENTERPRISE_ANNUAL: process.env.STRIPE_ENTERPRISE_ANNUAL_PRICE_ID || "",
 };
 
 export const PLAN_PRICES_USD = {
   PRO: { monthly: 199, annual: 1990, monthlyDisplay: "$199", annualDisplay: "$1,990" },
+  PRO_PLUS: { monthly: 349, annual: 3490, monthlyDisplay: "$349", annualDisplay: "$3,490" },
   ENTERPRISE: { monthly: 499, annual: 4990, monthlyDisplay: "$499", annualDisplay: "$4,990" },
 };
 
-export type PlanKey = "PRO" | "ENTERPRISE";
+export type PlanKey = "PRO" | "PRO_PLUS" | "ENTERPRISE";
 export type BillingInterval = "monthly" | "annual";
 
 let _stripe: Stripe | null = null;
@@ -146,7 +149,9 @@ export function stripeSubscriptionPeriod(
 export function parseStripePlanMetadata(
   metadata: Stripe.Metadata | null | undefined
 ): { plan: PlanKey; interval: BillingInterval; dealershipId?: string } {
-  const plan: PlanKey = metadata?.plan === "ENTERPRISE" ? "ENTERPRISE" : "PRO";
+  const raw = metadata?.plan;
+  const plan: PlanKey =
+    raw === "ENTERPRISE" ? "ENTERPRISE" : raw === "PRO_PLUS" ? "PRO_PLUS" : "PRO";
   const interval: BillingInterval = metadata?.interval === "annual" ? "annual" : "monthly";
   return { plan, interval, dealershipId: metadata?.dealershipId };
 }

@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { MapPin, Phone, Globe, BadgeCheck, Share2, PenLine, Award, ExternalLink } from "lucide-react";
 import { getPremiumInventoryUrl } from "@/lib/dealer/premium";
+import { getFeaturedBadgePlan } from "@/lib/dealer/featured-badge";
+import { FeaturedPlanBadge } from "@/components/dealer/FeaturedPlanBadge";
 import { StarRating } from "@/components/common/StarRating";
 import { RatingBadge } from "@/components/common/RatingBadge";
 import { Button } from "@/components/ui/button";
@@ -19,10 +21,13 @@ interface Props {
     website?: string | null;
     inventoryUrl?: string | null;
     isPremiumClaimed?: boolean;
+    featuredBadgeEnabled?: boolean;
+    claimedAt?: Date | string | null;
+    status?: string;
     coverImageUrl?: string | null;
     awards?: Array<{ title: string; year: number }>;
     ratingDistribution?: Record<string, number>;
-    subscription?: { plan: string } | null;
+    subscription?: { plan: string; status?: string } | null;
   };
   isPremium?: boolean;
   highlightWrite?: boolean;
@@ -31,6 +36,7 @@ interface Props {
 export function DealershipProfile({ dealer, isPremium = false, highlightWrite = false }: Props) {
   const inventoryUrl = isPremium ? getPremiumInventoryUrl(dealer) : null;
   const location = [dealer.cityName, dealer.stateName, dealer.country?.name].filter(Boolean).join(", ");
+  const badgePlan = getFeaturedBadgePlan(dealer);
 
   return (
     <div className="bg-card border-b border-border">
@@ -64,6 +70,7 @@ export function DealershipProfile({ dealer, isPremium = false, highlightWrite = 
                       Verified
                     </span>
                   )}
+                  {badgePlan && <FeaturedPlanBadge plan={badgePlan} size="md" />}
                 </div>
                 <div className="flex items-center gap-1.5 mt-1 text-muted-foreground text-sm">
                   <MapPin size={14} />

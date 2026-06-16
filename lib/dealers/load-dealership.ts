@@ -10,7 +10,7 @@ export async function fetchDealershipBySlug(slug: string) {
       city: true,
       brands: { include: { brand: true }, orderBy: { isPrimary: "desc" } },
       awards: { orderBy: { year: "desc" } },
-      subscription: { select: { plan: true } },
+      subscription: { select: { plan: true, status: true } },
       media: { where: { type: "IMAGE" }, take: 10 },
       _count: { select: { reviews: { where: { status: "PUBLISHED" } } } },
     },

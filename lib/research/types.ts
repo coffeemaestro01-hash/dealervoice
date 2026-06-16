@@ -1,4 +1,4 @@
-export type DealerPlanTier = "PRO" | "ENTERPRISE" | "SPONSORED";
+export type DealerPlanTier = "PRO" | "PRO_PLUS" | "ENTERPRISE" | "SPONSORED";
 
 export type FeaturedDealerSpotlight = {
   dealershipName: string;

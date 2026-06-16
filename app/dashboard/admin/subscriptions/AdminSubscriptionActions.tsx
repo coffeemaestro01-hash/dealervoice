@@ -56,6 +56,11 @@ export function AdminSubscriptionActions({ id, plan, status }: Props) {
             Upgrade to Pro
           </DropdownMenuItem>
         )}
+        {plan !== "PRO_PLUS" && (
+          <DropdownMenuItem onClick={() => patch({ plan: "PRO_PLUS", status: "ACTIVE" })}>
+            Upgrade to Pro+
+          </DropdownMenuItem>
+        )}
         {plan !== "ENTERPRISE" && (
           <DropdownMenuItem onClick={() => patch({ plan: "ENTERPRISE", status: "ACTIVE" })}>
             Upgrade to Enterprise

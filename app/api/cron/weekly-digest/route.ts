@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
     const newReviews7d = await prisma.review.count({ where: { createdAt: { gte: weekAgo }, status: "PUBLISHED" } });
     const pendingClaims = await prisma.dealerClaim.count({ where: { status: "PENDING" } });
     const pendingReports = await prisma.report.count({ where: { status: "PENDING" } });
-    const paidSubscriptions = await prisma.dealerSubscription.count({ where: { status: "ACTIVE", plan: { in: ["PRO", "ENTERPRISE"] } } }).catch(() => 0);
+    const paidSubscriptions = await prisma.dealerSubscription.count({ where: { status: "ACTIVE", plan: { in: ["PRO", "PRO_PLUS", "ENTERPRISE"] } } }).catch(() => 0);
     const revenueAgg = await prisma.invoice.aggregate({ _sum: { amount: true }, where: { status: "paid" } }).catch(() => ({ _sum: { amount: 0 } }));
     const newLeads7d = await prisma.lead.count({ where: { createdAt: { gte: weekAgo } } }).catch(() => 0);
     const topDealers = await prisma.dealership.findMany({

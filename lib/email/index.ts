@@ -229,12 +229,13 @@ export async function sendSubscriptionWelcomeEmail(
     name: string;
     dealerName: string;
     dealerSlug: string;
-    plan: "PRO" | "ENTERPRISE";
+    plan: "PRO" | "PRO_PLUS" | "ENTERPRISE";
     interval: "monthly" | "annual";
   }
 ) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.io";
-  const planLabel = params.plan === "ENTERPRISE" ? "Enterprise" : "Pro";
+  const planLabel =
+    params.plan === "ENTERPRISE" ? "Enterprise" : params.plan === "PRO_PLUS" ? "Pro+" : "Pro";
   const billingLabel = params.interval === "annual" ? "annual" : "monthly";
   const dashboardUrl = `${appUrl}/dashboard/dealer`;
   const settingsUrl = `${appUrl}/dashboard/dealer/settings`;

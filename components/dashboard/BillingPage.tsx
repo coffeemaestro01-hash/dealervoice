@@ -51,14 +51,22 @@ const PLANS = [
     name: "Pro",
     monthly: PLAN_PRICES_USD.PRO.monthlyDisplay,
     annual: PLAN_PRICES_USD.PRO.annualDisplay,
-    features: ["5 locations", "Full analytics", "Competitor monitoring", "AI response suggestions", "Verified badge"],
+    features: ["5 locations", "Full analytics", "Competitor monitoring", "AI response suggestions", "Featured Pro badge"],
+  },
+  {
+    key: "PRO_PLUS" as const,
+    name: "Pro+",
+    monthly: PLAN_PRICES_USD.PRO_PLUS.monthlyDisplay,
+    annual: PLAN_PRICES_USD.PRO_PLUS.annualDisplay,
+    badge: "Best value",
+    features: ["15 locations", "Everything in Pro", "Featured Pro+ badge", "Priority placement", "Review backlink embed"],
   },
   {
     key: "ENTERPRISE" as const,
     name: "Enterprise",
     monthly: PLAN_PRICES_USD.ENTERPRISE.monthlyDisplay,
     annual: PLAN_PRICES_USD.ENTERPRISE.annualDisplay,
-    features: ["Unlimited locations", "API access", "White-label reports", "Dedicated support", "SSO / SAML"],
+    features: ["Unlimited locations", "API access", "White-label reports", "Featured Enterprise badge", "Dedicated support"],
   },
 ];
 
@@ -132,7 +140,7 @@ export function BillingPage() {
   }
 
   return (
-    <div className="p-6 lg:p-8 max-w-4xl">
+    <div className="p-6 lg:p-8 max-w-6xl">
       <div className="flex items-center gap-3 mb-6">
         <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
           <CreditCard size={22} />
@@ -253,15 +261,23 @@ export function BillingPage() {
         />
       </div>
 
-      <div className="grid md:grid-cols-2 gap-5">
+      <div className="grid md:grid-cols-3 gap-5">
         {PLANS.map((plan) => {
           const isCurrent = currentPlan === plan.key;
           const price = interval === "monthly" ? plan.monthly : plan.annual;
+          const highlighted = plan.key === "PRO_PLUS";
           return (
             <div
               key={plan.key}
-              className={`bg-card rounded-xl border p-6 shadow-sm ${plan.key === "PRO" ? "border-primary/30 ring-1 ring-primary" : "border-border"}`}
+              className={`bg-card rounded-xl border p-6 shadow-sm relative ${
+                highlighted ? "border-primary/30 ring-1 ring-primary" : "border-border"
+              }`}
             >
+              {"badge" in plan && plan.badge && (
+                <span className="absolute -top-2.5 left-4 text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-primary text-night-900">
+                  {plan.badge}
+                </span>
+              )}
               <h3 className="text-lg font-bold text-foreground">{plan.name}</h3>
               <p className="text-2xl font-bold text-foreground mt-2">
                 {price}

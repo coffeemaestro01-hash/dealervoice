@@ -9,6 +9,7 @@ export async function getRevenueStats() {
   const [
     paidInvoices,
     proCount,
+    proPlusCount,
     enterpriseCount,
     freeCount,
     claimedDealers,
@@ -20,6 +21,7 @@ export async function getRevenueStats() {
   ] = await Promise.all([
     prisma.invoice.aggregate({ _sum: { amount: true }, where: { status: "paid" } }),
     prisma.dealerSubscription.count({ where: { plan: "PRO", status: "ACTIVE" } }),
+    prisma.dealerSubscription.count({ where: { plan: "PRO_PLUS", status: "ACTIVE" } }),
     prisma.dealerSubscription.count({ where: { plan: "ENTERPRISE", status: "ACTIVE" } }),
     prisma.dealerSubscription.count({ where: { plan: "FREE" } }),
     prisma.dealership.count({ where: { claimedAt: { not: null }, deletedAt: null } }),
@@ -30,12 +32,13 @@ export async function getRevenueStats() {
     prisma.lead.count({ where: { status: "CONVERTED", updatedAt: { gte: thirtyDaysAgo } } }),
   ]);
 
-  const mrrEstimate = proCount * 1699900 + enterpriseCount * 4199900;
+  const mrrEstimate = proCount * 19900 + proPlusCount * 34900 + enterpriseCount * 49900;
 
   return {
     totalRevenue: (paidInvoices._sum.amount ?? 0) / 100,
     mrrEstimate: mrrEstimate / 100,
     proCount,
+    proPlusCount,
     enterpriseCount,
     freeCount,
     claimedDealers,

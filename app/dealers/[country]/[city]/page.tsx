@@ -36,7 +36,7 @@ async function getDealersByCity(cityId: string) {
       country: { select: { name: true, code: true } },
       city: { select: { name: true, slug: true } },
       brands: { include: { brand: { select: { name: true, slug: true, logoUrl: true } } }, take: 5 },
-      subscription: { select: { plan: true } },
+      subscription: { select: { plan: true, status: true } },
     },
   });
 }
@@ -75,7 +75,7 @@ export default async function CityPage({ params }: Props) {
       include: {
         country: { select: { name: true, code: true } },
         brands: { include: { brand: { select: { name: true, slug: true, logoUrl: true } } }, take: 3 },
-        subscription: { select: { plan: true } },
+        subscription: { select: { plan: true, status: true } },
       },
     });
 

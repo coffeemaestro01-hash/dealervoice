@@ -7,7 +7,7 @@ import { isSuperAdmin } from "@/lib/admin/guards";
 import { logAdminAction } from "@/lib/admin/audit";
 
 const patchSchema = z.object({
-  plan: z.enum(["FREE", "PRO", "ENTERPRISE"]).optional(),
+  plan: z.enum(["FREE", "PRO", "PRO_PLUS", "ENTERPRISE"]).optional(),
   status: z.enum(["ACTIVE", "CANCELED", "PAST_DUE", "TRIALING", "PAUSED"]).optional(),
 });
 
@@ -50,7 +50,7 @@ export async function PATCH(req: NextRequest, props: { params: Promise<{ id: str
     include: { dealership: { select: { id: true, name: true, slug: true } } },
   });
 
-  const isPremium = ["PRO", "ENTERPRISE"].includes(updated.plan) && updated.status === "ACTIVE";
+  const isPremium = ["PRO", "PRO_PLUS", "ENTERPRISE"].includes(updated.plan) && updated.status === "ACTIVE";
   await prisma.dealership.update({
     where: { id: existing.dealershipId },
     data: { isPremiumClaimed: isPremium },

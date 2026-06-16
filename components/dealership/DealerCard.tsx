@@ -3,16 +3,26 @@ import Image from "next/image";
 import { MapPin, MessageSquare, BadgeCheck, Megaphone, PenLine } from "lucide-react";
 import { StarRating } from "@/components/common/StarRating";
 import { RatingBadge } from "@/components/common/RatingBadge";
+import { FeaturedPlanBadge } from "@/components/dealer/FeaturedPlanBadge";
+import { getFeaturedBadgePlan } from "@/lib/dealer/featured-badge";
 import { cn, formatNumber, buildDealerUrl } from "@/lib/utils";
 import type { DealershipWithRelations } from "@/types";
 
 interface DealerCardProps {
-  dealer: DealershipWithRelations;
+  dealer: DealershipWithRelations & {
+    isSponsored?: boolean;
+    isPremiumClaimed?: boolean;
+    featuredBadgeEnabled?: boolean;
+    claimedAt?: Date | string | null;
+    status?: string;
+    subscription?: { plan: string; status?: string } | null;
+  };
   featured?: boolean;
   className?: string;
 }
 
 export function DealerCard({ dealer, featured, className }: DealerCardProps) {
+  const badgePlan = getFeaturedBadgePlan(dealer);
   return (
     <Link
       href={buildDealerUrl(dealer as any)}
@@ -47,6 +57,7 @@ export function DealerCard({ dealer, featured, className }: DealerCardProps) {
                       Sponsored
                     </span>
                   )}
+                  {badgePlan && <FeaturedPlanBadge plan={badgePlan} />}
                 </h3>
                 <div className="flex items-center gap-1 mt-0.5 text-muted-foreground text-sm">
                   <MapPin size={12} />

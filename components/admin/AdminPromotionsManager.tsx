@@ -35,7 +35,7 @@ type DiscountType = "FIXED" | "PERCENT";
 const defaultForm = {
   code: "",
   label: "",
-  plan: "PRO" as "PRO" | "ENTERPRISE",
+  plan: "PRO" as "PRO" | "PRO_PLUS" | "ENTERPRISE",
   interval: "monthly" as "monthly" | "annual",
   discountType: "FIXED" as DiscountType,
   fixedPriceUsd: "1",
@@ -181,10 +181,11 @@ export function AdminPromotionsManager() {
               <label className="text-xs font-medium text-muted-foreground">Plan</label>
               <select
                 value={form.plan}
-                onChange={(e) => setForm({ ...form, plan: e.target.value as "PRO" | "ENTERPRISE" })}
+                onChange={(e) => setForm({ ...form, plan: e.target.value as "PRO" | "PRO_PLUS" | "ENTERPRISE" })}
                 className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm"
               >
                 <option value="PRO">Pro</option>
+                <option value="PRO_PLUS">Pro+</option>
                 <option value="ENTERPRISE">Enterprise</option>
               </select>
             </div>

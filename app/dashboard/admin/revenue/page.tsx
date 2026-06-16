@@ -28,10 +28,11 @@ export default async function AdminRevenuePage() {
         </p>
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
         <Stat label="Total paid revenue" value={`$${stats.totalRevenue.toLocaleString("en-US")}`} />
         <Stat label="MRR estimate" value={`$${stats.mrrEstimate.toLocaleString("en-US")}`} />
         <Stat label="Pro plans" value={stats.proCount} />
+        <Stat label="Pro+ plans" value={stats.proPlusCount} />
         <Stat label="Enterprise" value={stats.enterpriseCount} />
       </div>
 

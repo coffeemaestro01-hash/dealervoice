@@ -9,6 +9,8 @@ import { cn, buildDealerUrl } from "@/lib/utils";
 import type { ReviewWithRelations } from "@/types";
 import { PremiumUpgradeBanner } from "@/components/dashboard/PremiumUpgradeBanner";
 import { DealerReviewInvite } from "@/components/dashboard/DealerReviewInvite";
+import { DealerFeaturedBadgeEmbed } from "@/components/dashboard/DealerFeaturedBadgeEmbed";
+import { getFeaturedBadgePlan } from "@/lib/dealer/featured-badge";
 
 interface StatCardProps {
   label: string;
@@ -51,7 +53,10 @@ interface Props {
       reputationScore: number;
       responseRate: number;
       isPremiumClaimed?: boolean;
-      subscription?: { plan: string } | null;
+      featuredBadgeEnabled?: boolean;
+      claimedAt?: Date | string | null;
+      status?: string;
+      subscription?: { plan: string; status?: string } | null;
     };
     stats: { totalReviews: number; avgRating: number; reputationScore: number; responseRate: number; pendingResponses: number; reviewsThisMonth: number; reviewsLastMonth: number; ratingChange: number };
     recentReviews: ReviewWithRelations[];
@@ -70,6 +75,7 @@ export function DealerOverviewPage({ data }: Props) {
   }
 
   const { dealership, stats, recentReviews } = data;
+  const badgePlan = getFeaturedBadgePlan(dealership);
   const reviewGrowth = stats.reviewsLastMonth > 0
     ? Math.round(((stats.reviewsThisMonth - stats.reviewsLastMonth) / stats.reviewsLastMonth) * 100)
     : 0;
@@ -105,6 +111,10 @@ export function DealerOverviewPage({ data }: Props) {
       />
 
       <DealerReviewInvite slug={dealership.slug} dealerName={dealership.name} />
+
+      {badgePlan && (
+        <DealerFeaturedBadgeEmbed slug={dealership.slug} dealerName={dealership.name} plan={badgePlan} />
+      )}
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">

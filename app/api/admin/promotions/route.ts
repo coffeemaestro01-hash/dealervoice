@@ -16,7 +16,7 @@ import { planAmountCents } from "@/lib/payment";
 const baseCreateSchema = z.object({
   code: z.string().min(3).max(32),
   label: z.string().max(120).optional(),
-  plan: z.enum(["PRO", "ENTERPRISE"]),
+  plan: z.enum(["PRO", "PRO_PLUS", "ENTERPRISE"]),
   interval: z.enum(["monthly", "annual"]),
   maxRedemptions: z.number().int().min(1).optional(),
   expiresAt: z.string().datetime().optional(),
