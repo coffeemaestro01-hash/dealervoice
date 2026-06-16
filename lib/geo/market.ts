@@ -43,6 +43,7 @@ export const AFFILIATE_TRACKER_DOMAINS = [
   "zmgig.com",
   "tjzuh.com",
   "ewwhk.com",
+  "naiawork.com",
   "ad.admitad.com",
   "admitad.com",
 ];
