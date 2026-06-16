@@ -113,7 +113,7 @@ export default async function ChicagoPage() {
               </p>
             </div>
             <Link href="/register-dealership">
-              <Button className="bg-foreground hover:bg-foreground text-foreground shrink-0">List your store</Button>
+              <Button className="shrink-0">List your store</Button>
             </Link>
           </div>
         </div>

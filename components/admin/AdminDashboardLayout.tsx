@@ -51,7 +51,7 @@ export function AdminDashboardLayout({
                     href={item.href}
                     className={cn(
                       "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors mb-0.5",
-                      active ? "bg-primary/90 text-foreground" : "text-muted-foreground hover:bg-foreground hover:text-foreground"
+                      active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground"
                     )}
                   >
                     <item.icon size={15} />

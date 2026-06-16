@@ -148,7 +148,7 @@ export function AdminPromotionsManager() {
         </div>
         <Button
           onClick={() => setShowForm((v) => !v)}
-          className="bg-foreground hover:bg-foreground text-foreground gap-2"
+          className="gap-2"
         >
           <Plus size={16} /> New promotion
         </Button>
@@ -207,7 +207,7 @@ export function AdminPromotionsManager() {
                   onClick={() => setForm({ ...form, discountType: "FIXED" })}
                   className={`px-3 py-2 rounded-md text-sm font-medium border transition-colors ${
                     form.discountType === "FIXED"
-                      ? "bg-foreground text-foreground border-border"
+                      ? "bg-primary/10 text-primary border-primary/30"
                       : "bg-card text-muted-foreground border-border hover:border-border"
                   }`}
                 >
@@ -218,7 +218,7 @@ export function AdminPromotionsManager() {
                   onClick={() => setForm({ ...form, discountType: "PERCENT" })}
                   className={`px-3 py-2 rounded-md text-sm font-medium border transition-colors ${
                     form.discountType === "PERCENT"
-                      ? "bg-foreground text-foreground border-border"
+                      ? "bg-primary/10 text-primary border-primary/30"
                       : "bg-card text-muted-foreground border-border hover:border-border"
                   }`}
                 >

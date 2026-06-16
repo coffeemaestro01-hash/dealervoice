@@ -42,16 +42,16 @@ export function AdBannerClient({ content, href, className, compact, placementId,
       >
         <div className="absolute top-0 right-0 w-32 h-32 bg-card rounded-full blur-2xl pointer-events-none" />
         <div className="relative flex flex-col flex-1">
-          <div className="flex items-center gap-2 text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-foreground mb-2">
+          <div className="flex items-center gap-2 text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-primary-foreground/80 mb-2">
             <Megaphone size={12} aria-hidden />
             <span>Sponsored · {content.badge}</span>
           </div>
-          <h3 className={cn("font-bold text-foreground leading-tight", compact ? "text-base" : "text-lg md:text-xl")}>
+          <h3 className={cn("font-bold text-primary-foreground leading-tight", compact ? "text-base" : "text-lg md:text-xl")}>
             {content.headline}
           </h3>
           <p
             className={cn(
-              "text-foreground mt-1.5 leading-snug flex-1",
+              "text-primary-foreground/90 mt-1.5 leading-snug flex-1",
               compact ? "text-xs line-clamp-3" : "text-sm line-clamp-4"
             )}
           >
@@ -63,7 +63,7 @@ export function AdBannerClient({ content, href, className, compact, placementId,
             rel="noopener sponsored noreferrer"
             className={cn(
               "inline-flex items-center gap-1.5 mt-4 font-semibold rounded-lg w-fit",
-              "bg-card hover:bg-card transition-colors",
+              "bg-card text-primary hover:bg-card/90 transition-colors",
               compact ? "text-xs px-3 py-2" : "text-sm px-4 py-2.5"
             )}
           >

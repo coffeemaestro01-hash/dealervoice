@@ -36,7 +36,7 @@ export function SponsorshipCheckoutButtons({ dealershipId }: { dealershipId?: st
             <h3 className="font-semibold text-foreground">{tier.label}</h3>
             <p className="text-2xl font-bold text-primary mt-1">${(tier.amountCents / 100).toLocaleString()}</p>
             <Button
-              className="mt-4 w-full bg-foreground hover:bg-foreground text-foreground gap-2"
+              className="mt-4 w-full gap-2"
               disabled={!!loading}
               onClick={() => checkout(key)}
             >

@@ -127,7 +127,7 @@ export function AdminCreateCampaignForm({ countries }: { countries: { id: string
         {error && <p className="text-sm text-destructive">{error}</p>}
 
         <div className="flex flex-wrap gap-3 pt-2">
-          <Button onClick={() => submit(true)} disabled={loading} className="bg-foreground hover:bg-foreground text-foreground gap-2">
+          <Button onClick={() => submit(true)} disabled={loading} className="gap-2">
             <Send size={14} /> {loading ? "Sending…" : "Create & send"}
           </Button>
           <Button variant="outline" onClick={() => submit(false)} disabled={loading}>

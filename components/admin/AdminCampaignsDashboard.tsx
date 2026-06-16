@@ -83,7 +83,7 @@ export function AdminCampaignsDashboard() {
           </p>
         </div>
         <Link href="/dashboard/admin/campaigns/new">
-          <Button className="bg-foreground hover:bg-foreground text-foreground gap-2">
+          <Button className="gap-2">
             <Plus size={16} /> Create campaign
           </Button>
         </Link>
@@ -139,7 +139,7 @@ export function AdminCampaignsDashboard() {
           <p className="text-muted-foreground font-medium">No campaigns yet</p>
           <p className="text-sm text-muted-foreground mt-1 mb-4">Create your first dealer outreach email.</p>
           <Link href="/dashboard/admin/campaigns/new">
-            <Button className="bg-foreground hover:bg-foreground text-foreground">Create campaign</Button>
+            <Button>Create campaign</Button>
           </Link>
         </div>
       ) : (
