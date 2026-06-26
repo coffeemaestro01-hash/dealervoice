@@ -4,6 +4,7 @@ import prisma from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
+import { DealerGrowthBanner } from "@/components/home/DealerGrowthBanner";
 import { HeroSection } from "@/components/home/HeroSection";
 import { BuyerJourneyStrip } from "@/components/home/BuyerJourneyStrip";
 import { HowItWorksSection } from "@/components/home/HowItWorksSection";
@@ -52,6 +53,7 @@ export default async function HomePage() {
       <main className="flex-1">
         {/* Primary buyer funnel — above the fold */}
         <HeroSection stats={stats} />
+        <DealerGrowthBanner />
         <BuyerJourneyStrip />
         <HowItWorksSection dealerCount={stats.dealers} />
         <TrustSection />

@@ -9,6 +9,7 @@ import {
 } from "@/lib/payment";
 import { planFeatures } from "@/lib/subscription";
 import { maybeSendSubscriptionWelcomeEmail } from "@/lib/subscription/welcome-email";
+import { recordSubscriptionPayment } from "@/lib/income/record-subscription-payment";
 import { z } from "zod";
 import type Stripe from "stripe";
 
@@ -106,6 +107,18 @@ export async function POST(req: NextRequest) {
     ]);
 
     await maybeSendSubscriptionWelcomeEmail(dealershipId, plan, interval).catch(() => {});
+
+    const amountMinor = checkoutSession.amount_total ?? 0;
+    if (amountMinor > 0) {
+      await recordSubscriptionPayment({
+        dealershipId,
+        plan,
+        amountMinor,
+        currency: (checkoutSession.currency ?? "usd").toUpperCase(),
+        externalRef: checkoutSession.id,
+        description: `Stripe checkout verify — ${plan}`,
+      }).catch(() => {});
+    }
 
     return NextResponse.json({ success: true, subscription: { plan: sub.plan, status: sub.status } });
   } catch (err: unknown) {

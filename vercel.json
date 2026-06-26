@@ -17,6 +17,10 @@
       "schedule": "0 4 * * *"
     },
     {
+      "path": "/api/cron/growth-sprint",
+      "schedule": "0 7 * * *"
+    },
+    {
       "path": "/api/cron/outreach-drip",
       "schedule": "0 10 * * *"
     },

@@ -15,17 +15,15 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const followUps = await processDueOutreachDrips(50);
-    const autoStartIl = await autoStartOutreachDrips(10, "US", "Illinois");
-    const autoStart =
-      autoStartIl.started > 0
-        ? autoStartIl
-        : await autoStartOutreachDrips(25, "US");
+    const followUps = await processDueOutreachDrips(75);
+    const autoStartIl = await autoStartOutreachDrips(25, "US", "Illinois");
+    const autoStartUs = await autoStartOutreachDrips(50, "US");
 
     return NextResponse.json({
       ok: true,
       followUps,
-      autoStart,
+      autoStartIl,
+      autoStartUs,
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Drip cron failed";

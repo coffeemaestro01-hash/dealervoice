@@ -109,12 +109,17 @@ export default async function ChicagoPage() {
                 <Building2 className="text-primary" /> Are you a Chicago dealer?
               </h3>
               <p className="text-muted-foreground mt-1 max-w-lg">
-                Claim your free profile, respond to reviews, and join our pilot Pro program. We&apos;re onboarding Illinois dealers first.
+                Claim free → get review QR & SMS tools → upgrade to Pro ($199) or Pro+ ($349) for featured badge + website backlink. Pilot codes available via outreach.
               </p>
             </div>
-            <Link href="/register-dealership">
-              <Button className="shrink-0">List your store</Button>
-            </Link>
+            <div className="flex flex-wrap gap-2 shrink-0">
+              <Link href="/register-dealership">
+                <Button className="shrink-0">List your store</Button>
+              </Link>
+              <Link href="/pricing">
+                <Button variant="outline" className="border-primary/30 shrink-0">Pro plans</Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

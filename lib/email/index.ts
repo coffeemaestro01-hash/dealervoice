@@ -275,6 +275,25 @@ export async function sendSubscriptionWelcomeEmail(
   });
 }
 
+export async function sendDealerReviewGrowthEmail(to: string, dealerName: string, inviteUrl: string) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.io";
+  const dashboardUrl = `${appUrl}/dashboard/dealer`;
+  return resend.emails.send({
+    from: FROM,
+    to,
+    subject: `${dealerName} — get your first 10 reviews on DealerVoice`,
+    html: emailTemplate({
+      title: "Grow your reputation",
+      body: `<p>Hi,</p>
+<p><strong>${dealerName}</strong> is claimed on DealerVoice but has no published reviews yet. Buyers trust dealers with verified feedback — stores with 10+ reviews convert 3× more profile views into leads.</p>
+<p><strong>Share this link</strong> after every sale or service visit (SMS, email, receipt):</p>
+<p style="background:#f9fafb;border:1px solid #e5e7eb;padding:12px 16px;border-radius:8px;word-break:break-all;font-size:13px"><a href="${inviteUrl}" style="color:#C9961E">${inviteUrl}</a></p>
+<p><a href="${dashboardUrl}" style="background:#C9961E;color:#0a0a0a;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block">Open dealer dashboard</a></p>
+<p style="color:#777;font-size:14px;margin-top:20px">Your dashboard has QR codes, SMS templates, and featured badge embeds for Pro members.</p>`,
+    }),
+  });
+}
+
 export async function sendClaimApprovedEmail(
   to: string,
   name: string,

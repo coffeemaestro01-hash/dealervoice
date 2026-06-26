@@ -155,15 +155,15 @@ ${EMAILS.dealers}`,
 
   const codeLine = promoCode
     ? `Use code ${promoCode} at checkout for Pro at $1/month (normally $199/month). This code is exclusive to ${ctx.name}.`
-    : "Reply if you'd like a pilot discount on Pro — we have limited partner pricing for early dealers.";
+    : "Reply for pilot pricing — Pro $199/mo or Pro+ $349/mo with featured badge & review backlink on your website.";
 
   return {
-    subject: `Pilot offer for ${ctx.name} — Pro for $1/month`,
+    subject: `Pilot offer for ${ctx.name} — Pro from $1/month`,
     body: `Hi,
 
 Last note from us about ${ctx.name} on DealerVoice.
 
-Pro unlocks review invite tools, analytics, competitor monitoring, and removes third-party ads from your profile page.
+Pro ($199/mo) unlocks review invite tools, analytics, and competitor monitoring. Pro+ ($349/mo) adds a featured badge and embeddable review backlink for your website — buyers land directly on your profile to write a review.
 
 ${codeLine}
 
@@ -173,6 +173,6 @@ ${codeLine}
 Questions? ${EMAILS.dealers} · WhatsApp ${WHATSAPP_BUSINESS.display}
 
 — DealerVoice
-Built in Chicago · Available worldwide`,
+Built in Chicago · Available nationwide`,
   };
 }

@@ -10,6 +10,7 @@ import { maybeSendSubscriptionWelcomeEmail } from "@/lib/subscription/welcome-em
 import { maybeSendAdminSubscriptionAlert } from "@/lib/subscription/admin-alert";
 import { ensureDealerApiKey } from "@/lib/api/dealer-keys";
 import { recordIncome } from "@/lib/income/ledger";
+import { recordSubscriptionPayment } from "@/lib/income/record-subscription-payment";
 import { sponsorshipUntil } from "@/lib/sponsorship/checkout";
 import { planFeatures } from "@/lib/subscription";
 import { recordDealerInvoice } from "@/lib/billing/record-invoice";
@@ -100,15 +101,14 @@ async function syncSubscription(
       select: { country: { select: { code: true } } },
     });
 
-    await recordIncome({
-      source: "SUBSCRIPTION",
-      status: "CONFIRMED",
+    await recordSubscriptionPayment({
+      dealershipId,
+      plan,
       amountMinor: amountCents,
       currency,
       countryCode: dealer?.country?.code,
-      dealershipId,
-      description: `Stripe subscription payment — ${plan}`,
-      externalRef: stripeSub.id,
+      externalRef: `sub_init_${stripeSub.id}`,
+      description: `Stripe subscription activated — ${plan}`,
     }).catch(() => {});
   }
 }
@@ -183,6 +183,22 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
   });
 
   await sendDealerInvoiceEmail(recorded.id).catch(() => {});
+
+  if (invoice.amount_paid && invoice.amount_paid > 0) {
+    const dealer = await prisma.dealership.findUnique({
+      where: { id: sub.dealershipId },
+      select: { country: { select: { code: true } } },
+    });
+    await recordSubscriptionPayment({
+      dealershipId: sub.dealershipId,
+      plan: sub.plan,
+      amountMinor: invoice.amount_paid,
+      currency: invoice.currency.toUpperCase(),
+      countryCode: dealer?.country?.code,
+      externalRef: invoice.id,
+      description: description,
+    }).catch(() => {});
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -224,6 +240,17 @@ export async function POST(req: NextRequest) {
               meta.interval,
               promoCode
             ).catch(() => {});
+
+            if (session.amount_total && session.amount_total > 0) {
+              await recordSubscriptionPayment({
+                dealershipId: meta.dealershipId,
+                plan: meta.plan,
+                amountMinor: session.amount_total,
+                currency: (session.currency ?? "usd").toUpperCase(),
+                externalRef: session.id,
+                description: `Stripe checkout — ${meta.plan}`,
+              }).catch(() => {});
+            }
           }
 
           const promoCode = session.metadata?.promotionCode;

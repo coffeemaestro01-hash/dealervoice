@@ -355,6 +355,7 @@ model Dealership {
   outreachDripActive  Boolean        @default(false)
   nextOutreachAt      DateTime?
   outreachDripStartedAt DateTime?
+  reviewNudgeSentAt     DateTime?      @map("review_nudge_sent_at")
 
   // Address
   address             String?
