@@ -8,6 +8,7 @@ import {
 } from "@/lib/social/linkedin/content";
 import { createLinkedInPost, linkedInConfigured, uploadLinkedInImage } from "@/lib/social/linkedin/client";
 import { getLinkedInConnectionMeta } from "@/lib/social/linkedin/credentials";
+import { getLinkedInSetupInfo } from "@/lib/social/linkedin/oauth";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.io";
 const REUSE_DAYS = 14;
@@ -136,9 +137,11 @@ export async function getLinkedInSocialStatus() {
   });
   const next = await publishNextLinkedInPost({ dryRun: true });
   const connection = await getLinkedInConnectionMeta();
+  const setup = getLinkedInSetupInfo();
   return {
     configured: await linkedInConfigured(),
     connection,
+    setup,
     recent,
     nextPreview: next,
     poolSize: expandLinkedInPool().length,

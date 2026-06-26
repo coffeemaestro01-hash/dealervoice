@@ -1,10 +1,23 @@
 import crypto from "crypto";
 
-const SCOPES = [
-  "w_organization_social",
-  "r_organization_social",
-  "rw_organization_admin",
-].join(" ");
+const SCOPES = ["w_organization_social", "r_organization_social"].join(" ");
+
+export function getLinkedInSetupInfo() {
+  const redirectUri = linkedInRedirectUri();
+  return {
+    redirectUri,
+    scopes: SCOPES,
+    clientIdConfigured: !!process.env.LINKEDIN_CLIENT_ID,
+    clientSecretConfigured: !!process.env.LINKEDIN_CLIENT_SECRET,
+    appUrl: process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.io",
+    checklist: [
+      "LinkedIn Developers → DealerVoice → Products → add Sign In with LinkedIn + Community Management API",
+      `Auth tab → add redirect URL exactly: ${redirectUri}`,
+      "Auth tab → ensure scopes include w_organization_social (not just w_member_social)",
+      "You must be super admin on linkedin.com/company/dealervoice/admin",
+    ],
+  };
+}
 
 export function linkedInOAuthConfigured() {
   return !!(process.env.LINKEDIN_CLIENT_ID && process.env.LINKEDIN_CLIENT_SECRET);

@@ -2,6 +2,27 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/config";
 import { getLinkedInSocialStatus, publishNextLinkedInPost } from "@/lib/social/linkedin/publish";
+import { saveLinkedInCredentials } from "@/lib/social/linkedin/credentials";
+import { resolveDealerVoiceOrgId } from "@/lib/social/linkedin/oauth";
+
+async function connectManualToken(accessToken: string, userId: string) {
+  const probe = await fetch("https://api.linkedin.com/v2/userinfo", {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  if (!probe.ok) {
+    const text = await probe.text();
+    throw new Error(`Invalid token (${probe.status}): ${text.slice(0, 200)}`);
+  }
+
+  const organizationId = await resolveDealerVoiceOrgId(accessToken);
+  await saveLinkedInCredentials({
+    accessToken,
+    organizationId,
+    scopes: "manual",
+    connectedBy: userId,
+  });
+  return { organizationId };
+}
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -19,6 +40,17 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json().catch(() => ({}));
+
+  if (body.accessToken && typeof body.accessToken === "string") {
+    try {
+      const result = await connectManualToken(body.accessToken.trim(), session.user.id);
+      return NextResponse.json({ ok: true, connected: true, ...result });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Token save failed";
+      return NextResponse.json({ error: message }, { status: 400 });
+    }
+  }
+
   if (body.preview) {
     return NextResponse.json(await publishNextLinkedInPost({ dryRun: true }));
   }

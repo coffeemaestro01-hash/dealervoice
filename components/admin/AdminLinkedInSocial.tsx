@@ -22,6 +22,13 @@ type ConnectionMeta =
 type Status = {
   configured: boolean;
   connection?: ConnectionMeta;
+  setup?: {
+    redirectUri: string;
+    scopes: string;
+    clientIdConfigured: boolean;
+    clientSecretConfigured: boolean;
+    checklist: string[];
+  };
   poolSize: number;
   schedule: string;
   nextPreview: { body?: string; imageUrl?: string; templateKey?: string };
@@ -41,6 +48,8 @@ export function AdminLinkedInSocial() {
   const [status, setStatus] = useState<Status | null>(null);
   const [loading, setLoading] = useState(true);
   const [posting, setPosting] = useState(false);
+  const [manualToken, setManualToken] = useState("");
+  const [savingToken, setSavingToken] = useState(false);
 
   const load = () => {
     setLoading(true);
@@ -65,6 +74,33 @@ export function AdminLinkedInSocial() {
       window.history.replaceState({}, "", "/dashboard/admin/social");
     }
   }, [searchParams, toast]);
+
+  const saveManualToken = async () => {
+    if (!manualToken.trim()) return;
+    setSavingToken(true);
+    try {
+      const res = await fetch("/api/admin/social/linkedin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ accessToken: manualToken.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Failed");
+      toast({ title: "LinkedIn connected", description: `Org ID ${data.organizationId}` });
+      setManualToken("");
+      load();
+    } catch (e) {
+      toast({ title: "Token rejected", description: e instanceof Error ? e.message : "Failed", variant: "destructive" });
+    } finally {
+      setSavingToken(false);
+    }
+  };
+
+  const copyRedirect = () => {
+    const uri = status?.setup?.redirectUri ?? "https://dealervoice.io/api/admin/social/linkedin/callback";
+    void navigator.clipboard.writeText(uri);
+    toast({ title: "Copied redirect URI" });
+  };
 
   const postNow = async () => {
     setPosting(true);
@@ -106,16 +142,47 @@ export function AdminLinkedInSocial() {
               </p>
             </div>
           </div>
-          <ol className="list-decimal list-inside text-muted-foreground space-y-1 text-xs ml-6">
-            <li>LinkedIn Developers → DealerVoice → Products → request <strong>Community Management API</strong></li>
-            <li>Auth tab → add redirect: <code className="text-xs">https://dealervoice.io/api/admin/social/linkedin/callback</code></li>
-            <li>Click Connect below → approve as company page admin</li>
+          <ol className="list-decimal list-inside text-muted-foreground space-y-1.5 text-xs ml-6">
+            {(status.setup?.checklist ?? [
+              "LinkedIn Developers → Products → Sign In with LinkedIn + Community Management API",
+              "Auth tab → add redirect URL (copy below)",
+              "Scopes must include w_organization_social — not w_member_social alone",
+            ]).map((item) => (
+              <li key={item}>{item}</li>
+            ))}
           </ol>
+          <div className="flex flex-wrap items-center gap-2 text-xs">
+            <code className="bg-muted px-2 py-1 rounded break-all">
+              {status.setup?.redirectUri ?? "https://dealervoice.io/api/admin/social/linkedin/callback"}
+            </code>
+            <Button size="sm" variant="outline" type="button" onClick={copyRedirect}>
+              Copy redirect URI
+            </Button>
+          </div>
+          <p className="text-xs text-destructive/90">
+            LinkedIn &quot;Bummer, something went wrong&quot; = redirect URI missing or Community Management API not approved yet.
+          </p>
           <Button asChild className="gap-2">
             <a href="/api/admin/social/linkedin/connect">
               <Link2 size={16} /> Connect LinkedIn company page
             </a>
           </Button>
+          <div className="border-t border-amber-500/20 pt-4 space-y-2">
+            <p className="text-xs font-medium text-foreground">Fallback: paste token from LinkedIn Developers</p>
+            <p className="text-xs text-muted-foreground">
+              Developers → OAuth 2.0 tools → Create token with <strong>w_organization_social</strong> (after Community Management API is approved).
+            </p>
+            <textarea
+              className="w-full text-xs font-mono bg-muted border rounded-lg p-2 min-h-[72px]"
+              placeholder="Paste access token…"
+              value={manualToken}
+              onChange={(e) => setManualToken(e.target.value)}
+            />
+            <Button size="sm" variant="secondary" disabled={savingToken || !manualToken.trim()} onClick={saveManualToken}>
+              {savingToken ? <Loader2 size={14} className="animate-spin mr-1" /> : null}
+              Save token
+            </Button>
+          </div>
         </div>
       ) : conn?.connected ? (
         <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 text-sm flex gap-2">
