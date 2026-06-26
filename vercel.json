@@ -17,6 +17,10 @@
       "schedule": "0 4 * * *"
     },
     {
+      "path": "/api/cron/linkedin-post",
+      "schedule": "0 */3 * * *"
+    },
+    {
       "path": "/api/cron/growth-sprint",
       "schedule": "0 7 * * *"
     },

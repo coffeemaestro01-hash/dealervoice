@@ -29,6 +29,10 @@ cp .env.example .env.local
 | `STRIPE_PRICE_PRO_MONTHLY` | Price ID for Pro $199/mo |
 | `STRIPE_PRICE_ENTERPRISE_MONTHLY` | Price ID for Enterprise $499/mo |
 | `CRON_SECRET` | Random string for Vercel cron auth |
+| `LINKEDIN_CLIENT_ID` | LinkedIn app Client ID (OAuth connect button) |
+| `LINKEDIN_CLIENT_SECRET` | LinkedIn app secret (server only) |
+| `LINKEDIN_ACCESS_TOKEN` | Optional — manual token override |
+| `LINKEDIN_ORGANIZATION_ID` | Optional — manual org ID override |
 | `RESEND_API_KEY` | Transactional email |
 | `EMAIL_FROM` | e.g. `DealerVoice <noreply@send.dealervoice.io>` |
 
@@ -65,7 +69,9 @@ vercel env pull .env.local   # optional
 git push origin main         # auto-deploys
 ```
 
-Crons are defined in `vercel.json` (outreach drip, email discovery, digest, reputation).
+Crons are defined in `vercel.json` (outreach drip, email discovery, digest, reputation, **LinkedIn posts every 3h**).
+
+Paid ads playbook: **`docs/REVENUE-ADS-PLAYBOOK.md`** (Google, Meta, gift cards).
 
 ---
 

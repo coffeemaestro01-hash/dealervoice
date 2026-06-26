@@ -28,6 +28,7 @@ import {
   LifeBuoy,
   PenLine,
   Award,
+  Linkedin,
 } from "lucide-react";
 
 export type AdminTeam = "founder" | "ops" | "trust" | "growth" | "platform";
@@ -45,6 +46,7 @@ export const ADMIN_NAV: AdminNavItem[] = [
   { href: "/dashboard/admin", label: "Overview", icon: LayoutDashboard, exact: true, team: "founder", roles: ["SUPER_ADMIN", "REVENUE", "MODERATOR", "SUPPORT"] },
   { href: "/dashboard/admin/income", label: "Platform income", icon: Wallet, team: "founder", roles: ["SUPER_ADMIN"] },
   { href: "/dashboard/admin/revenue", label: "Revenue", icon: DollarSign, team: "founder", roles: ["SUPER_ADMIN", "REVENUE"] },
+  { href: "/dashboard/admin/social", label: "LinkedIn autopilot", icon: Linkedin, team: "growth", roles: ["SUPER_ADMIN", "REVENUE"] },
   { href: "/dashboard/admin/launch", label: "Launch tracker", icon: Activity, team: "founder", roles: ["SUPER_ADMIN", "REVENUE"] },
   { href: "/dashboard/admin/leads", label: "Leads", icon: Inbox, team: "ops", roles: ["SUPER_ADMIN", "REVENUE", "SUPPORT"] },
   { href: "/dashboard/admin/sponsors", label: "Sponsors", icon: Megaphone, team: "founder", roles: ["SUPER_ADMIN", "REVENUE"] },

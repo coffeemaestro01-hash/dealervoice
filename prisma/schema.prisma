@@ -1462,3 +1462,21 @@ model VehicleListing {
   @@index([isActive])
   @@index([listedAt])
 }
+
+model SocialPostLog {
+  id           String   @id @default(cuid())
+  platform     String   // linkedin
+  templateKey  String
+  contentHash  String
+  body         String   @db.Text
+  imageUrl     String?
+  videoUrl     String?
+  externalId   String?
+  status       String   @default("posted") // posted | failed
+  error        String?  @db.Text
+  postedAt     DateTime @default(now())
+
+  @@unique([platform, contentHash])
+  @@index([platform, postedAt])
+  @@index([templateKey])
+}

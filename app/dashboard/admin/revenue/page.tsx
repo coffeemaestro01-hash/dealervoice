@@ -3,6 +3,7 @@ import { getRevenueStats } from "@/lib/admin/stats";
 import { getAdRevenueStats } from "@/lib/ads/placements";
 import { getGrowthSprintMetrics } from "@/lib/marketing/growth-sprint";
 import { AdminGrowthPlaybook } from "@/components/admin/AdminGrowthPlaybook";
+import { AdminPaidAdsGuide } from "@/components/admin/AdminPaidAdsGuide";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -31,6 +32,10 @@ export default async function AdminRevenuePage() {
           <Link href="/dashboard/admin/income" className="text-primary hover:underline">
             Full income ledger →
           </Link>
+          {" · "}
+          <Link href="/dashboard/admin/social" className="text-primary hover:underline">
+            LinkedIn autopilot →
+          </Link>
         </p>
       </div>
 
@@ -43,6 +48,8 @@ export default async function AdminRevenuePage() {
       </div>
 
       <AdminGrowthPlaybook metrics={growth} />
+
+      <AdminPaidAdsGuide />
 
       <div className="bg-card rounded-xl border p-6">
         <h2 className="font-semibold text-foreground mb-4">Claim → pay funnel</h2>

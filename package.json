@@ -20,6 +20,7 @@
     "db:migrate:pro-plus": "tsx scripts/migrate-pro-plus-db.ts",
     "db:migrate:growth": "tsx scripts/migrate-growth-db.ts",
     "db:migrate:buyer-outreach": "tsx scripts/migrate-buyer-outreach-db.ts",
+    "db:migrate:social-post": "tsx scripts/migrate-social-post-db.ts",
     "income:backfill-stripe": "tsx scripts/backfill-stripe-income.ts",
     "backfill:franchised": "tsx scripts/backfill-franchised-dealers.ts",
     "outreach:discover-emails": "tsx scripts/discover-dealer-emails.ts",
