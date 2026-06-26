@@ -13,7 +13,7 @@ export default async function AdminSocialLinkedInPage() {
       <div>
         <h1 className="text-2xl font-bold text-foreground">LinkedIn growth autopilot</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Unique posts every 3 hours on{" "}
+          Posts daily on{" "}
           <a href="https://www.linkedin.com/company/dealervoice/" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
             linkedin.com/company/dealervoice
           </a>

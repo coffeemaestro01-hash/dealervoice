@@ -18,7 +18,7 @@
     },
     {
       "path": "/api/cron/linkedin-post",
-      "schedule": "0 */3 * * *"
+      "schedule": "0 14 * * *"
     },
     {
       "path": "/api/cron/growth-sprint",

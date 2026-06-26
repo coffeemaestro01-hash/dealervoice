@@ -142,6 +142,6 @@ export async function getLinkedInSocialStatus() {
     recent,
     nextPreview: next,
     poolSize: expandLinkedInPool().length,
-    schedule: "Every 3 hours (0 */3 * * * UTC)",
+    schedule: "Daily at 14:00 UTC (Vercel Hobby: 1×/day; use n8n for more)",
   };
 }

@@ -133,7 +133,7 @@ export function AdminLinkedInSocial() {
 
       <div className="grid sm:grid-cols-3 gap-4">
         <Stat label="Post pool" value={status.poolSize} />
-        <Stat label="Schedule" value="Every 3h UTC" />
+        <Stat label="Schedule" value="Daily 14:00 UTC" />
         <Stat label="API" value={status.configured ? "Connected" : "Not connected"} />
       </div>
 
