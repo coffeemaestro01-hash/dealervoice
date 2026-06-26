@@ -294,6 +294,27 @@ export async function sendDealerReviewGrowthEmail(to: string, dealerName: string
   });
 }
 
+export async function sendBuyerReviewOutreachEmail(
+  to: string,
+  name: string,
+  writeReviewUrl: string,
+  chicagoUrl: string
+) {
+  return resend.emails.send({
+    from: FROM,
+    to,
+    subject: "Bought a car in Chicago? Share your dealer experience",
+    html: emailTemplate({
+      title: "Help Chicago car buyers",
+      body: `<p>Hi ${name},</p>
+<p>DealerVoice is the independent review platform for car dealerships — built in Chicago. If you bought or serviced a car recently, your review helps the next buyer avoid bad experiences and rewards honest dealers.</p>
+<p><a href="${writeReviewUrl}" style="background:#C9961E;color:#0a0a0a;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block;font-weight:600">Write a review (2 min)</a></p>
+<p style="margin-top:16px"><a href="${chicagoUrl}" style="color:#C9961E">Browse Chicago-area dealers →</a></p>
+<p style="color:#777;font-size:13px;margin-top:20px">You received this because you have a DealerVoice account with email notifications on. Turn off in account settings anytime.</p>`,
+    }),
+  });
+}
+
 export async function sendClaimApprovedEmail(
   to: string,
   name: string,

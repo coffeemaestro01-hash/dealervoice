@@ -185,6 +185,7 @@ model User {
   totalReviews       Int        @default(0)
   emailNotifications Boolean    @default(true)
   marketingEmails    Boolean    @default(false)
+  lastBuyerOutreachAt DateTime?  @map("last_buyer_outreach_at")
   twoFactorEnabled   Boolean    @default(false)
   twoFactorSecret    String?
   phoneNumber        String?

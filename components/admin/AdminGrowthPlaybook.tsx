@@ -3,10 +3,17 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { Loader2, Zap, Mail, Users, DollarSign, RefreshCw } from "lucide-react";
+import { Loader2, Zap, Mail, Users, DollarSign, RefreshCw, MapPin, Database } from "lucide-react";
 
 type Props = {
   metrics: {
+    coverage: {
+      il: number;
+      chicagoland: number;
+      ilWithEmail: number;
+      ilNoEmail: number;
+      customerUsers: number;
+    };
     publishedReviews: number;
     paidSubs: number;
     mrrDollars: number;
@@ -20,10 +27,13 @@ type Props = {
 };
 
 const ACTIONS = [
+  { id: "import_chicagoland", label: "Import Chicagoland OSM", icon: Database },
+  { id: "discover_chicagoland", label: "Discover Chicagoland emails", icon: MapPin },
   { id: "discover_il", label: "Discover IL emails", icon: Mail },
   { id: "discover_us", label: "Discover US emails", icon: Mail },
   { id: "drip", label: "Run outreach drip", icon: Zap },
   { id: "nudge_reviews", label: "Nudge dealers for reviews", icon: Users },
+  { id: "outreach_buyers", label: "Email buyers for reviews", icon: Users },
   { id: "backfill_income", label: "Sync Stripe → income", icon: DollarSign },
 ] as const;
 
@@ -51,6 +61,14 @@ export function AdminGrowthPlaybook({ metrics }: Props) {
 
   return (
     <div className="space-y-6">
+      {metrics.coverage.il < 200 ? (
+        <div className="rounded-xl border border-destructive/40 bg-destructive/5 p-4 text-sm">
+          <strong className="text-destructive">Inventory gap:</strong> only{" "}
+          <strong>{metrics.coverage.il}</strong> Illinois dealers listed ({metrics.coverage.chicagoland} Chicagoland).
+          Real metro has 500+. Click <strong>Import Chicagoland OSM</strong> below — this is the #1 blocker to revenue.
+        </div>
+      ) : null}
+
       <div className="bg-card rounded-xl border border-primary/20 p-6">
         <h2 className="font-semibold text-foreground flex items-center gap-2">
           <Zap size={18} className="text-primary" /> 30-day revenue sprint — live progress

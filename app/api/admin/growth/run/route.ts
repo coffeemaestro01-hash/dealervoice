@@ -5,9 +5,20 @@ import { isStaffRole } from "@/lib/admin/permissions";
 import { discoverDealerEmailsBatch } from "@/lib/outreach/discover-emails";
 import { autoStartOutreachDrips, processDueOutreachDrips } from "@/lib/outreach/drip";
 import { nudgeDealersForReviews } from "@/lib/marketing/dealer-review-nudge";
+import { outreachBuyersForReviews } from "@/lib/marketing/buyer-review-outreach";
 import { backfillStripeSubscriptionIncome } from "@/lib/income/backfill-stripe";
+import { importChicagolandFromOsm } from "@/lib/geo/import-chicagoland-job";
 
-const ACTIONS = ["discover_il", "discover_us", "drip", "nudge_reviews", "backfill_income"] as const;
+const ACTIONS = [
+  "import_chicagoland",
+  "discover_chicagoland",
+  "discover_il",
+  "discover_us",
+  "drip",
+  "nudge_reviews",
+  "outreach_buyers",
+  "backfill_income",
+] as const;
 type Action = (typeof ACTIONS)[number];
 
 export async function POST(req: NextRequest) {
@@ -33,18 +44,30 @@ export async function POST(req: NextRequest) {
 
   try {
     switch (action) {
+      case "import_chicagoland":
+        return NextResponse.json({ ok: true, result: await importChicagolandFromOsm() });
+      case "discover_chicagoland":
+        return NextResponse.json({
+          ok: true,
+          result: await discoverDealerEmailsBatch({ region: "chicagoland", limit: 250 }),
+        });
       case "discover_il":
-        return NextResponse.json({ ok: true, result: await discoverDealerEmailsBatch({ state: "Illinois", limit: 80 }) });
+        return NextResponse.json({
+          ok: true,
+          result: await discoverDealerEmailsBatch({ region: "illinois", limit: 300 }),
+        });
       case "discover_us":
-        return NextResponse.json({ ok: true, result: await discoverDealerEmailsBatch({ limit: 120 }) });
+        return NextResponse.json({ ok: true, result: await discoverDealerEmailsBatch({ limit: 400 }) });
       case "drip": {
-        const followUps = await processDueOutreachDrips(75);
-        const il = await autoStartOutreachDrips(25, "US", "Illinois");
-        const us = await autoStartOutreachDrips(50, "US");
+        const followUps = await processDueOutreachDrips(150);
+        const il = await autoStartOutreachDrips(50, "US", "Illinois");
+        const us = await autoStartOutreachDrips(100, "US");
         return NextResponse.json({ ok: true, result: { followUps, il, us } });
       }
       case "nudge_reviews":
-        return NextResponse.json({ ok: true, result: await nudgeDealersForReviews(15) });
+        return NextResponse.json({ ok: true, result: await nudgeDealersForReviews(30) });
+      case "outreach_buyers":
+        return NextResponse.json({ ok: true, result: await outreachBuyersForReviews(200) });
       case "backfill_income":
         return NextResponse.json({ ok: true, result: await backfillStripeSubscriptionIncome() });
       default:

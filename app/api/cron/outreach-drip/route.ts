@@ -15,9 +15,9 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const followUps = await processDueOutreachDrips(75);
-    const autoStartIl = await autoStartOutreachDrips(25, "US", "Illinois");
-    const autoStartUs = await autoStartOutreachDrips(50, "US");
+    const followUps = await processDueOutreachDrips(150);
+    const autoStartIl = await autoStartOutreachDrips(50, "US", "Illinois");
+    const autoStartUs = await autoStartOutreachDrips(100, "US");
 
     return NextResponse.json({
       ok: true,

@@ -1,6 +1,7 @@
 import prisma from "@/lib/db";
 import { getIncomeDashboard } from "@/lib/income/ledger";
 import { getOutreachDripStats } from "@/lib/outreach/discover-emails";
+import { getMarketCoverageStats } from "@/lib/marketing/coverage-stats";
 
 export const GROWTH_TARGETS = {
   publishedReviews: 10,
@@ -54,6 +55,8 @@ export const MARKETING_PLAYBOOK = [
 ] as const;
 
 export async function getGrowthSprintMetrics() {
+  const coverage = await getMarketCoverageStats();
+
   const [
     publishedReviews,
     proSubs,
@@ -92,6 +95,7 @@ export async function getGrowthSprintMetrics() {
   const confirmedRevenue = income.confirmedTotalMinor / 100;
 
   return {
+    coverage,
     publishedReviews,
     paidSubs,
     proSubs,

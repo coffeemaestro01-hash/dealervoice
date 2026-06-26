@@ -1,12 +1,28 @@
 import prisma from "@/lib/db";
 import { usStateWhere } from "@/lib/outreach/regions";
+import { chicagolandCityWhere } from "@/lib/geo/chicagoland";
 
 const EMAIL_REGEX = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
-const SKIP_LOCAL = ["noreply", "no-reply", "donotreply", "privacy", "abuse", "postmaster"];
-const SKIP_EMAIL_FRAGMENTS = ["sentry.io", "wixpress.com", "cloudflare.com", "schema.org", "example.com"];
+const SKIP_LOCAL = ["noreply", "no-reply", "donotreply", "privacy", "abuse", "postmaster", "you", "user"];
+const SKIP_EMAIL_FRAGMENTS = ["sentry.io", "wixpress.com", "cloudflare.com", "schema.org", "example.com", "email.com"];
+const SKIP_EXACT = new Set(["you@email.com", "user@domain.com", "name@example.com"]);
+
+const SCRAPE_PATHS = [
+  "",
+  "/contact",
+  "/contact-us",
+  "/about",
+  "/about-us",
+  "/team",
+  "/contact.html",
+  "/about.html",
+];
+
+const CONCURRENCY = 8;
 
 function isUsableEmail(email: string) {
   const e = email.toLowerCase();
+  if (SKIP_EXACT.has(e)) return false;
   if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/.test(e)) return false;
   if (SKIP_LOCAL.some((s) => e.startsWith(s))) return false;
   if (SKIP_EMAIL_FRAGMENTS.some((f) => e.includes(f))) return false;
@@ -25,7 +41,11 @@ function pickBestEmail(emails: string[]) {
     .filter(isUsableEmail)
     .map((e) => ({
       e,
-      score: (e.includes("sales") ? 3 : 0) + (e.includes("info") ? 2 : 0) + (e.includes("contact") ? 2 : 0),
+      score:
+        (e.includes("sales") ? 4 : 0) +
+        (e.includes("info") ? 3 : 0) +
+        (e.includes("contact") ? 3 : 0) +
+        (e.includes("service") ? 2 : 0),
     }))
     .sort((a, b) => b.score - a.score);
   return scored[0]?.e ?? null;
@@ -33,11 +53,11 @@ function pickBestEmail(emails: string[]) {
 
 async function fetchEmailsFromUrl(url: string): Promise<string[]> {
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 8000);
+  const timer = setTimeout(() => controller.abort(), 10000);
   try {
     const res = await fetch(url, {
       signal: controller.signal,
-      headers: { "User-Agent": "DealerVoice-EmailDiscovery/1.0", Accept: "text/html" },
+      headers: { "User-Agent": "DealerVoice-EmailDiscovery/2.0", Accept: "text/html" },
     });
     if (!res.ok) return [];
     const html = await res.text();
@@ -51,17 +71,43 @@ async function fetchEmailsFromUrl(url: string): Promise<string[]> {
 
 async function discoverForWebsite(website: string) {
   const base = normalizeWebsite(website);
-  for (const path of ["", "/contact", "/contact-us", "/about"]) {
+  const found: string[] = [];
+  for (const path of SCRAPE_PATHS) {
     const emails = await fetchEmailsFromUrl(`${base.replace(/\/$/, "")}${path}`);
-    const best = pickBestEmail(emails);
+    found.push(...emails);
+    const best = pickBestEmail(found);
     if (best) return best;
   }
-  return null;
+  return pickBestEmail(found);
 }
 
-export async function discoverDealerEmailsBatch(opts: { state?: string; limit?: number }) {
+async function processBatch<T, R>(items: T[], fn: (item: T) => Promise<R>): Promise<R[]> {
+  const results: R[] = [];
+  for (let i = 0; i < items.length; i += CONCURRENCY) {
+    const chunk = items.slice(i, i + CONCURRENCY);
+    const chunkResults = await Promise.all(chunk.map(fn));
+    results.push(...chunkResults);
+  }
+  return results;
+}
+
+export type DiscoverRegion = "chicagoland" | "illinois" | "all";
+
+function regionWhere(region?: DiscoverRegion) {
+  if (region === "chicagoland") return chicagolandCityWhere();
+  if (region === "illinois") return usStateWhere("Illinois");
+  return {};
+}
+
+export async function discoverDealerEmailsBatch(opts: {
+  state?: string;
+  region?: DiscoverRegion;
+  limit?: number;
+}) {
   const us = await prisma.country.findUnique({ where: { code: "US" }, select: { id: true } });
   if (!us) return { scanned: 0, updated: 0 };
+
+  const regionFilter = opts.region ? regionWhere(opts.region) : opts.state ? usStateWhere(opts.state) : {};
 
   const dealers = await prisma.dealership.findMany({
     where: {
@@ -71,25 +117,30 @@ export async function discoverDealerEmailsBatch(opts: { state?: string; limit?: 
       OR: [{ email: null }, { email: "" }],
       website: { not: null },
       NOT: { website: "" },
-      ...(opts.state ? usStateWhere(opts.state) : {}),
+      ...regionFilter,
     },
     take: opts.limit ?? 30,
+    orderBy: [{ isFranchised: "desc" }, { cityName: "asc" }],
     select: { id: true, name: true, website: true },
   });
 
   let updated = 0;
-  for (const d of dealers) {
-    if (!d.website) continue;
+  await processBatch(dealers, async (d) => {
+    if (!d.website) return;
     const email = await discoverForWebsite(d.website);
-    if (!email) continue;
+    if (!email) return;
     await prisma.dealership.update({
       where: { id: d.id },
       data: { email, emailSource: "website" },
     });
     updated++;
-  }
+  });
 
-  return { scanned: dealers.length, updated, state: opts.state ?? "all" };
+  return {
+    scanned: dealers.length,
+    updated,
+    state: opts.state ?? opts.region ?? "all",
+  };
 }
 
 export async function getOutreachDripStats() {
