@@ -38,6 +38,20 @@ export function billingUrl() {
   return `${APP_URL}/dashboard/dealer/billing`;
 }
 
+export function promotionsUrl() {
+  return `${APP_URL}/promotions`;
+}
+
+function isChicagoland(ctx: DealerOutreachContext): boolean {
+  const state = ctx.stateName?.toLowerCase() ?? "";
+  const city = ctx.cityName?.toLowerCase() ?? "";
+  return state.includes("illinois") || city.includes("chicago");
+}
+
+function chicagolandPromoBlurb(): string {
+  return `Chicagoland Dealership Promotion (live now): claim your profile, collect 25 verified buyer reviews, and the first 100 qualified rooftops earn 2 years of Enterprise access. Details: ${promotionsUrl()}`;
+}
+
 export function buildClaimEmail(ctx: DealerOutreachContext) {
   const market = marketOf(ctx);
   const location = [ctx.cityName, ctx.stateName].filter(Boolean).join(", ");
@@ -123,7 +137,7 @@ Claiming is free and takes about two minutes. Once claimed, you can respond to r
 
 Claim your profile: ${claimUrl(ctx.slug)}
 
-Questions? WhatsApp ${WHATSAPP_BUSINESS.display} or email ${EMAILS.dealers}
+${isChicagoland(ctx) ? `${chicagolandPromoBlurb()}\n\n` : ""}Questions? WhatsApp ${WHATSAPP_BUSINESS.display} or email ${EMAILS.dealers}
 
 — DealerVoice
 ${EMAILS.dealers}`,
@@ -146,7 +160,7 @@ ${localHook} Dealers who claim their profile and collect reviews typically see m
 Your listing: ${profileUrl(ctx.slug)}
 Claim (free): ${claimUrl(ctx.slug)}
 
-If you have questions, reply to this email or WhatsApp ${WHATSAPP_BUSINESS.display}.
+${isChicagoland(ctx) ? `${chicagolandPromoBlurb()}\n\n` : ""}If you have questions, reply to this email or WhatsApp ${WHATSAPP_BUSINESS.display}.
 
 — DealerVoice
 ${EMAILS.dealers}`,
@@ -169,8 +183,9 @@ ${codeLine}
 
 1. Claim your profile: ${claimUrl(ctx.slug)}
 2. Upgrade at billing: ${billingUrl()}
+3. View live promotions: ${promotionsUrl()}
 
-Questions? ${EMAILS.dealers} · WhatsApp ${WHATSAPP_BUSINESS.display}
+${isChicagoland(ctx) ? `${chicagolandPromoBlurb()}\n\n` : ""}Questions? ${EMAILS.dealers} · WhatsApp ${WHATSAPP_BUSINESS.display}
 
 — DealerVoice
 Built in Chicago · Available nationwide`,

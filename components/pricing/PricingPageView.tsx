@@ -43,7 +43,7 @@ const TESTIMONIALS = [
 
 export function PricingPageView({ plans, dealerBanner, stats }: Props) {
   return (
-    <div className="bg-card">
+    <div className="bg-background">
       {/* Hero — GoodFirms "Choose your visibility level" */}
       <section className="bg-gradient-to-b from-background via-muted to-background text-foreground py-16 md:py-20">
         <div className="container max-w-4xl text-center">
@@ -138,9 +138,9 @@ export function PricingPageView({ plans, dealerBanner, stats }: Props) {
                   <Button
                     className={`w-full h-12 text-base font-semibold ${
                       plan.highlighted
-                        ? "bg-primary hover:bg-primary/90 text-foreground"
+                        ? "bg-primary hover:bg-primary/90 text-primary-foreground"
                         : plan.customPrice
-                          ? "bg-pearl hover:bg-muted text-foreground"
+                          ? "bg-muted hover:bg-accent text-foreground border border-border"
                           : "bg-card border-2 border-border text-foreground hover:bg-muted"
                     }`}
                   >

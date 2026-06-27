@@ -31,6 +31,10 @@
     {
       "path": "/api/cron/discover-emails",
       "schedule": "0 6 * * 2"
+    },
+    {
+      "path": "/api/cron/chicagoland-promotion",
+      "schedule": "0 5 * * *"
     }
   ]
 }

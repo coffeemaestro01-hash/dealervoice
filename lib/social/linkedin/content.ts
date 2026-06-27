@@ -26,6 +26,15 @@ const BASE_TAGS = ["DealerVoice", "Automotive", "CarDealers", "CustomerExperienc
 
 export const LINKEDIN_TEMPLATES: LinkedInPostTemplate[] = [
   {
+    key: "chicagoland-promotion",
+    category: "dealers",
+    imageTheme: "chicago",
+    hashtags: [...BASE_TAGS, "Chicago", "Chicagoland", "AutoDealers", "Enterprise"],
+    link: (c) => `${c.appUrl}/promotions`,
+    body: () =>
+      `Chicagoland Dealership Promotion — live on DealerVoice.\n\nClaim your profile, collect 25 verified buyer reviews, and the first 100 qualified rooftops earn 2 years of Enterprise access.\n\nPlus billing bonuses on every paid plan:\n→ Annual: 2 years of paid features\n→ 6-month: 1 year\n→ Monthly: 45 days (up to 3×)\n\nDetails: dealervoice.io/promotions`,
+  },
+  {
     key: "chicago-built",
     category: "chicago",
     imageTheme: "chicago",
@@ -59,7 +68,7 @@ export const LINKEDIN_TEMPLATES: LinkedInPostTemplate[] = [
     hashtags: [...BASE_TAGS, "SaaS", "B2B", "DealerTech", "ProPlus"],
     link: (c) => `${c.appUrl}/pricing`,
     body: () =>
-      `New on DealerVoice: Pro+ ($349/mo)\n\nFeatured badge on your profile + embeddable review backlink for your website. One click → buyer lands on your page ready to write a review.\n\nPro ($199) · Pro+ ($349) · Enterprise ($499)\n\nBuilt for dealers who treat reputation as revenue, not vanity.`,
+      `New on DealerVoice: Pro+ ($349/mo)\n\nFeatured badge on your profile + embeddable review backlink for your website. One click → buyer lands on your page ready to write a review.\n\nPro ($199) · Pro+ ($349) · Enterprise ($2,999.99)\n\nBuilt for dealers who treat reputation as revenue, not vanity.`,
   },
   {
     key: "growth-milestone",

@@ -2,8 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import prisma from "@/lib/db";
 import { Button } from "@/components/ui/button";
-import { MapPin, Star, Building2, MessageCircle } from "lucide-react";
+import { MapPin, Star, Building2, MessageCircle, Trophy } from "lucide-react";
 import { WHATSAPP_BUSINESS } from "@/lib/constants/social";
+import {
+  CHICAGO_JACKPOT,
+  CHICAGOLAND_DEALERSHIP_PROMOTION_NAME,
+  getChicagoJackpotAdminSummary,
+} from "@/lib/promotions/chicago-jackpot";
 
 export const metadata: Metadata = {
   title: "Chicago Car Dealers — Reviews & Ratings",
@@ -40,10 +45,17 @@ async function getChicagoDealers() {
 
 export default async function ChicagoPage() {
   const dealers = await getChicagoDealers();
+  let slotsRemaining: number = CHICAGO_JACKPOT.MAX_WINNERS;
+  try {
+    const jackpot = await getChicagoJackpotAdminSummary();
+    slotsRemaining = jackpot.slotsRemaining;
+  } catch {
+    /* default */
+  }
 
   return (
-    <div className="bg-card">
-      <section className="border-b border-border bg-gradient-to-br from-background via-muted to-background text-foreground">
+    <div className="bg-background">
+      <section className="border-b border-border bg-gradient-to-br from-background via-muted/40 to-background">
         <div className="container py-16 max-w-3xl">
           <p className="text-primary text-sm font-semibold tracking-wide uppercase mb-3">Chicago · Illinois</p>
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
@@ -59,8 +71,14 @@ export default async function ChicagoPage() {
               </Button>
             </Link>
             <Link href="/claim">
-              <Button size="lg" variant="outline" className="border-primary/30 text-foreground hover:bg-card">
+              <Button size="lg" variant="outline" className="border-primary/30">
                 Claim your dealership
+              </Button>
+            </Link>
+            <Link href="/promotions">
+              <Button size="lg" className="font-semibold gap-2">
+                <Trophy size={18} />
+                Dealer promotions
               </Button>
             </Link>
             <a href={WHATSAPP_BUSINESS.href} target="_blank" rel="noopener noreferrer">
@@ -106,18 +124,24 @@ export default async function ChicagoPage() {
           <div className="mt-10 rounded-2xl border border-primary/30 bg-primary/10 p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
               <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <Building2 className="text-primary" /> Are you a Chicago dealer?
+                <Trophy className="text-primary" size={22} />
+                {CHICAGOLAND_DEALERSHIP_PROMOTION_NAME}
               </h3>
-              <p className="text-muted-foreground mt-1 max-w-lg">
-                Claim free → get review QR & SMS tools → upgrade to Pro ($199) or Pro+ ($349) for featured badge + website backlink. Pilot codes available via outreach.
+              <p className="text-muted-foreground mt-2 max-w-lg leading-relaxed">
+                Claim your listing, collect {CHICAGO_JACKPOT.TARGET_VERIFIED_REVIEWS} verified buyer reviews, and join the
+                first {CHICAGO_JACKPOT.MAX_WINNERS} qualified Chicagoland dealerships to earn{" "}
+                {CHICAGO_JACKPOT.ENTERPRISE_FREE_YEARS} years of Enterprise access.{" "}
+                <strong className="text-foreground">{slotsRemaining} slots left.</strong>
               </p>
             </div>
             <div className="flex flex-wrap gap-2 shrink-0">
-              <Link href="/register-dealership">
-                <Button className="shrink-0">List your store</Button>
+              <Link href="/promotions">
+                <Button className="shrink-0 gap-2">
+                  Full details <Building2 size={16} />
+                </Button>
               </Link>
-              <Link href="/pricing">
-                <Button variant="outline" className="border-primary/30 shrink-0">Pro plans</Button>
+              <Link href="/claim">
+                <Button variant="outline" className="border-primary/30 shrink-0">Claim &amp; enter</Button>
               </Link>
             </div>
           </div>

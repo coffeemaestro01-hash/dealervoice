@@ -2,58 +2,22 @@ import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { shouldTrackPath } from "@/lib/analytics/paths";
 
-const PUBLIC_PATHS = [
-  "/",
-  "/login",
-  "/register",
-  "/forgot-password",
-  "/reset-password",
-  "/about",
-  "/pricing",
-  "/for-dealers",
-  "/buyers",
-  "/explore",
-  "/insights",
-  "/promotions",
-  "/blog",
-  "/research",
-  "/contact",
-  "/privacy",
-  "/terms",
-  "/cookies",
-  "/dmca",
-  "/grievance",
-  "/shipping-refunds",
-  "/bis-compliance",
-  "/methodology",
-  "/careers",
-  "/advertise",
-  "/api-docs",
-  "/chicago",
-  "/claim",
-  "/unsubscribe",
-  "/trust",
-  "/dealers",
-  "/dealership",
-  "/verify-email",
-  "/write-review",
-  "/settings",
-  "/vehicles",
-];
-
-const DEALER_PATHS = ["/dashboard/dealer"];
 const ADMIN_PATHS = ["/dashboard/admin"];
+const DEALER_DASHBOARD_PREFIX = "/dashboard/dealer";
+
+/** Only dashboard routes require login — all marketing pages stay public by default. */
+function requiresAuth(pathname: string): boolean {
+  return pathname === "/dashboard" || pathname.startsWith("/dashboard/");
+}
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Illinois / U.S. positioning — redirect legacy India marketing routes
   if (pathname === "/dealers/in" || pathname.startsWith("/dealers/in/")) {
     const dest = pathname.includes("/inventory") ? "/dealers/us/inventory" : "/chicago";
     return NextResponse.redirect(new URL(dest, req.url), 308);
   }
 
-  // SEO + static assets — never gate
   if (
     pathname === "/sitemap.xml" ||
     pathname === "/robots.txt" ||
@@ -65,15 +29,14 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // All API routes enforce auth themselves (return 401 JSON, not HTML redirect)
   if (pathname.startsWith("/api/")) {
     return NextResponse.next();
   }
 
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  const isPublic = PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"));
+  const needsAuth = requiresAuth(pathname);
+  const token = needsAuth ? await getToken({ req, secret: process.env.NEXTAUTH_SECRET }) : null;
 
-  if (!token && !isPublic) {
+  if (needsAuth && !token) {
     const loginUrl = new URL("/login", req.url);
     loginUrl.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(loginUrl);
@@ -89,7 +52,7 @@ export async function middleware(req: NextRequest) {
       }
     }
 
-    if (DEALER_PATHS.some((p) => pathname.startsWith(p))) {
+    if (pathname.startsWith(DEALER_DASHBOARD_PREFIX)) {
       if (!["DEALER_OWNER", "DEALER_GROUP_ADMIN", "MODERATOR", "SUPER_ADMIN"].includes(role)) {
         return NextResponse.redirect(new URL("/", req.url));
       }

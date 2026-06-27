@@ -68,6 +68,9 @@ export function HomepageAudienceSplit() {
               <li className="flex items-center gap-2.5">
                 <Bot size={14} className="text-primary shrink-0" /> AI sales assistant (Pro)
               </li>
+              <li className="flex items-center gap-2.5">
+                <Building2 size={14} className="text-primary shrink-0" /> Live dealer promotions
+              </li>
             </ul>
             <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary mt-8">
               Dealer solutions <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />

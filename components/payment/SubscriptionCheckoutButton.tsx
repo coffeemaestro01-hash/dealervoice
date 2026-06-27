@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 interface Props {
   dealershipId: string;
   plan: "PRO" | "PRO_PLUS" | "ENTERPRISE";
-  interval?: "monthly" | "annual";
+  interval?: "monthly" | "semiannual" | "annual";
   promotionCode?: string;
   label?: string;
   className?: string;

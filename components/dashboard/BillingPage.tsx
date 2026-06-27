@@ -83,7 +83,7 @@ export function BillingPage() {
   const showUpgrade = searchParams?.get("upgrade") === "1";
   const [dealership, setDealership] = useState<Dealership | null>(null);
   const [invoices, setInvoices] = useState<InvoiceRow[]>([]);
-  const [interval, setInterval] = useState<"monthly" | "annual">("monthly");
+  const [interval, setInterval] = useState<"monthly" | "semiannual" | "annual">("monthly");
   const [promotionCode, setPromotionCode] = useState("");
   const [loading, setLoading] = useState(true);
   const [portalLoading, setPortalLoading] = useState(false);
@@ -250,16 +250,25 @@ export function BillingPage() {
         </div>
       )}
 
-      <div className="flex gap-2 mb-6">
-        {(["monthly", "annual"] as const).map((i) => (
+      <div className="flex flex-wrap gap-2 mb-6">
+        {(
+          [
+            ["monthly", "Monthly"],
+            ["semiannual", "6-month (1 yr bonus)"],
+            ["annual", "Annual (save ~17%)"],
+          ] as const
+        ).map(([key, label]) => (
           <button
-            key={i}
-            onClick={() => setInterval(i)}
+            key={key}
+            type="button"
+            onClick={() => setInterval(key)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              interval === i ? "bg-primary text-foreground" : "bg-card border border-border text-muted-foreground hover:border-primary/30"
+              interval === key
+                ? "bg-primary text-primary-foreground"
+                : "bg-card border border-border text-muted-foreground hover:border-primary/30 hover:text-foreground"
             }`}
           >
-            {i === "monthly" ? "Monthly" : "Annual (save ~17%)"}
+            {label}
           </button>
         ))}
       </div>

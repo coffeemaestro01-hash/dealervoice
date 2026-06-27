@@ -9,8 +9,10 @@ import { RecentReviewsSection } from "@/components/home/RecentReviewsSection";
 import { HomepageTrustTeaser } from "@/components/home/HomepageTrustTeaser";
 import { HomepageInsightsTeaser } from "@/components/home/HomepageInsightsTeaser";
 import { HomepageCtaSection } from "@/components/home/HomepageCtaSection";
+import { HomepagePromotionsTeaser } from "@/components/home/HomepagePromotionsTeaser";
 import { Navbar } from "@/components/layouts/Navbar";
 import { Footer } from "@/components/layouts/Footer";
+import { getChicagoJackpotAdminSummary } from "@/lib/promotions/chicago-jackpot";
 
 export const metadata: Metadata = {
   title: "DealerVoice — The AI Dealership Reputation Platform",
@@ -35,6 +37,14 @@ async function getHeroStats() {
 
 export default async function HomePage() {
   const stats = await getHeroStats();
+  let slotsRemaining = 100;
+  try {
+    const jackpot = await getChicagoJackpotAdminSummary();
+    slotsRemaining = jackpot.slotsRemaining;
+  } catch {
+    /* default */
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-showroom">
       <div className="relative">
@@ -43,6 +53,7 @@ export default async function HomePage() {
       </div>
       <main className="flex-1">
         <HomepagePlatformShowcase />
+        <HomepagePromotionsTeaser slotsRemaining={slotsRemaining} />
         <HomepageAudienceSplit />
         <Suspense>
           <RecentReviewsSection showExploreLink />
