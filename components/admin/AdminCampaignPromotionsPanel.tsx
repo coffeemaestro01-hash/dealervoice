@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
   CHICAGO_JACKPOT,
+  CHICAGOLAND_DEALERSHIP_PROMOTION_NAME,
   jackpotStatusLabel,
 } from "@/lib/promotions/chicago-jackpot";
 import type { ChicagoJackpotStatus } from "@prisma/client";
@@ -69,7 +70,7 @@ export function AdminCampaignPromotionsPanel() {
   return (
     <div className="space-y-10">
       <section>
-        <h2 className="text-xl font-bold text-foreground mb-1">Chicago Jackpot</h2>
+        <h2 className="text-xl font-bold text-foreground mb-1">{CHICAGOLAND_DEALERSHIP_PROMOTION_NAME}</h2>
         <p className="text-sm text-muted-foreground mb-4">
           {winnerTotal} / {CHICAGO_JACKPOT.MAX_WINNERS} winner slots filled · {slotsRemaining} remaining ·{" "}
           {CHICAGO_JACKPOT.TARGET_VERIFIED_REVIEWS} verified reviews required ·{" "}

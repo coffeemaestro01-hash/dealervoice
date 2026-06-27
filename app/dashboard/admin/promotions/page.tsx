@@ -10,7 +10,7 @@ export default async function AdminPromotionsPage() {
     <div className="p-6 lg:p-8">
       <h1 className="text-2xl font-bold text-foreground mb-2">Promotions</h1>
       <p className="text-sm text-muted-foreground mb-6">
-        Chicago Jackpot, billing-period bonuses, and Stripe discount codes.
+        Chicagoland Dealership Promotion, billing-period bonuses, and Stripe discount codes.
       </p>
       <AdminPromotionsTabs />
     </div>

@@ -1,5 +1,5 @@
 /**
- * One-time backfill: sync Chicago Jackpot entries for claimed Chicagoland dealers.
+ * One-time backfill: sync Chicagoland Dealership Promotion entries for claimed Chicagoland dealers.
  * Usage: npx tsx scripts/sync-chicago-jackpot-backfill.ts
  */
 

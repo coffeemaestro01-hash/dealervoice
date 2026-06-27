@@ -15,7 +15,7 @@ export function AdminPromotionsTabs() {
       <div className="flex gap-2 mb-6 border-b border-border/60">
         {(
           [
-            ["campaigns", "Campaigns & Jackpot"],
+            ["campaigns", "Chicagoland & billing bonuses"],
             ["codes", "Discount codes"],
           ] as const
         ).map(([key, label]) => (

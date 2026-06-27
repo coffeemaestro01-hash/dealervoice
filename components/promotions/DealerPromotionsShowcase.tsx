@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Calendar, Gift, Sparkles, Trophy, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CHICAGO_JACKPOT } from "@/lib/promotions/chicago-jackpot";
+import { CHICAGO_JACKPOT, CHICAGOLAND_DEALERSHIP_PROMOTION_NAME } from "@/lib/promotions/chicago-jackpot";
 import { formatBillingBonusLabel } from "@/lib/billing/period-bonus";
 
 export interface PromotionsShowcaseStats {
@@ -68,23 +68,23 @@ export function DealerPromotionsShowcase({ stats, compact = false }: Props) {
           )}
         </div>
 
-        {/* Chicago Jackpot — hero promo */}
+        {/* Chicagoland Dealership Promotion — hero promo */}
         <div className="glass-panel glow-ring rounded-2xl p-8 md:p-10 mb-8 border border-primary/25">
           <div className="flex flex-col lg:flex-row lg:items-center gap-8">
             <div className="flex-1">
               <div className="inline-flex items-center gap-2 rounded-full bg-primary/15 border border-primary/30 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary mb-4">
                 <Trophy size={12} />
-                Chicago Jackpot
+                {CHICAGOLAND_DEALERSHIP_PROMOTION_NAME}
               </div>
               <h3 className="font-display text-2xl md:text-3xl font-light text-white">
                 {CHICAGO_JACKPOT.MAX_WINNERS} Chicagoland dealers.{" "}
-                <span className="text-gradient-gold">{CHICAGO_JACKPOT.ENTERPRISE_FREE_YEARS} years Enterprise free.</span>
+                <span className="text-gradient-gold">{CHICAGO_JACKPOT.ENTERPRISE_FREE_YEARS} years Enterprise access.</span>
               </h3>
               <p className="text-white/55 mt-3 text-sm md:text-base leading-relaxed max-w-xl">
                 Claim your listing and collect{" "}
                 <strong className="text-white/80">{CHICAGO_JACKPOT.TARGET_VERIFIED_REVIEWS} verified buyer reviews</strong>{" "}
                 from real customers. First {CHICAGO_JACKPOT.MAX_WINNERS} qualified dealerships win{" "}
-                {CHICAGO_JACKPOT.ENTERPRISE_FREE_YEARS} years of Enterprise — then keep{" "}
+                {CHICAGO_JACKPOT.ENTERPRISE_FREE_YEARS} years of Enterprise access — then keep{" "}
                 <strong className="text-white/80">{CHICAGO_JACKPOT.MIN_MONTHLY_REVIEWS}+ verified reviews per month</strong>{" "}
                 to stay eligible.
               </p>

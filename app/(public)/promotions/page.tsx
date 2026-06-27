@@ -5,9 +5,9 @@ import { getChicagoJackpotAdminSummary } from "@/lib/promotions/chicago-jackpot"
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Dealer Promotions — Chicago Jackpot & Billing Bonuses | DealerVoice",
+  title: "Dealer Promotions — Chicagoland Dealership Promotion & Billing Bonuses | DealerVoice",
   description:
-    "Chicago Jackpot: 5 years Enterprise free for the first 100 qualified dealers. Plus billing bonuses — 2 years on annual, 1 year on 6-month, 45 days on monthly.",
+    "Chicagoland Dealership Promotion: 2 years Enterprise access for the first 100 qualified dealers with 25 verified reviews. Plus billing bonuses — 2 years on annual, 1 year on 6-month, 45 days on monthly.",
 };
 
 export const dynamic = "force-dynamic";
@@ -52,7 +52,7 @@ export default async function PromotionsPage() {
       <section className="py-14 border-t border-border">
         <div className="container max-w-2xl text-center text-sm text-muted-foreground leading-relaxed">
           <p>
-            Promotions apply to claimed dealership profiles only. Chicago Jackpot is limited to Chicagoland claimed
+            Promotions apply to claimed dealership profiles only. The Chicagoland Dealership Promotion is limited to Chicagoland claimed
             listings. Billing bonuses apply automatically when you pay through Stripe — redemption limits are enforced
             per dealership. Terms may be updated; eligibility is shown in your{" "}
             <Link href="/dashboard/dealer/promotions" className="text-primary hover:underline">

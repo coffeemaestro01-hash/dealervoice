@@ -15,7 +15,7 @@ export function ForDealersHero() {
           <Link href="/promotions" className="text-primary font-medium hover:underline">
             live promotions
           </Link>{" "}
-          including the Chicago Jackpot and billing-period bonuses.
+          including the Chicagoland Dealership Promotion and billing-period bonuses.
         </p>
         <div className="flex flex-wrap gap-3 mt-8">
           <Link href="/claim">

@@ -3,11 +3,13 @@ import { chicagolandCityWhere } from "@/lib/geo/chicagoland";
 import { planFeatures } from "@/lib/subscription";
 import type { ChicagoJackpotStatus, Dealership } from "@prisma/client";
 
+export const CHICAGOLAND_DEALERSHIP_PROMOTION_NAME = "Chicagoland Dealership Promotion";
+
 export const CHICAGO_JACKPOT = {
-  TARGET_VERIFIED_REVIEWS: 45,
+  TARGET_VERIFIED_REVIEWS: 25,
   MAX_WINNERS: 100,
   MIN_MONTHLY_REVIEWS: 5,
-  ENTERPRISE_FREE_YEARS: 5,
+  ENTERPRISE_FREE_YEARS: 2,
 } as const;
 
 const VERIFIED_STATUSES = ["VERIFIED_PURCHASE", "VERIFIED_SERVICE"] as const;

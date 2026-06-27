@@ -9,7 +9,7 @@ import { getChicagoJackpotAdminSummary } from "@/lib/promotions/chicago-jackpot"
 export const metadata: Metadata = {
   title: "Dealer Solutions — Reputation & AI Tools | DealerVoice",
   description:
-    "Claim your dealership profile, manage reviews, capture leads with AI, and grow visibility. Chicago Jackpot + billing bonuses live now.",
+    "Claim your dealership profile, manage reviews, capture leads with AI, and grow visibility. Chicagoland Dealership Promotion + billing bonuses live now.",
 };
 
 export const dynamic = "force-dynamic";

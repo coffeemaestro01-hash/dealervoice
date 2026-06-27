@@ -5,6 +5,7 @@ import { Loader2, Trophy, Gift } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
   CHICAGO_JACKPOT,
+  CHICAGOLAND_DEALERSHIP_PROMOTION_NAME,
   jackpotStatusLabel,
 } from "@/lib/promotions/chicago-jackpot";
 import type { ChicagoJackpotStatus } from "@prisma/client";
@@ -70,7 +71,7 @@ export function DealerPromotionsPanel() {
       <div>
         <h1 className="text-2xl font-bold text-foreground">Promotions</h1>
         <p className="text-muted-foreground text-sm mt-1">
-          Track Chicago Jackpot progress and billing-period bonus redemptions.
+          Track {CHICAGOLAND_DEALERSHIP_PROMOTION_NAME} progress and billing-period bonus redemptions.
         </p>
       </div>
 
@@ -81,11 +82,11 @@ export function DealerPromotionsPanel() {
               <Trophy size={20} />
             </div>
             <div>
-              <h2 className="font-semibold text-foreground">Chicago Jackpot</h2>
+              <h2 className="font-semibold text-foreground">{CHICAGOLAND_DEALERSHIP_PROMOTION_NAME}</h2>
               <p className="text-sm text-muted-foreground mt-1">
                 First {CHICAGO_JACKPOT.MAX_WINNERS} Chicagoland dealerships with{" "}
                 {CHICAGO_JACKPOT.TARGET_VERIFIED_REVIEWS} verified reviews on a claimed profile win{" "}
-                {CHICAGO_JACKPOT.ENTERPRISE_FREE_YEARS} years of Enterprise — free.
+                {CHICAGO_JACKPOT.ENTERPRISE_FREE_YEARS} years of Enterprise access.
               </p>
             </div>
           </div>
@@ -126,7 +127,7 @@ export function DealerPromotionsPanel() {
             </>
           ) : (
             <p className="text-sm text-muted-foreground">
-              Claim your listing and collect verified reviews to enter the Chicago Jackpot.
+              Claim your listing and collect verified reviews to enter the {CHICAGOLAND_DEALERSHIP_PROMOTION_NAME}.
             </p>
           )}
         </section>

@@ -1,5 +1,5 @@
 /**
- * Campaign promotions — billing-period bonuses + Chicago Jackpot.
+ * Campaign promotions — billing-period bonuses + Chicagoland Dealership Promotion.
  * Usage: npm run db:migrate:campaign-promotions
  */
 
