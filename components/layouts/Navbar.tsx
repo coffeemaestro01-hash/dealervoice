@@ -38,6 +38,7 @@ const BUYERS_LINKS = [
 
 const DEALERS_LINKS = [
   { label: "Dealer solutions", href: "/for-dealers" },
+  { label: "Promotions", href: "/promotions" },
   { label: "Claim profile", href: "/claim" },
   { label: "Pricing", href: "/pricing" },
   { label: "Dealer dashboard", href: "/dashboard/dealer" },

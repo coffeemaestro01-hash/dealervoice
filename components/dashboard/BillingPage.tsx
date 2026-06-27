@@ -158,6 +158,18 @@ export function BillingPage() {
         </div>
       </div>
 
+      <div className="rounded-xl border border-primary/25 bg-primary/10 p-4 mb-8 text-sm">
+        <p className="font-semibold text-foreground">Billing-period bonuses — applied automatically</p>
+        <ul className="mt-2 space-y-1 text-muted-foreground text-xs md:text-sm">
+          <li>Annual → 2 years of paid features (once per dealership)</li>
+          <li>6-month → 1 year of paid features (once per dealership)</li>
+          <li>Monthly → 45 days of paid features (up to 3 redemptions)</li>
+        </ul>
+        <a href="/promotions" className="inline-block mt-3 text-primary text-xs font-semibold hover:underline">
+          Full promotion details →
+        </a>
+      </div>
+
       <PremiumUpgradeBanner
         dealershipId={dealership.id}
         dealerName={dealership.name}

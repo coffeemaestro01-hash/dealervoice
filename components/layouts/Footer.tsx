@@ -16,6 +16,7 @@ const FOOTER_LINKS = {
   ],
   "For dealers": [
     { label: "Dealer Solutions", href: "/for-dealers" },
+    { label: "Promotions", href: "/promotions" },
     { label: "Claim Your Dealership", href: "/claim" },
     { label: "Pricing", href: "/pricing" },
     { label: "Dealer Dashboard", href: "/dashboard/dealer" },

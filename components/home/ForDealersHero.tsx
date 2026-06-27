@@ -11,14 +11,22 @@ export function ForDealersHero() {
           Reputation that earns trust — and tools that convert it
         </h1>
         <p className="text-muted-foreground mt-5 text-lg leading-relaxed max-w-2xl">
-          Claim your profile free. Respond to reviews. Upgrade when you&apos;re ready for analytics, featured visibility,
-          and an AI assistant that captures leads around the clock.
+          Claim your profile free. Respond to reviews. Upgrade when you&apos;re ready — plus{" "}
+          <Link href="/promotions" className="text-primary font-medium hover:underline">
+            live promotions
+          </Link>{" "}
+          including the Chicago Jackpot and billing-period bonuses.
         </p>
         <div className="flex flex-wrap gap-3 mt-8">
           <Link href="/claim">
             <Button size="lg" className="gap-2 font-semibold">
               <BadgeCheck size={18} />
               Claim free profile
+            </Button>
+          </Link>
+          <Link href="/promotions">
+            <Button size="lg" variant="outline" className="gap-2 border-primary/30">
+              See promotions <ArrowRight size={16} />
             </Button>
           </Link>
           <Link href="/pricing">

@@ -3,6 +3,8 @@ import prisma from "@/lib/db";
 import { PLAN_PRICES_USD } from "@/lib/payment";
 import { PLAN_SERVICE_AREA_LIMITS } from "@/lib/subscription/plan-limits";
 import { PricingPageView, type PricingPlan } from "@/components/pricing/PricingPageView";
+import { DealerPromotionsShowcase } from "@/components/promotions/DealerPromotionsShowcase";
+import { getChicagoJackpotAdminSummary } from "@/lib/promotions/chicago-jackpot";
 
 export const metadata: Metadata = {
   title: "Pricing & Plans — DealerVoice",
@@ -108,9 +110,10 @@ export default async function PricingPage({
 
   let dealerBanner: { name: string; dealerId: string } | null = null;
   let stats = { dealerships: 1500, countries: 10 };
+  let promoStats = { jackpotSlotsRemaining: 100, jackpotWinners: 0 };
 
   try {
-    const [dealer, dealershipCount, countryCount] = await Promise.all([
+    const [dealer, dealershipCount, countryCount, jackpot] = await Promise.all([
       dealerId
         ? prisma.dealership.findUnique({
             where: { id: dealerId, deletedAt: null },
@@ -119,13 +122,25 @@ export default async function PricingPage({
         : null,
       prisma.dealership.count({ where: { deletedAt: null, status: "ACTIVE" } }),
       prisma.country.count(),
+      getChicagoJackpotAdminSummary().catch(() => null),
     ]);
 
     if (dealer) dealerBanner = { name: dealer.name, dealerId: dealerId! };
     stats = { dealerships: dealershipCount, countries: Math.max(countryCount, 1) };
+    if (jackpot) {
+      promoStats = {
+        jackpotSlotsRemaining: jackpot.slotsRemaining,
+        jackpotWinners: jackpot.winnerTotal,
+      };
+    }
   } catch {
     /* use defaults */
   }
 
-  return <PricingPageView plans={buildPlans(dealerId)} dealerBanner={dealerBanner} stats={stats} />;
+  return (
+    <>
+      <PricingPageView plans={buildPlans(dealerId)} dealerBanner={dealerBanner} stats={stats} />
+      <DealerPromotionsShowcase stats={promoStats} compact />
+    </>
+  );
 }
