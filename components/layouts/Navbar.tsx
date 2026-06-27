@@ -52,16 +52,21 @@ const COMPANY_LINKS = [
 function NavDropdown({
   label,
   links,
+  triggerClassName,
 }: {
   label: string;
   links: { label: string; href: string }[];
+  triggerClassName?: string;
 }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors font-medium"
+          className={
+            triggerClassName ??
+            "inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors font-medium"
+          }
         >
           {label}
           <ChevronDown size={14} />
@@ -78,7 +83,7 @@ function NavDropdown({
   );
 }
 
-export function Navbar() {
+export function Navbar({ overHero = false }: { overHero?: boolean }) {
   const { data: session } = useSession();
   const [mobileOpen, setMobileOpen] = useState(false);
   const user = session?.user;
@@ -90,20 +95,40 @@ export function Navbar() {
         ? "/dashboard/dealer"
         : "/dashboard/customer";
 
+  const navLinkClass = overHero
+    ? "inline-flex items-center gap-1 text-sm text-white/70 hover:text-white transition-colors font-medium"
+    : "inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors font-medium";
+
   return (
-    <header className="sticky top-0 z-50 bg-pearl backdrop-blur-md border-b border-border shadow-soft">
+    <header
+      className={cn(
+        "sticky top-0 z-50 backdrop-blur-md border-b",
+        overHero
+          ? "absolute inset-x-0 bg-transparent border-white/10"
+          : "bg-pearl border-border shadow-soft"
+      )}
+    >
       <nav className="container flex items-center justify-between h-16 gap-3" aria-label="Main navigation">
-        <Logo variant="full" height={32} priority />
+        <Logo variant="full" height={32} priority inverted={overHero} />
 
         <div className="hidden lg:flex items-center gap-6 flex-1 justify-center">
-          <NavDropdown label="For buyers" links={BUYERS_LINKS} />
-          <NavDropdown label="For dealers" links={DEALERS_LINKS} />
-          <NavDropdown label="Company" links={COMPANY_LINKS} />
+          <NavDropdown label="For buyers" links={BUYERS_LINKS} triggerClassName={navLinkClass} />
+          <NavDropdown label="For dealers" links={DEALERS_LINKS} triggerClassName={navLinkClass} />
+          <NavDropdown label="Company" links={COMPANY_LINKS} triggerClassName={navLinkClass} />
         </div>
 
         <div className="hidden md:flex items-center gap-3 shrink-0">
           <Link href="/dealers">
-            <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground hover:text-primary">
+            <Button
+              variant="ghost"
+              size="sm"
+              className={cn(
+                "gap-1.5",
+                overHero
+                  ? "text-white/70 hover:text-white hover:bg-white/10"
+                  : "text-muted-foreground hover:text-primary"
+              )}
+            >
               <Search size={15} />
               Search
             </Button>
@@ -111,7 +136,16 @@ export function Navbar() {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="gap-2 px-2 text-foreground hover:text-primary hover:bg-accent">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={cn(
+                    "gap-2 px-2",
+                    overHero
+                      ? "text-white hover:text-white hover:bg-white/10"
+                      : "text-foreground hover:text-primary hover:bg-accent"
+                  )}
+                >
                   <Avatar className="w-7 h-7">
                     <AvatarImage src={user.image ?? undefined} />
                     <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
@@ -148,7 +182,15 @@ export function Navbar() {
           ) : (
             <>
               <Link href="/login">
-                <Button variant="ghost" size="sm" className="text-foreground hover:text-primary hover:bg-accent">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={
+                    overHero
+                      ? "text-white/80 hover:text-white hover:bg-white/10"
+                      : "text-foreground hover:text-primary hover:bg-accent"
+                  }
+                >
                   Sign in
                 </Button>
               </Link>
@@ -164,7 +206,12 @@ export function Navbar() {
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden text-foreground hover:text-primary hover:bg-accent"
+          className={cn(
+            "md:hidden",
+            overHero
+              ? "text-white hover:text-white hover:bg-white/10"
+              : "text-foreground hover:text-primary hover:bg-accent"
+          )}
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
           aria-expanded={mobileOpen}

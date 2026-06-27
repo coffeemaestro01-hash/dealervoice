@@ -2,7 +2,8 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import prisma from "@/lib/db";
 
-import { HeroSection } from "@/components/home/HeroSection";
+import { HomepageCinematicHero } from "@/components/home/HomepageCinematicHero";
+import { HomepagePlatformShowcase } from "@/components/home/HomepagePlatformShowcase";
 import { HomepageAudienceSplit } from "@/components/home/HomepageAudienceSplit";
 import { RecentReviewsSection } from "@/components/home/RecentReviewsSection";
 import { HomepageTrustTeaser } from "@/components/home/HomepageTrustTeaser";
@@ -12,9 +13,9 @@ import { Navbar } from "@/components/layouts/Navbar";
 import { Footer } from "@/components/layouts/Footer";
 
 export const metadata: Metadata = {
-  title: "DealerVoice — Trusted Car Dealership Reviews Worldwide",
+  title: "DealerVoice — The AI Dealership Reputation Platform",
   description:
-    "Find car dealerships worldwide. Read verified buyer reviews, browse dealer inventory, and compare reputation scores before you buy or service your vehicle.",
+    "Verified reviews, transparent trust scores, and AI that helps dealerships capture every lead. The reputation platform built for automotive retail.",
 };
 
 export const dynamic = "force-dynamic";
@@ -36,9 +37,12 @@ export default async function HomePage() {
   const stats = await getHeroStats();
   return (
     <div className="flex flex-col min-h-screen bg-background">
-      <Navbar />
+      <div className="relative">
+        <Navbar overHero />
+        <HomepageCinematicHero stats={stats} />
+      </div>
       <main className="flex-1">
-        <HeroSection stats={stats} />
+        <HomepagePlatformShowcase />
         <HomepageAudienceSplit />
         <Suspense>
           <RecentReviewsSection showExploreLink />

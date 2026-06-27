@@ -10,6 +10,8 @@ interface LogoProps {
   href?: string | null;
   className?: string;
   priority?: boolean;
+  /** Light wordmark for dark backgrounds */
+  inverted?: boolean;
 }
 
 /**
@@ -23,8 +25,35 @@ export function Logo({
   href = "/",
   className,
   priority = false,
+  inverted = false,
 }: LogoProps) {
   const isFull = variant === "full";
+
+  if (inverted && isFull) {
+    const brand = (
+      <span className={cn("inline-flex items-center gap-2.5", className)}>
+        <Image
+          src="/logo/dealervoice-icon.png"
+          alt=""
+          width={height}
+          height={height}
+          priority={priority}
+          className="object-contain select-none"
+          aria-hidden
+        />
+        <span className="text-xl font-extrabold tracking-tight text-white">
+          DealerVoice<span className="text-primary">.io</span>
+        </span>
+      </span>
+    );
+    if (href === null) return brand;
+    return (
+      <Link href={href} className="inline-flex items-center" aria-label="DealerVoice home">
+        {brand}
+      </Link>
+    );
+  }
+
   const src = isFull ? "/logo/dealervoice-horizontal.png" : "/logo/dealervoice-icon.png";
   const ratio = isFull ? 1600 / 410 : 1;
   const width = Math.round(height * ratio);
