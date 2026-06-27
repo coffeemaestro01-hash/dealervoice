@@ -51,7 +51,7 @@ const PLANS = [
     name: "Pro",
     monthly: PLAN_PRICES_USD.PRO.monthlyDisplay,
     annual: PLAN_PRICES_USD.PRO.annualDisplay,
-    features: ["5 locations", "Full analytics", "Competitor monitoring", "AI response suggestions", "Featured Pro badge"],
+    features: ["5 locations", "Full analytics", "Competitor monitoring", "AI response suggestions", "AI sales assistant (24/7 chat + leads)", "Featured Pro badge"],
   },
   {
     key: "PRO_PLUS" as const,
@@ -59,7 +59,7 @@ const PLANS = [
     monthly: PLAN_PRICES_USD.PRO_PLUS.monthlyDisplay,
     annual: PLAN_PRICES_USD.PRO_PLUS.annualDisplay,
     badge: "Best value",
-    features: ["15 locations", "Everything in Pro", "Featured Pro+ badge", "Priority placement", "Review backlink embed"],
+    features: ["15 locations", "Everything in Pro", "Featured Pro+ badge", "Priority placement", "Review backlink embed", "AI assistant: booking + follow-ups"],
   },
   {
     key: "ENTERPRISE" as const,

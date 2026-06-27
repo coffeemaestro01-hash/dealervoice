@@ -11,9 +11,12 @@ export function getLinkedInSetupInfo() {
     clientSecretConfigured: !!process.env.LINKEDIN_CLIENT_SECRET,
     appUrl: process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.io",
     checklist: [
-      "LinkedIn Developers → DealerVoice → Products → add Sign In with LinkedIn + Community Management API",
+      "Create a NEW LinkedIn Developer app (e.g. DealerVoice Social) — Community Management API must be the ONLY product on the app",
+      "Do NOT add Events, Conversions, or other products to that app (LinkedIn blocks mixed apps)",
+      "Associate the new app with the DealerVoice company page",
       `Auth tab → add redirect URL exactly: ${redirectUri}`,
-      "Auth tab → ensure scopes include w_organization_social (not just w_member_social)",
+      "Products → request Community Management API only → wait for approval",
+      "Update Vercel LINKEDIN_CLIENT_ID + LINKEDIN_CLIENT_SECRET to the new app credentials",
       "You must be super admin on linkedin.com/company/dealervoice/admin",
     ],
   };

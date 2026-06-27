@@ -144,9 +144,9 @@ export function AdminLinkedInSocial() {
           </div>
           <ol className="list-decimal list-inside text-muted-foreground space-y-1.5 text-xs ml-6">
             {(status.setup?.checklist ?? [
-              "LinkedIn Developers → Products → Sign In with LinkedIn + Community Management API",
+              "Create NEW LinkedIn app — Community Management API must be the only product",
               "Auth tab → add redirect URL (copy below)",
-              "Scopes must include w_organization_social — not w_member_social alone",
+              "Update Vercel with new app Client ID + Secret",
             ]).map((item) => (
               <li key={item}>{item}</li>
             ))}
@@ -160,7 +160,8 @@ export function AdminLinkedInSocial() {
             </Button>
           </div>
           <p className="text-xs text-destructive/90">
-            LinkedIn &quot;Bummer, something went wrong&quot; = redirect URI missing or Community Management API not approved yet.
+            LinkedIn blocks Community Management API if your app has other products (Events, Conversions, etc.). Create a
+            <strong> new dedicated app</strong> with only Community Management API.
           </p>
           <Button asChild className="gap-2">
             <a href="/api/admin/social/linkedin/connect">

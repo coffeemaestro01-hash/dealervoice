@@ -16,6 +16,8 @@ import { isDealerPremiumClaimed } from "@/lib/dealer/premium";
 import { TrustScoreBreakdown } from "@/components/trust/TrustScoreBreakdown";
 import { AIReviewDigest } from "@/components/trust/AIReviewDigest";
 import { DreamCarAssistant } from "@/components/trust/DreamCarAssistant";
+import { DealerVoiceSalesAssistant } from "@/components/dealer/DealerVoiceSalesAssistant";
+import { getSalesAssistantFeatures } from "@/lib/sales-assistant/features";
 import { computeTrustScore } from "@/lib/trust/score";
 import { generateReviewDigest } from "@/lib/ai/review-digest";
 import { getDealershipBySlug } from "@/lib/dealers/load-dealership";
@@ -32,6 +34,10 @@ export async function DealershipRoute({ slug, page = 1, highlightWrite = false }
   if (!dealer) notFound();
 
   const isPremium = isDealerPremiumClaimed(dealer);
+  const assistantFeatures = getSalesAssistantFeatures(
+    dealer.subscription?.plan ?? "FREE",
+    dealer.subscription?.status
+  );
   const trustScore = computeTrustScore({
     reputationScore: dealer.reputationScore,
     isVerified: dealer.isVerified,
@@ -139,14 +145,18 @@ export async function DealershipRoute({ slug, page = 1, highlightWrite = false }
         </div>
       </div>
 
-      <DreamCarAssistant
-        dealerContext={{
-          name: dealer.name,
-          city: dealer.cityName,
-          rating: dealer.overallRating,
-          slug: dealer.slug,
-        }}
-      />
+      {assistantFeatures.enabled ? (
+        <DealerVoiceSalesAssistant dealershipId={dealer.id} dealerName={dealer.name} />
+      ) : (
+        <DreamCarAssistant
+          dealerContext={{
+            name: dealer.name,
+            city: dealer.cityName,
+            rating: dealer.overallRating,
+            slug: dealer.slug,
+          }}
+        />
+      )}
     </>
   );
 }
