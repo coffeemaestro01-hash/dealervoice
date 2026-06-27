@@ -3,7 +3,17 @@
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useState } from "react";
-import { Menu, X, Search, ChevronDown, LayoutDashboard, LogOut, User, PenLine, Building2 } from "lucide-react";
+import {
+  Menu,
+  X,
+  Search,
+  ChevronDown,
+  LayoutDashboard,
+  LogOut,
+  User,
+  PenLine,
+  Building2,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/common/Logo";
@@ -17,13 +27,56 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn, getInitials } from "@/lib/utils";
 
-const SECONDARY_LINKS = [
-  { label: "Vehicles", href: "/vehicles" },
-  { label: "How It Works", href: "/about" },
-  { label: "Trust", href: "/trust" },
-  { label: "Blog", href: "/blog" },
-  { label: "Research", href: "/research" },
+const BUYERS_LINKS = [
+  { label: "Overview", href: "/buyers" },
+  { label: "Find dealers", href: "/dealers" },
+  { label: "Explore coverage", href: "/explore" },
+  { label: "Write a review", href: "/write-review" },
+  { label: "Trust & scores", href: "/trust" },
+  { label: "Chicago", href: "/chicago" },
 ];
+
+const DEALERS_LINKS = [
+  { label: "Dealer solutions", href: "/for-dealers" },
+  { label: "Claim profile", href: "/claim" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "Dealer dashboard", href: "/dashboard/dealer" },
+];
+
+const COMPANY_LINKS = [
+  { label: "Insights", href: "/insights" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+];
+
+function NavDropdown({
+  label,
+  links,
+}: {
+  label: string;
+  links: { label: string; href: string }[];
+}) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors font-medium"
+        >
+          {label}
+          <ChevronDown size={14} />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="center" className="w-48">
+        {links.map((link) => (
+          <DropdownMenuItem key={link.href} asChild>
+            <Link href={link.href}>{link.label}</Link>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 export function Navbar() {
   const { data: session } = useSession();
@@ -34,64 +87,27 @@ export function Navbar() {
     user?.role === "SUPER_ADMIN" || user?.role === "MODERATOR"
       ? "/dashboard/admin"
       : user?.role === "DEALER_OWNER" || user?.role === "DEALER_GROUP_ADMIN"
-      ? "/dashboard/dealer"
-      : "/dashboard/customer";
+        ? "/dashboard/dealer"
+        : "/dashboard/customer";
 
   return (
     <header className="sticky top-0 z-50 bg-pearl backdrop-blur-md border-b border-border shadow-soft">
       <nav className="container flex items-center justify-between h-16 gap-3" aria-label="Main navigation">
         <Logo variant="full" height={32} priority />
 
-        <div className="hidden lg:flex items-center gap-5 flex-1 justify-center">
-          <div className="flex items-center gap-1 rounded-full bg-muted border border-border px-1 py-1">
-            <Link
-              href="/dealers"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-primary px-3 py-1.5 rounded-full hover:bg-accent transition-colors"
-            >
-              <Search size={14} aria-hidden />
-              Search Dealers
-            </Link>
-            <Link
-              href="/write-review"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-primary px-3 py-1.5 rounded-full hover:bg-accent transition-colors"
-            >
-              <PenLine size={14} aria-hidden />
-              Write a Review
-            </Link>
-          </div>
-
-          <Link
-            href="/claim"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary/80 px-3 py-1.5 rounded-lg border border-primary/30 bg-primary/5 hover:bg-primary/10 transition-colors"
-          >
-            <Building2 size={14} aria-hidden />
-            For Dealerships: Claim Your Profile
-          </Link>
-
-          {SECONDARY_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm text-muted-foreground hover:text-primary transition-colors font-medium"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-
-        <div className="hidden md:flex lg:hidden items-center gap-3">
-          <Link href="/dealers" className="text-sm text-muted-foreground hover:text-primary font-medium">
-            Search
-          </Link>
-          <Link href="/write-review" className="text-sm text-muted-foreground hover:text-primary font-medium">
-            Review
-          </Link>
-          <Link href="/claim" className="text-sm text-primary hover:text-primary/80 font-semibold">
-            Claim
-          </Link>
+        <div className="hidden lg:flex items-center gap-6 flex-1 justify-center">
+          <NavDropdown label="For buyers" links={BUYERS_LINKS} />
+          <NavDropdown label="For dealers" links={DEALERS_LINKS} />
+          <NavDropdown label="Company" links={COMPANY_LINKS} />
         </div>
 
         <div className="hidden md:flex items-center gap-3 shrink-0">
+          <Link href="/dealers">
+            <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground hover:text-primary">
+              <Search size={15} />
+              Search
+            </Button>
+          </Link>
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -132,10 +148,14 @@ export function Navbar() {
           ) : (
             <>
               <Link href="/login">
-                <Button variant="ghost" size="sm" className="text-foreground hover:text-primary hover:bg-accent">Sign in</Button>
+                <Button variant="ghost" size="sm" className="text-foreground hover:text-primary hover:bg-accent">
+                  Sign in
+                </Button>
               </Link>
               <Link href="/register">
-                <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold border-0">Sign up</Button>
+                <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold border-0">
+                  Sign up
+                </Button>
               </Link>
             </>
           )}
@@ -162,27 +182,49 @@ export function Navbar() {
             className="md:hidden bg-card border-t border-border"
           >
             <div className="container py-4 flex flex-col gap-1">
-              <p className="px-3 pt-1 pb-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Car Buyers</p>
-              <Link href="/dealers" className="px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-primary rounded-lg flex items-center gap-2" onClick={() => setMobileOpen(false)}>
-                <Search size={15} aria-hidden />
-                Search Dealers
-              </Link>
-              <Link href="/write-review" className="px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-primary rounded-lg flex items-center gap-2" onClick={() => setMobileOpen(false)}>
-                <PenLine size={15} aria-hidden />
-                Write a Review
-              </Link>
+              <p className="px-3 pt-1 pb-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                For buyers
+              </p>
+              {BUYERS_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-primary rounded-lg"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ))}
 
-              <p className="px-3 pt-3 pb-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Dealerships</p>
-              <Link href="/claim" className={cn("px-3 py-2.5 text-sm font-semibold text-primary hover:bg-primary/10 rounded-lg flex items-center gap-2", "border border-primary/20")} onClick={() => setMobileOpen(false)}>
-                <Building2 size={15} aria-hidden />
-                Claim Your Profile
-              </Link>
-              <Link href="/pricing" className="px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-primary rounded-lg" onClick={() => setMobileOpen(false)}>
-                Pricing
-              </Link>
+              <p className="px-3 pt-3 pb-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                For dealers
+              </p>
+              {DEALERS_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "px-3 py-2.5 text-sm font-medium rounded-lg",
+                    link.href === "/for-dealers"
+                      ? "text-primary font-semibold bg-primary/5 border border-primary/20"
+                      : "text-muted-foreground hover:bg-accent hover:text-primary"
+                  )}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ))}
 
-              {SECONDARY_LINKS.map((link) => (
-                <Link key={link.href} href={link.href} className="px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-primary rounded-lg" onClick={() => setMobileOpen(false)}>
+              <p className="px-3 pt-3 pb-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                Company
+              </p>
+              {COMPANY_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-primary rounded-lg"
+                  onClick={() => setMobileOpen(false)}
+                >
                   {link.label}
                 </Link>
               ))}
@@ -190,19 +232,34 @@ export function Navbar() {
               <div className="border-t border-border mt-2 pt-2 flex flex-col gap-1">
                 {user ? (
                   <>
-                    <Link href={dashboardHref} className="px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-primary rounded-lg" onClick={() => setMobileOpen(false)}>
+                    <Link
+                      href={dashboardHref}
+                      className="px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-primary rounded-lg"
+                      onClick={() => setMobileOpen(false)}
+                    >
                       Dashboard
                     </Link>
-                    <button onClick={() => signOut({ callbackUrl: "/" })} className="px-3 py-2.5 text-sm font-medium text-destructive hover:bg-accent rounded-lg text-left">
+                    <button
+                      onClick={() => signOut({ callbackUrl: "/" })}
+                      className="px-3 py-2.5 text-sm font-medium text-destructive hover:bg-accent rounded-lg text-left"
+                    >
                       Sign out
                     </button>
                   </>
                 ) : (
                   <>
-                    <Link href="/login" className="px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-primary rounded-lg" onClick={() => setMobileOpen(false)}>
+                    <Link
+                      href="/login"
+                      className="px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-primary rounded-lg"
+                      onClick={() => setMobileOpen(false)}
+                    >
                       Sign in
                     </Link>
-                    <Link href="/register" className="px-3 py-2.5 text-sm font-medium text-primary-foreground bg-primary rounded-lg text-center" onClick={() => setMobileOpen(false)}>
+                    <Link
+                      href="/register"
+                      className="px-3 py-2.5 text-sm font-medium text-primary-foreground bg-primary rounded-lg text-center"
+                      onClick={() => setMobileOpen(false)}
+                    >
                       Sign up
                     </Link>
                   </>

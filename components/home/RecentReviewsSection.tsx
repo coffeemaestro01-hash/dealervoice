@@ -1,7 +1,7 @@
 import Link from "next/link";
 import prisma from "@/lib/db";
 import { ReviewCard } from "@/components/review/ReviewCard";
-import { PenLine } from "lucide-react";
+import { PenLine, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 async function getRecentReviews() {
@@ -17,7 +17,7 @@ async function getRecentReviews() {
   });
 }
 
-export async function RecentReviewsSection() {
+export async function RecentReviewsSection({ showExploreLink = false }: { showExploreLink?: boolean }) {
   let reviews: Awaited<ReturnType<typeof getRecentReviews>> = [];
   try {
     reviews = await getRecentReviews();
@@ -33,6 +33,11 @@ export async function RecentReviewsSection() {
             Recent customer <span className="text-primary">reviews</span>
           </h2>
           <p className="text-muted-foreground mt-2">Real experiences from verified car buyers</p>
+          {showExploreLink ? (
+            <Link href="/explore" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline mt-3">
+              Explore dealers & coverage <ArrowRight size={14} />
+            </Link>
+          ) : null}
         </div>
 
         {reviews.length === 0 ? (

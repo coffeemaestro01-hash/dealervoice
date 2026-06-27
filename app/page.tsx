@@ -2,28 +2,12 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import prisma from "@/lib/db";
 
-export const dynamic = "force-dynamic";
-
-import { DealerGrowthBanner } from "@/components/home/DealerGrowthBanner";
-import { DealerAISalesAssistantSection } from "@/components/home/DealerAISalesAssistantSection";
 import { HeroSection } from "@/components/home/HeroSection";
-import { BuyerJourneyStrip } from "@/components/home/BuyerJourneyStrip";
-import { HowItWorksSection } from "@/components/home/HowItWorksSection";
-import { TrustSection } from "@/components/home/TrustSection";
-import { AIAuthoritySection } from "@/components/home/AIAuthoritySection";
-import { GlobalCoverageSection } from "@/components/home/GlobalCoverageSection";
-import { ChicagoCoverageSection } from "@/components/home/ChicagoCoverageSection";
-import { TrendingLocalDealers } from "@/components/home/TrendingLocalDealers";
-import { FirstReviewerSection } from "@/components/home/FirstReviewerSection";
+import { HomepageAudienceSplit } from "@/components/home/HomepageAudienceSplit";
 import { RecentReviewsSection } from "@/components/home/RecentReviewsSection";
-import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import { BlogStripSection } from "@/components/home/BlogStripSection";
-import { ResearchStripSection } from "@/components/home/ResearchStripSection";
-import { CategoriesSection } from "@/components/home/CategoriesSection";
-import { BrandsSection } from "@/components/home/BrandsSection";
-import { HomepageAds } from "@/components/home/HomepageAds";
-import { CtaSection } from "@/components/home/CtaSection";
-import { DreamCarAssistant } from "@/components/trust/DreamCarAssistant";
+import { HomepageTrustTeaser } from "@/components/home/HomepageTrustTeaser";
+import { HomepageInsightsTeaser } from "@/components/home/HomepageInsightsTeaser";
+import { HomepageCtaSection } from "@/components/home/HomepageCtaSection";
 import { Navbar } from "@/components/layouts/Navbar";
 import { Footer } from "@/components/layouts/Footer";
 
@@ -32,6 +16,8 @@ export const metadata: Metadata = {
   description:
     "Find car dealerships worldwide. Read verified buyer reviews, browse dealer inventory, and compare reputation scores before you buy or service your vehicle.",
 };
+
+export const dynamic = "force-dynamic";
 
 async function getHeroStats() {
   try {
@@ -52,53 +38,18 @@ export default async function HomePage() {
     <div className="flex flex-col min-h-screen bg-background">
       <Navbar />
       <main className="flex-1">
-        {/* Primary buyer funnel — above the fold */}
         <HeroSection stats={stats} />
-        <DealerGrowthBanner />
-        <DealerAISalesAssistantSection />
-        <BuyerJourneyStrip />
-        <HowItWorksSection dealerCount={stats.dealers} />
-        <TrustSection />
-        <AIAuthoritySection />
-
-        {/* Discovery & social proof */}
+        <HomepageAudienceSplit />
         <Suspense>
-          <GlobalCoverageSection />
+          <RecentReviewsSection showExploreLink />
         </Suspense>
+        <HomepageTrustTeaser />
         <Suspense>
-          <ChicagoCoverageSection />
+          <HomepageInsightsTeaser />
         </Suspense>
-        <Suspense>
-          <TrendingLocalDealers />
-        </Suspense>
-        <Suspense>
-          <FirstReviewerSection />
-        </Suspense>
-        <Suspense>
-          <RecentReviewsSection />
-        </Suspense>
-        <Suspense>
-          <TestimonialsSection />
-        </Suspense>
-
-        {/* Content & categories */}
-        <Suspense>
-          <BlogStripSection />
-        </Suspense>
-        <Suspense>
-          <ResearchStripSection />
-        </Suspense>
-        <CategoriesSection />
-        <BrandsSection />
-        <Suspense>
-          <HomepageAds />
-        </Suspense>
-        <CtaSection />
+        <HomepageCtaSection />
       </main>
       <Footer />
-
-      {/* Dream Car Assistant — floats above support chat */}
-      <DreamCarAssistant />
     </div>
   );
 }

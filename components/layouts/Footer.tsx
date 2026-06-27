@@ -5,26 +5,27 @@ import { ManageCookiesLink } from "@/components/consent/ManageCookiesLink";
 import { COMPANY } from "@/lib/constants/company";
 
 const FOOTER_LINKS = {
-  Platform: [
+  "For buyers": [
+    { label: "Overview", href: "/buyers" },
     { label: "Find Dealers", href: "/dealers" },
-    { label: "Chicago dealers", href: "/chicago" },
+    { label: "Explore", href: "/explore" },
     { label: "Write a Review", href: "/write-review" },
-    { label: "How It Works", href: "/about" },
+    { label: "Trust & Scores", href: "/trust" },
     { label: "Methodology", href: "/methodology" },
-    { label: "Pricing", href: "/pricing" },
+    { label: "Chicago", href: "/chicago" },
   ],
-  Business: [
+  "For dealers": [
+    { label: "Dealer Solutions", href: "/for-dealers" },
     { label: "Claim Your Dealership", href: "/claim" },
-    { label: "List Your Dealership", href: "/register-dealership" },
+    { label: "Pricing", href: "/pricing" },
     { label: "Dealer Dashboard", href: "/dashboard/dealer" },
     { label: "Advertise", href: "/advertise" },
-    { label: "API Access", href: "/api-docs" },
   ],
   Company: [
+    { label: "Insights", href: "/insights" },
     { label: "About Us", href: "/about" },
     { label: "Blog", href: "/blog" },
     { label: "Research", href: "/research" },
-    { label: "Careers", href: "/careers" },
     { label: "Contact", href: "/contact" },
   ],
   Legal: [

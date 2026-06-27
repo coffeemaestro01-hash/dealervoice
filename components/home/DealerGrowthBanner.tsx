@@ -27,9 +27,9 @@ export function DealerGrowthBanner() {
               <BadgeCheck size={16} /> Claim free
             </Button>
           </Link>
-          <Link href="/pricing">
+          <Link href="/for-dealers">
             <Button variant="outline" className="gap-2 border-primary/30">
-              <Star size={16} /> See Pro plans
+              <Star size={16} /> Dealer solutions
             </Button>
           </Link>
           <Link href="/chicago">
