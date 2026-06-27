@@ -38,14 +38,24 @@ export function stripePriceId(plan: PlanKey, interval: BillingInterval): string 
 
 export function planAmountCents(plan: PlanKey, interval: BillingInterval): number {
   const prices = PLAN_PRICES_USD[plan];
-  if (interval === "annual") return prices.annual * 100;
+  if (interval === "annual") return Math.round(prices.annual * 100);
   if (interval === "semiannual") return Math.round((prices.annual / 2) * 100);
-  return prices.monthly * 100;
+  return Math.round(prices.monthly * 100);
 }
 
 export function planDisplayPrice(plan: PlanKey, interval: BillingInterval): string {
   const prices = PLAN_PRICES_USD[plan];
-  return interval === "annual" ? prices.annualDisplay : prices.monthlyDisplay;
+  if (interval === "annual") return prices.annualDisplay;
+  if (interval === "semiannual") {
+    const half = prices.annual / 2;
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: half % 1 === 0 ? 0 : 2,
+      maximumFractionDigits: 2,
+    }).format(half);
+  }
+  return prices.monthlyDisplay;
 }
 
 export interface CreateStripeCheckoutParams {

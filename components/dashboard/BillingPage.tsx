@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Check, CreditCard, ExternalLink, FileText } from "lucide-react";
 import { SubscriptionCheckoutButton } from "@/components/payment/SubscriptionCheckoutButton";
-import { PLAN_PRICES_USD } from "@/lib/payment";
+import { PLAN_PRICES_USD, planDisplayPrice } from "@/lib/payment";
 import { PLAN_SERVICE_AREA_LIMITS } from "@/lib/subscription/plan-limits";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -292,7 +292,9 @@ export function BillingPage() {
       <div className="grid md:grid-cols-3 gap-5">
         {PLANS.map((plan) => {
           const isCurrent = currentPlan === plan.key;
-          const price = interval === "monthly" ? plan.monthly : plan.annual;
+          const price = planDisplayPrice(plan.key, interval);
+          const periodLabel =
+            interval === "monthly" ? "mo" : interval === "semiannual" ? "6 mo" : "yr";
           const highlighted = plan.key === "PRO_PLUS";
           return (
             <div
@@ -309,7 +311,7 @@ export function BillingPage() {
               <h3 className="text-lg font-bold text-foreground">{plan.name}</h3>
               <p className="text-2xl font-bold text-foreground mt-2">
                 {price}
-                <span className="text-sm font-normal text-muted-foreground">/{interval === "monthly" ? "mo" : "yr"}</span>
+                <span className="text-sm font-normal text-muted-foreground">/{periodLabel}</span>
               </p>
               <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                 {plan.features.map((f) => (

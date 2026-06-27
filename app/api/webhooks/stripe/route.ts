@@ -333,16 +333,14 @@ export async function POST(req: NextRequest) {
         const stripeSub = event.data.object as Stripe.Subscription;
         const dealershipId = stripeSub.metadata?.dealershipId;
         if (dealershipId) {
+          const freeFeatures = planFeatures("FREE");
           await prisma.dealerSubscription.updateMany({
             where: { dealershipId, stripeSubscriptionId: stripeSub.id },
             data: {
               status: "CANCELED",
               canceledAt: new Date(),
               plan: "FREE",
-              maxLocations: 1,
-              apiAccess: false,
-              whiteLabel: false,
-              competitorMonitoring: false,
+              ...freeFeatures,
             },
           });
         }

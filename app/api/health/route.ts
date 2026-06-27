@@ -35,6 +35,10 @@ export async function GET() {
   }
 
   checks.stripe = STRIPE_ENABLED ? "configured" : "missing_env";
+  checks.stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET ? "configured" : "missing_env";
+  checks.stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+    ? "configured"
+    : "missing_env";
 
   const healthy = checks.database === "ok";
   return NextResponse.json(
