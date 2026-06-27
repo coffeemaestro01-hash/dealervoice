@@ -16,7 +16,8 @@ export function DealerGrowthBanner() {
               Turn profile views into paying customers
             </h2>
             <p className="text-sm text-muted-foreground mt-2">
-              Claim free → collect reviews with QR & SMS tools → upgrade to Pro or Pro+ ($349) for featured badges and review backlinks on your website.
+              Claim free → collect reviews with QR & SMS tools → upgrade to Pro for the{" "}
+              <strong className="text-foreground">AI Sales Assistant (24/7)</strong> or Pro+ ($349) for booking, follow-ups, and featured badges.
             </p>
           </div>
         </div>
