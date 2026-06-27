@@ -20,7 +20,7 @@ export const PLAN_PRICES_USD = {
 };
 
 export type PlanKey = "PRO" | "PRO_PLUS" | "ENTERPRISE";
-export type BillingInterval = "monthly" | "annual";
+export type BillingInterval = "monthly" | "semiannual" | "annual";
 
 let _stripe: Stripe | null = null;
 
@@ -38,8 +38,9 @@ export function stripePriceId(plan: PlanKey, interval: BillingInterval): string 
 
 export function planAmountCents(plan: PlanKey, interval: BillingInterval): number {
   const prices = PLAN_PRICES_USD[plan];
-  const dollars = interval === "annual" ? prices.annual : prices.monthly;
-  return dollars * 100;
+  if (interval === "annual") return prices.annual * 100;
+  if (interval === "semiannual") return Math.round((prices.annual / 2) * 100);
+  return prices.monthly * 100;
 }
 
 export function planDisplayPrice(plan: PlanKey, interval: BillingInterval): string {
@@ -80,6 +81,7 @@ export async function createStripeCheckoutSession(
           unit_amount: planAmountCents(params.plan, params.interval),
           recurring: {
             interval: params.interval === "annual" ? "year" : "month",
+            ...(params.interval === "semiannual" ? { interval_count: 6 } : {}),
           },
         },
         quantity: 1,
@@ -152,6 +154,11 @@ export function parseStripePlanMetadata(
   const raw = metadata?.plan;
   const plan: PlanKey =
     raw === "ENTERPRISE" ? "ENTERPRISE" : raw === "PRO_PLUS" ? "PRO_PLUS" : "PRO";
-  const interval: BillingInterval = metadata?.interval === "annual" ? "annual" : "monthly";
+  const interval: BillingInterval =
+    metadata?.interval === "annual"
+      ? "annual"
+      : metadata?.interval === "semiannual"
+        ? "semiannual"
+        : "monthly";
   return { plan, interval, dealershipId: metadata?.dealershipId };
 }

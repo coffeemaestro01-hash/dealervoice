@@ -61,7 +61,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-pearl px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-showroom px-4 py-12">
       <Suspense>
         <OAuthErrorHandler />
       </Suspense>
@@ -116,7 +116,7 @@ export default function RegisterPage() {
               {errors.password && <p className="text-destructive text-xs mt-1">{errors.password.message}</p>}
             </div>
 
-            <Button type="submit" className="w-full bg-ember text-night-900 font-semibold hover:opacity-90 border-0 h-11" disabled={isLoading}>
+            <Button type="submit" className="w-full bg-primary text-primary-foreground font-semibold hover:opacity-90 border-0 h-11" disabled={isLoading}>
               {isLoading ? <><Loader2 size={16} className="animate-spin mr-2" />Creating account…</> : "Create Account"}
             </Button>
 

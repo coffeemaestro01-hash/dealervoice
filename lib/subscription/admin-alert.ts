@@ -2,12 +2,13 @@ import prisma from "@/lib/db";
 import { sendAdminNotification } from "@/lib/email";
 import { sendSlackAlert } from "@/lib/admin/slack";
 import { formatPromoPrice } from "@/lib/promotions";
+import type { BillingInterval } from "@/lib/payment";
 import type { SubscriptionPlan } from "@prisma/client";
 
 export async function maybeSendAdminSubscriptionAlert(
   dealershipId: string,
   plan: SubscriptionPlan,
-  interval: "monthly" | "annual",
+  interval: BillingInterval,
   promotionCode?: string
 ) {
   const sub = await prisma.dealerSubscription.findUnique({

@@ -10,6 +10,7 @@ import {
 import { planFeatures } from "@/lib/subscription";
 import { maybeSendSubscriptionWelcomeEmail } from "@/lib/subscription/welcome-email";
 import { recordSubscriptionPayment } from "@/lib/income/record-subscription-payment";
+import { applyBillingPeriodBonus, detectPaidIntervalFromStripe } from "@/lib/billing/period-bonus";
 import { z } from "zod";
 import type Stripe from "stripe";
 
@@ -107,6 +108,15 @@ export async function POST(req: NextRequest) {
     ]);
 
     await maybeSendSubscriptionWelcomeEmail(dealershipId, plan, interval).catch(() => {});
+
+    const paidInterval = detectPaidIntervalFromStripe(checkoutSession.metadata, subscription);
+    await applyBillingPeriodBonus({
+      dealershipId,
+      plan,
+      interval: paidInterval,
+      stripeCheckoutSessionId: session_id,
+      periodEnd: period.end,
+    }).catch(() => {});
 
     const amountMinor = checkoutSession.amount_total ?? 0;
     if (amountMinor > 0) {

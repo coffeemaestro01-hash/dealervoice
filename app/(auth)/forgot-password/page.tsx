@@ -29,7 +29,7 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-pearl px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-showroom px-4 py-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4"><FooterBrand height={34} /></div>
@@ -56,7 +56,7 @@ export default function ForgotPasswordPage() {
                     <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="pl-10" placeholder="you@email.com" />
                   </div>
                 </div>
-                <Button type="submit" disabled={loading} className="w-full bg-ember text-night-900 font-semibold border-0 hover:opacity-90">
+                <Button type="submit" disabled={loading} className="w-full bg-primary text-primary-foreground font-semibold border-0 hover:opacity-90">
                   {loading ? <><Loader2 size={16} className="animate-spin mr-2" />Sending…</> : "Send reset link"}
                 </Button>
               </form>

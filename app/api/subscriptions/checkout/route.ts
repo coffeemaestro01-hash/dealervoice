@@ -9,7 +9,7 @@ import { z } from "zod";
 const schema = z.object({
   dealershipId: z.string().cuid(),
   plan: z.enum(["PRO", "PRO_PLUS", "ENTERPRISE"]),
-  interval: z.enum(["monthly", "annual"]).default("monthly"),
+  interval: z.enum(["monthly", "semiannual", "annual"]).default("monthly"),
   promotionCode: z.string().min(3).max(32).optional(),
 });
 

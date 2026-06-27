@@ -42,7 +42,7 @@ function ResetForm() {
       <div className="text-center">
         <h1 className="text-2xl font-bold text-foreground mb-2">Invalid link</h1>
         <p className="text-muted-foreground mb-6">This password reset link is missing or malformed. Please request a new one.</p>
-        <Link href="/forgot-password"><Button className="bg-ember text-night-900 font-semibold border-0">Request new link</Button></Link>
+        <Link href="/forgot-password"><Button className="bg-primary text-primary-foreground font-semibold border-0">Request new link</Button></Link>
       </div>
     );
   }
@@ -73,7 +73,7 @@ function ResetForm() {
           </div>
         </div>
         {error && <p className="text-destructive text-sm">{error}</p>}
-        <Button type="submit" disabled={loading} className="w-full bg-ember text-night-900 font-semibold border-0 hover:opacity-90">
+        <Button type="submit" disabled={loading} className="w-full bg-primary text-primary-foreground font-semibold border-0 hover:opacity-90">
           {loading ? <><Loader2 size={16} className="animate-spin mr-2" />Updating…</> : "Reset password"}
         </Button>
       </form>
@@ -86,7 +86,7 @@ function ResetForm() {
 
 export default function ResetPasswordPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-pearl px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-showroom px-4 py-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-8"><div className="flex justify-center mb-4"><FooterBrand height={34} /></div></div>
         <div className="bg-card rounded-2xl border border-primary/30 shadow-ember p-8">

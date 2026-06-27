@@ -6,6 +6,11 @@ import {
   retrieveStripeSubscription,
 } from "@/lib/payment";
 import { incrementPromotionRedemption } from "@/lib/promotions";
+import {
+  applyBillingPeriodBonus,
+  detectPaidIntervalFromStripe,
+} from "@/lib/billing/period-bonus";
+import { syncChicagoJackpotForDealership } from "@/lib/promotions/chicago-jackpot";
 import { maybeSendSubscriptionWelcomeEmail } from "@/lib/subscription/welcome-email";
 import { maybeSendAdminSubscriptionAlert } from "@/lib/subscription/admin-alert";
 import { ensureDealerApiKey } from "@/lib/api/dealer-keys";
@@ -198,6 +203,15 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
       externalRef: invoice.id,
       description: description,
     }).catch(() => {});
+
+    const paidInterval = detectPaidIntervalFromStripe(stripeSub.metadata, stripeSub);
+    await applyBillingPeriodBonus({
+      dealershipId: sub.dealershipId,
+      plan: sub.plan,
+      interval: paidInterval,
+      stripeInvoiceId: invoice.id,
+      periodEnd: sub.currentPeriodEnd,
+    }).catch(() => {});
   }
 }
 
@@ -251,6 +265,15 @@ export async function POST(req: NextRequest) {
                 description: `Stripe checkout — ${meta.plan}`,
               }).catch(() => {});
             }
+
+            const paidInterval = detectPaidIntervalFromStripe(session.metadata, stripeSub);
+            await applyBillingPeriodBonus({
+              dealershipId: meta.dealershipId,
+              plan: meta.plan,
+              interval: paidInterval,
+              stripeCheckoutSessionId: session.id,
+              periodEnd: stripeSubscriptionPeriod(stripeSub).end,
+            }).catch(() => {});
           }
 
           const promoCode = session.metadata?.promotionCode;

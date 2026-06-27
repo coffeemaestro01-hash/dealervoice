@@ -36,7 +36,7 @@ async function getHeroStats() {
 export default async function HomePage() {
   const stats = await getHeroStats();
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="flex flex-col min-h-screen bg-showroom">
       <div className="relative">
         <Navbar overHero />
         <HomepageCinematicHero stats={stats} />

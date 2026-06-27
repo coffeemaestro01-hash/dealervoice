@@ -62,7 +62,7 @@ export default function LoginPage() {
         <OAuthErrorHandler />
       </Suspense>
       {/* Left panel */}
-      <div className="hidden lg:flex lg:w-1/2 bg-pearl text-foreground flex-col justify-center p-12 relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 bg-showroom text-foreground flex-col justify-center p-12 relative overflow-hidden border-r border-border/60">
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[120px]" />
         <div className="mb-12 relative"><FooterBrand height={34} /></div>
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="relative">
@@ -133,7 +133,7 @@ export default function LoginPage() {
               {errors.password && <p className="text-destructive text-xs mt-1">{errors.password.message}</p>}
             </div>
 
-            <Button type="submit" className="w-full bg-ember text-night-900 font-semibold hover:opacity-90 border-0" disabled={isLoading}>
+            <Button type="submit" className="w-full bg-primary text-primary-foreground font-semibold hover:bg-primary/90 border-0" disabled={isLoading}>
               {isLoading ? <><Loader2 size={16} className="animate-spin mr-2" />Signing in...</> : "Sign in"}
             </Button>
           </form>

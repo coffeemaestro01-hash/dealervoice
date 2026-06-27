@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BarChart3, MessageSquare, Settings, Users, Star, TrendingUp, CreditCard, LayoutDashboard, Mail, Car, LifeBuoy, Bot } from "lucide-react";
+import { BarChart3, MessageSquare, Settings, Users, Star, TrendingUp, CreditCard, LayoutDashboard, Mail, Car, LifeBuoy, Bot, Gift } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
@@ -15,6 +15,7 @@ const NAV_ITEMS = [
   { href: "/dashboard/dealer/competitors", icon: TrendingUp, label: "Competitors" },
   { href: "/dashboard/dealer/team", icon: Users, label: "Team" },
   { href: "/dashboard/dealer/support", icon: LifeBuoy, label: "Support" },
+  { href: "/dashboard/dealer/promotions", icon: Gift, label: "Promotions" },
   { href: "/dashboard/dealer/settings", icon: Settings, label: "Settings" },
 ];
 
@@ -22,9 +23,9 @@ export function DealerDashboardLayout({ children }: { children: React.ReactNode 
   const pathname = usePathname();
 
   return (
-    <div className="min-h-screen bg-muted flex">
+    <div className="min-h-screen bg-background/40 flex">
       {/* Sidebar */}
-      <aside className="hidden lg:flex flex-col w-56 bg-card border-r border-border fixed h-full z-10">
+      <aside className="hidden lg:flex flex-col w-56 surface-panel border-r border-border/60 fixed h-full z-10">
         <div className="p-5 border-b border-border">
           <Link href="/" className="flex items-center gap-2 font-bold text-primary">
             <Star className="fill-current" size={18} />

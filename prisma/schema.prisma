@@ -132,6 +132,19 @@ enum SupportTicketCategory {
   OTHER
 }
 
+enum BillingPeriodBonusType {
+  ANNUAL
+  SEMIANNUAL
+  MONTHLY
+}
+
+enum ChicagoJackpotStatus {
+  ELIGIBLE
+  QUALIFIED
+  WINNER
+  FORFEITED
+}
+
 enum PromotionDiscountType {
   FIXED
   PERCENT
@@ -452,6 +465,8 @@ model Dealership {
   apiKey           DealerApiKey?
   invoices         Invoice[]
   supportTickets   SupportTicket[]
+  billingPeriodRedemptions BillingPeriodRedemption[]
+  chicagoJackpotEntry ChicagoJackpotEntry?
 
   @@index([slug])
   @@index([countryId])
@@ -729,12 +744,14 @@ model DealerSubscription {
 
   welcomeEmailSentAt   DateTime?
   adminAlertSentAt     DateTime?
+  bonusAccessUntil     DateTime?
 
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
 
   dealership           Dealership         @relation(fields: [dealershipId], references: [id])
   invoices             Invoice[]
+  billingPeriodRedemptions BillingPeriodRedemption[]
 
   @@index([dealershipId])
   @@index([stripeCustomerId])
@@ -828,6 +845,64 @@ model PromotionCode {
   @@index([code])
   @@index([active])
   @@index([dealershipId])
+}
+
+model BillingPeriodRedemption {
+  id                      String                 @id @default(cuid())
+  dealershipId            String
+  bonusType               BillingPeriodBonusType
+  plan                    SubscriptionPlan
+  billingInterval         String                 // monthly | semiannual | annual
+  bonusDays               Int
+  accessUntil             DateTime
+  stripeInvoiceId         String?                @unique
+  stripeCheckoutSessionId String?                @unique
+  createdAt               DateTime               @default(now())
+
+  dealership              Dealership             @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+  subscription            DealerSubscription?    @relation(fields: [subscriptionId], references: [id])
+  subscriptionId          String?
+
+  @@index([dealershipId])
+  @@index([dealershipId, bonusType])
+}
+
+model ChicagoJackpotEntry {
+  id                    String               @id @default(cuid())
+  dealershipId          String               @unique
+  status                ChicagoJackpotStatus @default(ELIGIBLE)
+  verifiedReviewCount   Int                  @default(0)
+  qualifiedAt           DateTime?
+  wonAt                 DateTime?
+  enterpriseUntil       DateTime?
+  lastComplianceCheckAt DateTime?
+  reviewsThisMonth      Int                  @default(0)
+  complianceMonth       String?              // YYYY-MM
+  forfeitedAt           DateTime?
+  forfeitedReason       String?
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+
+  dealership            Dealership           @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+  complianceLogs          ChicagoJackpotComplianceLog[]
+
+  @@index([status])
+  @@index([verifiedReviewCount])
+}
+
+model ChicagoJackpotComplianceLog {
+  id          String   @id @default(cuid())
+  entryId     String
+  month       String   // YYYY-MM
+  reviewCount Int
+  compliant   Boolean
+  checkedAt   DateTime @default(now())
+
+  entry       ChicagoJackpotEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+
+  @@unique([entryId, month])
+  @@index([entryId])
+  @@index([month])
 }
 
 model DealerApiKey {

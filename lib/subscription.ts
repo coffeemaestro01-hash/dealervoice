@@ -17,9 +17,10 @@ export function planFeatures(plan: SubscriptionPlan) {
   return PLAN_FEATURES[plan];
 }
 
-export function periodEnd(interval: "monthly" | "annual", from = new Date()) {
+export function periodEnd(interval: "monthly" | "semiannual" | "annual", from = new Date()) {
   const end = new Date(from);
   if (interval === "annual") end.setFullYear(end.getFullYear() + 1);
+  else if (interval === "semiannual") end.setMonth(end.getMonth() + 6);
   else end.setMonth(end.getMonth() + 1);
   return end;
 }
@@ -27,7 +28,7 @@ export function periodEnd(interval: "monthly" | "annual", from = new Date()) {
 export async function activatePaidSubscription(params: {
   dealershipId: string;
   plan: SubscriptionPlan;
-  interval: "monthly" | "annual";
+  interval: "monthly" | "semiannual" | "annual";
   orderId: string;
   paymentId?: string;
   amountPaise: number;

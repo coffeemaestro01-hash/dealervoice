@@ -60,7 +60,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "oklch(0.972 0.012 85)",
+  themeColor: "oklch(0.11 0.01 50)",
   width: "device-width",
   initialScale: 1,
 };
@@ -80,7 +80,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           />
         ) : null}
       </head>
-      <body className="min-h-screen bg-background font-sans antialiased">
+      <body className="min-h-screen bg-showroom font-sans antialiased text-foreground">
         <Providers>{children}</Providers>
         <Toaster />
         <CookieBanner />

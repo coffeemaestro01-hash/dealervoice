@@ -44,7 +44,7 @@ function VerifyInner() {
           <CheckCircle2 className="mx-auto text-primary mb-4" size={48} />
           <h1 className="text-2xl font-bold text-foreground mb-2">Email verified! 🎉</h1>
           <p className="text-muted-foreground mb-6">Your account is now active. You can sign in and start exploring.</p>
-          <Link href="/login"><Button className="bg-ember text-night-900 font-semibold border-0 hover:opacity-90">Sign in</Button></Link>
+          <Link href="/login"><Button className="bg-primary text-primary-foreground font-semibold border-0 hover:opacity-90">Sign in</Button></Link>
         </>
       )}
       {state === "error" && (
@@ -61,7 +61,7 @@ function VerifyInner() {
 
 export default function VerifyEmailPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-pearl px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-showroom px-4 py-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-8"><div className="flex justify-center mb-4"><FooterBrand height={34} /></div></div>
         <div className="bg-card rounded-2xl border border-primary/30 shadow-ember p-8">

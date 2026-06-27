@@ -5,6 +5,7 @@ import prisma from "@/lib/db";
 import { z } from "zod";
 import { isAdminRole } from "@/lib/admin/guards";
 import { deleteCachePattern } from "@/lib/redis";
+import { syncChicagoJackpotForDealership } from "@/lib/promotions/chicago-jackpot";
 
 const patchSchema = z.object({
   status: z.enum(["PUBLISHED", "REMOVED", "FLAGGED", "UNDER_REVIEW", "PENDING"]).optional(),
@@ -76,6 +77,13 @@ export async function PATCH(req: NextRequest, props: { params: Promise<{ id: str
   }).catch(() => {});
 
   await deleteCachePattern(`dealership:${review.dealership.slug}*`).catch(() => {});
+
+  if (
+    parsed.data.status === "PUBLISHED" ||
+    parsed.data.verificationStatus?.startsWith("VERIFIED")
+  ) {
+    await syncChicagoJackpotForDealership(review.dealershipId).catch(() => {});
+  }
 
   return NextResponse.json({ data: updated });
 }

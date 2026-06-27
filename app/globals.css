@@ -16,36 +16,37 @@
 
 @layer base {
   :root {
-    --background: oklch(0.972 0.012 85);
-    --foreground: oklch(0.18 0.012 60);
-    --card: oklch(0.985 0.008 85);
-    --card-foreground: oklch(0.18 0.012 60);
-    --popover: oklch(0.985 0.008 85);
-    --popover-foreground: oklch(0.18 0.012 60);
+    /* Premium dark showroom — site-wide default */
+    --background: oklch(0.11 0.01 50);
+    --foreground: oklch(0.95 0.005 85);
+    --card: oklch(0.14 0.012 55);
+    --card-foreground: oklch(0.95 0.005 85);
+    --popover: oklch(0.14 0.012 55);
+    --popover-foreground: oklch(0.95 0.005 85);
     --primary: oklch(0.7 0.17 52);
-    --primary-foreground: oklch(0.99 0.005 85);
+    --primary-foreground: oklch(0.12 0.01 50);
     --primary-glow: oklch(0.78 0.16 62);
-    --secondary: oklch(0.96 0.012 82);
-    --secondary-foreground: oklch(0.18 0.012 60);
-    --muted: oklch(0.94 0.01 80);
-    --muted-foreground: oklch(0.5 0.01 60);
-    --accent: oklch(0.96 0.014 78);
-    --accent-foreground: oklch(0.18 0.012 60);
+    --secondary: oklch(0.18 0.012 55);
+    --secondary-foreground: oklch(0.92 0.005 85);
+    --muted: oklch(0.16 0.012 52);
+    --muted-foreground: oklch(0.65 0.01 70);
+    --accent: oklch(0.2 0.014 55);
+    --accent-foreground: oklch(0.95 0.005 85);
     --destructive: oklch(0.55 0.2 25);
     --destructive-foreground: oklch(0.99 0.005 85);
-    --border: oklch(0.88 0.012 75);
-    --input: oklch(0.88 0.012 75);
+    --border: oklch(0.99 0.005 85 / 0.12);
+    --input: oklch(0.99 0.005 85 / 0.15);
     --ring: oklch(0.7 0.17 52);
-    --circuit: oklch(0.78 0.012 70);
+    --circuit: oklch(0.99 0.005 85 / 0.08);
     --radius: 0.5rem;
     --chart-1: oklch(0.7 0.17 52);
     --chart-2: oklch(0.6 0.12 52);
     --chart-3: oklch(0.5 0.08 52);
     --chart-4: oklch(0.78 0.16 62);
-    --chart-5: oklch(0.4 0.04 60);
-    --gradient-pearl: linear-gradient(135deg, oklch(0.985 0.008 85), oklch(0.92 0.018 75));
+    --chart-5: oklch(0.55 0.04 60);
+    --gradient-pearl: linear-gradient(135deg, oklch(0.14 0.012 55), oklch(0.11 0.01 50));
     --gradient-ember: linear-gradient(135deg, oklch(0.72 0.17 50), oklch(0.78 0.16 65));
-    --shadow-soft: 0 1px 2px oklch(0.2 0.02 60 / 0.04), 0 8px 24px -8px oklch(0.5 0.06 50 / 0.12);
+    --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.2), 0 8px 24px -8px oklch(0 0 0 / 0.35);
     --shadow-ember: 0 12px 40px -10px oklch(0.7 0.17 52 / 0.45);
     --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
     --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -54,7 +55,10 @@
 
 @layer base {
   * { @apply border-border; }
-  body { @apply bg-background text-foreground font-sans; }
+  body {
+    @apply bg-showroom text-foreground font-sans;
+    background-attachment: fixed;
+  }
   h1, h2, h3, h4, h5, h6 {
     @apply font-display font-light tracking-tight;
     letter-spacing: -0.02em;
@@ -99,7 +103,7 @@
   .reputation-good { color: oklch(0.7 0.17 52 / 0.9); background-color: oklch(0.7 0.17 52 / 0.1); }
   .reputation-average { @apply text-muted-foreground bg-muted; }
   .reputation-poor { @apply text-muted-foreground bg-muted; }
-  .reputation-bad { @apply text-foreground bg-muted; }
+  .reputation-bad { @apply text-muted-foreground bg-muted; }
 
   .verified-badge { @apply inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full; }
   .badge-verified-purchase { @apply verified-badge text-primary; background-color: oklch(0.7 0.17 52 / 0.1); }
@@ -145,6 +149,12 @@
     background: oklch(0.99 0.005 85 / 0.06);
     border: 1px solid oklch(0.99 0.005 85 / 0.12);
     backdrop-filter: blur(16px);
+  }
+
+  .surface-panel {
+    background: oklch(0.14 0.012 55 / 0.85);
+    border: 1px solid oklch(0.99 0.005 85 / 0.1);
+    backdrop-filter: blur(12px);
   }
 
   .glow-ring {

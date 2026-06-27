@@ -27,9 +27,9 @@ export function AdminDashboardLayout({
   );
 
   return (
-    <div className="min-h-screen bg-muted flex">
-      <aside className="hidden lg:flex flex-col w-60 bg-card border-r border-border fixed h-full z-10 overflow-y-auto">
-        <div className="p-5 border-b border-border">
+    <div className="min-h-screen bg-background/40 flex">
+      <aside className="hidden lg:flex flex-col w-60 surface-panel border-r border-border/60 fixed h-full z-10 overflow-y-auto">
+        <div className="p-5 border-b border-border/60">
           <Link href="/" className="flex items-center gap-2 font-bold text-foreground">
             <Star className="fill-current text-primary" size={18} />
             DealerVoice

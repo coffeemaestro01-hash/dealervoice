@@ -41,11 +41,11 @@ const FOOTER_LINKS = {
 
 export function Footer() {
   return (
-    <footer className="bg-pearl text-muted-foreground mt-auto border-t border-border">
+    <footer className="surface-panel text-muted-foreground mt-auto border-t border-border/60">
       <div className="container py-12">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-10">
           <div className="col-span-2 md:col-span-1">
-            <Logo variant="full" height={32} />
+            <Logo variant="full" height={32} inverted />
             <p className="text-sm leading-relaxed mt-3">
               A global platform for car dealership reviews and reputation insights — {COMPANY.tagline.toLowerCase()}
             </p>

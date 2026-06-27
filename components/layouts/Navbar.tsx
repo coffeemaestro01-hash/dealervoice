@@ -95,9 +95,8 @@ export function Navbar({ overHero = false }: { overHero?: boolean }) {
         ? "/dashboard/dealer"
         : "/dashboard/customer";
 
-  const navLinkClass = overHero
-    ? "inline-flex items-center gap-1 text-sm text-white/70 hover:text-white transition-colors font-medium"
-    : "inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors font-medium";
+  const navLinkClass =
+    "inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors font-medium";
 
   return (
     <header
@@ -105,11 +104,11 @@ export function Navbar({ overHero = false }: { overHero?: boolean }) {
         "sticky top-0 z-50 backdrop-blur-md border-b",
         overHero
           ? "absolute inset-x-0 bg-transparent border-white/10"
-          : "bg-pearl border-border shadow-soft"
+          : "surface-panel border-border/60 shadow-soft"
       )}
     >
       <nav className="container flex items-center justify-between h-16 gap-3" aria-label="Main navigation">
-        <Logo variant="full" height={32} priority inverted={overHero} />
+        <Logo variant="full" height={32} priority inverted />
 
         <div className="hidden lg:flex items-center gap-6 flex-1 justify-center">
           <NavDropdown label="For buyers" links={BUYERS_LINKS} triggerClassName={navLinkClass} />
