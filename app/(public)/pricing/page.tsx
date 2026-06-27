@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import prisma from "@/lib/db";
 import { PLAN_PRICES_USD } from "@/lib/payment";
+import { PLAN_SERVICE_AREA_LIMITS } from "@/lib/subscription/plan-limits";
 import { PricingPageView, type PricingPlan } from "@/components/pricing/PricingPageView";
 
 export const metadata: Metadata = {
@@ -14,6 +15,7 @@ export const dynamic = "force-dynamic";
 function buildPlans(dealerId?: string): PricingPlan[] {
   const freeHref = dealerId ? `/claim?dealer=${dealerId}` : "/claim";
   const proHref = dealerId ? `/dashboard/dealer/billing?dealer=${dealerId}` : "/dashboard/dealer/billing";
+  const enterpriseHref = proHref;
 
   return [
     {
@@ -25,7 +27,7 @@ function buildPlans(dealerId?: string): PricingPlan[] {
       benefits: [
         "Claim and manage your dealership profile",
         "Respond to customer reviews publicly",
-        "One location included",
+        `${PLAN_SERVICE_AREA_LIMITS.FREE} service areas you serve`,
         "Appear in city and country dealer search",
         "Request-a-quote leads from buyers",
       ],
@@ -36,16 +38,17 @@ function buildPlans(dealerId?: string): PricingPlan[] {
       name: "DealerVoice Pro",
       tagline: "Remove ads & grow reputation",
       intro: "Access advanced features to enhance your profile, list inventory, and give buyers a competitor-free view of your dealership.",
-      priceUsd: `$${PLAN_PRICES_USD.PRO.monthly}/month`,
+      priceUsd: `$${PLAN_PRICES_USD.PRO.monthly}`,
       period: "/month",
       annualNote: `$${PLAN_PRICES_USD.PRO.annual}/year billed annually (save ~17%)`,
       benefits: [
         "Remove competitor ads on your profile",
         "Live inventory link on profile & city browse",
+        `${PLAN_SERVICE_AREA_LIMITS.PRO} service areas you serve`,
         "Full analytics and review trends",
         "AI-powered response suggestions",
         "AI sales assistant — 24/7 chat & lead capture",
-        "Competitor monitoring (up to 5 locations)",
+        "Competitor monitoring",
         "Priority email support",
       ],
       cta: "Upgrade to Pro",
@@ -57,13 +60,13 @@ function buildPlans(dealerId?: string): PricingPlan[] {
       name: "DealerVoice Pro+",
       tagline: "Featured badge & growth tools",
       intro: "Everything in Pro plus a featured badge on your profile, review backlink embeds, and priority placement in local browse.",
-      priceUsd: `$${PLAN_PRICES_USD.PRO_PLUS.monthly}/month`,
+      priceUsd: `$${PLAN_PRICES_USD.PRO_PLUS.monthly}`,
       period: "/month",
       annualNote: `$${PLAN_PRICES_USD.PRO_PLUS.annual}/year billed annually (save ~17%)`,
       benefits: [
         "Featured Pro+ badge on profile & directory",
+        `${PLAN_SERVICE_AREA_LIMITS.PRO_PLUS} service areas you serve`,
         "Embeddable review backlink for your website",
-        "15 locations under one account",
         "Priority placement in city browse",
         "Everything in Pro (ads removed, inventory, analytics)",
         "AI assistant: appointment booking + auto follow-up",
@@ -75,22 +78,23 @@ function buildPlans(dealerId?: string): PricingPlan[] {
     {
       name: "DealerVoice Enterprise",
       tagline: "For dealer groups & chains",
-      intro: "Maximize exposure across locations and integrate DealerVoice into your group operations with dedicated support.",
-      priceUsd: "Custom",
-      period: "",
-      customPrice: true,
-      includesLabel: "Includes all Pro benefits",
+      intro: "Maximum exposure, multi-location control, and exclusive growth programs built for operator-scale dealerships.",
+      priceUsd: `$${PLAN_PRICES_USD.ENTERPRISE.monthly.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+      period: "/month",
+      annualNote: `$${PLAN_PRICES_USD.ENTERPRISE.annual.toLocaleString()}/year billed annually`,
+      includesLabel: "Includes all Pro+ benefits",
       benefits: [
-        "Unlimited locations under one group",
+        `${PLAN_SERVICE_AREA_LIMITS.ENTERPRISE} service areas — top of applicable location directories`,
+        "Link 5 same-owner dealership locations under one account",
+        "CEO interviews on research articles — trending automotive topics",
+        "Highest lead prospect priority in areas you serve",
         "Full API access for inventory & reviews",
         "White-label reputation reporting",
         "Dedicated account manager",
-        "Custom integrations and onboarding",
         "AI assistant website embed widget",
-        "City sponsorship slots (where available)",
       ],
-      cta: "Get a quote",
-      href: "/contact",
+      cta: "Upgrade to Enterprise",
+      href: enterpriseHref,
     },
   ];
 }

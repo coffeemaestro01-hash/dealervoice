@@ -2,6 +2,7 @@ import { requireAuth } from "@/lib/auth/session";
 import prisma from "@/lib/db";
 import { notFound } from "next/navigation";
 import { DealerSettingsForm } from "@/components/dashboard/DealerSettingsForm";
+import { DealerServiceAreasPanel } from "@/components/dashboard/DealerServiceAreasPanel";
 
 async function getDealerData(userId: string) {
   const staffRecord = await prisma.dealerStaff.findFirst({
@@ -41,6 +42,9 @@ export default async function DealerSettingsPage() {
       </div>
 
       <DealerSettingsForm dealership={dealership} />
+      <div className="mt-10">
+        <DealerServiceAreasPanel />
+      </div>
     </div>
   );
 }

@@ -16,7 +16,7 @@ export const STRIPE_PRICES = {
 export const PLAN_PRICES_USD = {
   PRO: { monthly: 199, annual: 1990, monthlyDisplay: "$199", annualDisplay: "$1,990" },
   PRO_PLUS: { monthly: 349, annual: 3490, monthlyDisplay: "$349", annualDisplay: "$3,490" },
-  ENTERPRISE: { monthly: 499, annual: 4990, monthlyDisplay: "$499", annualDisplay: "$4,990" },
+  ENTERPRISE: { monthly: 2999.99, annual: 29999, monthlyDisplay: "$2,999.99", annualDisplay: "$29,999" },
 };
 
 export type PlanKey = "PRO" | "PRO_PLUS" | "ENTERPRISE";

@@ -16,14 +16,19 @@ const FAQS = [
       "All paid plans are billed in USD through Stripe. You can pay with major credit and debit cards. Annual billing saves approximately 17% compared to monthly.",
   },
   {
+    q: "What are service areas?",
+    answer:
+      "Every dealership can list cities and towns they serve beyond their physical address. Free plans include 5 service areas, Pro 15, Pro+ 35, and Enterprise 50 — with Enterprise dealers pinned to the top of applicable location directories.",
+  },
+  {
     q: "What does Pro remove from my profile?",
     answer:
-      "Free profiles may show sponsored competitor placements to buyers. Pro removes those ads on your listing, adds a live inventory link, analytics, AI reply suggestions, and support for up to five locations.",
+      "Free profiles may show sponsored competitor placements to buyers. Pro removes those ads on your listing, adds a live inventory link, analytics, AI reply suggestions, and up to 15 service areas.",
   },
   {
     q: "Who should choose Enterprise?",
     answer:
-      "Dealer groups and multi-city chains that need unlimited locations, API access, white-label reporting, and a dedicated account manager. Contact us for a tailored quote.",
+      "Dealer groups that need 50 service areas, top directory placement, CEO research interviews, highest lead priority, API access, and the ability to link 5 same-owner locations under one account — $2,999.99/month.",
   },
   {
     q: "Can I switch plans later?",

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Check, CreditCard, ExternalLink, FileText } from "lucide-react";
 import { SubscriptionCheckoutButton } from "@/components/payment/SubscriptionCheckoutButton";
 import { PLAN_PRICES_USD } from "@/lib/payment";
+import { PLAN_SERVICE_AREA_LIMITS } from "@/lib/subscription/plan-limits";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -51,7 +52,7 @@ const PLANS = [
     name: "Pro",
     monthly: PLAN_PRICES_USD.PRO.monthlyDisplay,
     annual: PLAN_PRICES_USD.PRO.annualDisplay,
-    features: ["5 locations", "Full analytics", "Competitor monitoring", "AI response suggestions", "AI sales assistant (24/7 chat + leads)", "Featured Pro badge"],
+    features: [`${PLAN_SERVICE_AREA_LIMITS.PRO} service areas`, "Full analytics", "Competitor monitoring", "AI response suggestions", "AI sales assistant (24/7 chat + leads)", "Featured Pro badge"],
   },
   {
     key: "PRO_PLUS" as const,
@@ -59,14 +60,20 @@ const PLANS = [
     monthly: PLAN_PRICES_USD.PRO_PLUS.monthlyDisplay,
     annual: PLAN_PRICES_USD.PRO_PLUS.annualDisplay,
     badge: "Best value",
-    features: ["15 locations", "Everything in Pro", "Featured Pro+ badge", "Priority placement", "Review backlink embed", "AI assistant: booking + follow-ups"],
+    features: [`${PLAN_SERVICE_AREA_LIMITS.PRO_PLUS} service areas`, "Everything in Pro", "Featured Pro+ badge", "Priority placement", "Review backlink embed", "AI assistant: booking + follow-ups"],
   },
   {
     key: "ENTERPRISE" as const,
     name: "Enterprise",
     monthly: PLAN_PRICES_USD.ENTERPRISE.monthlyDisplay,
     annual: PLAN_PRICES_USD.ENTERPRISE.annualDisplay,
-    features: ["Unlimited locations", "API access", "White-label reports", "Featured Enterprise badge", "Dedicated support"],
+    features: [
+      `${PLAN_SERVICE_AREA_LIMITS.ENTERPRISE} service areas · top of directories`,
+      "Link 5 same-owner locations",
+      "CEO research interviews",
+      "Highest lead prospect priority",
+      "API access & white-label reports",
+    ],
   },
 ];
 

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import prisma from "@/lib/db";
 import { publicDealerFilter } from "@/lib/dealer/status";
+import { sortDealersForDirectory } from "@/lib/dealer/directory-sort";
 import { DealerCard } from "@/components/dealership/DealerCard";
 import { isUsStateSlug, US_STATE_BY_SLUG } from "@/lib/geo/us-states";
 import { citySlug } from "@/lib/dealers/seo-url";
@@ -27,18 +28,40 @@ async function getCityData(countryCode: string, citySlug: string) {
   return { country, city };
 }
 
-async function getDealersByCity(cityId: string) {
-  return prisma.dealership.findMany({
-    where: { cityId, deletedAt: null },
-    take: 60,
-    orderBy: [{ reputationScore: "desc" }, { name: "asc" }],
-    include: {
-      country: { select: { name: true, code: true } },
-      city: { select: { name: true, slug: true } },
-      brands: { include: { brand: { select: { name: true, slug: true, logoUrl: true } } }, take: 5 },
-      subscription: { select: { plan: true, status: true } },
-    },
+async function getDealersByCity(cityId: string, cityName: string) {
+  const dealerInclude = {
+    country: { select: { name: true, code: true } },
+    city: { select: { name: true, slug: true } },
+    brands: { include: { brand: { select: { name: true, slug: true, logoUrl: true } } }, take: 5 },
+    subscription: { select: { plan: true, status: true } },
+    serviceAreas: { select: { cityName: true }, take: 5 },
+  } as const;
+
+  const [inCity, serving] = await Promise.all([
+    prisma.dealership.findMany({
+      where: { cityId, deletedAt: null },
+      take: 60,
+      include: dealerInclude,
+    }),
+    prisma.dealership.findMany({
+      where: {
+        deletedAt: null,
+        NOT: { cityId },
+        serviceAreas: { some: { cityName: { equals: cityName, mode: "insensitive" } } },
+      },
+      take: 40,
+      include: dealerInclude,
+    }),
+  ]);
+
+  const seen = new Set<string>();
+  const merged = [...inCity, ...serving].filter((d) => {
+    if (seen.has(d.id)) return false;
+    seen.add(d.id);
+    return true;
   });
+
+  return sortDealersForDirectory(merged);
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -79,7 +102,9 @@ export default async function CityPage({ params }: Props) {
       },
     });
 
-    const filtered = dealers.filter((d) => citySlug(d.cityName) === citySlugParam);
+    const filtered = sortDealersForDirectory(
+      dealers.filter((d) => citySlug(d.cityName) === citySlugParam)
+    );
     const cityLabel = filtered[0]?.cityName ?? citySlugParam.replace(/-/g, " ");
     if (filtered.length === 0) notFound();
 
@@ -110,7 +135,7 @@ export default async function CityPage({ params }: Props) {
   if (!data) notFound();
 
   const { country, city } = data;
-  const dealers = await getDealersByCity(city.id);
+  const dealers = await getDealersByCity(city.id, city.name);
   const countryHref = `/dealers/${country.code.toLowerCase()}`;
 
   return (

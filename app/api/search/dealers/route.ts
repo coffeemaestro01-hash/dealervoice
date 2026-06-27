@@ -3,6 +3,7 @@ import { searchSchema } from "@/lib/validations";
 import { getCache, setCache, CACHE_KEYS, CACHE_TTL } from "@/lib/redis";
 import prisma from "@/lib/db";
 import { publicDealerWhere } from "@/lib/dealer/status";
+import { sortDealersForDirectory } from "@/lib/dealer/directory-sort";
 import type { DealerCategory, Prisma } from "@prisma/client";
 
 export async function GET(req: NextRequest) {
@@ -47,7 +48,16 @@ export async function GET(req: NextRequest) {
       ...(sort === "needs_review" && { totalReviews: 0 }),
       ...(andClauses.length > 0 && { AND: andClauses }),
       ...(country && { country: { code: country.toUpperCase() } }),
-      ...(city && { cityName: { contains: city, mode: "insensitive" } }),
+      ...(city && {
+        OR: [
+          { cityName: { contains: city, mode: "insensitive" } },
+          {
+            serviceAreas: {
+              some: { cityName: { contains: city, mode: "insensitive" } },
+            },
+          },
+        ],
+      }),
       ...(category && { category: category as DealerCategory }),
       ...(rating && { overallRating: { gte: rating } }),
       ...(verified && { verifiedReviews: { gt: 0 } }),
@@ -68,7 +78,7 @@ export async function GET(req: NextRequest) {
             }[sort ?? "relevance"] ?? { reputationScore: "desc" as const },
           ];
 
-    const dealers = await prisma.dealership.findMany({
+    const dealersRaw = await prisma.dealership.findMany({
       where,
       orderBy,
       skip: (page - 1) * limit,
@@ -80,9 +90,11 @@ export async function GET(req: NextRequest) {
           include: { brand: { select: { name: true, slug: true, logoUrl: true } } },
           take: 6,
         },
-        subscription: { select: { plan: true } },
+        subscription: { select: { plan: true, status: true } },
+        serviceAreas: { select: { cityName: true, stateName: true }, take: 8 },
       },
     });
+    const dealers = sortDealersForDirectory(dealersRaw);
     const total = await prisma.dealership.count({ where });
 
     const result = {

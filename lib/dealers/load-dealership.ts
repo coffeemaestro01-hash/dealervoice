@@ -11,6 +11,7 @@ export async function fetchDealershipBySlug(slug: string) {
       brands: { include: { brand: true }, orderBy: { isPrimary: "desc" } },
       awards: { orderBy: { year: "desc" } },
       subscription: { select: { plan: true, status: true } },
+      serviceAreas: { select: { cityName: true, stateName: true }, orderBy: { cityName: "asc" } },
       media: { where: { type: "IMAGE" }, take: 10 },
       _count: { select: { reviews: { where: { status: "PUBLISHED" } } } },
     },

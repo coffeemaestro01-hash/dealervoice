@@ -28,6 +28,7 @@ interface Props {
     awards?: Array<{ title: string; year: number }>;
     ratingDistribution?: Record<string, number>;
     subscription?: { plan: string; status?: string } | null;
+    serviceAreas?: Array<{ cityName: string; stateName: string | null }>;
   };
   isPremium?: boolean;
   highlightWrite?: boolean;
@@ -78,6 +79,14 @@ export function DealershipProfile({ dealer, isPremium = false, highlightWrite = 
                     {location}
                   </Link>
                 </div>
+                {dealer.serviceAreas && dealer.serviceAreas.length > 0 && (
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Also serves:{" "}
+                    {dealer.serviceAreas
+                      .map((a) => (a.stateName ? `${a.cityName}, ${a.stateName}` : a.cityName))
+                      .join(" · ")}
+                  </p>
+                )}
                 {/* Brands */}
                 {dealer.brands.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mt-2">

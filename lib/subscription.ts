@@ -2,15 +2,65 @@ import type { SubscriptionPlan } from "@prisma/client";
 import prisma from "@/lib/db";
 import { recordIncome } from "@/lib/income/ledger";
 import { recordDealerInvoice } from "@/lib/billing/record-invoice";
+import { ENTERPRISE_LINKED_LOCATIONS, PLAN_SERVICE_AREA_LIMITS } from "@/lib/subscription/plan-limits";
 
-export const PLAN_FEATURES: Record<
-  SubscriptionPlan,
-  { maxLocations: number; competitorMonitoring: boolean; apiAccess: boolean; whiteLabel: boolean }
-> = {
-  FREE: { maxLocations: 1, competitorMonitoring: false, apiAccess: false, whiteLabel: false },
-  PRO: { maxLocations: 5, competitorMonitoring: true, apiAccess: false, whiteLabel: false },
-  PRO_PLUS: { maxLocations: 15, competitorMonitoring: true, apiAccess: false, whiteLabel: false },
-  ENTERPRISE: { maxLocations: 999, competitorMonitoring: true, apiAccess: true, whiteLabel: true },
+export type PlanFeatureSet = {
+  maxLocations: number;
+  maxServiceAreas: number;
+  maxLinkedDealerships: number;
+  competitorMonitoring: boolean;
+  apiAccess: boolean;
+  whiteLabel: boolean;
+  priorityDirectoryPlacement: boolean;
+  ceoResearchInterviews: boolean;
+  topLeadProspect: boolean;
+};
+
+export const PLAN_FEATURES: Record<SubscriptionPlan, PlanFeatureSet> = {
+  FREE: {
+    maxLocations: 1,
+    maxServiceAreas: PLAN_SERVICE_AREA_LIMITS.FREE,
+    maxLinkedDealerships: 0,
+    competitorMonitoring: false,
+    apiAccess: false,
+    whiteLabel: false,
+    priorityDirectoryPlacement: false,
+    ceoResearchInterviews: false,
+    topLeadProspect: false,
+  },
+  PRO: {
+    maxLocations: 1,
+    maxServiceAreas: PLAN_SERVICE_AREA_LIMITS.PRO,
+    maxLinkedDealerships: 0,
+    competitorMonitoring: true,
+    apiAccess: false,
+    whiteLabel: false,
+    priorityDirectoryPlacement: false,
+    ceoResearchInterviews: false,
+    topLeadProspect: false,
+  },
+  PRO_PLUS: {
+    maxLocations: 1,
+    maxServiceAreas: PLAN_SERVICE_AREA_LIMITS.PRO_PLUS,
+    maxLinkedDealerships: 0,
+    competitorMonitoring: true,
+    apiAccess: false,
+    whiteLabel: false,
+    priorityDirectoryPlacement: false,
+    ceoResearchInterviews: false,
+    topLeadProspect: false,
+  },
+  ENTERPRISE: {
+    maxLocations: ENTERPRISE_LINKED_LOCATIONS,
+    maxServiceAreas: PLAN_SERVICE_AREA_LIMITS.ENTERPRISE,
+    maxLinkedDealerships: ENTERPRISE_LINKED_LOCATIONS,
+    competitorMonitoring: true,
+    apiAccess: true,
+    whiteLabel: true,
+    priorityDirectoryPlacement: true,
+    ceoResearchInterviews: true,
+    topLeadProspect: true,
+  },
 };
 
 export function planFeatures(plan: SubscriptionPlan) {

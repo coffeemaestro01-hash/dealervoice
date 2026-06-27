@@ -84,13 +84,13 @@ export function PricingPageView({ plans, dealerBanner, stats }: Props) {
             Start free. Upgrade when you are ready to own the buyer journey on your profile.
           </p>
 
-          <div className="grid lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto items-stretch">
+          <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-5 xl:gap-4 max-w-[1400px] mx-auto items-stretch">
             {plans.map((plan) => (
               <article
                 key={plan.name}
-                className={`flex flex-col rounded-2xl bg-card p-8 md:p-9 shadow-sm border transition-shadow hover:shadow-md ${
+                className={`flex flex-col rounded-2xl bg-card p-6 xl:p-7 shadow-sm border transition-shadow hover:shadow-md ${
                   plan.highlighted
-                    ? "border-primary/30 ring-2 ring-primary/30 lg:scale-[1.02] shadow-lg relative z-10"
+                    ? "border-primary/30 ring-2 ring-primary/30 shadow-lg relative z-10"
                     : "border-border"
                 }`}
               >
@@ -100,17 +100,17 @@ export function PricingPageView({ plans, dealerBanner, stats }: Props) {
                   </span>
                 )}
 
-                <h2 className="text-2xl font-bold text-foreground">{plan.name}</h2>
+                <h2 className="text-xl xl:text-2xl font-bold text-foreground">{plan.name.replace("DealerVoice ", "")}</h2>
                 <p className="text-primary font-medium text-sm mt-1">{plan.tagline}</p>
 
-                <div className="mt-6 mb-2">
+                <div className="mt-5 mb-2">
                   {plan.customPrice ? (
                     <p className="text-2xl font-bold text-foreground">Pricing on request</p>
                   ) : (
                     <>
-                      <p className="text-4xl font-bold text-foreground tracking-tight">
+                      <p className="text-3xl xl:text-4xl font-bold text-foreground tracking-tight">
                         {plan.priceUsd}
-                        {plan.period && <span className="text-lg font-medium text-muted-foreground">{plan.period}</span>}
+                        {plan.period && <span className="text-base font-medium text-muted-foreground">{plan.period}</span>}
                       </p>
                     </>
                   )}
@@ -125,9 +125,9 @@ export function PricingPageView({ plans, dealerBanner, stats }: Props) {
                   <p className="text-xs font-semibold text-primary uppercase tracking-wide mb-3">{plan.includesLabel}</p>
                 )}
 
-                <ul className="space-y-3 flex-1 mb-8">
+                <ul className="space-y-2.5 flex-1 mb-6">
                   {plan.benefits.map((b) => (
-                    <li key={b} className="flex gap-2.5 text-sm text-foreground leading-snug">
+                    <li key={b} className="flex gap-2 text-xs xl:text-sm text-foreground leading-snug">
                       <CheckCircle2 size={16} className="text-primary shrink-0 mt-0.5" />
                       <span>{b}</span>
                     </li>
