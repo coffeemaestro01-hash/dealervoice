@@ -227,6 +227,8 @@ model User {
   emailCampaigns   EmailCampaign[] @relation("CampaignCreator")
   supportTickets   SupportTicket[]
   supportTicketReplies SupportTicketReply[]
+  inboxTicketsAssigned InboxTicket[] @relation("InboxTicketAssignee")
+  inboxMessagesAuthored InboxMessage[] @relation("InboxMessageAuthor")
 
   @@index([email])
   @@index([role])
@@ -470,6 +472,15 @@ model Dealership {
   serviceAreas         DealershipServiceArea[]
   enterpriseLinks      EnterpriseAccountLink[] @relation("EnterprisePrimary")
   linkedToEnterprise   EnterpriseAccountLink?  @relation("EnterpriseLinked")
+  inboxTickets         InboxTicket[]
+  inboxContacts        InboxContact[]
+  inboxEmailConnections InboxEmailConnection[]
+  inboxCannedResponses InboxCannedResponse[]
+  inboxAutomationRules InboxAutomationRule[]
+  inboxSavedViews      InboxSavedView[]
+  inboxSlaConfigs      InboxSLAConfig[]
+  inboxOnboardingSessions InboxOnboardingSession[]
+  inboxCsatSurveys        InboxCSATSurvey[]
 
   @@index([slug])
   @@index([countryId])
@@ -1585,4 +1596,257 @@ model SocialPostLog {
   @@unique([platform, contentHash])
   @@index([platform, postedAt])
   @@index([templateKey])
+}
+enum InboxTicketStatus {
+  NEW
+  OPEN
+  IN_PROGRESS
+  WAITING
+  RESOLVED
+  CLOSED
+}
+
+enum InboxTicketPriority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum InboxTicketChannel {
+  EMAIL
+  WEB_FORM
+  PHONE
+  WALK_IN
+  OTHER
+}
+
+enum InboxMessageDirection {
+  INBOUND
+  OUTBOUND
+  INTERNAL
+}
+
+enum InboxEmailProvider {
+  GMAIL
+  MICROSOFT
+  IMAP
+  FORWARDING
+  OTHER
+}
+
+enum InboxConnectionStatus {
+  PENDING
+  CONNECTED
+  ERROR
+  DISCONNECTED
+}
+
+enum InboxCSATScore {
+  VERY_HAPPY
+  NEUTRAL
+  UNHAPPY
+}
+
+model InboxEmailConnection {
+  id             String                @id @default(cuid())
+  dealershipId   String
+  label          String                @default("Support")
+  address        String?
+  provider       InboxEmailProvider    @default(OTHER)
+  status         InboxConnectionStatus @default(PENDING)
+  config         Json?
+  lastError      String?               @db.Text
+  connectedAt    DateTime?
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+
+  dealership Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+  tickets    InboxTicket[]
+
+  @@index([dealershipId])
+}
+
+model InboxContact {
+  id           String   @id @default(cuid())
+  dealershipId String
+  email        String
+  name         String?
+  phone        String?
+  company      String?
+  vehicleInfo  String?
+  tags         String[]
+  notes        String?  @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  dealership Dealership    @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+  tickets    InboxTicket[]
+  csatSurveys InboxCSATSurvey[]
+
+  @@unique([dealershipId, email])
+  @@index([dealershipId])
+}
+
+model InboxTicket {
+  id               String              @id @default(cuid())
+  ticketNumber     Int                 @default(autoincrement()) @unique
+  dealershipId     String
+  subject          String
+  status           InboxTicketStatus   @default(NEW)
+  priority         InboxTicketPriority @default(MEDIUM)
+  channel          InboxTicketChannel  @default(EMAIL)
+  connectionId     String?
+  contactId        String
+  assignedToId     String?
+  tags             String[]
+  summary          String?             @db.Text
+  intent           String?
+  sentiment        String?
+  snoozedUntil     DateTime?
+  firstResponseAt  DateTime?
+  resolvedAt       DateTime?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  dealership Dealership            @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+  connection InboxEmailConnection? @relation(fields: [connectionId], references: [id])
+  contact    InboxContact          @relation(fields: [contactId], references: [id])
+  assignee   User?                 @relation("InboxTicketAssignee", fields: [assignedToId], references: [id])
+  messages   InboxMessage[]
+  events     InboxTicketEvent[]
+  csatSurveys InboxCSATSurvey[]
+
+  @@index([dealershipId, status])
+  @@index([dealershipId, createdAt])
+  @@index([assignedToId])
+}
+
+model InboxMessage {
+  id          String                @id @default(cuid())
+  ticketId    String
+  body        String                @db.Text
+  bodyHtml    String?               @db.Text
+  from        String
+  to          String
+  direction   InboxMessageDirection
+  authorId    String?
+  isAiDraft   Boolean               @default(false)
+  externalId  String?
+  createdAt   DateTime              @default(now())
+
+  ticket InboxTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  author User?       @relation("InboxMessageAuthor", fields: [authorId], references: [id])
+
+  @@index([ticketId, createdAt])
+}
+
+model InboxTicketEvent {
+  id        String   @id @default(cuid())
+  ticketId  String
+  actorId   String?
+  type      String
+  payload   Json?
+  createdAt DateTime @default(now())
+
+  ticket InboxTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId, createdAt])
+}
+
+model InboxCannedResponse {
+  id           String   @id @default(cuid())
+  dealershipId String
+  title        String
+  body         String   @db.Text
+  shortcut     String?
+  category     String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  dealership Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+
+  @@index([dealershipId])
+}
+
+model InboxAutomationRule {
+  id           String   @id @default(cuid())
+  dealershipId String
+  name         String
+  trigger      String
+  conditions   Json
+  actions      Json
+  isActive     Boolean  @default(true)
+  runCount     Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  dealership Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+
+  @@index([dealershipId])
+}
+
+model InboxSLAConfig {
+  id                 String @id @default(cuid())
+  dealershipId       String
+  priority           String
+  label              String?
+  firstResponseHours Int    @default(24)
+  resolutionHours    Int    @default(72)
+
+  dealership Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+
+  @@unique([dealershipId, priority])
+}
+
+model InboxSavedView {
+  id           String   @id @default(cuid())
+  dealershipId String
+  ownerId      String?
+  name         String
+  filters      Json
+  isShared     Boolean  @default(false)
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  dealership Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+
+  @@index([dealershipId])
+}
+
+model InboxCSATSurvey {
+  id           String         @id @default(cuid())
+  dealershipId String
+  ticketId     String
+  contactId    String
+  token        String         @unique
+  score        InboxCSATScore?
+  comment      String?        @db.Text
+  sentAt       DateTime?
+  respondedAt  DateTime?
+  createdAt    DateTime       @default(now())
+
+  dealership Dealership   @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+  ticket     InboxTicket  @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  contact    InboxContact @relation(fields: [contactId], references: [id])
+
+  @@index([dealershipId])
+  @@index([ticketId])
+}
+
+model InboxOnboardingSession {
+  id           String   @id @default(cuid())
+  dealershipId String
+  userId       String
+  step         String   @default("welcome")
+  provider     InboxEmailProvider?
+  transcript   Json?
+  completedAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  dealership Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+
+  @@index([dealershipId])
+  @@index([userId])
 }

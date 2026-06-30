@@ -19,7 +19,7 @@
     "db:migrate:outreach-automation": "tsx scripts/migrate-outreach-automation-db.ts",
     "db:migrate:franchise-v1": "tsx scripts/migrate-franchise-v1-db.ts",
     "db:migrate:billing-v2": "tsx scripts/migrate-billing-v2-db.ts",
-    "db:migrate:pro-plus": "tsx scripts/migrate-pro-plus-db.ts",
+    "db:migrate:inbox-v1": "tsx scripts/migrate-inbox-v1-db.ts",
     "db:migrate:growth": "tsx scripts/migrate-growth-db.ts",
     "db:migrate:buyer-outreach": "tsx scripts/migrate-buyer-outreach-db.ts",
     "db:migrate:social-post": "tsx scripts/migrate-social-post-db.ts",

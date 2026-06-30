@@ -3,15 +3,26 @@ import { getToken } from "next-auth/jwt";
 import { shouldTrackPath } from "@/lib/analytics/paths";
 
 const ADMIN_PATHS = ["/dashboard/admin"];
+const TICKETING_PREFIX = "/ticketing";
 const DEALER_DASHBOARD_PREFIX = "/dashboard/dealer";
 
-/** Only dashboard routes require login — all marketing pages stay public by default. */
+/** Dashboard and Inbox routes require login. */
 function requiresAuth(pathname: string): boolean {
-  return pathname === "/dashboard" || pathname.startsWith("/dashboard/");
+  return (
+    pathname === "/dashboard" ||
+    pathname.startsWith("/dashboard/") ||
+    pathname === TICKETING_PREFIX ||
+    pathname.startsWith(`${TICKETING_PREFIX}/`)
+  );
 }
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+  const host = req.headers.get("host")?.split(":")[0] ?? "";
+
+  if (host === "ticketing.dealervoice.io" && (pathname === "/" || pathname === "")) {
+    return NextResponse.redirect(new URL("/ticketing/inbox", req.url));
+  }
 
   if (pathname === "/dealers/in" || pathname.startsWith("/dealers/in/")) {
     const dest = pathname.includes("/inventory") ? "/dealers/us/inventory" : "/chicago";

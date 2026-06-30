@@ -51,6 +51,7 @@ function buildPlans(dealerId?: string): PricingPlan[] {
         "AI-powered response suggestions",
         "AI sales assistant — 24/7 chat & lead capture",
         "Competitor monitoring",
+        "DealerVoice Inbox — customer support (5 team seats)",
         "Priority email support",
       ],
       cta: "Upgrade to Pro",
@@ -71,6 +72,7 @@ function buildPlans(dealerId?: string): PricingPlan[] {
         "Embeddable review backlink for your website",
         "Priority placement in city browse",
         "Everything in Pro (ads removed, inventory, analytics)",
+        "DealerVoice Inbox — customer support (10 team seats)",
         "AI assistant: appointment booking + auto follow-up",
       ],
       cta: "Upgrade to Pro+",
@@ -88,6 +90,7 @@ function buildPlans(dealerId?: string): PricingPlan[] {
       benefits: [
         `${PLAN_SERVICE_AREA_LIMITS.ENTERPRISE} service areas — top of applicable location directories`,
         "Link 5 same-owner dealership locations under one account",
+        "DealerVoice Inbox on all linked locations (50 shared team seats)",
         "CEO interviews on research articles — trending automotive topics",
         "Highest lead prospect priority in areas you serve",
         "Full API access for inventory & reviews",

@@ -72,7 +72,7 @@ async function callOpenAI(prompt: string): Promise<string> {
   return data.choices?.[0]?.message?.content || "";
 }
 
-async function callAI(prompt: string, json = true): Promise<string> {
+export async function callAI(prompt: string, json = true): Promise<string> {
   if (process.env.GEMINI_API_KEY) {
     try { return await callGemini(prompt, json); } catch (e) { console.error("Gemini error:", e); }
   }
