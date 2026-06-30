@@ -7,10 +7,40 @@ import AppleProvider from "next-auth/providers/apple";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
 import { UserRole, UserStatus } from "@prisma/client";
+import {
+  ALLOWED_AUTH_REDIRECT_ORIGINS,
+  AUTH_COOKIE_DOMAIN,
+} from "@/lib/auth/cookie-domain";
 
 export const authOptions: NextAuthOptions = {
   adapter: DealerVoicePrismaAdapter(prisma),
   session: { strategy: "jwt", maxAge: 30 * 24 * 60 * 60 },
+  ...(AUTH_COOKIE_DOMAIN
+    ? {
+        cookies: {
+          sessionToken: {
+            name: "__Secure-next-auth.session-token",
+            options: {
+              httpOnly: true,
+              sameSite: "lax",
+              path: "/",
+              secure: true,
+              domain: AUTH_COOKIE_DOMAIN,
+            },
+          },
+          callbackUrl: {
+            name: "__Secure-next-auth.callback-url",
+            options: {
+              httpOnly: true,
+              sameSite: "lax",
+              path: "/",
+              secure: true,
+              domain: AUTH_COOKIE_DOMAIN,
+            },
+          },
+        },
+      }
+    : {}),
   pages: {
     signIn: "/login",
     error: "/login",
@@ -76,6 +106,24 @@ export const authOptions: NextAuthOptions = {
       : []),
   ],
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith("/")) {
+        return `${baseUrl}${url}`;
+      }
+      try {
+        const targetOrigin = new URL(url).origin;
+        const allowed = new Set(
+          ALLOWED_AUTH_REDIRECT_ORIGINS.map((origin) => new URL(origin).origin),
+        );
+        allowed.add(new URL(baseUrl).origin);
+        if (allowed.has(targetOrigin)) {
+          return url;
+        }
+      } catch {
+        // fall through to baseUrl
+      }
+      return baseUrl;
+    },
     async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;

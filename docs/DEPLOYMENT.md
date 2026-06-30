@@ -130,4 +130,14 @@ Same pattern as `www`. Propagation: ~5–30 minutes.
 
 **Until then:** `https://dealervoice.io/ticketing/inbox` works immediately.
 
+### Google sign-in on the Inbox subdomain
+
+Inbox auth runs on `dealervoice.io` (where Google OAuth redirect URIs are registered), then returns to `ticketing.dealervoice.io` with a shared session cookie (`.dealervoice.io`).
+
+Optional — only if you want Google sign-in to complete entirely on the subdomain without redirecting to the main site:
+
+| Authorized redirect URI (Google Cloud Console) |
+|---|
+| `https://ticketing.dealervoice.io/api/auth/callback/google` |
+
 See `docs/DEALERVOICE_INBOX.md`.

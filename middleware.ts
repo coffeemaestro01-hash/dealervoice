@@ -1,10 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { shouldTrackPath } from "@/lib/analytics/paths";
+import {
+  CANONICAL_AUTH_ORIGIN,
+  TICKETING_HOST,
+} from "@/lib/auth/cookie-domain";
 
 const ADMIN_PATHS = ["/dashboard/admin"];
 const TICKETING_PREFIX = "/ticketing";
 const DEALER_DASHBOARD_PREFIX = "/dashboard/dealer";
+
+/** OAuth redirect URIs are registered on dealervoice.io — sign in there, then return. */
+function ticketingAuthLoginRedirect(req: NextRequest, pathname: string): NextResponse {
+  const loginUrl = new URL("/login", CANONICAL_AUTH_ORIGIN);
+  const callbackUrl = `${req.nextUrl.origin}${pathname}${req.nextUrl.search}`;
+  loginUrl.searchParams.set("callbackUrl", callbackUrl);
+  return NextResponse.redirect(loginUrl);
+}
 
 /** Dashboard and Inbox routes require login. */
 function requiresAuth(pathname: string): boolean {
@@ -20,8 +32,26 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const host = req.headers.get("host")?.split(":")[0] ?? "";
 
-  if (host === "ticketing.dealervoice.io" && (pathname === "/" || pathname === "")) {
+  if (host === TICKETING_HOST && (pathname === "/" || pathname === "")) {
     return NextResponse.redirect(new URL("/ticketing/inbox", req.url));
+  }
+
+  if (
+    host === TICKETING_HOST &&
+    (pathname === "/login" || pathname === "/register")
+  ) {
+    const canonicalAuth = new URL(pathname, CANONICAL_AUTH_ORIGIN);
+    req.nextUrl.searchParams.forEach((value, key) => {
+      if (key === "callbackUrl") {
+        const cb = value.startsWith("http")
+          ? value
+          : `${req.nextUrl.origin}${value.startsWith("/") ? value : `/${value}`}`;
+        canonicalAuth.searchParams.set(key, cb);
+        return;
+      }
+      canonicalAuth.searchParams.set(key, value);
+    });
+    return NextResponse.redirect(canonicalAuth);
   }
 
   if (pathname === "/dealers/in" || pathname.startsWith("/dealers/in/")) {
@@ -48,8 +78,11 @@ export async function middleware(req: NextRequest) {
   const token = needsAuth ? await getToken({ req, secret: process.env.NEXTAUTH_SECRET }) : null;
 
   if (needsAuth && !token) {
+    if (host === TICKETING_HOST) {
+      return ticketingAuthLoginRedirect(req, pathname);
+    }
     const loginUrl = new URL("/login", req.url);
-    loginUrl.searchParams.set("callbackUrl", pathname);
+    loginUrl.searchParams.set("callbackUrl", pathname + req.nextUrl.search);
     return NextResponse.redirect(loginUrl);
   }
 
