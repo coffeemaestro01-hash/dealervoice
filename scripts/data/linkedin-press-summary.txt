@@ -4,7 +4,7 @@ We're building outlet-level review infrastructure for U.S. car buyers — starti
 
 • Structured buyer reviews (sales + service)
 • Free dealer profile claims
-• Pro ($199/mo) and Enterprise ($499/mo) via Stripe — tools, not pay-to-win scores
+• Pro ($199/mo), Pro+ ($349/mo), and Enterprise ($2,999.99/mo) via Stripe — tools, not pay-to-win scores
 • $49 lead fee on converted quotes for participating dealers
 
 Buyers: find Illinois dealers at https://dealervoice.io/chicago

@@ -26,8 +26,9 @@ cp .env.example .env.local
 | `STRIPE_SECRET_KEY` | Stripe secret key (live or test) |
 | `STRIPE_WEBHOOK_SECRET` | From Stripe Dashboard → Webhooks |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key |
-| `STRIPE_PRICE_PRO_MONTHLY` | Price ID for Pro $199/mo |
-| `STRIPE_PRICE_ENTERPRISE_MONTHLY` | Price ID for Enterprise $499/mo |
+| `STRIPE_PRO_MONTHLY_PRICE_ID` | Price ID for Pro $199/mo |
+| `STRIPE_PRO_PLUS_MONTHLY_PRICE_ID` | Price ID for Pro+ $349/mo |
+| `STRIPE_ENTERPRISE_MONTHLY_PRICE_ID` | Price ID for Enterprise $2,999.99/mo |
 | `CRON_SECRET` | Random string for Vercel cron auth |
 | `LINKEDIN_CLIENT_ID` | LinkedIn app Client ID (OAuth connect button) |
 | `LINKEDIN_CLIENT_SECRET` | LinkedIn app secret (server only) |
@@ -54,7 +55,7 @@ npm run db:migrate:monetization-v2   # if not yet applied
 
 ## 3. Stripe Setup
 
-1. Create products/prices in Stripe Dashboard (Pro $199/mo, Enterprise $499/mo).
+1. Create products/prices in Stripe Dashboard (Pro $199/mo, Pro+ $349/mo, Enterprise $2,999.99/mo).
 2. Add env vars above to Vercel.
 3. Webhook endpoint: `https://dealervoice.io/api/webhooks/stripe`
    - Events: `checkout.session.completed`, `customer.subscription.*`, `invoice.*`

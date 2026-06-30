@@ -42,7 +42,8 @@ CLAIMING A DEALERSHIP
 PRICING (paid plans for dealers)
 - There is a free dealer profile.
 - Pro plan: $199/month.
-- Enterprise plan: $499/month.
+- Pro+ plan: $349/month.
+- Enterprise plan: $2,999.99/month.
 - Paid plans unlock tools and features, never a higher rating.
 - Billing: plans are billed in advance, monthly or annual. Cancel anytime from the dashboard or by emailing billing@dealervoice.io; access continues to the end of the billing period.
 

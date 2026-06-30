@@ -122,7 +122,7 @@ export const LINKEDIN_TEMPLATES: LinkedInPostTemplate[] = [
     hashtags: [...BASE_TAGS, "Enterprise", "API", "DealerGroups", "MultiRooftop"],
     link: (c) => `${c.appUrl}/pricing`,
     body: () =>
-      `Dealer groups on Enterprise get API access, white-label options, and unlimited locations on DealerVoice.\n\nOne dashboard for reputation across rooftops. Public trust scores buyers can actually use.\n\n$499/mo — built for operator-scale, not single-lot experiments.`,
+      `Dealer groups on Enterprise get API access, white-label options, and up to 5 linked locations on DealerVoice.\n\nOne dashboard for reputation across rooftops. Public trust scores buyers can actually use.\n\n$2,999.99/mo — built for operator-scale, not single-lot experiments.`,
   },
   {
     key: "invite-qr",

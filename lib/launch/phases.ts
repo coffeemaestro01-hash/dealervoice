@@ -45,7 +45,7 @@ export const GLOBAL_LAUNCH_PHASES: LaunchPhase[] = [
     number: 3,
     title: "Dealer B2B (Stripe USD)",
     summary: "Pro/Enterprise via Stripe; promo codes; welcome email; admin alerts.",
-    revenueStreams: ["Pro $199/mo", "Enterprise $499/mo", "Per-dealer pilot codes"],
+    revenueStreams: ["Pro $199/mo", "Pro+ $349/mo", "Enterprise $2,999.99/mo", "Per-dealer pilot codes"],
     deliverables: [
       "Stripe Checkout + webhooks",
       "Admin → Promotions (global + per-dealer)",
@@ -87,7 +87,7 @@ export const REVENUE_STREAM_GUIDE = [
   {
     stream: "Subscriptions (Stripe USD)",
     whoPays: "Dealers — Pro / Enterprise",
-    howMuch: "$199–$499/mo",
+    howMuch: "$199–$2,999.99/mo",
     tracking: "IncomeRecord SUBSCRIPTION on webhook",
     yourAction: "Private promo codes for pilot dealers",
   },

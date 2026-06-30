@@ -27,7 +27,7 @@ Dealer billing runs through **Stripe** (USD). Built in Chicago, US-first GTM.
 
 ## Revenue streams
 
-1. **Subscriptions** — Pro $199/mo, Enterprise $499/mo (Stripe). Per-dealer promo codes via outreach drip.
+1. **Subscriptions** — Pro $199/mo, Pro+ $349/mo, Enterprise $2,999.99/mo (Stripe). Per-dealer promo codes via outreach drip.
 2. **Lead fees** — $49 when dealer marks quote **Converted** (Stripe invoice auto-charged).
 3. **Sponsorship** — `/advertise` → Stripe checkout ($299 city / $499 homepage, 30 days). Auto-activates sponsor flag.
 4. **Affiliate / AdSense** — Parked until external approvals.

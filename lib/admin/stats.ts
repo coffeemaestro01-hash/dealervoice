@@ -1,5 +1,6 @@
 import { DealerStatus } from "@prisma/client";
 import prisma from "@/lib/db";
+import { planAmountCents } from "@/lib/payment";
 
 const ACTIVE_DEALER_STATUSES: DealerStatus[] = ["ACTIVE", "CLAIMED"];
 
@@ -37,7 +38,10 @@ export async function getRevenueStats() {
     prisma.lead.count({ where: { status: "CONVERTED", updatedAt: { gte: thirtyDaysAgo } } }),
   ]);
 
-  const mrrEstimate = proCount * 19900 + proPlusCount * 34900 + enterpriseCount * 49900;
+  const mrrEstimate =
+    proCount * planAmountCents("PRO", "monthly") +
+    proPlusCount * planAmountCents("PRO_PLUS", "monthly") +
+    enterpriseCount * planAmountCents("ENTERPRISE", "monthly");
 
   return {
     totalRevenue: (paidInvoices._sum.amount ?? 0) / 100,
