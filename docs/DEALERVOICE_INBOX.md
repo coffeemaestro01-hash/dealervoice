@@ -36,36 +36,26 @@ Shown in **Inbox → Settings** after first load.
 When an agent sends a reply in Inbox, the app:
 
 1. Saves the message to the ticket
-2. Sends email via **Resend** from `{Dealership Name} <inbox-{slug}@mail.dealervoice.io>`
+2. Sends email via **Resend** from your verified domain, e.g. `{Dealership Name} via DealerVoice <noreply@send.dealervoice.io>`
 3. Subject includes `[DV-000142]` for threading
-4. Sets `Reply-To` to the ingest address
+4. Sets **Reply-To** to the dealer&apos;s support address from Settings (or `support@dealervoice.io`)
 
-Requires `RESEND_API_KEY` and verified sending domain (`mail.dealervoice.io` or your configured domain).
+Uses `RESEND_API_KEY` and `EMAIL_FROM` (or defaults to `noreply@send.dealervoice.io`). Works on the **free Resend plan** — no second domain required.
 
-### Inbound (customer email → ticket)
+### Inbound (customer email → ticket) — optional
 
-1. Enable **Inbound** on your Resend domain (`INBOX_INBOUND_DOMAIN`, default `mail.dealervoice.io`)
-2. Add DNS MX records Resend provides for that subdomain
-3. Point Resend inbound webhook to:
-
-   ```
-   POST https://dealervoice.io/api/inbox/inbound
-   Authorization: Bearer <INBOX_INBOUND_WEBHOOK_SECRET>
-   ```
-
-   Or header: `x-inbox-webhook-secret: <secret>`
-
-4. Dealers **forward** their support mailbox to their ingest address, or receive mail directly on that address
-
-**Threading:** Replies with `[DV-XXXXXX]` in the subject attach to the existing ticket. New mail creates a new ticket.
+Requires Resend **Enable Receiving** (MX records) or a paid second domain. Skip on free plan if ImprovMX handles `@dealervoice.io` mail.
 
 ### Environment variables
 
 | Variable | Description |
 |----------|-------------|
 | `RESEND_API_KEY` | Resend API key (already used site-wide) |
-| `INBOX_INBOUND_DOMAIN` | Default `mail.dealervoice.io` |
-| `INBOX_INBOUND_WEBHOOK_SECRET` | Bearer secret for `/api/inbox/inbound` |
+| `EMAIL_FROM` | Verified sender, e.g. `DealerVoice <noreply@send.dealervoice.io>` |
+| `INBOX_SEND_FROM` | Optional override for inbox From address (default `noreply@send.dealervoice.io`) |
+| `INBOX_REPLY_TO` | Optional fallback Reply-To if dealer has no support address in Settings |
+| `INBOX_INBOUND_DOMAIN` | For future inbound (default `mail.dealervoice.io`) |
+| `INBOX_INBOUND_WEBHOOK_SECRET` | Bearer secret for `/api/inbox/inbound` when inbound is enabled |
 
 ## Public web form
 

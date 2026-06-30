@@ -60,6 +60,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
       body: parsed.data.body,
       subject: ticket.subject,
       ticketNumber: ticket.ticketNumber,
+      dealerReplyTo: connection?.address,
     });
 
     return NextResponse.json(

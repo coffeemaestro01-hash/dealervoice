@@ -17,6 +17,7 @@ type Connection = {
   status: string;
   lastError: string | null;
   connectedAt: string | null;
+  config?: { inboundAddress?: string } | null;
 };
 
 type SettingsData = {
@@ -111,9 +112,22 @@ export default function InboxSettingsPage() {
                   <dd className="font-medium text-foreground">{conn.label}</dd>
                 </div>
                 <div>
-                  <dt className="text-muted-foreground">Address</dt>
+                  <dt className="text-muted-foreground">Customer-facing address</dt>
                   <dd className="font-medium text-foreground">{conn.address ?? "Not set"}</dd>
                 </div>
+                {conn.config?.inboundAddress ? (
+                  <div className="sm:col-span-2">
+                    <dt className="text-muted-foreground">DealerVoice ingest address</dt>
+                    <dd className="font-mono text-sm text-foreground mt-1 break-all">
+                      {conn.config.inboundAddress}
+                    </dd>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Optional for automatic ticket creation when you enable Resend inbound (paid plan or
+                      MX migration). Until then, use the web form and forward mail to your team manually.
+                      Outbound replies send from your verified Resend domain.
+                    </p>
+                  </div>
+                ) : null}
               </dl>
 
               {conn.lastError && (

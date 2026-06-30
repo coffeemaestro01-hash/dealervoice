@@ -1,7 +1,11 @@
 import { Resend } from "resend";
 import prisma from "@/lib/db";
+import { EMAILS } from "@/lib/constants/emails";
 import { formatInboxTicketId } from "@/lib/inbox/constants";
 import { buildInboxInboundAddress } from "@/lib/inbox/email-address";
+
+/** Verified Resend sender (send.dealervoice.io on free plan). Override with EMAIL_FROM in production. */
+const DEFAULT_INBOX_SEND_ADDRESS = "noreply@send.dealervoice.io";
 
 function getResend() {
   const key = process.env.RESEND_API_KEY;
@@ -9,9 +13,29 @@ function getResend() {
   return new Resend(key);
 }
 
-function inboxFromAddress(dealershipName: string, inboundAddress: string): string {
-  const safeName = dealershipName.replace(/[<>"]/g, "").trim() || "DealerVoice Inbox";
-  return `${safeName} <${inboundAddress}>`;
+/** Resend-verified From line with dealership branding. */
+export function buildInboxVerifiedFromAddress(dealershipName: string): string {
+  const safeName = dealershipName.replace(/[<>"]/g, "").trim() || "DealerVoice";
+  const branded = `${safeName} via DealerVoice`;
+
+  const configured = process.env.EMAIL_FROM?.trim();
+  if (configured) {
+    const match = configured.match(/^(.+?)\s*<([^>]+)>$/);
+    if (match) return `${branded} <${match[2].trim()}>`;
+    if (configured.includes("@")) return `${branded} <${configured}>`;
+  }
+
+  const sendAddress =
+    process.env.INBOX_SEND_FROM?.trim() || DEFAULT_INBOX_SEND_ADDRESS;
+  return `${branded} <${sendAddress}>`;
+}
+
+function resolveInboxReplyTo(dealerSupportAddress?: string | null): string {
+  return (
+    dealerSupportAddress?.trim() ||
+    process.env.INBOX_REPLY_TO?.trim() ||
+    EMAILS.support
+  );
 }
 
 export async function ensureDealershipInboundAddress(dealershipId: string): Promise<string> {
@@ -61,20 +85,20 @@ export async function sendInboxOutboundEmail(input: {
   body: string;
   subject: string;
   ticketNumber: number;
+  dealerReplyTo?: string | null;
 }): Promise<{ externalId: string | null; error?: string }> {
   if (!process.env.RESEND_API_KEY) {
     return { externalId: null, error: "Email sending is not configured (RESEND_API_KEY missing)" };
   }
 
-  const [dealership, ticket] = await Promise.all([
+  const [dealership, ticket, connection] = await Promise.all([
     prisma.dealership.findUnique({
       where: { id: input.dealershipId },
-      select: { name: true, slug: true },
+      select: { name: true },
     }),
     prisma.inboxTicket.findFirst({
       where: { id: input.ticketId, dealershipId: input.dealershipId },
       include: {
-        contact: true,
         messages: {
           where: { externalId: { not: null } },
           orderBy: { createdAt: "desc" },
@@ -82,13 +106,17 @@ export async function sendInboxOutboundEmail(input: {
         },
       },
     }),
+    prisma.inboxEmailConnection.findFirst({
+      where: { dealershipId: input.dealershipId },
+      select: { address: true },
+      orderBy: { createdAt: "asc" },
+    }),
   ]);
 
   if (!dealership || !ticket) {
     return { externalId: null, error: "Ticket or dealership not found" };
   }
 
-  const inboundAddress = buildInboxInboundAddress(dealership.slug);
   const displayId = formatInboxTicketId(input.ticketNumber);
   const subject = input.subject.includes(displayId)
     ? input.subject
@@ -107,14 +135,16 @@ export async function sendInboxOutboundEmail(input: {
     headers.References = references.join(" ");
   }
 
+  const replyTo = resolveInboxReplyTo(input.dealerReplyTo ?? connection?.address);
+
   try {
     const result = await getResend().emails.send({
-      from: inboxFromAddress(dealership.name, inboundAddress),
+      from: buildInboxVerifiedFromAddress(dealership.name),
       to: input.toEmail,
       subject,
       text: input.body,
       headers,
-      reply_to: inboundAddress,
+      reply_to: replyTo,
     });
 
     const externalId = result.data?.id ?? null;
