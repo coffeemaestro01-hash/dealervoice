@@ -1,4 +1,5 @@
 import prisma from "@/lib/db";
+import { planAmountCents } from "@/lib/payment";
 import { getIncomeDashboard } from "@/lib/income/ledger";
 import { getOutreachDripStats } from "@/lib/outreach/discover-emails";
 import { getMarketCoverageStats } from "@/lib/marketing/coverage-stats";
@@ -91,7 +92,11 @@ export async function getGrowthSprintMetrics() {
   ]);
 
   const paidSubs = proSubs + proPlusSubs + enterpriseSubs;
-  const mrrDollars = (proSubs * 199 + proPlusSubs * 349 + enterpriseSubs * 499) / 100;
+  const mrrDollars =
+    (proSubs * planAmountCents("PRO", "monthly") +
+      proPlusSubs * planAmountCents("PRO_PLUS", "monthly") +
+      enterpriseSubs * planAmountCents("ENTERPRISE", "monthly")) /
+    100;
   const confirmedRevenue = income.confirmedTotalMinor / 100;
 
   return {
