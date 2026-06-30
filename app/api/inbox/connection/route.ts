@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { updateInboxConnection } from "@/lib/inbox/tickets";
 import { requireInboxSession, inboxErrorResponse } from "@/lib/inbox/session";
+import { ensureDealershipInboundAddress } from "@/lib/inbox/email";
 import { z } from "zod";
 
 const patchSchema = z.object({
@@ -15,6 +16,8 @@ const patchSchema = z.object({
 export async function GET() {
   try {
     const { dealershipId } = await requireInboxSession();
+
+    await ensureDealershipInboundAddress(dealershipId);
 
     const connection = await prisma.inboxEmailConnection.findFirst({
       where: { dealershipId },

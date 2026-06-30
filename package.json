@@ -28,6 +28,7 @@
     "outreach:discover-emails": "tsx scripts/discover-dealer-emails.ts",
     "resend:domain-setup": "tsx scripts/resend-domain-setup.ts",
     "smoke": "node scripts/smoke-test.mjs",
+    "db:delete-smoke-users": "tsx scripts/delete-smoke-test-users.ts",
     "db:migrate": "prisma migrate dev",
     "db:migrate:prod": "prisma migrate deploy",
     "db:studio": "prisma studio",

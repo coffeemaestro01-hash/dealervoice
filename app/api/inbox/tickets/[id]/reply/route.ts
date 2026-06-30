@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { replyToInboxTicket } from "@/lib/inbox/tickets";
 import { requireInboxSession, inboxErrorResponse } from "@/lib/inbox/session";
+import { sendInboxOutboundEmail } from "@/lib/inbox/email";
 import { z } from "zod";
 
 const replySchema = z.object({
@@ -51,7 +52,27 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
       fromAddress: fromLabel,
     });
 
-    return NextResponse.json({ data: message }, { status: 201 });
+    const sendResult = await sendInboxOutboundEmail({
+      messageId: message.id,
+      ticketId: ticket.id,
+      dealershipId,
+      toEmail: ticket.contact.email,
+      body: parsed.data.body,
+      subject: ticket.subject,
+      ticketNumber: ticket.ticketNumber,
+    });
+
+    return NextResponse.json(
+      {
+        data: message,
+        email: {
+          sent: Boolean(sendResult.externalId),
+          externalId: sendResult.externalId,
+          error: sendResult.error ?? null,
+        },
+      },
+      { status: 201 },
+    );
   } catch (err) {
     return inboxErrorResponse(err);
   }

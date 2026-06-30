@@ -37,7 +37,7 @@ cp .env.example .env.local
 | `RESEND_API_KEY` | Transactional email |
 | `EMAIL_FROM` | e.g. `DealerVoice <noreply@send.dealervoice.io>` |
 
-Optional: `SLACK_WEBHOOK_URL`, `MEILISEARCH_*`, `SUPABASE_*` (file uploads), `OPENAI_API_KEY` / `GEMINI_API_KEY`.
+Optional: `INBOX_INBOUND_DOMAIN`, `INBOX_INBOUND_WEBHOOK_SECRET`, `SLACK_WEBHOOK_URL`, `MEILISEARCH_*`, `SUPABASE_*` (file uploads), `OPENAI_API_KEY` / `GEMINI_API_KEY`.
 
 ---
 
@@ -141,3 +141,5 @@ Optional — only if you want Google sign-in to complete entirely on the subdoma
 | `https://ticketing.dealervoice.io/api/auth/callback/google` |
 
 See `docs/DEALERVOICE_INBOX.md`.
+
+**Resend inbound (Inbox email):** Enable receiving on `mail.dealervoice.io` (or `INBOX_INBOUND_DOMAIN`), add MX records, webhook → `https://dealervoice.io/api/inbox/inbound` with `INBOX_INBOUND_WEBHOOK_SECRET`.
