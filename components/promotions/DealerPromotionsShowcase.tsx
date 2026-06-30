@@ -36,9 +36,11 @@ const BILLING_PROMOS = [
 interface Props {
   stats?: PromotionsShowcaseStats;
   compact?: boolean;
+  /** Reframe as a closing bonus block (e.g. on /for-dealers). */
+  bonusTone?: boolean;
 }
 
-export function DealerPromotionsShowcase({ stats, compact = false }: Props) {
+export function DealerPromotionsShowcase({ stats, compact = false, bonusTone = false }: Props) {
   const slotsLeft = stats?.jackpotSlotsRemaining ?? CHICAGO_JACKPOT.MAX_WINNERS;
   const winners = stats?.jackpotWinners ?? 0;
 
@@ -55,15 +57,26 @@ export function DealerPromotionsShowcase({ stats, compact = false }: Props) {
         <div className="text-center max-w-2xl mx-auto mb-12">
           <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary mb-4">
             <Sparkles size={14} />
-            Limited-time dealer offers
+            {bonusTone ? "Stack bonuses on top" : "Limited-time dealer offers"}
           </p>
           <h2 id="dealer-promotions-heading" className="font-display text-3xl md:text-4xl font-light text-white leading-tight">
-            Promotions that reward
-            <span className="text-gradient-gold"> growth and commitment</span>
+            {bonusTone ? (
+              <>
+                Already strong value —
+                <span className="text-gradient-gold"> we reward commitment too</span>
+              </>
+            ) : (
+              <>
+                Promotions that reward
+                <span className="text-gradient-gold"> growth and commitment</span>
+              </>
+            )}
           </h2>
           {!compact && (
             <p className="text-white/50 mt-4 text-base leading-relaxed">
-              Active on every paid plan checkout. Track your progress anytime in the dealer dashboard after you claim.
+              {bonusTone
+                ? "Billing-period bonuses apply automatically at checkout. Chicagoland dealers can compete for Enterprise access on top of an already complete platform."
+                : "Active on every paid plan checkout. Track your progress anytime in the dealer dashboard after you claim."}
             </p>
           )}
         </div>
