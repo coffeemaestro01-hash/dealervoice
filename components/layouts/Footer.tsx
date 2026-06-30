@@ -16,6 +16,7 @@ const FOOTER_LINKS = {
   ],
   "For dealers": [
     { label: "Dealer Solutions", href: "/for-dealers" },
+    { label: "DealerVoice Inbox", href: "/dealer-inbox" },
     { label: "Promotions", href: "/promotions" },
     { label: "Claim Your Dealership", href: "/claim" },
     { label: "Pricing", href: "/pricing" },
@@ -25,6 +26,7 @@ const FOOTER_LINKS = {
   Company: [
     { label: "Insights", href: "/insights" },
     { label: "About Us", href: "/about" },
+    { label: "Message from CEO", href: "/message-from-ceo" },
     { label: "Blog", href: "/blog" },
     { label: "Research", href: "/research" },
     { label: "Contact", href: "/contact" },

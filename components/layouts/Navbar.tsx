@@ -38,6 +38,7 @@ const BUYERS_LINKS = [
 
 const DEALERS_LINKS = [
   { label: "Dealer solutions", href: "/for-dealers" },
+  { label: "DealerVoice Inbox", href: "/dealer-inbox" },
   { label: "Promotions", href: "/promotions" },
   { label: "Claim profile", href: "/claim" },
   { label: "Pricing", href: "/pricing" },
@@ -47,6 +48,7 @@ const DEALERS_LINKS = [
 const COMPANY_LINKS = [
   { label: "Insights", href: "/insights" },
   { label: "About", href: "/about" },
+  { label: "Message from CEO", href: "/message-from-ceo" },
   { label: "Contact", href: "/contact" },
 ];
 

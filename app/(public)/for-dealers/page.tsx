@@ -3,6 +3,7 @@ import { ForDealersHero } from "@/components/home/ForDealersHero";
 import { DealerReputationSection } from "@/components/home/DealerReputationSection";
 import { DealerGrowthBanner } from "@/components/home/DealerGrowthBanner";
 import { DealerAISalesAssistantSection } from "@/components/home/DealerAISalesAssistantSection";
+import { DealerInboxTeaserSection } from "@/components/marketing/DealerInboxTeaserSection";
 import { DealerPromotionsShowcase } from "@/components/promotions/DealerPromotionsShowcase";
 import { getChicagoJackpotAdminSummary } from "@/lib/promotions/chicago-jackpot";
 
@@ -31,6 +32,7 @@ export default async function ForDealersPage() {
       <ForDealersHero />
       <DealerPromotionsShowcase stats={promoStats} />
       <DealerReputationSection />
+      <DealerInboxTeaserSection />
       <DealerGrowthBanner />
       <DealerAISalesAssistantSection />
     </>

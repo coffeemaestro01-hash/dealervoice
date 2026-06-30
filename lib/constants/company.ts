@@ -8,6 +8,14 @@ export const COMPANY = {
   governingLaw: "State of Illinois, United States",
 } as const;
 
+export const CEO = {
+  name: "Divyakumar Soni",
+  title: "CEO",
+  organization: "DealerVoice",
+  tagline: "Trust at every touchpoint — from the showroom floor to the service lane.",
+  headshotPath: "/images/team/divyakumar-soni-ceo.png",
+} as const;
+
 export function companyHqLine(): string {
   return `${COMPANY.hqCity}, ${COMPANY.hqState}, ${COMPANY.hqCountry}`;
 }
