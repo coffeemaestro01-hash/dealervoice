@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { Prisma } from "@prisma/client";
 import { runOnboardingAssistant } from "@/lib/inbox/ai";
+import { normalizeInboxProvider } from "@/lib/inbox/normalize-provider";
 import { updateInboxConnection } from "@/lib/inbox/tickets";
 import { requireInboxSession, inboxErrorResponse } from "@/lib/inbox/session";
 import type { InboxEmailProvider } from "@prisma/client";
@@ -54,13 +56,15 @@ export async function POST(req: NextRequest) {
       { role: "assistant", content: result.reply },
     ];
 
-    const provider = result.suggestedProvider as InboxEmailProvider | null;
+    const provider: InboxEmailProvider | null =
+      result.suggestedProvider ?? normalizeInboxProvider(session.provider ?? undefined);
+
     const updated = await prisma.inboxOnboardingSession.update({
       where: { id: session.id },
       data: {
         step: result.nextStep,
-        provider: provider ?? undefined,
-        transcript: updatedTranscript,
+        ...(provider ? { provider } : {}),
+        transcript: updatedTranscript as Prisma.InputJsonValue,
         completedAt: result.markComplete ? new Date() : undefined,
       },
     });
@@ -70,6 +74,11 @@ export async function POST(req: NextRequest) {
         provider,
         config: result.connectionConfig,
         status: result.markComplete ? "CONNECTED" : "PENDING",
+      });
+    } else if (provider) {
+      await updateInboxConnection(dealershipId, {
+        provider,
+        status: "PENDING",
       });
     }
 
