@@ -107,3 +107,27 @@ npm run seed:blog    # re-upsert US content + unpublish legacy India slugs
 ```
 
 Primary launch doc: **`GLOBAL_LAUNCH.md`** at repo root.
+
+---
+
+## 8. DealerVoice Inbox subdomain
+
+**URL:** `https://ticketing.dealervoice.io` (same app as `/ticketing/*` on dealervoice.io)
+
+### Vercel
+
+`ticketing.dealervoice.io` is assigned to the **dealervoice** project. Confirm under Vercel → dealervoice → **Settings → Domains**.
+
+### Registrar DNS (required)
+
+`dealervoice.io` uses third-party DNS (`registrar-servers.com`). Add:
+
+| Type  | Host        | Value                  |
+|-------|-------------|------------------------|
+| CNAME | `ticketing` | `cname.vercel-dns.com` |
+
+Same pattern as `www`. Propagation: ~5–30 minutes.
+
+**Until then:** `https://dealervoice.io/ticketing/inbox` works immediately.
+
+See `docs/DEALERVOICE_INBOX.md`.
