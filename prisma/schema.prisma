@@ -229,6 +229,8 @@ model User {
   supportTicketReplies SupportTicketReply[]
   inboxTicketsAssigned InboxTicket[] @relation("InboxTicketAssignee")
   inboxMessagesAuthored InboxMessage[] @relation("InboxMessageAuthor")
+  adminJobRuns         AdminJobRun[] @relation("AdminJobActor")
+  reviewGiftCardsMarked ReviewGiftCard[] @relation("GiftCardMarkedBy")
 
   @@index([email])
   @@index([role])
@@ -481,6 +483,7 @@ model Dealership {
   inboxSlaConfigs      InboxSLAConfig[]
   inboxOnboardingSessions InboxOnboardingSession[]
   inboxCsatSurveys        InboxCSATSurvey[]
+  reviewGiftCards         ReviewGiftCard[]
 
   @@index([slug])
   @@index([countryId])
@@ -682,6 +685,7 @@ model Review {
   helpfulMarks HelpfulMark[]
   reports      Report[]        @relation("ReviewReports")
   verificationDocs MediaFile[] @relation("VerificationDocs")
+  giftCard         ReviewGiftCard?
 
   @@index([dealershipId])
   @@index([authorId])
@@ -1849,4 +1853,77 @@ model InboxOnboardingSession {
 
   @@index([dealershipId])
   @@index([userId])
+}
+
+enum AdminJobType {
+  OUTREACH_CHICAGOLAND_PUSH
+  OUTREACH_DRIP
+  GROWTH_CRON
+  GROWTH_ACTION
+  GIFT_CARD_UPDATE
+  BUYER_OUTREACH
+  EMAIL_DISCOVERY
+}
+
+enum AdminJobStatus {
+  RUNNING
+  SUCCESS
+  PARTIAL
+  FAILED
+}
+
+enum ReviewGiftCardStatus {
+  ELIGIBLE
+  APPROVED
+  SENT
+  DECLINED
+}
+
+enum ReviewGiftCardProgram {
+  CHICAGO_LAUNCH_10
+}
+
+model AdminJobRun {
+  id           String         @id @default(cuid())
+  jobType      AdminJobType
+  status       AdminJobStatus @default(SUCCESS)
+  summary      String
+  payload      Json?
+  actorUserId  String?        @map("actor_user_id")
+  startedAt    DateTime       @default(now()) @map("started_at")
+  finishedAt   DateTime?      @map("finished_at")
+  errorMessage String?        @map("error_message") @db.Text
+
+  actor User? @relation("AdminJobActor", fields: [actorUserId], references: [id])
+
+  @@index([jobType])
+  @@index([startedAt])
+  @@map("admin_job_runs")
+}
+
+model ReviewGiftCard {
+  id              String                @id @default(cuid())
+  reviewId        String                @unique @map("review_id")
+  dealershipId    String                @map("dealership_id")
+  program         ReviewGiftCardProgram @default(CHICAGO_LAUNCH_10)
+  status          ReviewGiftCardStatus  @default(ELIGIBLE)
+  amountCents     Int                   @default(2500) @map("amount_cents")
+  recipientEmail  String                @map("recipient_email")
+  recipientName   String?               @map("recipient_name")
+  notes           String?               @db.Text
+  approvedAt      DateTime?             @map("approved_at")
+  sentAt          DateTime?             @map("sent_at")
+  declinedAt      DateTime?             @map("declined_at")
+  markedByUserId  String?               @map("marked_by_user_id")
+  createdAt       DateTime              @default(now()) @map("created_at")
+  updatedAt       DateTime              @updatedAt @map("updated_at")
+
+  review     Review     @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  dealership Dealership @relation(fields: [dealershipId], references: [id], onDelete: Cascade)
+  markedBy   User?      @relation("GiftCardMarkedBy", fields: [markedByUserId], references: [id])
+
+  @@index([status])
+  @@index([program])
+  @@index([dealershipId])
+  @@map("review_gift_cards")
 }

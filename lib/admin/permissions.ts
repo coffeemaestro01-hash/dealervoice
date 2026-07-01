@@ -29,6 +29,7 @@ import {
   PenLine,
   Award,
   Linkedin,
+  Command,
 } from "lucide-react";
 
 export type AdminTeam = "founder" | "ops" | "trust" | "growth" | "platform";
@@ -43,6 +44,7 @@ export interface AdminNavItem {
 }
 
 export const ADMIN_NAV: AdminNavItem[] = [
+  { href: "/dashboard/admin/command-center", label: "Command center", icon: Command, team: "founder", roles: ["SUPER_ADMIN"] },
   { href: "/dashboard/admin", label: "Overview", icon: LayoutDashboard, exact: true, team: "founder", roles: ["SUPER_ADMIN", "REVENUE", "MODERATOR", "SUPPORT"] },
   { href: "/dashboard/admin/income", label: "Platform income", icon: Wallet, team: "founder", roles: ["SUPER_ADMIN"] },
   { href: "/dashboard/admin/revenue", label: "Revenue", icon: DollarSign, team: "founder", roles: ["SUPER_ADMIN", "REVENUE"] },

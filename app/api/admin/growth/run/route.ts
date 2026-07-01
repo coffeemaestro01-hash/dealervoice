@@ -8,6 +8,7 @@ import { nudgeDealersForReviews } from "@/lib/marketing/dealer-review-nudge";
 import { outreachBuyersForReviews } from "@/lib/marketing/buyer-review-outreach";
 import { backfillStripeSubscriptionIncome } from "@/lib/income/backfill-stripe";
 import { importChicagolandFromOsm } from "@/lib/geo/import-chicagoland-job";
+import { logAdminJobRun } from "@/lib/admin/business-tracking";
 
 const ACTIONS = [
   "import_chicagoland",
@@ -43,36 +44,57 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    let result: unknown;
     switch (action) {
       case "import_chicagoland":
-        return NextResponse.json({ ok: true, result: await importChicagolandFromOsm() });
+        result = await importChicagolandFromOsm();
+        break;
       case "discover_chicagoland":
-        return NextResponse.json({
-          ok: true,
-          result: await discoverDealerEmailsBatch({ region: "chicagoland", limit: 250 }),
-        });
+        result = await discoverDealerEmailsBatch({ region: "chicagoland", limit: 250 });
+        break;
       case "discover_il":
-        return NextResponse.json({
-          ok: true,
-          result: await discoverDealerEmailsBatch({ region: "illinois", limit: 300 }),
-        });
+        result = await discoverDealerEmailsBatch({ region: "illinois", limit: 300 });
+        break;
       case "discover_us":
-        return NextResponse.json({ ok: true, result: await discoverDealerEmailsBatch({ limit: 400 }) });
+        result = await discoverDealerEmailsBatch({ limit: 400 });
+        break;
       case "drip": {
         const followUps = await processDueOutreachDrips(150);
         const il = await autoStartOutreachDrips(50, "US", "Illinois");
         const us = await autoStartOutreachDrips(100, "US");
-        return NextResponse.json({ ok: true, result: { followUps, il, us } });
+        result = { followUps, il, us };
+        break;
       }
       case "nudge_reviews":
-        return NextResponse.json({ ok: true, result: await nudgeDealersForReviews(30) });
+        result = await nudgeDealersForReviews(30);
+        break;
       case "outreach_buyers":
-        return NextResponse.json({ ok: true, result: await outreachBuyersForReviews(200) });
+        result = await outreachBuyersForReviews(200);
+        break;
       case "backfill_income":
-        return NextResponse.json({ ok: true, result: await backfillStripeSubscriptionIncome() });
+        result = await backfillStripeSubscriptionIncome();
+        break;
       default:
         return NextResponse.json({ error: "Unknown action" }, { status: 400 });
     }
+
+    const jobType =
+      action === "drip"
+        ? "OUTREACH_DRIP"
+        : action.startsWith("discover")
+          ? "EMAIL_DISCOVERY"
+          : action === "outreach_buyers"
+            ? "BUYER_OUTREACH"
+            : "GROWTH_ACTION";
+
+    await logAdminJobRun({
+      jobType,
+      summary: `Growth action: ${action}`,
+      payload: result as object,
+      actorUserId: session.user.id,
+    });
+
+    return NextResponse.json({ ok: true, result });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Action failed";
     return NextResponse.json({ error: message }, { status: 500 });

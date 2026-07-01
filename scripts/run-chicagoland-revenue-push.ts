@@ -4,6 +4,7 @@
  */
 import { loadProjectEnv } from "./load-env";
 import { runChicagolandRevenuePush } from "@/lib/outreach/chicagoland-push";
+import { finishAdminJobRun, startAdminJobRun } from "@/lib/admin/business-tracking";
 
 loadProjectEnv();
 
@@ -18,17 +19,42 @@ async function main() {
   }
 
   console.log("\n=== Chicagoland revenue push ===\n");
-  const result = await runChicagolandRevenuePush();
 
-  console.log("Snapshot before send:");
-  console.log(JSON.stringify(result.snapshot, null, 2));
-  console.log("\nDrip follow-ups (steps 2–3):");
-  console.log(JSON.stringify(result.followUps, null, 2));
-  console.log("\nNew Illinois drip starts (step 1):");
-  console.log(JSON.stringify(result.autoStartIl, null, 2));
-  console.log("\nUpgrade nudges (claimed FREE):");
-  console.log(JSON.stringify(result.upgradeNudges, null, 2));
-  console.log("\nDone.\n");
+  const job = await startAdminJobRun("OUTREACH_CHICAGOLAND_PUSH", "CLI chicagoland revenue push");
+
+  try {
+    const result = await runChicagolandRevenuePush();
+    const totalSent =
+      result.followUps.sent + result.autoStartIl.started + result.upgradeNudges.sent;
+    const totalFailed =
+      result.followUps.failed + result.autoStartIl.errors + result.upgradeNudges.failed;
+    const status =
+      totalFailed > 0 && totalSent === 0 ? "FAILED" : totalFailed > 0 ? "PARTIAL" : "SUCCESS";
+
+    await finishAdminJobRun(job.id, {
+      status,
+      summary: `CLI push — ${totalSent} sent (${result.followUps.sent} follow-ups, ${result.autoStartIl.started} new IL, ${result.upgradeNudges.sent} upgrades)`,
+      payload: result as object,
+    });
+
+    console.log("Snapshot before send:");
+    console.log(JSON.stringify(result.snapshot, null, 2));
+    console.log("\nDrip follow-ups (steps 2–3):");
+    console.log(JSON.stringify(result.followUps, null, 2));
+    console.log("\nNew Illinois drip starts (step 1):");
+    console.log(JSON.stringify(result.autoStartIl, null, 2));
+    console.log("\nUpgrade nudges (claimed FREE):");
+    console.log(JSON.stringify(result.upgradeNudges, null, 2));
+    console.log("\nDone.\n");
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Push failed";
+    await finishAdminJobRun(job.id, {
+      status: "FAILED",
+      summary: "CLI chicagoland push failed",
+      errorMessage: message,
+    });
+    throw err;
+  }
 }
 
 main().catch((err) => {
