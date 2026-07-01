@@ -177,7 +177,7 @@ ${EMAILS.dealers}`,
 
 Last note from us about ${ctx.name} on DealerVoice.
 
-Pro ($199/mo) unlocks review invite tools, analytics, and competitor monitoring. Pro+ ($349/mo) adds a featured badge and embeddable review backlink for your website — buyers land directly on your profile to write a review.
+Pro ($199/mo) unlocks AI Sales Assistant, DealerVoice Inbox (customer support desk), review tools, analytics, and competitor monitoring. Pro+ ($349/mo) adds a featured badge and embeddable review backlink for your website — buyers land directly on your profile to write a review.
 
 ${codeLine}
 
@@ -189,5 +189,35 @@ ${isChicagoland(ctx) ? `${chicagolandPromoBlurb()}\n\n` : ""}Questions? ${EMAILS
 
 — DealerVoice
 Built in Chicago · Available nationwide`,
+  };
+}
+
+export function buildUpgradeNudgeEmail(ctx: DealerOutreachContext, promoCode?: string) {
+  const location = [ctx.cityName, ctx.stateName].filter(Boolean).join(", ");
+  const codeLine = promoCode
+    ? `Your exclusive code: ${promoCode} — Pro at $1/month for your first billing period (normally $199/mo).`
+    : "Reply for pilot pricing on Pro ($199/mo) or Pro+ ($349/mo).";
+
+  return {
+    subject: `${ctx.name} — unlock AI + Inbox on DealerVoice Pro`,
+    body: `Hi,
+
+You claimed ${ctx.name}${location ? ` in ${location}` : ""} on DealerVoice — great start.
+
+Paid plans add what moves the needle for rooftops:
+• AI Sales Assistant — 24/7 chat and lead capture on your profile
+• DealerVoice Inbox — team support desk with templates and AI drafts (included, no separate helpdesk bill)
+• Remove competitor ads on your profile + review analytics
+
+${codeLine}
+
+Upgrade: ${billingUrl()}
+Your profile: ${profileUrl(ctx.slug)}
+Dealer solutions overview: ${APP_URL}/for-dealers
+
+${isChicagoland(ctx) ? `${chicagolandPromoBlurb()}\n\n` : ""}Questions? Reply or email ${EMAILS.dealers}
+
+— DealerVoice
+${EMAILS.dealers}`,
   };
 }

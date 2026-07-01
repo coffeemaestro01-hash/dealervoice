@@ -26,6 +26,7 @@
     "income:backfill-stripe": "tsx scripts/backfill-stripe-income.ts",
     "backfill:franchised": "tsx scripts/backfill-franchised-dealers.ts",
     "outreach:discover-emails": "tsx scripts/discover-dealer-emails.ts",
+    "outreach:chicagoland-push": "tsx scripts/run-chicagoland-revenue-push.ts",
     "resend:domain-setup": "tsx scripts/resend-domain-setup.ts",
     "smoke": "node scripts/smoke-test.mjs",
     "db:delete-smoke-users": "tsx scripts/delete-smoke-test-users.ts",
