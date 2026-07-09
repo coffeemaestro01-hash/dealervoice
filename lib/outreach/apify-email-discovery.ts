@@ -16,7 +16,7 @@ function apifyToken(): string | null {
   return process.env.APIFY_API_TOKEN || process.env.APIFY_TOKEN || null;
 }
 
-async function waitForRun(token: string, runId: string, maxWaitMs = 180_000) {
+async function waitForRun(token: string, runId: string, maxWaitMs: number) {
   const started = Date.now();
   while (Date.now() - started < maxWaitMs) {
     const res = await fetch(`https://api.apify.com/v2/actor-runs/${runId}?token=${token}`);
@@ -60,7 +60,7 @@ function emailFromApifyItem(item: Record<string, unknown>): string | null {
 /** Batch extract emails via Apify Playwright actor (JS-heavy dealer sites). */
 export async function discoverEmailsViaApify(
   websites: string[],
-  opts?: { maxConcurrency?: number; timeoutPerUrl?: number }
+  opts?: { maxConcurrency?: number; timeoutPerUrl?: number; maxWaitMs?: number }
 ): Promise<ApifyEmailResult[]> {
   const token = apifyToken();
   if (!token) {
@@ -69,6 +69,12 @@ export async function discoverEmailsViaApify(
   if (websites.length === 0) return [];
 
   const urls = websites.map(normalizeWebsiteUrl);
+  const timeoutPerUrl = opts?.timeoutPerUrl ?? 25;
+  const maxConcurrency = opts?.maxConcurrency ?? 3;
+  const maxWaitMs =
+    opts?.maxWaitMs ??
+    Math.min(900_000, Math.max(120_000, urls.length * timeoutPerUrl * 1000 * 2));
+
   const runRes = await fetch(
     `https://api.apify.com/v2/acts/${ACTOR_ID}/runs?token=${token}`,
     {
@@ -79,9 +85,9 @@ export async function discoverEmailsViaApify(
         scrapeEmails: true,
         scrapePhones: false,
         scrapeSocials: false,
-        followLinkPages: true,
-        maxConcurrency: opts?.maxConcurrency ?? 5,
-        timeoutPerUrl: opts?.timeoutPerUrl ?? 25,
+        followLinkPages: false,
+        maxConcurrency,
+        timeoutPerUrl,
       }),
     }
   );
@@ -91,7 +97,7 @@ export async function discoverEmailsViaApify(
   }
 
   const runJson = (await runRes.json()) as { data: { id: string; defaultDatasetId?: string } };
-  const datasetId = await waitForRun(token, runJson.data.id);
+  const datasetId = await waitForRun(token, runJson.data.id, maxWaitMs);
   if (!datasetId) throw new Error("Apify run missing dataset");
 
   const items = await fetchDatasetItems(token, datasetId);
