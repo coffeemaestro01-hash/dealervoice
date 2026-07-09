@@ -20,7 +20,13 @@ export async function GET(req: NextRequest) {
     day === 1 || day === 3 || day === 5
       ? await discoverDealerEmailsBatch({ region: "chicagoland", limit: 200 })
       : day === 2
-        ? await discoverDealerEmailsBatch({ region: "illinois", limit: 250 })
+        ? await discoverDealerEmailsBatch({
+            region: "illinois",
+            limit: 250,
+            useApifyFallback: true,
+            apifyMaxUrls: 40,
+            autoStartDrip: true,
+          })
         : day === 4
           ? await discoverDealerEmailsBatch({ limit: 300 })
           : { scanned: 0, updated: 0, state: "weekend-pause" };

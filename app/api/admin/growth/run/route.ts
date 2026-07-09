@@ -53,7 +53,13 @@ export async function POST(req: NextRequest) {
         result = await discoverDealerEmailsBatch({ region: "chicagoland", limit: 250 });
         break;
       case "discover_il":
-        result = await discoverDealerEmailsBatch({ region: "illinois", limit: 300 });
+        result = await discoverDealerEmailsBatch({
+          region: "illinois",
+          limit: 300,
+          useApifyFallback: true,
+          apifyMaxUrls: 50,
+          autoStartDrip: true,
+        });
         break;
       case "discover_us":
         result = await discoverDealerEmailsBatch({ limit: 400 });
