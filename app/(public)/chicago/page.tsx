@@ -2,18 +2,27 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import prisma from "@/lib/db";
 import { Button } from "@/components/ui/button";
-import { MapPin, Star, Building2, MessageCircle, Trophy } from "lucide-react";
+import { MapPin, Star, Building2, MessageCircle, Trophy, Gift } from "lucide-react";
 import { WHATSAPP_BUSINESS } from "@/lib/constants/social";
 import {
   CHICAGO_JACKPOT,
   CHICAGOLAND_DEALERSHIP_PROMOTION_NAME,
   getChicagoJackpotAdminSummary,
 } from "@/lib/promotions/chicago-jackpot";
+import { CHICAGO_GIFT_CARD, countChicagoGiftCardsUsed } from "@/lib/reviews/gift-cards";
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.io";
 
 export const metadata: Metadata = {
-  title: "Chicago Car Dealers — Reviews & Ratings",
+  title: "Chicago Car Dealers — Reviews & Ratings | DealerVoice",
   description:
-    "Compare Chicago and Illinois car dealerships on DealerVoice. Read buyer reviews, request quotes, and find transparent dealers near you.",
+    "Compare Chicago and Illinois car dealerships on DealerVoice. Read buyer reviews, write your experience in 2 minutes, and find transparent dealers near you.",
+  alternates: { canonical: "/chicago" },
+  openGraph: {
+    title: "Chicago Car Dealers — Verified Reviews",
+    description: "Built in Chicago. Compare dealerships, read reviews, request quotes.",
+    url: `${APP_URL}/chicago`,
+  },
 };
 
 export const dynamic = "force-dynamic";
@@ -46,15 +55,45 @@ async function getChicagoDealers() {
 export default async function ChicagoPage() {
   const dealers = await getChicagoDealers();
   let slotsRemaining: number = CHICAGO_JACKPOT.MAX_WINNERS;
+  let giftSlotsRemaining: number = CHICAGO_GIFT_CARD.MAX_SLOTS;
   try {
-    const jackpot = await getChicagoJackpotAdminSummary();
+    const [jackpot, giftUsed] = await Promise.all([
+      getChicagoJackpotAdminSummary(),
+      countChicagoGiftCardsUsed().catch(() => 0),
+    ]);
     slotsRemaining = jackpot.slotsRemaining;
+    giftSlotsRemaining = Math.max(0, CHICAGO_GIFT_CARD.MAX_SLOTS - giftUsed);
   } catch {
     /* default */
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        name: "DealerVoice",
+        url: APP_URL,
+        description: "Verified car dealership reviews — built in Chicago",
+        potentialAction: {
+          "@type": "SearchAction",
+          target: `${APP_URL}/dealers?q={search_term_string}`,
+          "query-input": "required name=search_term_string",
+        },
+      },
+      {
+        "@type": "Organization",
+        name: "DealerVoice",
+        url: APP_URL,
+        logo: `${APP_URL}/icon.png`,
+        areaServed: { "@type": "City", name: "Chicago" },
+      },
+    ],
+  };
+
   return (
     <div className="bg-background">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <section className="border-b border-border bg-gradient-to-br from-background via-muted/40 to-background">
         <div className="container py-16 max-w-3xl">
           <p className="text-primary text-sm font-semibold tracking-wide uppercase mb-3">Chicago · Illinois</p>
@@ -64,9 +103,29 @@ export default async function ChicagoPage() {
           <p className="text-lg text-muted-foreground mb-8">
             DealerVoice is built in Chicago. Compare local dealerships, read buyer reviews, and request quotes before you visit the lot.
           </p>
+          {giftSlotsRemaining > 0 ? (
+            <div className="rounded-xl border border-primary/30 bg-primary/5 px-4 py-3 mb-6 text-sm text-foreground">
+              <strong className="text-primary flex items-center gap-1.5">
+                <Gift size={16} /> Limited for buyers
+              </strong>
+              <span className="block mt-1">
+                First {CHICAGO_GIFT_CARD.MAX_SLOTS} verified Chicagoland reviews → $
+                {CHICAGO_GIFT_CARD.AMOUNT_CENTS / 100} gift card after publish.{" "}
+                <strong>{giftSlotsRemaining} spots left.</strong>
+              </span>
+              <Link href="/chicago/review" className="text-primary font-semibold hover:underline mt-1 inline-block">
+                Write your review →
+              </Link>
+            </div>
+          ) : null}
           <div className="flex flex-wrap gap-3">
+            <Link href="/chicago/review">
+              <Button size="lg" className="bg-ember text-night-900 font-semibold border-0 gap-2">
+                <Star size={18} /> Write a review
+              </Button>
+            </Link>
             <Link href="/dealers/us">
-              <Button size="lg" className="bg-ember text-night-900 font-semibold border-0">
+              <Button size="lg" variant="outline" className="border-primary/30">
                 Browse Illinois dealers
               </Button>
             </Link>

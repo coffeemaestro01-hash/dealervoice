@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `Best Car Dealerships in ${label} (2026) — Verified Reviews`,
     description: `Compare top-rated franchised car dealerships in ${label}. Read verified buyer reviews, trust scores, and dealer profiles on DealerVoice.`,
-    alternates: { canonical: `/best-car-dealerships-in-${city}` },
+    alternates: { canonical: `/best-car-dealerships-in/${city}` },
   };
 }
 

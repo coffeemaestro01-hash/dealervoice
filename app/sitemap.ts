@@ -3,6 +3,10 @@ import prisma from "@/lib/db";
 import { publicDealerWhere } from "@/lib/dealer/status";
 import { stateSlug } from "@/lib/geo";
 import { dealerCanonicalPath } from "@/lib/dealers/seo-url";
+import {
+  chicagolandRankingSitemapPages,
+  growthStaticSitemapPages,
+} from "@/lib/seo/growth-sitemap-pages";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://dealervoice.io";
 
@@ -104,5 +108,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: p.slug.includes("research") ? 0.75 : 0.55,
   }));
 
-  return [...static_pages, ...blogPages, ...dealerPages, ...countryPages, ...statePages, ...cityPages];
+  let growthPages: MetadataRoute.Sitemap = growthStaticSitemapPages();
+  let rankingPages: MetadataRoute.Sitemap = [];
+  try {
+    rankingPages = await chicagolandRankingSitemapPages();
+  } catch {
+    /* DB unavailable */
+  }
+
+  return [
+    ...static_pages,
+    ...growthPages,
+    ...rankingPages,
+    ...blogPages,
+    ...dealerPages,
+    ...countryPages,
+    ...statePages,
+    ...cityPages,
+  ];
 }
