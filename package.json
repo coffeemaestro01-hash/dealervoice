@@ -29,6 +29,7 @@
     "outreach:discover-emails": "tsx scripts/discover-dealer-emails.ts",
     "outreach:chicagoland-push": "tsx scripts/run-chicagoland-revenue-push.ts",
     "outreach:discover-il": "tsx scripts/run-illinois-email-discovery.ts",
+    "outreach:remediate-vendor-emails": "tsx scripts/remediate-vendor-emails.ts",
     "resend:domain-setup": "tsx scripts/resend-domain-setup.ts",
     "smoke": "node scripts/smoke-test.mjs",
     "db:delete-smoke-users": "tsx scripts/delete-smoke-test-users.ts",

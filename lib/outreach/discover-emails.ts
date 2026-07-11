@@ -3,6 +3,7 @@ import { usStateWhere } from "@/lib/outreach/regions";
 import { chicagolandCityWhere } from "@/lib/geo/chicagoland";
 import {
   extractEmailsFromText,
+  isVendorEmail,
   normalizeWebsiteUrl,
   pickBestDealerEmail,
 } from "@/lib/outreach/email-parse";
@@ -25,7 +26,19 @@ function regionWhere(region?: DiscoverRegion) {
   return {};
 }
 
-async function fetchEmailsFromUrl(url: string): Promise<string[]> {
+async function discoverForWebsiteDirect(website: string): Promise<string | null> {
+  const base = normalizeWebsiteUrl(website);
+  const found: string[] = [];
+  for (const path of SCRAPE_PATHS) {
+    const emails = await fetchEmailsFromUrl(`${base.replace(/\/$/, "")}${path}`, website);
+    found.push(...emails);
+    const best = pickBestDealerEmail(found, website);
+    if (best) return best;
+  }
+  return pickBestDealerEmail(found, website);
+}
+
+async function fetchEmailsFromUrl(url: string, website?: string): Promise<string[]> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 10000);
   try {
@@ -35,24 +48,12 @@ async function fetchEmailsFromUrl(url: string): Promise<string[]> {
     });
     if (!res.ok) return [];
     const html = await res.text();
-    return extractEmailsFromText(html);
+    return extractEmailsFromText(html, website);
   } catch {
     return [];
   } finally {
     clearTimeout(timer);
   }
-}
-
-async function discoverForWebsiteDirect(website: string): Promise<string | null> {
-  const base = normalizeWebsiteUrl(website);
-  const found: string[] = [];
-  for (const path of SCRAPE_PATHS) {
-    const emails = await fetchEmailsFromUrl(`${base.replace(/\/$/, "")}${path}`);
-    found.push(...emails);
-    const best = pickBestDealerEmail(found);
-    if (best) return best;
-  }
-  return pickBestDealerEmail(found);
 }
 
 async function processBatch<T, R>(items: T[], fn: (item: T) => Promise<R>): Promise<R[]> {
@@ -109,7 +110,7 @@ export async function discoverDealerEmailsBatch(opts: {
   await processBatch(dealers, async (d) => {
     if (!d.website) return;
     const email = await discoverForWebsiteDirect(d.website);
-    if (email) {
+    if (email && !isVendorEmail(email, d.website)) {
       await prisma.dealership.update({
         where: { id: d.id },
         data: { email, emailSource: "website" },
@@ -131,7 +132,8 @@ export async function discoverDealerEmailsBatch(opts: {
       const results = await discoverEmailsViaApify(websites);
       for (let i = 0; i < batch.length; i++) {
         const email = results[i]?.email;
-        if (!email) continue;
+        const website = batch[i].website;
+        if (!email || isVendorEmail(email, website)) continue;
         await prisma.dealership.update({
           where: { id: batch[i].id },
           data: { email, emailSource: "apify" },
@@ -188,6 +190,89 @@ export async function runIllinoisEmailDiscoveryJob(opts?: {
   });
 
   return result;
+}
+
+const OUTREACH_RESET = {
+  outreachDripStep: 0,
+  outreachDripActive: false,
+  outreachStatus: null as string | null,
+  lastOutreachAt: null as Date | null,
+  nextOutreachAt: null as Date | null,
+  outreachDripStartedAt: null as Date | null,
+};
+
+/** Clear vendor/platform emails and optionally re-scrape dealer websites. */
+export async function remediateVendorEmails(opts?: {
+  limit?: number;
+  rediscover?: boolean;
+  autoStartDrip?: boolean;
+}) {
+  const limit = opts?.limit ?? 200;
+  const dealers = await prisma.dealership.findMany({
+    where: { deletedAt: null, email: { not: null }, NOT: { email: "" } },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      website: true,
+      outreachDripStep: true,
+    },
+  });
+
+  const flagged = dealers.filter((d) => d.email && isVendorEmail(d.email, d.website)).slice(0, limit);
+
+  let cleared = 0;
+  let rediscovered = 0;
+  let stillVendor = 0;
+
+  for (const d of flagged) {
+    await prisma.dealership.update({
+      where: { id: d.id },
+      data: {
+        email: null,
+        emailSource: null,
+        ...(d.outreachDripStep > 0 ? OUTREACH_RESET : {}),
+      },
+    });
+    cleared++;
+
+    if (!opts?.rediscover || !d.website) continue;
+
+    let email = await discoverForWebsiteDirect(d.website);
+    if (!email && apifyEmailDiscoveryConfigured()) {
+      try {
+        const [result] = await discoverEmailsViaApify([d.website]);
+        email = result?.email ?? null;
+      } catch {
+        /* Apify optional */
+      }
+    }
+
+    if (email && !isVendorEmail(email, d.website)) {
+      await prisma.dealership.update({
+        where: { id: d.id },
+        data: { email, emailSource: "website" },
+      });
+      rediscovered++;
+    } else if (email && isVendorEmail(email, d.website)) {
+      stillVendor++;
+    }
+  }
+
+  let dripStarted = 0;
+  if (opts?.autoStartDrip && rediscovered > 0 && process.env.RESEND_API_KEY) {
+    const drip = await autoStartOutreachDrips(Math.min(20, rediscovered), "US");
+    dripStarted = drip.started;
+  }
+
+  const summary = `Vendor email remediation — ${cleared} cleared, ${rediscovered} re-discovered`;
+  await logAdminJobRun({
+    jobType: "EMAIL_DISCOVERY",
+    summary,
+    payload: { cleared, rediscovered, stillVendor, flagged: flagged.length, dripStarted },
+  });
+
+  return { flagged: flagged.length, cleared, rediscovered, stillVendor, dripStarted, dealers: flagged.map((d) => d.name) };
 }
 
 export async function getOutreachDripStats() {

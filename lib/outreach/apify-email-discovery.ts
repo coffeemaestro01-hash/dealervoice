@@ -40,20 +40,20 @@ async function fetchDatasetItems(token: string, datasetId: string) {
   return (await res.json()) as Record<string, unknown>[];
 }
 
-function emailFromApifyItem(item: Record<string, unknown>): string | null {
+function emailFromApifyItem(item: Record<string, unknown>, websiteUrl?: string): string | null {
   const emails = item.emails;
   if (Array.isArray(emails) && emails.length) {
     const list = emails.map(String);
-    return pickBestDealerEmail(list);
+    return pickBestDealerEmail(list, websiteUrl);
   }
   const email = item.email;
   if (typeof email === "string" && email.includes("@")) {
-    return pickBestDealerEmail([email]);
+    return pickBestDealerEmail([email], websiteUrl);
   }
   const text = [item.markdown, item.text, item.html, item.content]
     .filter((v) => typeof v === "string")
     .join("\n");
-  if (text) return pickBestDealerEmail(extractEmailsFromText(text));
+  if (text) return pickBestDealerEmail(extractEmailsFromText(text, websiteUrl), websiteUrl);
   return null;
 }
 
@@ -112,7 +112,7 @@ export async function discoverEmailsViaApify(
     if (!url) continue;
     byUrl.set(url, {
       url,
-      email: emailFromApifyItem(item),
+      email: emailFromApifyItem(item, url),
       rawEmails: Array.isArray(item.emails) ? item.emails.map(String) : undefined,
     });
   }
