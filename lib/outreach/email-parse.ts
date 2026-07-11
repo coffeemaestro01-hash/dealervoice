@@ -47,6 +47,7 @@ const VENDOR_DOMAIN_FRAGMENTS = [
   "autodata.net",
   "dealereprocess.com",
   "chatlead.com",
+  "automarketingteam.com",
 ];
 
 const VENDOR_LOCAL_PREFIXES = ["support@", "help@", "webmaster@", "hostmaster@", "tickets@", "helpdesk@"];
