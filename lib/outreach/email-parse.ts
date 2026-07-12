@@ -48,6 +48,10 @@ const VENDOR_DOMAIN_FRAGMENTS = [
   "dealereprocess.com",
   "chatlead.com",
   "automarketingteam.com",
+  "edealerhub.com",
+  "udcnet.com",
+  "istudiosg.com",
+  "host.udcnet.com",
 ];
 
 const VENDOR_LOCAL_PREFIXES = ["support@", "help@", "webmaster@", "hostmaster@", "tickets@", "helpdesk@"];
@@ -102,6 +106,11 @@ export function isVendorEmail(email: string, websiteUrl?: string | null): boolea
     if (local.includes("support") || local.includes("helpdesk") || local.includes("website")) {
       return true;
     }
+  }
+
+  // Corporate foundation / lead-routing inboxes, not GMs
+  if ((local.includes("foundation") || local.startsWith("leads")) && !domainMatchesWebsite(e, websiteUrl)) {
+    return true;
   }
 
   return false;
