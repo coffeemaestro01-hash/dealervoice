@@ -71,9 +71,10 @@ export async function discoverEmailsViaApify(
   const urls = websites.map(normalizeWebsiteUrl);
   const timeoutPerUrl = opts?.timeoutPerUrl ?? 25;
   const maxConcurrency = opts?.maxConcurrency ?? 3;
+  const batches = Math.ceil(urls.length / maxConcurrency);
   const maxWaitMs =
     opts?.maxWaitMs ??
-    Math.min(900_000, Math.max(120_000, urls.length * timeoutPerUrl * 1000 * 2));
+    Math.min(1_800_000, Math.max(180_000, batches * timeoutPerUrl * 1000 * 2 + 120_000));
 
   const runRes = await fetch(
     `https://api.apify.com/v2/acts/${ACTOR_ID}/runs?token=${token}`,

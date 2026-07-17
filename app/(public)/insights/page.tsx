@@ -5,6 +5,8 @@ import { ArrowRight } from "lucide-react";
 import { BlogStripSection } from "@/components/home/BlogStripSection";
 import { ResearchStripSection } from "@/components/home/ResearchStripSection";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Insights — Blog & Research | DealerVoice",
   description:

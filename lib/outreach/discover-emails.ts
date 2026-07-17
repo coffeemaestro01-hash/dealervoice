@@ -127,22 +127,26 @@ export async function discoverDealerEmailsBatch(opts: {
 
   if (opts.useApifyFallback !== false && failed.length > 0 && apifyEmailDiscoveryConfigured()) {
     const batch = failed.slice(0, apifyMax);
-    const websites = batch.map((d) => d.website!).filter(Boolean);
-    try {
-      const results = await discoverEmailsViaApify(websites);
-      for (let i = 0; i < batch.length; i++) {
-        const email = results[i]?.email;
-        const website = batch[i].website;
-        if (!email || isVendorEmail(email, website)) continue;
-        await prisma.dealership.update({
-          where: { id: batch[i].id },
-          data: { email, emailSource: "apify" },
-        });
-        apifyUpdated++;
+    const APIFY_CHUNK = 15;
+    for (let offset = 0; offset < batch.length; offset += APIFY_CHUNK) {
+      const chunk = batch.slice(offset, offset + APIFY_CHUNK);
+      const websites = chunk.map((d) => d.website!).filter(Boolean);
+      try {
+        const results = await discoverEmailsViaApify(websites);
+        for (let i = 0; i < chunk.length; i++) {
+          const email = results[i]?.email;
+          const website = chunk[i].website;
+          if (!email || isVendorEmail(email, website)) continue;
+          await prisma.dealership.update({
+            where: { id: chunk[i].id },
+            data: { email, emailSource: "apify" },
+          });
+          apifyUpdated++;
+        }
+      } catch (err) {
+        apifySkipped = true;
+        console.error(`Apify fallback failed (chunk ${offset / APIFY_CHUNK + 1}):`, err);
       }
-    } catch (err) {
-      apifySkipped = true;
-      console.error("Apify fallback failed:", err);
     }
   } else if (failed.length > 0 && !apifyEmailDiscoveryConfigured()) {
     apifySkipped = true;
